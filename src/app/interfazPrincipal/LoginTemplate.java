@@ -3,7 +3,6 @@ package app.interfazPrincipal;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -24,8 +23,21 @@ public class LoginTemplate extends JFrame{
     private Cursor cursorMano = new Cursor(Cursor.HAND_CURSOR);
     private Border borde = BorderFactory.createMatteBorder(0, 0, 2, 0, GRANATE);
 
+    /* Declaración imagenes (y labels) */
+    private JLabel labelLogo = new JLabel();
+    private JLabel labelCerrar = new JLabel();
+    private JLabel labelUsuario = new JLabel();
+    private JLabel labelPassword = new JLabel();
+    private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword, DimAux;
+
     public LoginTemplate(){
         this.generarFuente(); // Generar la fuente
+
+        /* Cargar imágenes */
+        imagenLogo = new ImageIcon("/resources/images/logo1.png");
+        imagenCerrar = new ImageIcon("/resources/images/close.png");
+        imagenUsuario = new ImageIcon("/resources/images/user.png");
+        imagenPassword = new ImageIcon("/resources/images/password.png");
 
         /* Parte de izquierda de la interfaz */
         panelIzquierda=new JPanel();
