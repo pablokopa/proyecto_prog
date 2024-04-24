@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class LoginTemplate extends JFrame{
     /* Declaracion elementos */
@@ -112,12 +113,11 @@ public class LoginTemplate extends JFrame{
     /* Método para generar la fuente */
     private void generarFuente() {
         try {
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment(); // Para que se pueda usar la fuente en toda la app
-            ge.registerFont( Font.createFont( // Crear fuente
-                    Font.TRUETYPE_FONT, // Formato de la fuente (TRUETYPE no altera la fuente)
-                    new File("proyecto_prog/resources/fonts/Montserrat.ttf")
-            ));
-        } catch (IOException | FontFormatException e) { // Excepcione por si no se encuentra la fuente
+            InputStream is = getClass().getResourceAsStream("/resources/fonts/Montserrat.ttf"); // Cargar fuente independientemente del sistema operativo
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is); // Crea fuente y le da formato (TRUETYPE no altera la fuente)
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(font); // Registra la fuente
+        } catch (IOException | FontFormatException e) { // Excepcion por si no se encuentra la fuente
             System.out.println(e);
         }
     }
