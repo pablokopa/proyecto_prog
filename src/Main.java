@@ -1,5 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        GestorUsuarios gestorUsuarios = new GestorUsuarios();
+        Usuario usuario = new Usuario("Pepe", "pepe");
+        System.out.println( gestorUsuarios.getListaUsuarios().add(usuario) );
+        System.out.println( gestorUsuarios.eliminarUsuario(usuario) );
+        System.out.println(usuario);
     }
 }
