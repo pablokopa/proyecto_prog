@@ -1,6 +1,7 @@
 package app.interfazPrincipal;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +10,7 @@ public class LoginTemplate extends JFrame{
     /* Declaracion elementos */
     private JLabel tituloLogin;
     private JTextField cuadroUsuario;
-    private JPasswordField cuadroContraseña;
+    private JPasswordField cuadroPassword;
     private JButton botonEntrar, botonCerrar, botonRegistrar;
     private JPanel panelDerecha, panelIzquierda;
 
@@ -18,8 +19,9 @@ public class LoginTemplate extends JFrame{
     private Font MONSERRAT_BIG = new Font("Montserrat", Font.PLAIN, 22);
     private Font MONSERRAT_SMALL = new Font("Montserrat", Font.PLAIN, 13);
 
-    /* Declaracion tipo de cursor */
-
+    /* Declaracion tipo de cursor y bordes */
+    private Cursor cursorMano = new Cursor(Cursor.HAND_CURSOR);
+    private Border borde = BorderFactory.createMatteBorder(0, 0, 2, 0, GRANATE);
 
     public LoginTemplate(){
         this.generarFuente(); // Generar la fuente
@@ -51,14 +53,16 @@ public class LoginTemplate extends JFrame{
         cuadroUsuario.setCaretColor(GRANATE); // Color de la línea del cursor
         cuadroUsuario.setHorizontalAlignment(SwingConstants.CENTER); // Para que el texto se empiece a escribir en el centro
         cuadroUsuario.setFont(MONSERRAT_SMALL);
+        cuadroUsuario.setBorder(borde); // Borde personalizado
 
-        cuadroContraseña=new JPasswordField();
-        cuadroContraseña.setSize(260, 40);
-        cuadroContraseña.setLocation((panelDerecha.getWidth() - cuadroContraseña.getWidth()) / 2, 220);
-        cuadroContraseña.setForeground(Color.DARK_GRAY);
+        cuadroPassword =new JPasswordField();
+        cuadroPassword.setSize(260, 40);
+        cuadroPassword.setLocation((panelDerecha.getWidth() - cuadroPassword.getWidth()) / 2, 220);
+        cuadroPassword.setForeground(Color.DARK_GRAY);
         cuadroUsuario.setBackground(Color.WHITE);
-        cuadroContraseña.setCaretColor(GRANATE);
-        cuadroContraseña.setHorizontalAlignment(SwingConstants.CENTER);
+        cuadroPassword.setCaretColor(GRANATE);
+        cuadroPassword.setHorizontalAlignment(SwingConstants.CENTER);
+        cuadroPassword.setBorder(borde);
 
         botonEntrar = new JButton("Entrar");
         botonEntrar.setSize(250, 45);
@@ -67,6 +71,7 @@ public class LoginTemplate extends JFrame{
         botonEntrar.setForeground(Color.WHITE);
         botonEntrar.setFocusable(false); // Para que no se vea el cuadro de selección en el texto
         botonEntrar.setFont(MONSERRAT_SMALL);
+        botonEntrar.setCursor(cursorMano); // Cambiar el cursor
 
         botonCerrar = new JButton("X");
         botonCerrar.setBounds(330, 10, 45, 30);
@@ -74,6 +79,7 @@ public class LoginTemplate extends JFrame{
         botonCerrar.setBackground(GRANATE);
         botonCerrar.setForeground(Color.WHITE);
         botonCerrar.setFont(MONSERRAT_SMALL);
+        botonCerrar.setCursor(cursorMano);
 
         botonRegistrar = new JButton("Registrarse");
         botonRegistrar.setSize(145, 35);
@@ -82,13 +88,14 @@ public class LoginTemplate extends JFrame{
         botonRegistrar.setForeground(Color.WHITE);
         botonRegistrar.setFocusable(false);
         botonRegistrar.setFont(MONSERRAT_SMALL);
+        botonRegistrar.setCursor(cursorMano);
 
         /* AÑADIR BOTONES */
         this.add(panelDerecha);
         this.add(panelIzquierda);
         panelIzquierda.add(tituloLogin);
         panelDerecha.add(cuadroUsuario);
-        panelDerecha.add(cuadroContraseña);
+        panelDerecha.add(cuadroPassword);
         panelDerecha.add(botonEntrar);
         panelDerecha.add(botonCerrar);
         panelDerecha.add(botonRegistrar);
