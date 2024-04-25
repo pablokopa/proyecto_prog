@@ -1,4 +1,4 @@
-package app.interfazPrincipal;
+package app.client.interfazPrincipal.principal;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;

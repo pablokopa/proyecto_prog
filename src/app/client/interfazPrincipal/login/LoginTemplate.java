@@ -1,4 +1,4 @@
-package app.interfazPrincipal;
+package app.client.interfazPrincipal.login;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -44,7 +44,7 @@ public class LoginTemplate extends JFrame{
         panelIzquierda.setLayout(null);
 
         labelLogo.setIcon(imagenLogo);
-        labelLogo.setBounds(50, 110, 550, 250);
+        labelLogo.setBounds(50, 125, 550, 250);
 
         /* Parte de derecha de la interfaz */
         panelDerecha=new JPanel();
@@ -142,7 +142,7 @@ public class LoginTemplate extends JFrame{
         setSize(1000, 500);
         setLocationRelativeTo(this);
         setResizable(false);
-        /*setUndecorated(true);*/
+        setUndecorated(true);
         setVisible(true);
     }
 }
