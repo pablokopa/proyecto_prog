@@ -1,3 +1,5 @@
+package usuarios;
+
 public class Usuario {
     private String nombreUsuario;
     private String contraUsuario;
@@ -9,6 +11,11 @@ public class Usuario {
         //this.dataCreacion = "NULL";
     }
 
+    /**
+     * Comprueba si dos objetos (Usuario) tienen el mismo nombre de usuario
+     * @param obj (Usuario)
+     * @return true si son iguales
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null)                return false;
