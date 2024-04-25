@@ -3,6 +3,8 @@ package app.client.interfazPrincipal.login;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginTemplate extends JFrame{
     /* Declaracion elementos */
@@ -160,7 +162,15 @@ public class LoginTemplate extends JFrame{
         labelCerrar.setFocusable(false);
         labelCerrar.setBorder(null);
         labelCerrar.setCursor(cursorMano);
+        // Acción del botón de cerrar
+        labelCerrar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) { // Cuando se haga click
+                dispose(); // Cerrar la ventana
+            }
+        });
         panelDerecha.add(labelCerrar);
+
 
         /* Imagen candado password */
         labelPassword = new JLabel();
