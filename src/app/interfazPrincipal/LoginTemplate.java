@@ -34,10 +34,10 @@ public class LoginTemplate extends JFrame{
         this.generarFuente(); // Generar la fuente
 
         /* Cargar imágenes */
-        imagenLogo = new ImageIcon("/resources/images/logo1.png");
-        imagenCerrar = new ImageIcon("/resources/images/close.png");
-        imagenUsuario = new ImageIcon("/resources/images/user.png");
-        imagenPassword = new ImageIcon("/resources/images/password.png");
+        imagenLogo = new ImageIcon("resources/images/logo1.png");
+        imagenCerrar = new ImageIcon("resources/images/close.png");
+        imagenUsuario = new ImageIcon("resources/images/user.png");
+        imagenPassword = new ImageIcon("resources/images/password.png");
 
         /* Parte de izquierda de la interfaz */
         panelIzquierda=new JPanel();
@@ -46,10 +46,8 @@ public class LoginTemplate extends JFrame{
         panelIzquierda.setBackground(GRANATE);
         panelIzquierda.setLayout(null);
 
-        tituloLogin=new JLabel("Login Usuario");
-        tituloLogin.setBounds(100,20,200,30);
-        tituloLogin.setForeground(Color.WHITE);
-        tituloLogin.setFont(MONSERRAT_BIG);
+        labelLogo.setIcon(imagenLogo);
+        labelLogo.setBounds(50, 100, 550, 250);
 
         /* Parte de derecha de la interfaz */
         panelDerecha=new JPanel();
@@ -106,12 +104,12 @@ public class LoginTemplate extends JFrame{
         /* AÑADIR BOTONES */
         this.add(panelDerecha);
         this.add(panelIzquierda);
-        panelIzquierda.add(tituloLogin);
         panelDerecha.add(cuadroUsuario);
         panelDerecha.add(cuadroPassword);
         panelDerecha.add(botonEntrar);
         panelDerecha.add(botonCerrar);
         panelDerecha.add(botonRegistrar);
+        panelIzquierda.add(labelLogo);
 
         /* CONFIGURACIÓN DE LA VENTANA */
         setTitle("Interfaz Principal");
