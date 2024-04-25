@@ -11,7 +11,7 @@ public class LoginTemplate extends JFrame{
     private JLabel textoLogin;
     private JTextField cuadroUsuario;
     private JPasswordField cuadroPassword;
-    private JButton botonEntrar, botonCerrar, botonRegistrar;
+    private JButton botonEntrar, botonRegistrar;
     private JPanel panelDerecha, panelIzquierda;
 
     /* Declaracion colores y fuentes */
