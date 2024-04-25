@@ -1,8 +1,12 @@
 package app.client.interfazPrincipal.login;
 
+import usuarios.GestorUsuarios;
+import usuarios.Usuario;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.*;
 
 public class LoginTemplate extends JFrame{
     /* Declaracion elementos */
@@ -27,12 +31,12 @@ public class LoginTemplate extends JFrame{
     private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword;
 
     /* Constructor */
-    public LoginTemplate(){
+    public LoginTemplate(GestorUsuarios gestorUsuarios){
         this.crearDecoradores();
         this.crearJPanels();
         this.crearJTextFields();
         this.crearJPasswordField();
-        this.crearJButtons();
+        this.crearJButtons(gestorUsuarios);
         this.crearJLabels();
 
         /* Configuración */
@@ -113,7 +117,7 @@ public class LoginTemplate extends JFrame{
         imagenPassword = new ImageIcon("resources/images/password.png");
     }
 
-    public void crearJButtons(){
+    public void crearJButtons(GestorUsuarios gestorUsuarios){
         /* Botón de entrar */
         botonEntrar = new JButton("Entrar");
         botonEntrar.setSize(250, 45);
@@ -134,6 +138,20 @@ public class LoginTemplate extends JFrame{
         botonRegistrar.setFocusable(false);
         botonRegistrar.setFont(ArialDefault);
         botonRegistrar.setCursor(cursorMano);
+
+        // Acción del botón de registrar
+        botonRegistrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Usuario usuarioTemporal = new Usuario(labelUsuario.getText(),labelPassword.getText());
+                if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
+                    System.out.println("Usuario registrado correctamente");
+                }else{
+                    System.out.println("El usuario no ha sido registrado");
+                }
+            }
+        });
+
         panelDerecha.add(botonRegistrar);
     }
 
@@ -160,6 +178,15 @@ public class LoginTemplate extends JFrame{
         labelCerrar.setFocusable(false);
         labelCerrar.setBorder(null);
         labelCerrar.setCursor(cursorMano);
+
+        // Acción del botón de cerrar
+        labelCerrar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+            }
+        });
+
         panelDerecha.add(labelCerrar);
 
         /* Imagen candado password */
