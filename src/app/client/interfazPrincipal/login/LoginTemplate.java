@@ -1,5 +1,6 @@
 package app.client.interfazPrincipal.login;
 
+import app.services.ObjGraficos;
 import usuarios.GestorUsuarios;
 import usuarios.Usuario;
 import javax.swing.*;
@@ -8,6 +9,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class LoginTemplate extends JFrame{
+    /* Servicios */
+    private ObjGraficos sObjGraficos;
+
     /* Declaración movimiento ventana */
     private int mouseX;
     private int mouseY;
@@ -37,6 +41,8 @@ public class LoginTemplate extends JFrame{
 
     /* Constructor */
     public LoginTemplate(GestorUsuarios gestorUsuarios){
+        sObjGraficos = ObjGraficos.getService();
+
         this.moverVentana();
         this.crearDecoradores();
         this.crearJPanels();
@@ -83,19 +89,11 @@ public class LoginTemplate extends JFrame{
 
     public void crearJPanels(){
         /* Panel Izquierda */
-        panelIzquierda=new JPanel();
-        panelIzquierda.setSize(600,500);
-        panelIzquierda.setLocation(0,0);
-        panelIzquierda.setBackground(GRANATE);
-        panelIzquierda.setLayout(null);
+        panelIzquierda = sObjGraficos.construirJPanel(0, 0, 600, 500, GRANATE, null);
         this.add(panelIzquierda);
 
         /* Panel Derecha */
-        panelDerecha=new JPanel();
-        panelDerecha.setSize(400,500);
-        panelDerecha.setLocation(600,0);
-        panelDerecha.setBackground(Color.WHITE);
-        panelDerecha.setLayout(null);
+        panelDerecha = sObjGraficos.construirJPanel(600, 0, 400, 500, Color.WHITE, null);
         this.add(panelDerecha);
     }
 
@@ -150,27 +148,11 @@ public class LoginTemplate extends JFrame{
 
     public void crearJButtons(GestorUsuarios gestorUsuarios){
         /* Botón de entrar */
-        botonEntrar = new JButton("Entrar");
-        botonEntrar.setSize(250, 45);
-        botonEntrar.setLocation((panelDerecha.getWidth() - botonEntrar.getWidth()) / 2, 300);
-        botonEntrar.setBackground(GRANATE);
-        botonEntrar.setForeground(Color.WHITE);
-        botonEntrar.setFocusable(false); // Para que no se vea el cuadro de selección en el texto
-        botonEntrar.setFont(ArialDefault);
-        botonEntrar.setCursor(cursorMano); // Cambiar el cursor
+        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, cursorMano, null, ArialDefault, GRANATE, Color.WHITE, null, "center", true);
         panelDerecha.add(botonEntrar);
 
         /* Botón de registrarse */
-        botonRegistrar = new JButton("Registrarse");
-        botonRegistrar.setSize(150, 40);
-        botonRegistrar.setLocation((panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370);
-        botonRegistrar.setBackground(GRANATE);
-        botonRegistrar.setForeground(Color.WHITE);
-        botonRegistrar.setFocusable(false);
-        botonRegistrar.setFont(ArialDefault);
-        botonRegistrar.setCursor(cursorMano);
-
-        // Acción del botón de registrar
+        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, cursorMano, null, ArialDefault, GRANATE, Color.WHITE, null, "center", true);
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -182,18 +164,12 @@ public class LoginTemplate extends JFrame{
                 }
             }
         });
-
         panelDerecha.add(botonRegistrar);
     }
 
     public void crearJLabels(){
         /* Texto login*/
-        textoLogin = new JLabel("Iniciar Sesión");
-        textoLogin.setSize(400, 80);
-        textoLogin.setLocation((panelDerecha.getWidth() - textoLogin.getWidth()) / 2, 65);
-        textoLogin.setForeground(GRANATE);
-        textoLogin.setFont(ArialTitle);
-        textoLogin.setHorizontalAlignment(SwingConstants.CENTER);
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", (panelDerecha.getWidth()-165) / 2, 65, 400, 80, null, null, ArialTitle, null, GRANATE, null, "center");
         panelDerecha.add(textoLogin);
 
         /* Imagen logo */
@@ -217,7 +193,6 @@ public class LoginTemplate extends JFrame{
             }
         });
         panelDerecha.add(labelCerrar);
-
 
         /* Imagen candado password */
         labelPassword = new JLabel();
