@@ -3,7 +3,7 @@ package usuarios;
 import java.util.Objects;
 
 public class Usuario {
-    private String nombreUsuario;
+    private final String nombreUsuario;
     private String contraUsuario;
 
     public Usuario(String nombreUsuario, String contraUsuario){

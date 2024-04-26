@@ -2,7 +2,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import tareas.GestorTareas;
-import tareas.TareaCompletada;
 import tareas.TareaToDo;
 
 import static org.junit.Assert.*;
