@@ -6,6 +6,9 @@ out/
 /.idea
 *.iml
 
+### JUnit ###
+TEST-*.xml
+
 ### Eclipse ###
 .apt_generated
 .classpath
