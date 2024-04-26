@@ -16,7 +16,7 @@ public class GestorTareas {
         return listaTareasToDo;
     }
     public ArrayList<TareaCompletada> getListaTareasCompletadas() {
-        return listaTareasCompletadas;
+        return this.listaTareasCompletadas;
     }
 
     /**
@@ -35,7 +35,7 @@ public class GestorTareas {
      */
     public boolean completarTarea(TareaToDo tarea){
         TareaCompletada tareaCompletada = new TareaCompletada(tarea.getNombreTarea(), tarea.getDescripcionTarea());
-        return eliminarTarea(tarea) && listaTareasCompletadas.add(tareaCompletada);
+        return listaTareasCompletadas.add(tareaCompletada) && eliminarTarea(tarea);
     }
 
     /**

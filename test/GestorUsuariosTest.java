@@ -22,4 +22,20 @@ public class GestorUsuariosTest {
         gestorUsuarios.registrarUsuario(new Usuario("nombre", "contra"));
         assertFalse(gestorUsuarios.registrarUsuario(new Usuario("nombre", "otraContra")));
     }
+
+    @Test
+    @DisplayName("Usuario eliminado correctamente")
+    public void usuarioEliminadoCorrectamente(){
+        GestorUsuarios gestorUsuarios = new GestorUsuarios();
+        Usuario usuario = new Usuario("nombre", "contra");
+        gestorUsuarios.registrarUsuario(usuario);
+        assertTrue(gestorUsuarios.eliminarUsuario(usuario));
+    }
+
+    @Test
+    @DisplayName("No se puede eliminar un usuario no registrado")
+    public void usuarioNoSePuedeEliminar(){
+        GestorUsuarios gestorUsuarios = new GestorUsuarios();
+        assertFalse(gestorUsuarios.eliminarUsuario(new Usuario("nombre", "contra")));
+    }
 }
