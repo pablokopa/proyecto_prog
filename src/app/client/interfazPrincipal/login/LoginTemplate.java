@@ -11,6 +11,8 @@ public class LoginTemplate extends JFrame{
     /* Declaración movimiento ventana */
     private int mouseX;
     private int mouseY;
+    private int x;
+    private int y;
 
     /* Declaracion elementos */
     private JLabel textoLogin;
@@ -62,11 +64,18 @@ public class LoginTemplate extends JFrame{
                 mouseY = e.getY();
             }
         });
+
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                int x = e.getXOnScreen();
-                int y = e.getYOnScreen();
+                x = e.getXOnScreen();
+                y = e.getYOnScreen();
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
                 setLocation(x - mouseX, y - mouseY);
             }
         });
