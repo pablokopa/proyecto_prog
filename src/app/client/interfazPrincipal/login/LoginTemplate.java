@@ -2,21 +2,21 @@ package app.client.interfazPrincipal.login;
 
 import usuarios.GestorUsuarios;
 import usuarios.Usuario;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class LoginTemplate extends JFrame{
+    /* Declaración movimiento ventana */
+    private int mouseX;
+    private int mouseY;
+
     /* Declaracion elementos */
     private JLabel textoLogin;
     private JTextField cuadroUsuario;
     private JPasswordField cuadroPassword;
-    private JButton botonEntrar, botonCerrar, botonRegistrar;
+    private JButton botonEntrar, botonRegistrar;
     private JPanel panelDerecha, panelIzquierda;
 
     /* Declaracion colores y fuentes */
@@ -35,6 +35,7 @@ public class LoginTemplate extends JFrame{
 
     /* Constructor */
     public LoginTemplate(GestorUsuarios gestorUsuarios){
+        this.moverVentana();
         this.crearDecoradores();
         this.crearJPanels();
         this.crearJTextFields();
@@ -51,6 +52,24 @@ public class LoginTemplate extends JFrame{
         setResizable(false);
         setUndecorated(true);
         setVisible(true);
+    }
+
+    public void moverVentana(){
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mouseX = e.getX();
+                mouseY = e.getY();
+            }
+        });
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int x = e.getXOnScreen();
+                int y = e.getYOnScreen();
+                setLocation(x - mouseX, y - mouseY);
+            }
+        });
     }
 
     public void crearJPanels(){
