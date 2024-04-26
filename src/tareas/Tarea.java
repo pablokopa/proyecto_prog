@@ -1,11 +1,12 @@
 package tareas;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Tarea {
     private String nombreTarea;
     private String descripcionTarea;
-    private UUID idTarea;
+    private final UUID idTarea;
 
     public Tarea(String nombreTarea, String descripcionTarea){
         this.nombreTarea = nombreTarea;
@@ -22,7 +23,7 @@ public class Tarea {
         if (obj == null || getClass() != obj.getClass()) return false;
         if (obj == this) return true;
         Tarea tareaObj = (Tarea) obj;
-        return tareaObj.idTarea.equals(this.idTarea);
+        return Objects.equals(this.idTarea, tareaObj.idTarea);
     }
 
     /*
