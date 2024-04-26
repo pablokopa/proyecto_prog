@@ -1,3 +1,5 @@
+package testUsuarios;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +12,9 @@ import static org.junit.Assert.assertTrue;
 public class GestorUsuariosTest {
     private GestorUsuarios gestorUsuarios;
 
+    /**
+     * Inicializa el gestor de usuarios
+     */
     @Before
     public void setUp(){
         gestorUsuarios = new GestorUsuarios();

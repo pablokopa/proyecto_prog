@@ -1,17 +1,25 @@
 package usuarios;
 
-import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Clase que gestiona los usuarios
+ */
 public class GestorUsuarios {
-    private final List<Usuario> listaUsuarios;
+    private final ArrayList<Usuario> listaUsuarios; // Lista de usuarios
 
+    /**
+     * Constructor
+     */
     public GestorUsuarios(){
         this.listaUsuarios = new ArrayList<>();
     }
 
     // Getters
-    public List<Usuario> getListaUsuarios() {
+    /**
+     * @return lista de usuarios
+     */
+    public ArrayList<Usuario> getListaUsuarios() {
         return listaUsuarios;
     }
 

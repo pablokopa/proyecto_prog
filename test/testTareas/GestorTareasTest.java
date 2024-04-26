@@ -1,3 +1,5 @@
+package testTareas;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +11,9 @@ import static org.junit.Assert.*;
 public class GestorTareasTest {
     private GestorTareas gestorTareas;
 
+    /**
+     * Inicializa el gestor de tareas
+     */
     @Before
     public void setUp(){
         gestorTareas = new GestorTareas();

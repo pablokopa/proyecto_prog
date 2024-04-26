@@ -2,10 +2,18 @@ package usuarios;
 
 import java.util.Objects;
 
+/**
+ * Clase Usuario
+ */
 public class Usuario {
-    private final String nombreUsuario;
+    private final String nombreUsuario;     // Nombre de usuario; es único
     private String contraUsuario;
 
+    /**
+     * Constructor
+     * @param nombreUsuario nombre de usuario
+     * @param contraUsuario contraseña de usuario
+     */
     public Usuario(String nombreUsuario, String contraUsuario){
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
@@ -26,17 +34,20 @@ public class Usuario {
     }
 
     /**
-     * Se utiliza junto con el método equals para comparar objetos.
-     * El usuario no debe estar incluido dentro de una colección HashSet o HashMap,
-     * porque la igualdad y la generación del hashcode se basan en el nombre de usuario
-     * y podría dar problemas.
-     * @return hash code
+     * Se utiliza automáticamente en el caso de utilizar HashSet, HashMap o HashTable,
+     * no se puede cambiar el nombre de usuario o podría causar problemas
+     * (No utilizado actualmente en el proyecto)
+     * @return hashCode de nombreUsuario
      */
     @Override
     public int hashCode() {
         return nombreUsuario.hashCode();
     }
 
+    /**
+     * Método toString
+     * @return nombre de usuario
+     */
     @Override
     public String toString() {
         return this.nombreUsuario;

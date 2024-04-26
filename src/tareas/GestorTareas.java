@@ -2,10 +2,16 @@ package tareas;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que gestiona las tareas
+ */
 public class GestorTareas {
-    private final ArrayList<TareaToDo> listaTareasToDo;
-    private final ArrayList<TareaCompletada> listaTareasCompletadas;
+    private final ArrayList<TareaToDo> listaTareasToDo;                 // Lista de tareas to-do
+    private final ArrayList<TareaCompletada> listaTareasCompletadas;    // Lista de tareas completadas
 
+    /**
+     * Constructor
+     */
     public GestorTareas(){
         this.listaTareasToDo = new ArrayList<>();
         this.listaTareasCompletadas = new ArrayList<>();
