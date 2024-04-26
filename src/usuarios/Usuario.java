@@ -1,19 +1,22 @@
 package usuarios;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 public class Usuario {
     private String nombreUsuario;
     private String contraUsuario;
-    //private String dataCreacion;
+    private final LocalDate dataCreacion;
 
     public Usuario(String nombreUsuario, String contraUsuario){
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
-        //this.dataCreacion = "NULL";
+        this.dataCreacion = LocalDate.now();    // añade la fecha de creación del usuario
     }
 
     /**
      * Comprueba si dos objetos (Usuario) tienen el mismo nombre de usuario
-     * @param obj (Usuario)
+     * @param obj usuario a comparar
      * @return true si son iguales
      */
     @Override
@@ -22,11 +25,16 @@ public class Usuario {
         if (!(obj instanceof Usuario))  return false;
         if (obj == this)                return true;
         Usuario userObj = (Usuario) obj;
-        return userObj.nombreUsuario.equals(this.nombreUsuario);
+        return Objects.equals(this.nombreUsuario, userObj.nombreUsuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return nombreUsuario.hashCode();
     }
 
     @Override
     public String toString() {
-        return this.nombreUsuario + "(" + "24/04/2024" + ")";
+        return this.nombreUsuario + "(" + dataCreacion + ")";
     }
 }
