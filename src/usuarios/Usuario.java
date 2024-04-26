@@ -1,17 +1,14 @@
 package usuarios;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class Usuario {
     private String nombreUsuario;
     private String contraUsuario;
-    private final LocalDate dataCreacion;
 
     public Usuario(String nombreUsuario, String contraUsuario){
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
-        this.dataCreacion = LocalDate.now();    // añade la fecha de creación del usuario
     }
 
     /**
@@ -28,6 +25,13 @@ public class Usuario {
         return Objects.equals(this.nombreUsuario, userObj.nombreUsuario);
     }
 
+    /**
+     * Se utiliza junto con el método equals para comparar objetos.
+     * El usuario no debe estar incluido dentro de una colección HashSet o HashMap,
+     * porque la igualdad y la generación del hashcode se basan en el nombre de usuario
+     * y podría dar problemas.
+     * @return hash code
+     */
     @Override
     public int hashCode() {
         return nombreUsuario.hashCode();
@@ -35,6 +39,6 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return this.nombreUsuario + "(" + dataCreacion + ")";
+        return this.nombreUsuario;
     }
 }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class GestorUsuarios {
     private final List<Usuario> listaUsuarios;
 
-    // Constructor
     public GestorUsuarios(){
         this.listaUsuarios = new ArrayList<>();
     }
@@ -43,7 +42,6 @@ public class GestorUsuarios {
      * @return true si fue conectado correctamente
      */
     public boolean conectarUsuario (Usuario usuario){
-
         return false;
     }
 
