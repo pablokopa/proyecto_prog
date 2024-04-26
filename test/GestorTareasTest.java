@@ -14,12 +14,18 @@ public class GestorTareasTest {
         gestorTareas = new GestorTareas();
     }
 
+    /**
+     * Test para verificar que se puede agregar una tarea correctamente
+     */
     @Test
     @DisplayName("Agregar tarea correctamente")
     public void agregarTareaCorrectamente(){
         assertTrue(gestorTareas.agregarTarea(new TareaToDo("nombre", "descripcion")));
     }
 
+    /**
+     * Test para verificar que se puede completar una tarea correctamente
+     */
     @Test
     @DisplayName("Completar tarea correctamente")
     public void completarTareaCorrectamente(){
@@ -28,6 +34,9 @@ public class GestorTareasTest {
         assertTrue(gestorTareas.completarTarea(tarea));
     }
 
+    /**
+     * Test para verificar que una tarea completada se elimina y se instancia en TareaCompletada
+     */
     @Test
     @DisplayName("Tarea Completada Es Instancia de TareaCompletada")
     public void completarTareaInstanciaTareaCompletada(){
@@ -37,6 +46,9 @@ public class GestorTareasTest {
         assertFalse(gestorTareas.getListaTareasCompletadas().isEmpty());
     }
 
+    /**
+     * Test para verificar que se elimina la TareaToDo correctamente
+     */
     @Test
     @DisplayName("Eliminar tarea to-do correctamente")
     public void eliminarTareaToDoCorrectamente(){
@@ -45,6 +57,9 @@ public class GestorTareasTest {
         assertTrue(gestorTareas.eliminarTarea(tarea));
     }
 
+    /**
+     * Test para verificar que se puede eliminar una TareaCompletada correctamente
+     */
     @Test
     @DisplayName("Eliminar tarea completada correctamente")
     public void eliminarTareaCompletadaCorrectamente(){

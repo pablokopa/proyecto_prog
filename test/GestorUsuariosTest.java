@@ -15,12 +15,18 @@ public class GestorUsuariosTest {
         gestorUsuarios = new GestorUsuarios();
     }
 
+    /**
+     * Test para verificar que se puede registrar un usuario correctamente
+     */
     @Test
     @DisplayName("Usuario registrado correctamente")
     public void usuarioRegistradoCorrectamente(){
         assertTrue(gestorUsuarios.registrarUsuario(new Usuario("nombre", "contra")));
     }
 
+    /**
+     * Test para verificar que no se puede registrar un usuario con el mismo nombre
+     */
     @Test
     @DisplayName("Usuario ya registrado")
     public void usuarioYaRegistrado(){
@@ -28,6 +34,9 @@ public class GestorUsuariosTest {
         assertFalse(gestorUsuarios.registrarUsuario(new Usuario("nombre", "otraContra")));
     }
 
+    /**
+     * Test para verificar que se puede eliminar un usuario correctamente
+     */
     @Test
     @DisplayName("Usuario eliminado correctamente")
     public void usuarioEliminadoCorrectamente(){
@@ -36,6 +45,9 @@ public class GestorUsuariosTest {
         assertTrue(gestorUsuarios.eliminarUsuario(usuario));
     }
 
+    /**
+     * Test para verificar que no se puede eliminar un usuario no registrado
+     */
     @Test
     @DisplayName("No se puede eliminar un usuario no registrado")
     public void usuarioNoSePuedeEliminar(){
