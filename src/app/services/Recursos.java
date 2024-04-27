@@ -40,6 +40,7 @@ public class Recursos {
     /**
      * Método privado para inicializar las fuentes.
      * Este método se llama en el constructor de la clase Recursos.
+     * @param sizeLetra tamaño de la fuente
      */
     private void crearFuentes(int sizeLetra) {
         ArialDefault = new Font("Arial", Font.PLAIN, sizeLetra);
@@ -82,6 +83,7 @@ public class Recursos {
 
     /**
      * Método para obtener la fuente ArialDefault.
+     * @param sizeLetra tamaño de la fuente
      * @return La fuente ArialDefault.
      */
     public Font getFontTArialDefault(int sizeLetra) {
@@ -91,6 +93,7 @@ public class Recursos {
 
     /**
      * Método para obtener la fuente ArialBold.
+     * @param sizeLetra tamaño de la fuente
      * @return La fuente ArialBold.
      */
     public Font getFontArialBold(int sizeLetra) {
@@ -100,6 +103,7 @@ public class Recursos {
 
     /**
      * Método para obtener la fuente ArialItalic.
+     * @param sizeLetra tamaño de la fuente
      * @return La fuente ArialItalic.
      */
     public Font getFontArialItalic(int sizeLetra) {
