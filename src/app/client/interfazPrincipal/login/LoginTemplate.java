@@ -129,8 +129,9 @@ public class LoginTemplate extends JFrame{
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto
                 if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)){
-                    return;
+                    return;                         // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
                 }
                 // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
