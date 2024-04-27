@@ -1,7 +1,7 @@
 package usuarios;
 
 import javax.swing.*;
-import java.util.ArrayList;g
+import java.util.ArrayList;
 
 /**
  * Clase que gestiona los usuarios
