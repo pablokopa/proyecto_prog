@@ -100,7 +100,7 @@ public class LoginTemplate extends JFrame{
      * Crea y configura el campo de texto para el nombre de usuario.
      */
     public void crearJTextFields(){
-        cuadroUsuario = sObjGraficos.construirJTextField(null, (panelDerecha.getWidth() - 260) / 2, 150, 260, 40, sRecursos.getFontArialBold(), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
+        cuadroUsuario = sObjGraficos.construirJTextField(null, (panelDerecha.getWidth() - 260) / 2, 150, 260, 40, sRecursos.getFontArialBold(12), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
         panelDerecha.add(cuadroUsuario);
     }
 
@@ -109,7 +109,7 @@ public class LoginTemplate extends JFrame{
      * Crea y configura el campo de contraseña para la contraseña del usuario.
      */
     public void crearJPasswordField(){
-        cuadroPassword = sObjGraficos.construirJPasswordField(null, (panelDerecha.getWidth() - 260) / 2, 220, 260, 40, sRecursos.getFontArialBold(), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
+        cuadroPassword = sObjGraficos.construirJPasswordField(null, (panelDerecha.getWidth() - 260) / 2, 220, 260, 40, sRecursos.getFontArialBold(12), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
         panelDerecha.add(cuadroPassword);
     }
 
@@ -119,11 +119,11 @@ public class LoginTemplate extends JFrame{
      */
     public void crearJButtons(GestorUsuarios gestorUsuarios){
         /* Botón de entrar */
-        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(12), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
         panelDerecha.add(botonEntrar);
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(12), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
 
         // *** Se puede hacer un método externo ***
         botonRegistrar.addActionListener(new ActionListener() {
@@ -152,11 +152,11 @@ public class LoginTemplate extends JFrame{
      */
     public void crearJLabels(){
         /* Texto login*/
-        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialTitle(), null, sRecursos.getGRANATE(), null, "c");
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialTitle(27), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
 
         /* Label informativo; nombre y contraseña correctos */
-        textoComprobacion = sObjGraficos.construirJLabel("Texto informativo de usuario", 0, 90, 400, 32, null, null, sRecursos.getFontArialItalic(), null, sRecursos.getGRANATE(), null, "c");
+        textoComprobacion = sObjGraficos.construirJLabel("Texto informativo de usuario", 0, 90, 400, 32, null, null, sRecursos.getFontArialItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
 
         /* Imagen logo */

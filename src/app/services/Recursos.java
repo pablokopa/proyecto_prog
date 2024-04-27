@@ -21,7 +21,7 @@ public class Recursos {
 
     private Recursos() { // Constructor privado para evitar instanciación
         this.crearColores();
-        this.crearFuentes();
+//        this.crearFuentes();
         this.crearCursores();
         this.crearBordes();
         this.crearImagenes();
@@ -39,11 +39,11 @@ public class Recursos {
      * Método privado para inicializar las fuentes.
      * Este método se llama en el constructor de la clase Recursos.
      */
-    private void crearFuentes() {
-        ArialDefault = new Font("Arial", Font.PLAIN, 14);
-        ArialTitle = new Font("Arial", Font.BOLD, 24);
-        ArialBold = new Font("Arial", Font.BOLD, 13);
-        ArialItalic = new Font("Arial" , Font.ITALIC, 15);
+    private void crearFuentes(int sizeLetra) {
+        ArialDefault = new Font("Arial", Font.PLAIN, sizeLetra);
+        ArialTitle = new Font("Arial", Font.BOLD, sizeLetra);
+        ArialBold = new Font("Arial", Font.BOLD, sizeLetra);
+        ArialItalic = new Font("Arial" , Font.ITALIC, sizeLetra);
     }
 
     /**
@@ -83,25 +83,37 @@ public class Recursos {
      * Método para obtener la fuente ArialDefault.
      * @return La fuente ArialDefault.
      */
-    public Font getFontTArialDefault() { return ArialDefault; }
+    public Font getFontTArialDefault(int sizeLetra) {
+        crearFuentes(sizeLetra);
+        return ArialDefault;
+    }
 
     /**
      * Método para obtener la fuente ArialTitle.
      * @return La fuente ArialTitle.
      */
-    public Font getFontArialTitle() { return ArialTitle; }
+    public Font getFontArialTitle(int sizeLetra) {
+        crearFuentes(sizeLetra);
+        return ArialTitle;
+    }
 
     /**
      * Método para obtener la fuente ArialBold.
      * @return La fuente ArialBold.
      */
-    public Font getFontArialBold() { return ArialBold; }
+    public Font getFontArialBold(int sizeLetra) {
+        crearFuentes(sizeLetra);
+        return ArialBold;
+    }
 
     /**
      * Método para obtener la fuente ArialItalic.
      * @return La fuente ArialItalic.
      */
-    public Font getFontArialItalic() { return ArialItalic; }
+    public Font getFontArialItalic(int sizeLetra) {
+        crearFuentes(sizeLetra);
+        return ArialItalic;
+    }
 
     /**
      * Método para obtener el cursor de tipo mano.
