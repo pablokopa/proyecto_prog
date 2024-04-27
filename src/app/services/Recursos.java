@@ -12,7 +12,7 @@ import java.awt.*;
 public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE;
-    private Font ArialDefault, ArialTitle, ArialBold;
+    private Font ArialDefault, ArialTitle, ArialBold, ArialItalic;
     private Cursor cursorMano;
     private Border bordeGranate;
     private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword;
@@ -43,6 +43,7 @@ public class Recursos {
         ArialDefault = new Font("Arial", Font.PLAIN, 14);
         ArialTitle = new Font("Arial", Font.BOLD, 24);
         ArialBold = new Font("Arial", Font.BOLD, 13);
+        ArialItalic = new Font("Arial" , Font.ITALIC, 15);
     }
 
     /**
@@ -95,6 +96,12 @@ public class Recursos {
      * @return La fuente ArialBold.
      */
     public Font getFontArialBold() { return ArialBold; }
+
+    /**
+     * Método para obtener la fuente ArialItalic.
+     * @return La fuente ArialItalic.
+     */
+    public Font getFontArialItalic() { return ArialItalic; }
 
     /**
      * Método para obtener el cursor de tipo mano.

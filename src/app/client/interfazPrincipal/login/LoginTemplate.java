@@ -24,6 +24,9 @@ public class LoginTemplate extends JFrame{
 
     private JLabel textoLogin;
     private JLabel labelLogo, labelCerrar, labelUsuario, labelPassword;
+
+    private JLabel textoComprobacion;
+
     private JTextField cuadroUsuario;
     private JPasswordField cuadroPassword;
     private JButton botonEntrar, botonRegistrar;
@@ -121,10 +124,15 @@ public class LoginTemplate extends JFrame{
 
         /* Botón de registrarse */
         botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+
+        // *** Se puede hacer un método externo ***
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // * en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[]
+                // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
+                System.out.println(gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText()));
+
+
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
                 if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
                     System.out.println("Usuario registrado correctamente");
@@ -144,8 +152,12 @@ public class LoginTemplate extends JFrame{
      */
     public void crearJLabels(){
         /* Texto login*/
-        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", (panelDerecha.getWidth()-165) / 2, 65, 400, 80, null, null, sRecursos.getFontArialTitle(), null, sRecursos.getGRANATE(), null, "center");
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialTitle(), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
+
+        /* Label informativo; nombre y contraseña correctos */
+        textoComprobacion = sObjGraficos.construirJLabel("Texto informativo de usuario", 0, 90, 400, 32, null, null, sRecursos.getFontArialItalic(), null, sRecursos.getGRANATE(), null, "c");
+        panelDerecha.add(textoComprobacion);
 
         /* Imagen logo */
         labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "center");
