@@ -130,15 +130,12 @@ public class LoginTemplate extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto
-                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)){
+                /* Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto y
+                   Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños */
+                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)
+                        || !gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
                     textoLogin.setText("Registrarse");
                     return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
-                }
-                // Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños
-                if (!gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
-                    textoLogin.setText("Registrarse");
-                    return;
                 }
 
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
