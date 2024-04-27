@@ -136,14 +136,19 @@ public class LoginTemplate extends JFrame{
                 if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)){
                     return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
                 }
+                // Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños
+                if (!gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
+                    return;
+                }
+
                 // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
-                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
+                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
                 if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
                     textoComprobacion.setText("Usuario registrado correctamente");
                     cuadroUsuario.setText("");
                     cuadroPassword.setText("");
                 }else{
-                    System.out.println("El usuario no ha sido registrado");
+                    System.out.println("El usuario no ha sido registrado por alguna razón desconocida");
                 }
             }
         });

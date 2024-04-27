@@ -7,14 +7,14 @@ import java.util.Objects;
  */
 public class Usuario {
     private final String nombreUsuario;     // Nombre de usuario; es único
-    private String contraUsuario;
+    private char[] contraUsuario;
 
     /**
      * Constructor
      * @param nombreUsuario nombre de usuario
      * @param contraUsuario contraseña de usuario
      */
-    public Usuario(String nombreUsuario, String contraUsuario){
+    public Usuario(String nombreUsuario, char[] contraUsuario){
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
     }

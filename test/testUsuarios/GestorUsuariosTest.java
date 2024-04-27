@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import usuarios.GestorUsuarios;
 import usuarios.Usuario;
+import javax.swing.JLabel;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -26,7 +27,8 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("Usuario registrado correctamente")
     public void usuarioRegistradoCorrectamente(){
-        assertTrue(gestorUsuarios.registrarUsuario(new Usuario("nombre", "contra")));
+        char[] contraUsuario = {};
+        assertTrue(gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario)));
     }
 
     /**
@@ -35,8 +37,9 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("Usuario ya registrado")
     public void usuarioYaRegistrado(){
-        gestorUsuarios.registrarUsuario(new Usuario("nombre", "contra"));
-        assertFalse(gestorUsuarios.registrarUsuario(new Usuario("nombre", "otraContra")));
+        char[] contraUsuario = {};
+        gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario));
+        assertFalse(gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario)));
     }
 
     /**
@@ -45,7 +48,7 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("Usuario eliminado correctamente")
     public void usuarioEliminadoCorrectamente(){
-        Usuario usuario = new Usuario("nombre", "contra");
+        Usuario usuario = new Usuario("nombre", null);
         gestorUsuarios.registrarUsuario(usuario);
         assertTrue(gestorUsuarios.eliminarUsuario(usuario));
     }
@@ -56,6 +59,27 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("No se puede eliminar un usuario no registrado")
     public void usuarioNoSePuedeEliminar(){
-        assertFalse(gestorUsuarios.eliminarUsuario(new Usuario("nombre", "contra")));
+        assertFalse(gestorUsuarios.eliminarUsuario(new Usuario("nombre", null)));
+    }
+
+    /**
+     * Test para verificar que un nombre correcto es permitido
+     */
+    @Test
+    @DisplayName("Comprobar nombre de usuario correcto")
+    public void comprobarNombreUsuarioCumpleLimitaciones(){
+        String nombre = "nombre";
+        assertTrue(gestorUsuarios.comprobarNombreUsuario(nombre, null));
+    }
+
+    /**
+     * Test para verificar que un nombre con menos de 4 letras no es permitido
+     */
+    @Test
+    @DisplayName("Comprobar nombre de usuario con menos de 4 letras")
+    public void comprobarNombreUsuarioConMenosDe4Letras(){
+        String nombre = "nom";
+        JLabel label = new JLabel();
+        assertFalse(gestorUsuarios.comprobarNombreUsuario(nombre, label));
     }
 }
