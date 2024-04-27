@@ -22,7 +22,7 @@ public class LoginTemplate extends JFrame{
     private int mouseX, x;
     private int mouseY, y;
 
-    private JLabel textoLogin;
+    private JLabel textoLogin, textoRegistro;
     private JLabel labelLogo, labelCerrar, labelUsuario, labelPassword;
 
     private JLabel textoComprobacion;
@@ -129,9 +129,12 @@ public class LoginTemplate extends JFrame{
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                textoLogin.setVisible(false);
+                textoRegistro = sObjGraficos.construirJLabel("Registrarse", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(24), null, sRecursos.getGRANATE(), null, "c");
+                panelDerecha.add(textoRegistro);
                 // Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto
                 if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)){
-                    return;                         // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
+                    return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
                 }
                 // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
@@ -152,14 +155,6 @@ public class LoginTemplate extends JFrame{
      * Crea y configura las etiquetas para el logo, el botón de cerrar, el icono de usuario y el icono de contraseña.
      */
     public void crearJLabels(){
-        /* Texto login*/
-        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(24), null, sRecursos.getGRANATE(), null, "c");
-        panelDerecha.add(textoLogin);
-
-        /* Label informativo; nombre y contraseña correctos */
-        textoComprobacion = sObjGraficos.construirJLabel("", 0, 90, 400, 32, null, null, sRecursos.getFontArialItalic(13), null, sRecursos.getGRANATE(), null, "c");
-        panelDerecha.add(textoComprobacion);
-
         /* Imagen logo */
         labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "center");
         panelIzquierda.add(labelLogo);
@@ -181,5 +176,13 @@ public class LoginTemplate extends JFrame{
             }
         });
         panelDerecha.add(labelCerrar);
+
+        /* Texto login*/
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(24), null, sRecursos.getGRANATE(), null, "c");
+        panelDerecha.add(textoLogin);
+
+        /* Label informativo; nombre y contraseña correctos */
+        textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getFontArialItalic(13), null, sRecursos.getGRANATE(), null, "c");
+        panelDerecha.add(textoComprobacion);
     }
 }
