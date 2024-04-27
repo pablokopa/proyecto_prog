@@ -92,6 +92,6 @@ public class Tarea {
      */
     @Override
     public String toString() {
-        return this.nombreTarea + ": " + this.descripcionTarea;
+        return this.nombreTarea + ": " + this.descripcionTarea + " - " + this.idTarea;      // añade id tarea temporalmente para pruebas
     }
 }

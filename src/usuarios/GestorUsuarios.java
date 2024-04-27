@@ -2,11 +2,13 @@ package usuarios;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Clase que gestiona los usuarios
  */
 public class GestorUsuarios {
+    private Usuario usuarioConectado;
     private final ArrayList<Usuario> listaUsuarios; // Lista de usuarios
 
     /**
@@ -22,6 +24,10 @@ public class GestorUsuarios {
      */
     public ArrayList<Usuario> getListaUsuarios() {
         return this.listaUsuarios;
+    }
+
+    public Usuario getUsuarioConectado() {
+        return usuarioConectado;
     }
 
     /**
@@ -50,7 +56,18 @@ public class GestorUsuarios {
      * @param usuario (Usuario)
      * @return true si fue conectado correctamente
      */
-    public boolean conectarUsuario (Usuario usuario){
+    public boolean conectarUsuario (Usuario usuario, JLabel textoComprobacion){
+        if (this.listaUsuarios.contains(usuario)){
+            int index = this.listaUsuarios.indexOf(usuario);
+            if (Arrays.equals(this.listaUsuarios.get(index).getContraUsuario(), usuario.getContraUsuario())){
+                System.out.println("Usuario conectado");
+                usuarioConectado = usuario;
+                return true;
+            }
+            textoComprobacion.setText("Contraseña incorrecta");
+            return false;
+        }
+        textoComprobacion.setText("Usuario no registrado");
         return false;
     }
 
@@ -64,7 +81,7 @@ public class GestorUsuarios {
     }
 
     /**
-     * Comprueba si el nombre de usuario ya existe o si tiene al menos 4 carácteres
+     * Comprueba si el nombre de usuario ya existe o si tiene al menos 3 carácteres
      * @param nombreUsuario (String) obtenida desde la interfaz de usuario
      * @return true si fue creado correctamente, mensaje en la interfaz si no
      */
@@ -74,8 +91,8 @@ public class GestorUsuarios {
             textoComprobacion.setText("El nombre de usuario ya existe");
             return false;
         }
-        else if (nombreUsuario.length()<4){
-            textoComprobacion.setText("El nombre de usuario debe tener al menos 4 carácteres");
+        else if (nombreUsuario.length()<3){
+            textoComprobacion.setText("El nombre de usuario debe tener al menos 3 carácteres");
             return false;
         }
         return true;

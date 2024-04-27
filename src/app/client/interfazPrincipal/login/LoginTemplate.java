@@ -1,5 +1,6 @@
 package app.client.interfazPrincipal.login;
 
+import app.client.interfazPrincipal.principal.MenuPrincipalConsolaTemporal;
 import app.services.ObjGraficos;
 import app.services.Recursos;
 
@@ -118,12 +119,9 @@ public class LoginTemplate extends JFrame{
      * Crea y configura los botones para el logo, el botón de cerrar, el icono de usuario y el icono de contraseña.
      */
     public void crearJButtons(GestorUsuarios gestorUsuarios){
-        /* Botón de entrar */
-        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
-        panelDerecha.add(botonEntrar);
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
 
         // *** Se puede hacer un método externo ***
         botonRegistrar.addActionListener(new ActionListener() {
@@ -150,7 +148,31 @@ public class LoginTemplate extends JFrame{
             }
         });
         panelDerecha.add(botonRegistrar);
+
+        /* Botón de entrar */
+        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+
+        botonEntrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
+                if (gestorUsuarios.conectarUsuario(usuarioTemporal, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+                    /* cambiar de ventana */
+                    // *** pruebas ***
+                    setVisible(false);
+                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(gestorUsuarios);
+                    menuPrincipal.elegirEnMenu();
+                }else{
+                    textoLogin.setText("Iniciar Sesión");
+                }
+            }
+        });
+
+        panelDerecha.add(botonEntrar);
+
     }
+
+
 
     /**
      * Método para crear las etiquetas.
