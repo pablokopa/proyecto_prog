@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import usuarios.GestorUsuarios;
 import usuarios.Usuario;
+import javax.swing.JLabel;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -58,4 +59,27 @@ public class GestorUsuariosTest {
     public void usuarioNoSePuedeEliminar(){
         assertFalse(gestorUsuarios.eliminarUsuario(new Usuario("nombre", "contra")));
     }
+
+    /**
+     * Test para verificar que un nombre correcto es permitido
+     */
+    @Test
+    @DisplayName("Comprobar nombre de usuario correcto")
+    public void comprobarNombreUsuarioCumpleLimitaciones(){
+        String nombre = "nombre";
+        assertTrue(gestorUsuarios.comprobarNombreUsuario(nombre, null));
+    }
+
+    /**
+     * Test para verificar que un nombre con menos de 4 letras no es permitido
+     */
+    @Test
+    @DisplayName("Comprobar nombre de usuario con menos de 4 letras")
+    public void comprobarNombreUsuarioConMenosDe4Letras(){
+        String nombre = "nom";
+        JLabel label = new JLabel();
+        assertFalse(gestorUsuarios.comprobarNombreUsuario(nombre, label));
+    }
+
+
 }

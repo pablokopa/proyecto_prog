@@ -6,7 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import tareas.GestorTareas;
 import tareas.TareaToDo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class GestorTareasTest {
     private GestorTareas gestorTareas;
