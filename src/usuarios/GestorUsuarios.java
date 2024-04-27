@@ -1,7 +1,7 @@
 package usuarios;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import java.util.ArrayList;g
 
 /**
  * Clase que gestiona los usuarios
@@ -69,7 +69,7 @@ public class GestorUsuarios {
      * @return mensaje de error
      */
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
-        Usuario usuario = new Usuario(nombreUsuario, "");
+        Usuario usuario = new Usuario(nombreUsuario, null);
         if (this.listaUsuarios.contains(usuario)){
             textoComprobacion.setText("El nombre de usuario ya existe");
             return false;
@@ -81,9 +81,21 @@ public class GestorUsuarios {
         return true;
     }
 
-    public String comprobarPasswordUsuario(char[] passwordUsuario){
-
-        return "";
+    public boolean comprobarPasswordUsuario(char[] passwordUsuario, JLabel textoComprobacion){
+        String caracteresNoPermitidos = "!@#$%^&*()_+{}|:\"<>?`~\\[\\];',./";
+        if (passwordUsuario.length<4){
+            textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
+            return false;
+        }
+        for (int i=0; i<passwordUsuario.length; i++){
+            if (passwordUsuario[i]==' '){
+                textoComprobacion.setText("La contraseña no puede tener espacios en blanco");
+                return false;
+            } else if (caracteresNoPermitidos.indexOf(passwordUsuario[i]) != -1){
+                textoComprobacion.setText("La contraseña no puede tener carácteres extraños");
+                return false;
+            }
+        }
+        return true;
     }
-
 }

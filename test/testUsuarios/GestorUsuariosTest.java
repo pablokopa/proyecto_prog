@@ -27,7 +27,8 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("Usuario registrado correctamente")
     public void usuarioRegistradoCorrectamente(){
-        assertTrue(gestorUsuarios.registrarUsuario(new Usuario("nombre", "contra")));
+        char[] contraUsuario = {};
+        assertTrue(gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario)));
     }
 
     /**
@@ -36,8 +37,9 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("Usuario ya registrado")
     public void usuarioYaRegistrado(){
-        gestorUsuarios.registrarUsuario(new Usuario("nombre", "contra"));
-        assertFalse(gestorUsuarios.registrarUsuario(new Usuario("nombre", "otraContra")));
+        char[] contraUsuario = {};
+        gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario));
+        assertFalse(gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario)));
     }
 
     /**
@@ -46,7 +48,7 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("Usuario eliminado correctamente")
     public void usuarioEliminadoCorrectamente(){
-        Usuario usuario = new Usuario("nombre", "contra");
+        Usuario usuario = new Usuario("nombre", null);
         gestorUsuarios.registrarUsuario(usuario);
         assertTrue(gestorUsuarios.eliminarUsuario(usuario));
     }
@@ -57,7 +59,7 @@ public class GestorUsuariosTest {
     @Test
     @DisplayName("No se puede eliminar un usuario no registrado")
     public void usuarioNoSePuedeEliminar(){
-        assertFalse(gestorUsuarios.eliminarUsuario(new Usuario("nombre", "contra")));
+        assertFalse(gestorUsuarios.eliminarUsuario(new Usuario("nombre", null)));
     }
 
     /**
@@ -80,6 +82,4 @@ public class GestorUsuariosTest {
         JLabel label = new JLabel();
         assertFalse(gestorUsuarios.comprobarNombreUsuario(nombre, label));
     }
-
-
 }
