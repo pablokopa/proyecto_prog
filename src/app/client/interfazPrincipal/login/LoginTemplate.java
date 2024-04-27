@@ -22,7 +22,7 @@ public class LoginTemplate extends JFrame{
     private int mouseX, x;
     private int mouseY, y;
 
-    private JLabel textoLogin, textoRegistro;
+    private JLabel textoLogin;
     private JLabel labelLogo, labelCerrar, labelUsuario, labelPassword;
 
     private JLabel textoComprobacion;
@@ -129,22 +129,22 @@ public class LoginTemplate extends JFrame{
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textoLogin.setVisible(false);
-                textoRegistro = sObjGraficos.construirJLabel("Registrarse", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(24), null, sRecursos.getGRANATE(), null, "c");
-                panelDerecha.add(textoRegistro);
+
                 // Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto
                 if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)){
+                    textoLogin.setText("Registrarse");
                     return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
                 }
                 // Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños
                 if (!gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
+                    textoLogin.setText("Registrarse");
                     return;
                 }
 
-                // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
-                if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
+                if (gestorUsuarios.registrarUsuario(usuarioTemporal)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
                     textoComprobacion.setText("Usuario registrado correctamente");
+                    textoLogin.setText("Bienvenido, "+cuadroUsuario.getText()+"!");
                     cuadroUsuario.setText("");
                     cuadroPassword.setText("");
                 }else{
