@@ -152,7 +152,7 @@ public class LoginTemplate extends JFrame{
      */
     public void crearJLabels(){
         /* Texto login*/
-        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialTitle(27), null, sRecursos.getGRANATE(), null, "c");
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(Recursos.TITTLE_SIZE), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
 
         /* Label informativo; nombre y contraseña correctos */

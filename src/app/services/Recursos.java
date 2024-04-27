@@ -17,6 +17,9 @@ public class Recursos {
     private Border bordeGranate;
     private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword;
 
+    // Constante de tamaño de titulo
+    public static final int TITTLE_SIZE = 27;
+
     static private Recursos servicio; // Instancia única de la clase
 
     private Recursos() { // Constructor privado para evitar instanciación
