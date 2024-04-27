@@ -62,4 +62,25 @@ public class GestorUsuarios {
         return false;
     }
 
+    /**
+     * Comprueba si el nombre de usuario ya existe o si tiene al menos 4 carácteres
+     * @param nombreUsuario (String)
+     * @return mensaje de error
+     */
+    public String comprobarNombreUsuario(String nombreUsuario){
+        Usuario usuario = new Usuario(nombreUsuario, "");
+        if (this.listaUsuarios.contains(usuario)){
+            return "El nombre de usuario ya existe";
+        }
+        else if (nombreUsuario.length()<4){
+            return "El nombre de debe tener al menos 4 carácteres";
+        }
+        return "Nombre disponible";
+    }
+
+    public String comprobarPasswordUsuario(char[] passwordUsuario){
+
+        return "";
+    }
+
 }
