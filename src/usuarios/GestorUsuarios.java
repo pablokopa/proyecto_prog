@@ -1,5 +1,6 @@
 package usuarios;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -67,14 +68,14 @@ public class GestorUsuarios {
      * @param nombreUsuario (String)
      * @return mensaje de error
      */
-    public boolean comprobarNombreUsuario(String nombreUsuario){
+    public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
         Usuario usuario = new Usuario(nombreUsuario, "");
         if (this.listaUsuarios.contains(usuario)){
-            System.out.println("El nombre de usuario ya existe");
+            textoComprobacion.setText("El nombre de usuario ya existe");
             return false;
         }
         else if (nombreUsuario.length()<4){
-            System.out.println("El nombre debe tener al menos 4 carácteres");
+            textoComprobacion.setText("El nombre de usuario debe tener al menos 4 carácteres");
             return false;
         }
         return true;

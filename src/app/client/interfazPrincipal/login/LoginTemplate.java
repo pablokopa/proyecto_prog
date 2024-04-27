@@ -129,17 +129,17 @@ public class LoginTemplate extends JFrame{
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
-                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText())){
+                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)){
                     return;
                 }
-
+                // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
                 if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
                     System.out.println("Usuario registrado correctamente");
                 }else{
                     System.out.println("El usuario no ha sido registrado");
                 }
+                textoComprobacion.setText("Usuario registrado correctamente");
                 cuadroUsuario.setText("");
                 cuadroPassword.setText("");
             }
@@ -157,7 +157,7 @@ public class LoginTemplate extends JFrame{
         panelDerecha.add(textoLogin);
 
         /* Label informativo; nombre y contraseña correctos */
-        textoComprobacion = sObjGraficos.construirJLabel("Texto informativo de usuario", 0, 90, 400, 32, null, null, sRecursos.getFontArialItalic(13), null, sRecursos.getGRANATE(), null, "c");
+        textoComprobacion = sObjGraficos.construirJLabel("", 0, 90, 400, 32, null, null, sRecursos.getFontArialItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
 
         /* Imagen logo */
