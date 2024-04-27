@@ -124,12 +124,15 @@ public class LoginTemplate extends JFrame{
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Usuario usuarioTemporal = new Usuario(labelUsuario.getText(),labelPassword.getText());
+                // * en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[]
+                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
                 if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
                     System.out.println("Usuario registrado correctamente");
                 }else{
                     System.out.println("El usuario no ha sido registrado");
                 }
+                cuadroUsuario.setText("");
+                cuadroPassword.setText("");
             }
         });
         panelDerecha.add(botonRegistrar);

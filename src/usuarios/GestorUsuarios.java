@@ -20,7 +20,7 @@ public class GestorUsuarios {
      * @return lista de usuarios
      */
     public ArrayList<Usuario> getListaUsuarios() {
-        return listaUsuarios;
+        return this.listaUsuarios;
     }
 
     /**
