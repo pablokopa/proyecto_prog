@@ -123,7 +123,7 @@ public class LoginTemplate extends JFrame{
         panelDerecha.add(botonEntrar);
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(12), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
 
         // *** Se puede hacer un método externo ***
         botonRegistrar.addActionListener(new ActionListener() {
