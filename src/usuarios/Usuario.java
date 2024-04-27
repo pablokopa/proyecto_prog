@@ -1,17 +1,22 @@
 package usuarios;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Clase Usuario
+ */
 public class Usuario {
-    private String nombreUsuario;
+    private final String nombreUsuario;     // Nombre de usuario; es único
     private String contraUsuario;
-    private final LocalDate dataCreacion;
 
+    /**
+     * Constructor
+     * @param nombreUsuario nombre de usuario
+     * @param contraUsuario contraseña de usuario
+     */
     public Usuario(String nombreUsuario, String contraUsuario){
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
-        this.dataCreacion = LocalDate.now();    // añade la fecha de creación del usuario
     }
 
     /**
@@ -28,13 +33,23 @@ public class Usuario {
         return Objects.equals(this.nombreUsuario, userObj.nombreUsuario);
     }
 
+    /**
+     * Se utiliza automáticamente en el caso de utilizar HashSet, HashMap o HashTable,
+     * no se puede cambiar el nombre de usuario o podría causar problemas
+     * (No utilizado actualmente en el proyecto)
+     * @return hashCode de nombreUsuario
+     */
     @Override
     public int hashCode() {
         return nombreUsuario.hashCode();
     }
 
+    /**
+     * Método toString
+     * @return nombre de usuario
+     */
     @Override
     public String toString() {
-        return this.nombreUsuario + "(" + dataCreacion + ")";
+        return this.nombreUsuario;
     }
 }

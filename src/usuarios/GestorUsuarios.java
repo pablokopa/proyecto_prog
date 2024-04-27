@@ -1,18 +1,25 @@
 package usuarios;
 
-import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Clase que gestiona los usuarios
+ */
 public class GestorUsuarios {
-    private final List<Usuario> listaUsuarios;
+    private final ArrayList<Usuario> listaUsuarios; // Lista de usuarios
 
-    // Constructor
+    /**
+     * Constructor
+     */
     public GestorUsuarios(){
         this.listaUsuarios = new ArrayList<>();
     }
 
     // Getters
-    public List<Usuario> getListaUsuarios() {
+    /**
+     * @return lista de usuarios
+     */
+    public ArrayList<Usuario> getListaUsuarios() {
         return listaUsuarios;
     }
 
@@ -43,7 +50,6 @@ public class GestorUsuarios {
      * @return true si fue conectado correctamente
      */
     public boolean conectarUsuario (Usuario usuario){
-
         return false;
     }
 

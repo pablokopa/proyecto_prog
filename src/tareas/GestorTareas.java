@@ -2,14 +2,18 @@ package tareas;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que gestiona las tareas
+ */
 public class GestorTareas {
-    private final ArrayList<TareaToDo> listaTareasToDo;
-    private final ArrayList<TareaEnProgreso> listaTareasEnProgreso;
-    private final ArrayList<TareaCompletada> listaTareasCompletadas;
+    private final ArrayList<TareaToDo> listaTareasToDo;                 // Lista de tareas to-do
+    private final ArrayList<TareaCompletada> listaTareasCompletadas;    // Lista de tareas completadas
 
+    /**
+     * Constructor
+     */
     public GestorTareas(){
         this.listaTareasToDo = new ArrayList<>();
-        this.listaTareasEnProgreso = new ArrayList<>();
         this.listaTareasCompletadas = new ArrayList<>();
     }
 
@@ -17,14 +21,10 @@ public class GestorTareas {
     public ArrayList<TareaToDo> getListaTareasToDo() {
         return listaTareasToDo;
     }
-    public ArrayList<TareaEnProgreso> getListaTareasEnProgreso() {
-        return listaTareasEnProgreso;
-    }
     public ArrayList<TareaCompletada> getListaTareasCompletadas() {
-        return listaTareasCompletadas;
+        return this.listaTareasCompletadas;
     }
 
-    //
     /**
      * Agrega una tarea a la lista de tareas por hacer
      * @param tarea tarea a agregar
@@ -35,16 +35,23 @@ public class GestorTareas {
     }
 
     /**
+     * Completa una tarea y la agrega a la lista de tareas completadas
+     * @param tarea tarea a completar
+     * @return true si fue completada correctamente
+     */
+    public boolean completarTarea(TareaToDo tarea){
+        TareaCompletada tareaCompletada = new TareaCompletada(tarea.getNombreTarea(), tarea.getDescripcionTarea());
+        return listaTareasCompletadas.add(tareaCompletada) && eliminarTarea(tarea);
+    }
+
+    /**
      * Elimina una tarea de la lista de tareas
-     * @param tarea tarea a eliminar. Debe ser una instancia de TareaToDo, TareaEnProgreso o TareaCompletada
+     * @param tarea tarea a eliminar. Debe ser una instancia de TareaToDo o TareaCompletada
      * @return true si fue eliminada correctamente
      */
     public boolean eliminarTarea(Tarea tarea){
         if (tarea instanceof TareaToDo){
             return this.listaTareasToDo.remove((TareaToDo) tarea);
-        }
-        if (tarea instanceof TareaEnProgreso){
-            return this.listaTareasEnProgreso.remove(((TareaEnProgreso) tarea));
         }
         if (tarea instanceof TareaCompletada){
             return this.listaTareasCompletadas.remove(((TareaCompletada) tarea));
