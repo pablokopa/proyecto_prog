@@ -18,7 +18,7 @@ public class Recursos {
     private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword;
 
     // Constante de tamaño de titulo
-    public static final int TITTLE_SIZE = 27;
+    public static final int TITTLE_SIZE = 24;
 
     static private Recursos servicio; // Instancia única de la clase
 
