@@ -65,8 +65,8 @@ public class GestorUsuarios {
 
     /**
      * Comprueba si el nombre de usuario ya existe o si tiene al menos 4 carácteres
-     * @param nombreUsuario (String)
-     * @return mensaje de error
+     * @param nombreUsuario (String) obtenida desde la interfaz de usuario
+     * @return true si fue creado correctamente, mensaje en la interfaz si no
      */
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
         Usuario usuario = new Usuario(nombreUsuario, null);
@@ -81,8 +81,13 @@ public class GestorUsuarios {
         return true;
     }
 
+    /**
+     * Comprueba si la contraseña tiene al menos 4 carácteres y no tiene espacios en blanco ni ciertos carácteres extraños
+     * @param passwordUsuario (char[]) obtenida desde la interfaz de usuario
+     * @return true si fue creado correctamente, mensaje en la interfaz si no
+     */
     public boolean comprobarPasswordUsuario(char[] passwordUsuario, JLabel textoComprobacion){
-        String caracteresNoPermitidos = "!@#$%^&*()_+{}|:\"<>?`~\\[\\];',./";
+        String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
         if (passwordUsuario.length<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
             return false;
