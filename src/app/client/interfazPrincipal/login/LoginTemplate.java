@@ -136,13 +136,12 @@ public class LoginTemplate extends JFrame{
                 // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
                 if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
-                    System.out.println("Usuario registrado correctamente");
+                    textoComprobacion.setText("Usuario registrado correctamente");
+                    cuadroUsuario.setText("");
+                    cuadroPassword.setText("");
                 }else{
                     System.out.println("El usuario no ha sido registrado");
                 }
-                textoComprobacion.setText("Usuario registrado correctamente");
-                cuadroUsuario.setText("");
-                cuadroPassword.setText("");
             }
         });
         panelDerecha.add(botonRegistrar);
@@ -154,7 +153,7 @@ public class LoginTemplate extends JFrame{
      */
     public void crearJLabels(){
         /* Texto login*/
-        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(Recursos.TITTLE_SIZE), null, sRecursos.getGRANATE(), null, "c");
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 0, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(24), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
 
         /* Label informativo; nombre y contraseña correctos */
