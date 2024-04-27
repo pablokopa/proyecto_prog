@@ -130,8 +130,9 @@ public class LoginTemplate extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
-                System.out.println(gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText()));
-
+                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText())){
+                    return;
+                }
 
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(),cuadroPassword.getText());
                 if (gestorUsuarios.registrarUsuario(usuarioTemporal)){

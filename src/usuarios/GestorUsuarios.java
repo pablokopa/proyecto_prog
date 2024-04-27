@@ -67,15 +67,17 @@ public class GestorUsuarios {
      * @param nombreUsuario (String)
      * @return mensaje de error
      */
-    public String comprobarNombreUsuario(String nombreUsuario){
+    public boolean comprobarNombreUsuario(String nombreUsuario){
         Usuario usuario = new Usuario(nombreUsuario, "");
         if (this.listaUsuarios.contains(usuario)){
-            return "El nombre de usuario ya existe";
+            System.out.println("El nombre de usuario ya existe");
+            return false;
         }
         else if (nombreUsuario.length()<4){
-            return "El nombre de debe tener al menos 4 carácteres";
+            System.out.println("El nombre debe tener al menos 4 carácteres");
+            return false;
         }
-        return "Nombre disponible";
+        return true;
     }
 
     public String comprobarPasswordUsuario(char[] passwordUsuario){
