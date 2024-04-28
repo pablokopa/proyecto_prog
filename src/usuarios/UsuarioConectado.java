@@ -1,18 +1,19 @@
-package tareas;
+package usuarios;
+
+import tareas.Tarea;
+import tareas.TareaCompletada;
+import tareas.TareaToDo;
 
 import java.util.ArrayList;
 
-/**
- * Clase que gestiona las tareas
- */
-public class GestorTareas {
+public class UsuarioConectado extends Usuario{
+    private static UsuarioConectado usuarioConectado = null;
+
     private final ArrayList<TareaToDo> listaTareasToDo;                 // Lista de tareas to-do
     private final ArrayList<TareaCompletada> listaTareasCompletadas;    // Lista de tareas completadas
 
-    /**
-     * Constructor
-     */
-    public GestorTareas(){
+    public UsuarioConectado(Usuario usuario){
+        super(usuario.getNombreUsuario(), usuario.getContraUsuario());
         this.listaTareasToDo = new ArrayList<>();
         this.listaTareasCompletadas = new ArrayList<>();
     }
@@ -24,6 +25,7 @@ public class GestorTareas {
     public ArrayList<TareaCompletada> getListaTareasCompletadas() {
         return this.listaTareasCompletadas;
     }
+
 
     /**
      * Agrega una tarea a la lista de tareas por hacer
@@ -57,5 +59,12 @@ public class GestorTareas {
             return this.listaTareasCompletadas.remove(((TareaCompletada) tarea));
         }
         return false;
+    }
+
+    public static UsuarioConectado getUsuarioConectado(Usuario usuario){
+        if (usuarioConectado == null){
+            usuarioConectado = new UsuarioConectado(usuario);
+        }
+        return usuarioConectado;
     }
 }

@@ -8,7 +8,6 @@ import java.util.Arrays;
  * Clase que gestiona los usuarios
  */
 public class GestorUsuarios {
-    private Usuario usuarioConectado;
     private final ArrayList<Usuario> listaUsuarios; // Lista de usuarios
 
     /**
@@ -24,10 +23,6 @@ public class GestorUsuarios {
      */
     public ArrayList<Usuario> getListaUsuarios() {
         return this.listaUsuarios;
-    }
-
-    public Usuario getUsuarioConectado() {
-        return usuarioConectado;
     }
 
     /**
@@ -61,7 +56,7 @@ public class GestorUsuarios {
             int index = this.listaUsuarios.indexOf(usuario);
             if (Arrays.equals(this.listaUsuarios.get(index).getContraUsuario(), usuario.getContraUsuario())){
                 System.out.println("Usuario conectado");
-                usuarioConectado = usuario;
+                UsuarioConectado.getUsuarioConectado(usuario);
                 return true;
             }
             textoComprobacion.setText("Contraseña incorrecta");

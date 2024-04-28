@@ -1,7 +1,5 @@
 package usuarios;
 
-import tareas.GestorTareas;
-
 import java.util.Objects;
 
 /**
@@ -10,7 +8,6 @@ import java.util.Objects;
 public class Usuario {
     private final String nombreUsuario;     // Nombre de usuario; es único
     private char[] contraUsuario;
-    private GestorTareas gestorTareasUsuario;
 
     /**
      * Constructor
@@ -20,15 +17,14 @@ public class Usuario {
     public Usuario(String nombreUsuario, char[] contraUsuario){
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
-        this.gestorTareasUsuario = new GestorTareas();
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
     public char[] getContraUsuario() {
         return contraUsuario;
-    }
-
-    public GestorTareas getGestorTareasUsuario() {
-        return gestorTareasUsuario;
     }
 
     /**
