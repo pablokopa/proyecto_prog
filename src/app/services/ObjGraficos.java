@@ -319,6 +319,19 @@ public class ObjGraficos {
         return check;
     }
 
+    public JCheckBox construirJCheckBox(
+            String texto, int ancho, int alto, Cursor cursor, Font fuente, Color colorFuente
+    ) {
+        check = new JCheckBox(texto);
+        check.setSize(ancho, alto);
+//        check.setFocusable(false);
+//        check.setBackground(null);
+        check.setCursor(cursor);g
+        check.setFont(fuente);
+        check.setForeground(colorFuente);
+        return check;
+    }
+
     /**
      * Método para construir un JTextArea.
      * @param texto El texto inicial del área de texto.
@@ -387,10 +400,4 @@ public class ObjGraficos {
         }
         return comboBox;
     }
-/*
-    public JList<JCheckBox> construirJListDeJCheckBox(
-
-    )
-    */
-
 }

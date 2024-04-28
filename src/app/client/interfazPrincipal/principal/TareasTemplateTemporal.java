@@ -4,6 +4,7 @@ import app.services.ObjGraficos;
 import app.services.Recursos;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -51,18 +52,34 @@ public class TareasTemplateTemporal extends JFrame {
 
         /* Panel principal */
         panelVistaPrincipal = sObjGraficos.construirJPanel(250,50, 850, 600, sRecursos.getGRIS_CLARO(), null);
-        add(panelVistaPrincipal);
+
 
         // [!!] Para cambiar el tamaño de los 2 siguientes paneles, simplemente cambiar el valor de sizeDerecha
         int sizeDerecha = 300;
 
         /* Panel donde estarán las tareas */
-        panelVerTareas = sObjGraficos.construirPanelBarra(new JPanel(),10,10, panelVistaPrincipal.getWidth()-(20+sizeDerecha), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        for (int i=0; i<100; i++){
+            JCheckBox checkBox = sObjGraficos.construirJCheckBox("Tarea "+i, 100, 100, sRecursos.getCursorMano(), sRecursos.getFontTArialDefault(13), sRecursos.getGRANATE());
+
+            panel.add(checkBox);
+        }
+
+
+        panelVerTareas = sObjGraficos.construirPanelBarra(panel,10,10, panelVistaPrincipal.getWidth()-(20+sizeDerecha), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
+
+
+
+
         panelVistaPrincipal.add(panelVerTareas);
 
         /* Panel donde estará información de la tarea seleccionada */
         panelInformacionExtra = sObjGraficos.construirJPanel(panelVerTareas.getWidth()+15, 10, panelVistaPrincipal.getWidth()-panelVerTareas.getWidth()-25, panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
         panelVistaPrincipal.add(panelInformacionExtra);
+
+        add(panelVistaPrincipal);
     }
 
     private void crearLabels(){
