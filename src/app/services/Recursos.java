@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class Recursos {
     // Declaración de recursos gráficos
-    private Color GRANATE;
+    private Color GRANATE, BLANCO, GRIS_CLARO;
     private Font ArialDefault, ArialBold, ArialItalic;
     private Cursor cursorMano;
     private Border bordeGranate;
@@ -32,6 +32,8 @@ public class Recursos {
      */
     private void crearColores() {
         GRANATE = new Color(82,0,0);
+        BLANCO = new Color(255, 255, 255);
+        GRIS_CLARO = new Color(245, 245, 245);
     }
 
     /**
@@ -77,6 +79,18 @@ public class Recursos {
      * @return El color GRANATE.
      */
     public Color getGRANATE() { return GRANATE; }
+
+    /**
+     * Método para obtener el color BLANCO.
+     * @return El color BLANCO.
+     */
+    public Color getBLANCO() { return BLANCO; }
+
+    /**
+     * Método para obtener el color GRIS_CLARO.
+     * @return El color GRIS_CLARO.
+     */
+    public Color getGRIS_CLARO() { return GRIS_CLARO; }
 
     /**
      * Método para obtener la fuente ArialDefault.

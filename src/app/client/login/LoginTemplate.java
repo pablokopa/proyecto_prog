@@ -1,4 +1,4 @@
-package app.client.interfazPrincipal.login;
+package app.client.login;
 
 import app.services.ObjGraficos;
 import app.services.Recursos;
