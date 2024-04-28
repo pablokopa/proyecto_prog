@@ -12,7 +12,8 @@ public class TareasTemplateTemporal extends JFrame {
     private ObjGraficos sObjGraficos;
     private Recursos sRecursos;
 
-
+    private int mouseX, x;
+    private int mouseY, y;
 
     private JPanel panelOpciones, panelVistaPrincipal, panelSuperior;
     private JPanel panelVerTareas, panelInformacionExtra;
@@ -23,17 +24,19 @@ public class TareasTemplateTemporal extends JFrame {
         sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
 
-        setSize(1100, 650);
-
-        crearPaneles();
-        crearLabels();
-
         /* Configuración de la ventana */
-
+        setSize(1100, 650);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(this);
         setLayout(null);
         setUndecorated(true);
+
+        /* Generar los componentes */
+        crearPaneles();
+        crearLabels();
+        moverVentana();
+
+        /* Hacer visible la ventana */
         setVisible(true);
     }
 
@@ -50,15 +53,15 @@ public class TareasTemplateTemporal extends JFrame {
         panelVistaPrincipal = sObjGraficos.construirJPanel(250,50, 850, 600, sRecursos.getGRIS_CLARO(), null);
         add(panelVistaPrincipal);
 
-        // [!!] Para cambiar el tamaño de los siguientes paneles, simplemente cambia el valor +250 del ancho de panelVerTareas. (3er argumento que recibe, último número)
+        // [!!] Para cambiar el tamaño de los 2 siguientes paneles, simplemente cambia el valor +250 del ancho de panelVerTareas. (3er argumento que recibe, último número)
 
         /* Panel donde estarán las tareas */
         panelVerTareas = sObjGraficos.construirJPanel(10,10, panelVistaPrincipal.getWidth()-(20+250), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
+        panelVistaPrincipal.add(panelVerTareas);
+
         /* Panel donde estará información de la tarea seleccionada */
         panelInformacionExtra = sObjGraficos.construirJPanel(panelVerTareas.getWidth()+15, 10, panelVistaPrincipal.getWidth()-panelVerTareas.getWidth()-25, panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
-        panelVistaPrincipal.add(panelVerTareas);
         panelVistaPrincipal.add(panelInformacionExtra);
-        add(panelVistaPrincipal);
     }
 
     private void crearLabels(){
@@ -71,6 +74,28 @@ public class TareasTemplateTemporal extends JFrame {
             }
         });
         panelSuperior.add(labelCerrarVentana);
+    }
+
+    /**
+     * Método para permitir el movimiento de la ventana.
+     */
+    public void moverVentana(){
+        panelSuperior.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mouseX = e.getX();
+                mouseY = e.getY();
+            }
+        });
+
+        panelSuperior.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                x = e.getXOnScreen();
+                y = e.getYOnScreen();
+                setLocation(x - mouseX, y - mouseY);
+            }
+        });
     }
 
     public static void main(String[] args) {
