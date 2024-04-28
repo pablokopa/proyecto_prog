@@ -50,13 +50,15 @@ public class TareasTemplateTemporal extends JFrame {
         panelVistaPrincipal = sObjGraficos.construirJPanel(250,50, 850, 600, sRecursos.getGRIS_CLARO(), null);
         add(panelVistaPrincipal);
 
-        panelVerTareas = sObjGraficos.construirJPanel(10,10, panelVistaPrincipal.getWidth()-(20+230), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), sRecursos.getBordeGranate());
-//        panelInformacionExtra = sObjGraficos.construirJPanel()
+        // [!!] Para cambiar el tamaño de los siguientes paneles, simplemente cambia el valor +250 del ancho de panelVerTareas. (3er argumento que recibe, último número)
+
+        /* Panel donde estarán las tareas */
+        panelVerTareas = sObjGraficos.construirJPanel(10,10, panelVistaPrincipal.getWidth()-(20+250), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
+        /* Panel donde estará información de la tarea seleccionada */
+        panelInformacionExtra = sObjGraficos.construirJPanel(panelVerTareas.getWidth()+15, 10, panelVistaPrincipal.getWidth()-panelVerTareas.getWidth()-25, panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
         panelVistaPrincipal.add(panelVerTareas);
+        panelVistaPrincipal.add(panelInformacionExtra);
         add(panelVistaPrincipal);
-
-        /* Panel ver tareas */
-
     }
 
     private void crearLabels(){
