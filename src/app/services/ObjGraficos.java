@@ -259,10 +259,10 @@ public class ObjGraficos {
     public JScrollPane construirPanelBarra(
             Component componente, int x, int y, int ancho, int alto, Color colorFondo, Border borde
     ) {
+        componente.setBackground(colorFondo);
         panelScroll = new JScrollPane(componente);
         panelScroll.setLocation(x, y);
         panelScroll.setSize(ancho, alto);
-        panelScroll.getViewport().setBackground(colorFondo);
         panelScroll.setBorder(borde);
         return panelScroll;
     }
@@ -387,4 +387,10 @@ public class ObjGraficos {
         }
         return comboBox;
     }
+/*
+    public JList<JCheckBox> construirJListDeJCheckBox(
+
+    )
+    */
+
 }

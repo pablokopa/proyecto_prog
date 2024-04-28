@@ -4,7 +4,6 @@ import app.services.ObjGraficos;
 import app.services.Recursos;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -16,7 +15,8 @@ public class TareasTemplateTemporal extends JFrame {
     private int mouseY, y;
 
     private JPanel panelOpciones, panelVistaPrincipal, panelSuperior;
-    private JPanel panelVerTareas, panelInformacionExtra;
+    private JScrollPane panelVerTareas;
+    private JPanel panelInformacionExtra;
 
     private JLabel labelCerrarVentana;
 
@@ -53,10 +53,11 @@ public class TareasTemplateTemporal extends JFrame {
         panelVistaPrincipal = sObjGraficos.construirJPanel(250,50, 850, 600, sRecursos.getGRIS_CLARO(), null);
         add(panelVistaPrincipal);
 
-        // [!!] Para cambiar el tamaño de los 2 siguientes paneles, simplemente cambia el valor +250 del ancho de panelVerTareas. (3er argumento que recibe, último número)
+        // [!!] Para cambiar el tamaño de los 2 siguientes paneles, simplemente cambiar el valor de sizeDerecha
+        int sizeDerecha = 300;
 
         /* Panel donde estarán las tareas */
-        panelVerTareas = sObjGraficos.construirJPanel(10,10, panelVistaPrincipal.getWidth()-(20+250), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
+        panelVerTareas = sObjGraficos.construirPanelBarra(new JPanel(),10,10, panelVistaPrincipal.getWidth()-(20+sizeDerecha), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
         panelVistaPrincipal.add(panelVerTareas);
 
         /* Panel donde estará información de la tarea seleccionada */
@@ -77,13 +78,13 @@ public class TareasTemplateTemporal extends JFrame {
     }
 
     /**
-     * Método para permitir el movimiento de la ventana.
+     * Método para permitir el movimiento de la ventana desde panelSuperior.
      */
     public void moverVentana(){
         panelSuperior.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                mouseX = e.getX();
+                mouseX = e.getX()+250;      // +250 porque es la posición x de panelSuperior
                 mouseY = e.getY();
             }
         });
