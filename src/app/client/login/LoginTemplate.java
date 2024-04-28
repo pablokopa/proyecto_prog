@@ -1,5 +1,6 @@
 package app.client.login;
 
+import app.client.interfazPrincipal.principal.MenuPrincipalConsolaTemporal;
 import app.services.ObjGraficos;
 import app.services.Recursos;
 
@@ -22,7 +23,7 @@ public class LoginTemplate extends JFrame{
     private int mouseX, x;
     private int mouseY, y;
 
-    private JLabel textoLogin, textoRegistro;
+    private JLabel textoLogin;
     private JLabel labelLogo, labelCerrar, labelUsuario, labelPassword;
 
     private JLabel textoComprobacion;
@@ -118,33 +119,27 @@ public class LoginTemplate extends JFrame{
      * Crea y configura los botones para el logo, el botón de cerrar, el icono de usuario y el icono de contraseña.
      */
     public void crearJButtons(GestorUsuarios gestorUsuarios){
-        /* Botón de entrar */
-        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
-        panelDerecha.add(botonEntrar);
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - botonEntrar.getWidth())-25, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
 
         // *** Se puede hacer un método externo ***
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textoLogin.setVisible(false);
-                textoRegistro = sObjGraficos.construirJLabel("Registrarse", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getFontArialBold(24), null, sRecursos.getGRANATE(), null, "c");
-                panelDerecha.add(textoRegistro);
-                // Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto
-                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)){
+
+                /* Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto y
+                   Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños */
+                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)
+                        || !gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
+                    textoLogin.setText("Registrarse");
                     return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
                 }
-                // Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños
-                if (!gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
-                    return;
-                }
 
-                // *** en JPasswordField, getText() esta deprecado, hay que cambiarlo por getPassword() que devuelve un char[] ***
                 Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
-                if (gestorUsuarios.registrarUsuario(usuarioTemporal)){
+                if (gestorUsuarios.registrarUsuario(usuarioTemporal)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
                     textoComprobacion.setText("Usuario registrado correctamente");
+                    textoLogin.setText("Bienvenido, "+cuadroUsuario.getText()+"!");
                     cuadroUsuario.setText("");
                     cuadroPassword.setText("");
                 }else{
@@ -153,7 +148,31 @@ public class LoginTemplate extends JFrame{
             }
         });
         panelDerecha.add(botonRegistrar);
+
+        /* Botón de entrar */
+        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+
+        botonEntrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
+                if (gestorUsuarios.conectarUsuario(usuarioTemporal, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+                    /* cambiar de ventana */
+                    // *** pruebas ***
+                    setVisible(false);
+                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(gestorUsuarios);
+                    menuPrincipal.elegirEnMenu();
+                }else{
+                    textoLogin.setText("Iniciar Sesión");
+                }
+            }
+        });
+
+        panelDerecha.add(botonEntrar);
+
     }
+
+
 
     /**
      * Método para crear las etiquetas.

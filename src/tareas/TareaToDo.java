@@ -1,7 +1,8 @@
 package tareas;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Clase que representa una tarea por hacer.
@@ -9,9 +10,13 @@ import java.time.ZonedDateTime;
  */
 public class TareaToDo extends Tarea{
     /**
-     * Fecha de creación de la tarea. Establece la hora y día basado en la zona horaria de España
+     * Establece el día de creación según el día del SO
      */
-    private ZonedDateTime fechaCreacion;  // fecha de creación de la tarea
+    private LocalDate diaCreacion;
+    /**
+     * Establece la hora de creación según la hora del SO
+     */
+    private LocalTime horaCreacion;
 
     /**
      * Constructor. La tarea recibe un ID único desde la clase padre
@@ -20,8 +25,34 @@ public class TareaToDo extends Tarea{
      */
     public TareaToDo(String nombreTarea, String descripcionTarea) {
         super(nombreTarea, descripcionTarea);
-        this.fechaCreacion = ZonedDateTime.now(ZoneId.of("Europe/Madrid"));      // añade la fecha de creación y hora basada en la zona horaria de España
+        this.diaCreacion = LocalDate.now();
+        this.horaCreacion = LocalTime.now();
     }
 
+    /**
+     * Día de creación de la tarea
+     * @return día de creación con formato dd-MM-yyyy
+     */
+    public String getDiaCreacion() {
+        DateTimeFormatter diaFormato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return diaCreacion.format(diaFormato);
+    }
 
+    /**
+     * Hora de creación de la tarea
+     * @return hora de creación con formato HH:mm:ss
+     */
+    public String getHoraCreacion() {
+        DateTimeFormatter horaFormato = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return horaCreacion.format(horaFormato);
+    }
+
+    /**
+     * Nombre, descripción, día y hora de creación de la tarea
+     * @return nombre: descripción - dd-MM-yyyy, HH:mm:ss
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " - "+getDiaCreacion()+", "+getHoraCreacion();
+    }
 }
