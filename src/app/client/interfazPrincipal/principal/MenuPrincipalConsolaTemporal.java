@@ -1,5 +1,6 @@
 package app.client.interfazPrincipal.principal;
 
+import tareas.TareaCompletada;
 import tareas.TareaToDo;
 import usuarios.GestorUsuarios;
 import usuarios.Usuario;
@@ -41,8 +42,23 @@ public class MenuPrincipalConsolaTemporal {
                 usuarioConectado.getGestorTareasUsuario().agregarTarea(nuevaTarea);
             }
 
-            if (opcion == 2) {
-                System.out.println("");
+            if (opcion == 5) {
+                if (usuarioConectado.getGestorTareasUsuario().getListaTareasToDo().isEmpty()){
+                    System.out.println("No hay tareas por hacer todavía");
+                } else {
+                    System.out.println("Tareas por hacer: ");
+                    for (TareaToDo tarea : usuarioConectado.getGestorTareasUsuario().getListaTareasToDo()) {
+                        System.out.println(tarea);
+                    }
+                }
+                if (usuarioConectado.getGestorTareasUsuario().getListaTareasCompletadas().isEmpty()){
+                    System.out.println("No hay tareas completadas todavía");
+                } else {
+                    System.out.println("Tareas completadas: ");
+                    for (TareaCompletada tarea : usuarioConectado.getGestorTareasUsuario().getListaTareasCompletadas()) {
+                        System.out.println(tarea);
+                    }
+                }
             }
 
 
