@@ -132,7 +132,7 @@ public class LoginTemplate extends JFrame{
                    Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños */
                 if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)
                         || !gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
-                    textoLogin.setText("Registrarse");
+                    textoLogin.setText("Registro fallido..");
                     return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
                 }
 
@@ -159,11 +159,11 @@ public class LoginTemplate extends JFrame{
                 if (gestorUsuarios.conectarUsuario(usuarioTemporal, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
                     /* cambiar de ventana */
                     // *** pruebas ***
-                    setVisible(false);
+                    dispose();
                     MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(usuarioTemporal);
                     menuPrincipal.elegirEnMenu();
                 }else{
-                    textoLogin.setText("Iniciar Sesión");
+                    textoLogin.setText("Inicio de sesión fallido..");
                 }
             }
         });

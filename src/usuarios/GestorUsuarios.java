@@ -104,11 +104,11 @@ public class GestorUsuarios {
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
             return false;
         }
-        for (int i=0; i<passwordUsuario.length; i++){
-            if (passwordUsuario[i]==' '){
+        for (char caracter : passwordUsuario) {
+            if (caracter == ' ') {
                 textoComprobacion.setText("La contraseña no puede tener espacios en blanco");
                 return false;
-            } else if (caracteresNoPermitidos.indexOf(passwordUsuario[i]) != -1){
+            } else if (caracteresNoPermitidos.indexOf(caracter) != -1) {
                 textoComprobacion.setText("La contraseña no puede tener carácteres extraños");
                 return false;
             }

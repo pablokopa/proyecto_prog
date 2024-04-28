@@ -1,10 +1,11 @@
-import app.client.principal.InterfazPrincipalTemplate;
+import app.client.login.LoginTemplate;
+//import app.client.principal.InterfazPrincipalTemplate;
 import usuarios.GestorUsuarios;
 
 public class Main {
     public static void main(String[] args) {
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
-        //new LoginTemplate(gestorUsuarios);
-        new InterfazPrincipalTemplate();
+        new LoginTemplate(gestorUsuarios);
+//        new InterfazPrincipalTemplate();
     }
 }

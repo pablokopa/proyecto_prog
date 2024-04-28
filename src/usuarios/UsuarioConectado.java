@@ -6,16 +6,31 @@ import tareas.TareaToDo;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que representa un usuario conectado. Singleton.
+ */
 public class UsuarioConectado extends Usuario{
     private static UsuarioConectado usuarioConectado = null;
 
     private final ArrayList<TareaToDo> listaTareasToDo;                 // Lista de tareas to-do
     private final ArrayList<TareaCompletada> listaTareasCompletadas;    // Lista de tareas completadas
 
-    public UsuarioConectado(Usuario usuario){
+    public UsuarioConectado(Usuario usuario) {
         super(usuario.getNombreUsuario(), usuario.getContraUsuario());
         this.listaTareasToDo = new ArrayList<>();
         this.listaTareasCompletadas = new ArrayList<>();
+    }
+
+    /**
+     * Obtiene la instancia única de UsuarioConectado
+     * @param usuario usuario a conectar
+     * @return instancia de UsuarioConectado
+     */
+    public static UsuarioConectado getUsuarioConectado(Usuario usuario){
+        if (usuarioConectado == null){
+            usuarioConectado = new UsuarioConectado(usuario);
+        }
+        return usuarioConectado;
     }
 
     // Getters
@@ -61,10 +76,29 @@ public class UsuarioConectado extends Usuario{
         return false;
     }
 
-    public static UsuarioConectado getUsuarioConectado(Usuario usuario){
-        if (usuarioConectado == null){
-            usuarioConectado = new UsuarioConectado(usuario);
+    public void verTareas(){
+
+        if (this.listaTareasToDo.isEmpty()){
+            System.out.println("Todavía no hay tareas por hacer.");
+        } else {
+            System.out.println("Tareas por hacer: ");
+            int index = 1;
+            for (TareaToDo tarea : this.listaTareasToDo) {
+                System.out.println(index+". "+tarea);
+                index++;
+            }
         }
-        return usuarioConectado;
+
+        if (this.listaTareasCompletadas.isEmpty()){
+            System.out.println("Todavía no hay tareas completadas.");
+        } else {
+            System.out.println("Tareas completadas: ");
+            int index=1;
+            for (TareaCompletada tarea : this.listaTareasCompletadas) {
+                System.out.println(index+". "+tarea);
+                index++;
+            }
+        }
     }
+
 }

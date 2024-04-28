@@ -18,7 +18,8 @@ public class MenuPrincipalConsolaTemporal {
             (4) Eliminar tarea
             (5) Ver tareas
             (6) Cambiar contraseña
-            (7) Desconectar usuario""";
+            (7) Desconectar usuario
+            (0) Cerrar aplicación""";
 
     public MenuPrincipalConsolaTemporal(Usuario usuario){
         usuarioConectado = UsuarioConectado.getUsuarioConectado(usuario);
@@ -40,26 +41,32 @@ public class MenuPrincipalConsolaTemporal {
                 usuarioConectado.agregarTarea(nuevaTarea);
             }
 
-            if (opcion == 5) {
-                if (usuarioConectado.getListaTareasToDo().isEmpty()){
-                    System.out.println("No hay tareas por hacer todavía");
-                } else {
-                    System.out.println("Tareas por hacer: ");
-                    for (TareaToDo tarea : usuarioConectado.getListaTareasToDo()) {
-                        System.out.println(tarea);
-                    }
+            if (opcion == 2) {
+
+            }
+
+            if (opcion == 4) {
+                System.out.println("Qué tipo de tarea deseas eliminar? \t\n(1) Por hacer\t\n(2) Completada");
+                int tipo = Integer.parseInt(sc.nextLine());
+                System.out.println("Qué tarea deseas eliminar? (index)");
+                int index = Integer.parseInt(sc.nextLine())-1;
+
+                if (tipo == 1){
+                    usuarioConectado.eliminarTarea(usuarioConectado.getListaTareasToDo().get(index));
                 }
-                if (usuarioConectado.getListaTareasCompletadas().isEmpty()){
-                    System.out.println("No hay tareas completadas todavía");
-                } else {
-                    System.out.println("Tareas completadas: ");
-                    for (TareaCompletada tarea : usuarioConectado.getListaTareasCompletadas()) {
-                        System.out.println(tarea);
-                    }
+                if (tipo == 2){
+                    usuarioConectado.eliminarTarea(usuarioConectado.getListaTareasCompletadas().get(index));
                 }
             }
 
+            if (opcion == 5) {
+                usuarioConectado.verTareas();
+            }
 
+            if (opcion == 0) {
+                System.out.println("Cerrando aplicación...");
+                break;
+            }
         }
     }
 
