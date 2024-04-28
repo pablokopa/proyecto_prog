@@ -4,13 +4,13 @@ import tareas.TareaCompletada;
 import tareas.TareaToDo;
 import usuarios.GestorUsuarios;
 import usuarios.Usuario;
+import usuarios.UsuarioConectado;
 
 import java.util.Scanner;
 
 public class MenuPrincipalConsolaTemporal {
     Scanner sc = new Scanner(System.in);
-    GestorUsuarios gestorUsuarios;
-    Usuario usuarioConectado;
+    UsuarioConectado usuarioConectado;
 
     String menuPrincipal = """
             (1) Crear tarea
@@ -21,9 +21,8 @@ public class MenuPrincipalConsolaTemporal {
             (6) Cambiar contraseña
             (7) Desconectar usuario""";
 
-    public MenuPrincipalConsolaTemporal(GestorUsuarios gestorUsuario){
-        this.gestorUsuarios = gestorUsuario;
-        this.usuarioConectado = gestorUsuario.getUsuarioConectado();
+    public MenuPrincipalConsolaTemporal(Usuario usuario){
+        usuarioConectado = UsuarioConectado.getUsuarioConectado(usuario);
     }
 
     public void elegirEnMenu(){
@@ -39,23 +38,23 @@ public class MenuPrincipalConsolaTemporal {
                 String descripcionTarea = sc.nextLine();
 
                 TareaToDo nuevaTarea = new TareaToDo(nombreTarea, descripcionTarea);
-                usuarioConectado.getGestorTareasUsuario().agregarTarea(nuevaTarea);
+                usuarioConectado.agregarTarea(nuevaTarea);
             }
 
             if (opcion == 5) {
-                if (usuarioConectado.getGestorTareasUsuario().getListaTareasToDo().isEmpty()){
+                if (usuarioConectado.getListaTareasToDo().isEmpty()){
                     System.out.println("No hay tareas por hacer todavía");
                 } else {
                     System.out.println("Tareas por hacer: ");
-                    for (TareaToDo tarea : usuarioConectado.getGestorTareasUsuario().getListaTareasToDo()) {
+                    for (TareaToDo tarea : usuarioConectado.getListaTareasToDo()) {
                         System.out.println(tarea);
                     }
                 }
-                if (usuarioConectado.getGestorTareasUsuario().getListaTareasCompletadas().isEmpty()){
+                if (usuarioConectado.getListaTareasCompletadas().isEmpty()){
                     System.out.println("No hay tareas completadas todavía");
                 } else {
                     System.out.println("Tareas completadas: ");
-                    for (TareaCompletada tarea : usuarioConectado.getGestorTareasUsuario().getListaTareasCompletadas()) {
+                    for (TareaCompletada tarea : usuarioConectado.getListaTareasCompletadas()) {
                         System.out.println(tarea);
                     }
                 }

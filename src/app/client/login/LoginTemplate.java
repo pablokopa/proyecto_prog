@@ -160,7 +160,7 @@ public class LoginTemplate extends JFrame{
                     /* cambiar de ventana */
                     // *** pruebas ***
                     setVisible(false);
-                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(gestorUsuarios);
+                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(usuarioTemporal);
                     menuPrincipal.elegirEnMenu();
                 }else{
                     textoLogin.setText("Iniciar Sesión");
