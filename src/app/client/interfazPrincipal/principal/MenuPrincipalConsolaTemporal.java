@@ -2,7 +2,6 @@ package app.client.interfazPrincipal.principal;
 
 import tareas.TareaCompletada;
 import tareas.TareaToDo;
-import usuarios.GestorUsuarios;
 import usuarios.Usuario;
 import usuarios.UsuarioConectado;
 

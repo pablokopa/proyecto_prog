@@ -1,23 +1,25 @@
-package testTareas;
+package testUsuarios;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import tareas.GestorTareas;
+
 import tareas.TareaToDo;
+import usuarios.Usuario;
+import usuarios.UsuarioConectado;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-public class GestorTareasTest {
-    private GestorTareas gestorTareas;
+public class UsuarioConectadoTest {
+    private UsuarioConectado usuarioConectado;
 
     /**
      * Inicializa el gestor de tareas
      */
     @Before
     public void setUp(){
-        gestorTareas = new GestorTareas();
+        usuarioConectado = UsuarioConectado.getUsuarioConectado(new Usuario("Admin", new char[0]));
     }
 
     /**
@@ -26,7 +28,7 @@ public class GestorTareasTest {
     @Test
     @DisplayName("Agregar tarea correctamente")
     public void agregarTareaCorrectamente(){
-        assertTrue(gestorTareas.agregarTarea(new TareaToDo("nombre", "descripcion")));
+        assertTrue(usuarioConectado.agregarTarea(new TareaToDo("nombre", "descripcion")));
     }
 
     /**
@@ -36,8 +38,8 @@ public class GestorTareasTest {
     @DisplayName("Completar tarea correctamente")
     public void completarTareaCorrectamente(){
         TareaToDo tarea = new TareaToDo("nombre", "descripcion");
-        gestorTareas.agregarTarea(tarea);
-        assertTrue(gestorTareas.completarTarea(tarea));
+        usuarioConectado.agregarTarea(tarea);
+        assertTrue(usuarioConectado.completarTarea(tarea));
     }
 
     /**
@@ -47,9 +49,9 @@ public class GestorTareasTest {
     @DisplayName("Tarea Completada Es Instancia de TareaCompletada")
     public void completarTareaInstanciaTareaCompletada(){
         TareaToDo tarea = new TareaToDo("nombre", "descripcion");
-        gestorTareas.agregarTarea(tarea);
-        gestorTareas.completarTarea(tarea);
-        assertFalse(gestorTareas.getListaTareasCompletadas().isEmpty());
+        usuarioConectado.agregarTarea(tarea);
+        usuarioConectado.completarTarea(tarea);
+        assertFalse(usuarioConectado.getListaTareasCompletadas().isEmpty());
     }
 
     /**
@@ -59,8 +61,8 @@ public class GestorTareasTest {
     @DisplayName("Eliminar tarea to-do correctamente")
     public void eliminarTareaToDoCorrectamente(){
         TareaToDo tarea = new TareaToDo("nombre", "descripcion");
-        gestorTareas.agregarTarea(tarea);
-        assertTrue(gestorTareas.eliminarTarea(tarea));
+        usuarioConectado.agregarTarea(tarea);
+        assertTrue(usuarioConectado.eliminarTarea(tarea));
     }
 
     /**
@@ -70,7 +72,7 @@ public class GestorTareasTest {
     @DisplayName("Eliminar tarea completada correctamente")
     public void eliminarTareaCompletadaCorrectamente(){
         TareaToDo tareaToDo = new TareaToDo("nombre", "descripcion");
-        gestorTareas.completarTarea(tareaToDo);
-        assertTrue(gestorTareas.eliminarTarea(gestorTareas.getListaTareasCompletadas().getFirst()));
+        usuarioConectado.completarTarea(tareaToDo);
+        assertTrue(usuarioConectado.eliminarTarea(usuarioConectado.getListaTareasCompletadas().getFirst()));
     }
 }
