@@ -326,7 +326,7 @@ public class ObjGraficos {
         check.setSize(ancho, alto);
 //        check.setFocusable(false);
 //        check.setBackground(null);
-        check.setCursor(cursor);g
+        check.setCursor(cursor);
         check.setFont(fuente);
         check.setForeground(colorFuente);
         return check;
