@@ -16,8 +16,8 @@ public class MenuPrincipalConsolaTemporal {
             (3) Modificar tarea
             (4) Eliminar tarea
             (5) Ver tareas
-            (6) Cambiar contraseña
-            (7) Desconectar usuario
+            (6*) Cambiar contraseña
+            (7*) Desconectar usuario
             (0) Cerrar aplicación""";
 
     public MenuPrincipalConsolaTemporal(Usuario usuario){
@@ -30,6 +30,7 @@ public class MenuPrincipalConsolaTemporal {
             System.out.println(menuPrincipal);
             int opcion = Integer.parseInt(sc.nextLine());
 
+            // crear tarea
             if (opcion == 1) {
                 System.out.println("Nombre de la tarea: ");
                 String nombreTarea = sc.nextLine();
@@ -40,11 +41,43 @@ public class MenuPrincipalConsolaTemporal {
                 usuarioConectado.agregarTarea(nuevaTarea);
             }
 
+            // completar tarea (ToDo)
             if (opcion == 2) {
+                usuarioConectado.verTareasToDo();
 
+                System.out.println("Qué tarea deseas completar? (index)");
+                int index = Integer.parseInt(sc.nextLine())-1;
+                usuarioConectado.completarTarea(usuarioConectado.getListaTareasToDo().get(index));
             }
 
+            // modificar tarea
+            if (opcion == 3) {
+                usuarioConectado.verTareas();
+
+                System.out.println("Qué tipo de tarea deseas modificar? \t\n(1) Por hacer\t\n(2) Completada");
+                int tipo = Integer.parseInt(sc.nextLine());
+                System.out.println("Qué tarea deseas modificar? (index)");
+                int index = Integer.parseInt(sc.nextLine())-1;
+
+                System.out.println("Nuevo nombre de tarea: ");
+                String nombreTarea = sc.nextLine();
+                System.out.println("Nueva descripción de tarea: ");
+                String descripcionTarea = sc.nextLine();
+
+                if (tipo == 1){
+                    usuarioConectado.modificarTarea(usuarioConectado.getListaTareasToDo().get(index), nombreTarea, descripcionTarea);
+                }
+                if (tipo == 2){
+                    usuarioConectado.modificarTarea(usuarioConectado.getListaTareasCompletadas().get(index), nombreTarea, descripcionTarea);
+                }
+
+                System.out.println("Opción aún no disponible");
+            }
+
+            // eliminar tarea
             if (opcion == 4) {
+                usuarioConectado.verTareas();
+
                 System.out.println("Qué tipo de tarea deseas eliminar? \t\n(1) Por hacer\t\n(2) Completada");
                 int tipo = Integer.parseInt(sc.nextLine());
                 System.out.println("Qué tarea deseas eliminar? (index)");
@@ -58,8 +91,19 @@ public class MenuPrincipalConsolaTemporal {
                 }
             }
 
+            // ver tareas
             if (opcion == 5) {
                 usuarioConectado.verTareas();
+            }
+
+            // cambiar contraseña
+            if (opcion == 6) {
+
+            }
+
+            // desconectar usuario
+            if (opcion == 7) {
+
             }
 
             if (opcion == 0) {
