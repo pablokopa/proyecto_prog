@@ -1,4 +1,4 @@
-package usuarios;
+package app.model.usuarios;
 
 import javax.swing.*;
 import java.util.ArrayList;

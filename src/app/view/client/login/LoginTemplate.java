@@ -1,11 +1,11 @@
-package app.client.login;
+package app.view.client.login;
 
-import app.client.interfazPrincipal.principal.MenuPrincipalConsolaTemporal;
-import app.services.ObjGraficos;
-import app.services.Recursos;
+import app.view.client.interfazPrincipal.principal.MenuPrincipalConsolaTemporal;
+import app.view.services.ObjGraficos;
+import app.view.services.Recursos;
 
-import usuarios.GestorUsuarios;
-import usuarios.Usuario;
+import app.model.usuarios.GestorUsuarios;
+import app.model.usuarios.Usuario;
 
 import javax.swing.*;
 import java.awt.*;

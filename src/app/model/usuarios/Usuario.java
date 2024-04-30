@@ -1,4 +1,4 @@
-package usuarios;
+package app.model.usuarios;
 
 import java.util.Objects;
 

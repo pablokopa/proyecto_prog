@@ -1,50 +1,50 @@
-package tareas;
+package app.model.tareas;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Clase que representa una tarea por hacer.
+ * Clase que representa una tarea completada
  * Hereda de Tarea
  */
-public class TareaToDo extends Tarea{
+public class TareaCompletada extends Tarea{
     /**
      * Establece el día de creación según el día del SO
      */
-    private LocalDate diaCreacion;
+    private LocalDate diaFinalizacion;
     /**
      * Establece la hora de creación según la hora del SO
      */
-    private LocalTime horaCreacion;
+    private LocalTime horaFinalizacion;
 
     /**
      * Constructor. La tarea recibe un ID único desde la clase padre
      * @param nombreTarea nombre de la tarea
      * @param descripcionTarea descripción de la tarea
      */
-    public TareaToDo(String nombreTarea, String descripcionTarea) {
+    public TareaCompletada(String nombreTarea, String descripcionTarea) {
         super(nombreTarea, descripcionTarea);
-        this.diaCreacion = LocalDate.now();
-        this.horaCreacion = LocalTime.now();
+        this.diaFinalizacion = LocalDate.now();
+        this.horaFinalizacion = LocalTime.now();
     }
 
     /**
-     * Día de creación de la tarea
-     * @return día de creación con formato dd-MM-yyyy
+     * Día de finalización de la tarea
+     * @return día de finalización con formato dd-MM-yyyy
      */
-    public String getDiaCreacion() {
+    public String getDiaFinalizacion() {
         DateTimeFormatter diaFormato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return diaCreacion.format(diaFormato);
+        return diaFinalizacion.format(diaFormato);
     }
 
     /**
-     * Hora de creación de la tarea
-     * @return hora de creación con formato HH:mm:ss
+     * Hora de finalización de la tarea
+     * @return hora de finalización con formato HH:mm:ss
      */
-    public String getHoraCreacion() {
+    public String getHoraFinalizacion() {
         DateTimeFormatter horaFormato = DateTimeFormatter.ofPattern("HH:mm:ss");
-        return horaCreacion.format(horaFormato);
+        return horaFinalizacion.format(horaFormato);
     }
 
     /**
@@ -53,6 +53,6 @@ public class TareaToDo extends Tarea{
      */
     @Override
     public String toString() {
-        return super.toString() + " - "+getDiaCreacion()+", "+getHoraCreacion();
+        return super.toString() + " - "+ getDiaFinalizacion()+", "+ getHoraFinalizacion();
     }
 }

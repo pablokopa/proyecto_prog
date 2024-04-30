@@ -1,9 +1,8 @@
-package app.client.interfazPrincipal.principal;
+package app.view.client.interfazPrincipal.principal;
 
-import tareas.TareaCompletada;
-import tareas.TareaToDo;
-import usuarios.Usuario;
-import usuarios.UsuarioConectado;
+import app.model.tareas.TareaToDo;
+import app.model.usuarios.Usuario;
+import app.model.usuarios.UsuarioConectado;
 
 import java.util.Scanner;
 

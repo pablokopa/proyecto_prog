@@ -1,4 +1,4 @@
-package app.services;
+package app.view.services;
 
 import javax.swing.*;
 import javax.swing.border.Border;

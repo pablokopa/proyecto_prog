@@ -3,8 +3,8 @@ package testUsuarios;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import usuarios.GestorUsuarios;
-import usuarios.Usuario;
+import app.model.usuarios.GestorUsuarios;
+import app.model.usuarios.Usuario;
 import javax.swing.JLabel;
 
 import static org.junit.Assert.assertFalse;

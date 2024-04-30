@@ -1,4 +1,4 @@
-package tareas;
+package app.model.tareas;
 
 import java.util.Objects;
 import java.util.UUID;

@@ -1,8 +1,8 @@
-package usuarios;
+package app.model.usuarios;
 
-import tareas.Tarea;
-import tareas.TareaCompletada;
-import tareas.TareaToDo;
+import app.model.tareas.Tarea;
+import app.model.tareas.TareaCompletada;
+import app.model.tareas.TareaToDo;
 
 import java.util.ArrayList;
 

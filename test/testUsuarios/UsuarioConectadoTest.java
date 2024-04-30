@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
-import tareas.TareaToDo;
-import usuarios.Usuario;
-import usuarios.UsuarioConectado;
+import app.model.tareas.TareaToDo;
+import app.model.usuarios.Usuario;
+import app.model.usuarios.UsuarioConectado;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;

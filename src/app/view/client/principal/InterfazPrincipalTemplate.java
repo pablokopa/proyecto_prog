@@ -1,7 +1,7 @@
-package app.client.principal;
+package app.view.client.principal;
 
-import app.services.ObjGraficos;
-import app.services.Recursos;
+import app.view.services.ObjGraficos;
+import app.view.services.Recursos;
 
 import javax.swing.*;
 
