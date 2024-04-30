@@ -124,49 +124,49 @@ public class LoginTemplate extends JFrame{
         botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
 
         // *** Se puede hacer un método externo ***
-        botonRegistrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                /* Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto y
-                   Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños */
-                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)
-                        || !gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
-                    textoLogin.setText("Registro fallido..");
-                    return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
-                }
-
-                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
-                if (gestorUsuarios.registrarUsuario(usuarioTemporal)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
-                    textoComprobacion.setText("Usuario registrado correctamente");
-                    textoLogin.setText("Bienvenido, "+cuadroUsuario.getText()+"!");
-                    cuadroUsuario.setText("");
-                    cuadroPassword.setText("");
-                }else{
-                    System.out.println("El usuario no ha sido registrado por alguna razón desconocida");
-                }
-            }
-        });
+//        botonRegistrar.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//                 Se comprueba si el nombre de usuario ya existe y se le pasa el label textoComprobacion para que pueda cambiar el texto y
+//                   Se comprueba si la contraseña tiene al menos 4 caracteres y no tiene espacios en blanco, además de ciertos carácteres extraños
+//                if (!gestorUsuarios.comprobarNombreUsuario(cuadroUsuario.getText(), textoComprobacion)
+//                        || !gestorUsuarios.comprobarPasswordUsuario(cuadroPassword.getPassword(), textoComprobacion)){
+//                    textoLogin.setText("Registro fallido..");
+//                    return; // si comprobarNombre no devuelve true, se corta el flujo de la acción del botón y no se registra el usuario
+//                }
+//
+//                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
+//                if (gestorUsuarios.registrarUsuario(usuarioTemporal)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
+//                    textoComprobacion.setText("Usuario registrado correctamente");
+//                    textoLogin.setText("Bienvenido, "+cuadroUsuario.getText()+"!");
+//                    cuadroUsuario.setText("");
+//                    cuadroPassword.setText("");
+//                }else{
+//                    System.out.println("El usuario no ha sido registrado por alguna razón desconocida");
+//                }
+//            }
+//        });
         panelDerecha.add(botonRegistrar);
 
         /* Botón de entrar */
         botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getFontTArialDefault(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
-
-        botonEntrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
-                if (gestorUsuarios.conectarUsuario(usuarioTemporal, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
-                    /* cambiar de ventana */
-                    // *** pruebas ***
-                    dispose();
-                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(usuarioTemporal);
-                    menuPrincipal.elegirEnMenu();
-                }else{
-                    textoLogin.setText("Inicio de sesión fallido..");
-                }
-            }
-        });
+//
+//        botonEntrar.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                Usuario usuarioTemporal = new Usuario(cuadroUsuario.getText(), cuadroPassword.getPassword());
+//                if (gestorUsuarios.conectarUsuario(usuarioTemporal, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+//                    /* cambiar de ventana */
+//                    // *** pruebas ***
+//                    dispose();
+//                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(usuarioTemporal);
+//                    menuPrincipal.elegirEnMenu();
+//                }else{
+//                    textoLogin.setText("Inicio de sesión fallido..");
+//                }
+//            }
+//        });
 
         panelDerecha.add(botonEntrar);
 
@@ -209,4 +209,28 @@ public class LoginTemplate extends JFrame{
         textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getFontArialItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
     }
+
+    // Getters
+    public JButton getBotonRegistrar(){
+        return botonRegistrar;
+    }
+    public JButton getBotonEntrar(){
+        return botonEntrar;
+    }
+    public JTextField getCuadroUsuario(){
+        return cuadroUsuario;
+    }
+    public JPasswordField getCuadroPassword(){
+        return cuadroPassword;
+    }
+    public JLabel getTextoLogin(){
+        return textoLogin;
+    }
+    public JLabel getTextoComprobacion(){
+        return textoComprobacion;
+    }
+    public Frame getFrameLoginTemplate(){
+        return this;
+    }
+
 }
