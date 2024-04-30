@@ -1,7 +1,8 @@
-unnamed package
-app.client.interfazPrincipal.principal
-app.client.login
-app.client.principal
-app.services
-tareas
-usuarios
+app
+app.model.tareas
+app.model.usuarios
+app.view.client.interfazPrincipal.principal
+app.view.client.login
+app.view.client.principal
+app.view.services
+testUsuarios
