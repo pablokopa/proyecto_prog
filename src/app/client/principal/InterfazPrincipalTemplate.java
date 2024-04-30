@@ -4,7 +4,6 @@ import app.services.ObjGraficos;
 import app.services.Recursos;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class InterfazPrincipalTemplate extends JFrame {
     private ObjGraficos sObjGraficos;

@@ -76,9 +76,9 @@ public class GestorUsuariosTest {
      * Test para verificar que un nombre con menos de 4 letras no es permitido
      */
     @Test
-    @DisplayName("Comprobar nombre de usuario con menos de 4 letras")
+    @DisplayName("Comprobar nombre de usuario con menos de 3 letras")
     public void comprobarNombreUsuarioConMenosDe4Letras(){
-        String nombre = "nom";
+        String nombre = "no";
         JLabel label = new JLabel();
         assertFalse(gestorUsuarios.comprobarNombreUsuario(nombre, label));
     }

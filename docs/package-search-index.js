@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"app.client.interfazPrincipal.login"},{"l":"app.client.interfazPrincipal.principal"},{"l":"app.services"},{"l":"tareas"},{"l":"testTareas"},{"l":"testUsuarios"},{"l":"usuarios"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"app.client.interfazPrincipal.principal"},{"l":"app.client.login"},{"l":"app.client.principal"},{"l":"app.services"},{"l":"tareas"},{"l":"usuarios"}];updateSearchResults();

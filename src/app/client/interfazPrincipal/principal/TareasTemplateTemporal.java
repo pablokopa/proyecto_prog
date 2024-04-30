@@ -4,7 +4,6 @@ import app.services.ObjGraficos;
 import app.services.Recursos;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -63,16 +62,11 @@ public class TareasTemplateTemporal extends JFrame {
 
         for (int i=0; i<100; i++){
             JCheckBox checkBox = sObjGraficos.construirJCheckBox("Tarea "+i, 100, 100, sRecursos.getCursorMano(), sRecursos.getFontTArialDefault(13), sRecursos.getGRANATE());
-
             panel.add(checkBox);
         }
 
-
+        /* ScrollPane donde se van a ver las tareas */
         panelVerTareas = sObjGraficos.construirPanelBarra(panel,10,10, panelVistaPrincipal.getWidth()-(20+sizeDerecha), panelVistaPrincipal.getHeight()-20, sRecursos.getGRANATE(), null);
-
-
-
-
         panelVistaPrincipal.add(panelVerTareas);
 
         /* Panel donde estará información de la tarea seleccionada */
