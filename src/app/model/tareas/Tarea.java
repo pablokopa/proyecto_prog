@@ -54,6 +54,12 @@ public class Tarea {
     }
 
     // Setters
+    public void setNombreTarea(String nombreTarea) {
+        this.nombreTarea = nombreTarea;
+    }
+    public void setDescripcionTarea(String descripcionTarea) {
+        this.descripcionTarea = descripcionTarea;
+    }
 
     /**
      * Establece la prioridad de la tarea

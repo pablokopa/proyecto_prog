@@ -210,7 +210,7 @@ public class LoginTemplate extends JFrame{
         panelDerecha.add(textoComprobacion);
     }
 
-    // Getters
+    // Getters para utilizar los componentes en el controlador
     public JButton getBotonRegistrar(){
         return botonRegistrar;
     }

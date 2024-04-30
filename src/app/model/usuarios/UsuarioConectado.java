@@ -7,7 +7,8 @@ import app.model.tareas.TareaToDo;
 import java.util.ArrayList;
 
 /**
- * Clase que representa un usuario conectado. Singleton.
+ * Clase Singleton que representa un usuario conectado.
+ * Actúa como un gestor de tareas del propio usuario.
  */
 public class UsuarioConectado extends Usuario{
     private static UsuarioConectado usuarioConectado = null;
@@ -76,28 +77,54 @@ public class UsuarioConectado extends Usuario{
         return false;
     }
 
-    public void verTareas(){
-
-        if (this.listaTareasToDo.isEmpty()){
+    /**
+     * Muestra las tareas por hacer
+     */
+    public void verTareasToDo() {
+        if (this.listaTareasToDo.isEmpty()) {
             System.out.println("Todavía no hay tareas por hacer.");
         } else {
             System.out.println("Tareas por hacer: ");
             int index = 1;
             for (TareaToDo tarea : this.listaTareasToDo) {
-                System.out.println(index+". "+tarea);
+                System.out.println(index + ". " + tarea);
                 index++;
             }
         }
+    }
 
+    /**
+     * Muestra las tareas completadas
+     */
+    public void verTareasCompletadas(){
         if (this.listaTareasCompletadas.isEmpty()){
             System.out.println("Todavía no hay tareas completadas.");
         } else {
             System.out.println("Tareas completadas: ");
-            int index=1;
+            int index = 1;
             for (TareaCompletada tarea : this.listaTareasCompletadas) {
-                System.out.println(index+". "+tarea);
+                System.out.println(index + ". " + tarea);
                 index++;
             }
+        }
+    }
+
+    /**
+     * Muestra todas las tareas
+     */
+    public void verTareas(){
+        verTareasToDo();
+        verTareasCompletadas();
+    }
+
+    public void modificarTarea(Tarea tarea, String nombre, String descripcion) {
+        if (tarea instanceof TareaToDo){
+            tarea.setNombreTarea(nombre);
+            tarea.setDescripcionTarea(descripcion);
+        }
+        if (tarea instanceof TareaCompletada){
+            tarea.setNombreTarea(nombre);
+            tarea.setDescripcionTarea(descripcion);
         }
     }
 
