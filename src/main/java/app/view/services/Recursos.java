@@ -3,6 +3,8 @@ package app.view.services;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Clase Recursos que proporciona recursos gráficos para la aplicación.
@@ -12,7 +14,7 @@ import java.awt.*;
 public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE, BLANCO, GRIS_CLARO;
-    private Font ArialDefault, ArialBold, ArialItalic;
+    private Font ArialDefault, ArialBold, ArialItalic, Monserrat;
     private Cursor cursorMano;
     private Border bordeGranate;
     private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword;
@@ -38,13 +40,28 @@ public class Recursos {
 
     /**
      * Método privado para inicializar las fuentes.
-     * Este método se llama en el constructor de la clase Recursos.
      * @param sizeLetra tamaño de la fuente
      */
     private void crearFuentes(int sizeLetra) {
         ArialDefault = new Font("Arial", Font.PLAIN, sizeLetra);
         ArialBold = new Font("Arial", Font.BOLD, sizeLetra);
         ArialItalic = new Font("Arial" , Font.ITALIC, sizeLetra);
+    }
+
+    /**
+     * Método privado para inicializar la fuente Monserrat.
+     * @param sizeLetra tamaño de la fuente
+     */
+    private void crearFuenteMonserrat(float sizeLetra) {
+        try {
+            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat.ttf");
+            Monserrat = Font.createFont(Font.TRUETYPE_FONT, is);
+            Monserrat = Monserrat.deriveFont(sizeLetra);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            Monserrat = new Font("Arial", Font.PLAIN, (int) sizeLetra);
+            System.out.println(Monserrat.toString());
+        }
     }
 
     /**
@@ -120,6 +137,16 @@ public class Recursos {
     public Font getFontArialItalic(int sizeLetra) {
         crearFuentes(sizeLetra);
         return ArialItalic;
+    }
+
+    /**
+     * Método para obtener la fuente Monserrat.
+     * @param sizeLetra tamaño de la fuente
+     * @return La fuente Monserrat.
+     */
+    public Font getMonserrat(float sizeLetra) {
+        crearFuenteMonserrat(sizeLetra);
+        return Monserrat;
     }
 
     /**
