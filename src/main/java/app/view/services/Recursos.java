@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE, BLANCO, GRIS_CLARO;
-    private Font ArialDefault, ArialBold, ArialItalic, Monserrat;
+    private Font ArialDefault, ArialBold, ArialItalic, Monserrat, MonserratItalic;
     private Cursor cursorMano;
     private Border bordeGranate;
     private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword;
@@ -61,6 +61,22 @@ public class Recursos {
             e.printStackTrace();
             Monserrat = new Font("Arial", Font.PLAIN, (int) sizeLetra);
             System.out.println(Monserrat.toString());
+        }
+    }
+
+    /**
+     * Método privado para inicializar la fuente Monserrat Italic.
+     * @param sizeLetra tamaño de la fuente
+     */
+    private void crearFuenteMonserratItalic(float sizeLetra) {
+        try {
+            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat.ttf");
+            MonserratItalic = Font.createFont(Font.TRUETYPE_FONT, is);
+            MonserratItalic = MonserratItalic.deriveFont(Font.ITALIC, sizeLetra);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            MonserratItalic = new Font("Arial", Font.ITALIC, (int) sizeLetra);
+            System.out.println(MonserratItalic.toString());
         }
     }
 
@@ -147,6 +163,16 @@ public class Recursos {
     public Font getMonserrat(float sizeLetra) {
         crearFuenteMonserrat(sizeLetra);
         return Monserrat;
+    }
+
+    /**
+     * Método para obtener la fuente Monserrat Italic.
+     * @param sizeLetra tamaño de la fuente
+     * @return La fuente Monserrat Italic.
+     */
+    public Font getMonserratItalic(float sizeLetra) {
+        crearFuenteMonserratItalic(sizeLetra);
+        return MonserratItalic;
     }
 
     /**

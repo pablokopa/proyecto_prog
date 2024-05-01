@@ -156,11 +156,11 @@ public class LoginTemplate extends JFrame{
         panelDerecha.add(labelCerrar);
 
         /* Texto login*/
-        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getMonserrat(24), null, sRecursos.getGRANATE(), null, "c");
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getMonserrat(22), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
 
         /* Label informativo; nombre y contraseña correctos */
-        textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getMonserrat(13), null, sRecursos.getGRANATE(), null, "c");
+        textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getMonserratItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
     }
 
