@@ -5,6 +5,7 @@ out/
 /out
 /.idea
 *.iml
+target/
 
 ### JUnit ###
 TEST-*.xml
