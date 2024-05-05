@@ -44,6 +44,7 @@ public class LoginController {
                     loginTemplate.getTextoLogin().setText("Bienvenido, "+loginTemplate.getCuadroUsuario().getText()+"!");
                     loginTemplate.getCuadroUsuario().setText("");
                     loginTemplate.getCuadroPassword().setText("");
+                    loginTemplate.getTextoNumeroUsuarios().setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
                 }else{
                     System.out.println("El usuario no ha sido registrado por alguna razón desconocida");
                 }
