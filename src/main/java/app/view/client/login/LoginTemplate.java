@@ -158,7 +158,7 @@ public class LoginTemplate extends JFrame{
         panelDerecha.add(labelCerrar);
 
         /* Contador usuarios */
-        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: 0", -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
+        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
         panelDerecha.add(textoNumeroUsuarios);
 
         /* Texto login */
