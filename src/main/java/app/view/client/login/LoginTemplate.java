@@ -17,13 +17,14 @@ import java.awt.event.MouseEvent;
 public class LoginTemplate extends JFrame{
     private ObjGraficos sObjGraficos;
     private Recursos sRecursos;
+    private GestorUsuarios gestorUsuarios;
 
     private int mouseX, x;
     private int mouseY, y;
 
     private JLabel textoLogin;
     private JLabel labelLogo, labelCerrar, labelUsuario, labelPassword;
-
+    private JLabel textoNumeroUsuarios;
     private JLabel textoComprobacion;
 
     private JTextField cuadroUsuario;
@@ -39,6 +40,7 @@ public class LoginTemplate extends JFrame{
     public LoginTemplate(GestorUsuarios gestorUsuarios){
         sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
+        this.gestorUsuarios = gestorUsuarios;
 
         this.moverVentana();
         this.crearJPanels();
@@ -155,7 +157,11 @@ public class LoginTemplate extends JFrame{
         });
         panelDerecha.add(labelCerrar);
 
-        /* Texto login*/
+        /* Contador usuarios */
+        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: " + gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMonserrat(10), null, sRecursos.getGRANATE(), null, "r");
+        panelDerecha.add(textoNumeroUsuarios);
+
+        /* Texto login */
         textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getMonserrat(22), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
 

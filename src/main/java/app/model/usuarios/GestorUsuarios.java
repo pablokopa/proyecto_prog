@@ -115,4 +115,12 @@ public class GestorUsuarios {
         }
         return true;
     }
+
+    /**
+     * Cuenta el número de usuarios registrados
+     * @return número total de usuarios registrados
+     */
+    public int contarUsuarios(){
+        return this.listaUsuarios.size();
+    }
 }
