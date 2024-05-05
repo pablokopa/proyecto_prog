@@ -48,17 +48,18 @@ public class Recursos {
         ArialItalic = new Font("Arial" , Font.ITALIC, sizeLetra);
     }
 
+
+    // Cambiar fuente por otra Montserrat-Light/Plain
     private void crearFuenteMonserratPlain(float sizeLetra) {
         try {
             InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Light.ttf");
-            MonserratBold = Font.createFont(Font.TRUETYPE_FONT, is);
-            MonserratBold = MonserratBold.deriveFont(sizeLetra);
+            MontserratPlain = Font.createFont(Font.TRUETYPE_FONT, is);
+            MontserratPlain = MontserratPlain.deriveFont(sizeLetra);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
-            MonserratBold = new Font("Arial", Font.PLAIN, (int) sizeLetra);
+            MontserratPlain = new Font("Arial", Font.PLAIN, (int) sizeLetra);
 
         }
-        System.out.println(MonserratBold.toString());
     }
 
     /**
@@ -75,7 +76,6 @@ public class Recursos {
             MonserratBold = new Font("Arial", Font.PLAIN, (int) sizeLetra);
 
         }
-        System.out.println(MonserratBold.toString());
     }
 
     /**
@@ -92,7 +92,6 @@ public class Recursos {
             MonserratItalic = new Font("Arial", Font.ITALIC, (int) sizeLetra);
 
         }
-        System.out.println(MonserratItalic.toString());
     }
 
     /**
@@ -175,7 +174,7 @@ public class Recursos {
      * @param sizeLetra tamaño de la fuente
      * @return La fuente MonserratBold.
      */
-    public Font getMonserrat(float sizeLetra) {
+    public Font getMonserratBold(float sizeLetra) {
         crearFuenteMonserratBold(sizeLetra);
         return MonserratBold;
     }
@@ -188,6 +187,11 @@ public class Recursos {
     public Font getMonserratItalic(float sizeLetra) {
         crearFuenteMonserratItalic(sizeLetra);
         return MonserratItalic;
+    }
+
+    public Font getMontserratPlain(float sizeLetra) {
+        crearFuenteMonserratPlain(sizeLetra);
+        return MontserratPlain;
     }
 
     /**
