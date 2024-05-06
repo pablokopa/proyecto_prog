@@ -17,7 +17,7 @@ public class Recursos {
     private Font ArialDefault, ArialBold, ArialItalic, MontserratPlain, MonserratBold, MonserratItalic;
     private Cursor cursorMano;
     private Border bordeGranate;
-    private ImageIcon imagenLogo, imagenCerrar, imagenUsuario, imagenPassword;
+    private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword;
 
     static private Recursos servicio; // Instancia única de la clase
 
@@ -116,6 +116,7 @@ public class Recursos {
      */
     private void crearImagenes() {
         imagenLogo = new ImageIcon("src/main/resources/images/logo1.png");
+        imagenLogo2 = new ImageIcon("src/main/resources/images/logo2.png");
         imagenCerrar = new ImageIcon("src/main/resources/images/close.png");
         imagenUsuario = new ImageIcon("src/main/resources/images/user.png");
         imagenPassword = new ImageIcon("src/main/resources/images/password.png");
@@ -217,6 +218,12 @@ public class Recursos {
      * @return La imagen del logo.
      */
     public ImageIcon getImagenLogo() { return imagenLogo; }
+
+    /**
+     * Método para obtener la imagen del logo secundaria
+     * @return la imagen del logo secundaria
+     */
+    public ImageIcon getImagenLogo2() { return imagenLogo2; }
 
     /**
      * Método para obtener la imagen del usuario.

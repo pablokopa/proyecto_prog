@@ -57,6 +57,7 @@ public class LoginTemplate extends JFrame{
         setLocationRelativeTo(this);
         setResizable(false);
         setUndecorated(true);
+        setIconImage(sRecursos.getImagenLogo2().getImage());
         setVisible(true);
     }
 

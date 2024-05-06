@@ -24,6 +24,7 @@ public class InterfazPrincipalTemplate extends JFrame {
         setLocationRelativeTo(this);
         setLayout(null);
         setUndecorated(true);
+        setIconImage(sRecursos.getImagenLogo2().getImage());
         setVisible(true);
     }
 
