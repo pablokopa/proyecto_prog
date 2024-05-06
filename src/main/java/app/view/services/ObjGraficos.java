@@ -149,9 +149,10 @@ public class ObjGraficos {
                 etiqueta.setHorizontalTextPosition(SwingConstants.LEFT);
                 break;
             case "t":
-                etiqueta.setHorizontalAlignment(SwingConstants.CENTER);
-                etiqueta.setVerticalTextPosition(SwingConstants.TOP);
-                etiqueta.setHorizontalTextPosition(SwingConstants.CENTER);
+                etiqueta.setHorizontalAlignment(SwingConstants.CENTER);     // posiciona el texto en el centro del label horizontalmente
+                etiqueta.setVerticalAlignment(SwingConstants.TOP);          // posiciona el texto en la parte de arriba del label verticalmente
+                etiqueta.setHorizontalTextPosition(SwingConstants.CENTER);  // posiciona el texto en el centro de la imagen horizontalmente (si existe en el label)
+                etiqueta.setVerticalTextPosition(SwingConstants.TOP);       // posiciona el texto por encima de la imagen verticalmente (si existe en el label)
                 break;
             case "b":
                 etiqueta.setHorizontalAlignment(SwingConstants.CENTER);
