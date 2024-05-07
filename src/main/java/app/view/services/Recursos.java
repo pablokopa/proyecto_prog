@@ -19,6 +19,11 @@ public class Recursos {
     private Border bordeGranate;
     private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword;
 
+    /**
+     * Constante de tamaño de letra estándar para los botones.
+     */
+    public static final int SIZE_LETRA_BOTON = 15;
+
     static private Recursos servicio; // Instancia única de la clase
 
     private Recursos() { // Constructor privado para evitar instanciación
