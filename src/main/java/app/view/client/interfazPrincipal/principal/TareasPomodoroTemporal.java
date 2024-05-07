@@ -16,6 +16,7 @@ public class TareasPomodoroTemporal extends JFrame {
 
     private JPanel panelOpciones, panelVistaPrincipal, panelSuperior;
     private JLabel labelCerrarVentana, labelTiempoConcentracion, labelTiempoDescanso;
+    private JButton botonPlay, botonPause, botonDetener, botonCambiarTiempo;
 
     TareasPomodoroTemporal() {
         this.sObjGraficos = ObjGraficos.getService();
@@ -32,6 +33,7 @@ public class TareasPomodoroTemporal extends JFrame {
         /* Generar los componentes */
         crearPaneles();
         crearLabels();
+        crearBotones();
         moverVentana();
 
         /* Hacer visible la ventana */
@@ -54,7 +56,20 @@ public class TareasPomodoroTemporal extends JFrame {
 
     private void crearLabels(){
         /* Label cerrar ventana */
-        labelCerrarVentana = sObjGraficos.construirJLabel(null,panelVistaPrincipal.getWidth()-50, 5, 40, 40, sRecursos.getCursorMano(), sRecursos.getImagenCerrar(), null, null, null, null, "r");
+        labelCerrarVentana = sObjGraficos.construirJLabel(
+                null,
+                panelVistaPrincipal.getWidth()-50,
+                5,
+                40,
+                40,
+                sRecursos.getCursorMano(),
+                sRecursos.getImagenCerrar(),
+                null,
+                null,
+                null,
+                null,
+                "r"
+        );
         labelCerrarVentana.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -94,6 +109,80 @@ public class TareasPomodoroTemporal extends JFrame {
                 "t"
         );
         panelVistaPrincipal.add(labelTiempoDescanso);
+    }
+
+    private void crearBotones(){
+        int xInicial = panelVistaPrincipal.getWidth();
+        int espacioOcupado = 620;
+
+        botonPlay = sObjGraficos.construirJButton(
+                "Comenzar",
+                (panelVistaPrincipal.getWidth()-620)/2,
+                panelVistaPrincipal.getHeight()-100-20,
+                200,
+                50,
+                sRecursos.getCursorMano(),
+                null,
+                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
+                sRecursos.getGRANATE(),
+                sRecursos.getBLANCO(),
+                null,
+                "",
+                true
+        );
+        panelVistaPrincipal.add(botonPlay);
+
+        botonPause = sObjGraficos.construirJButton(
+                "Pausar",
+                botonPlay.getX()+botonPlay.getWidth()+10,
+                panelVistaPrincipal.getHeight()-100-20,
+                200,
+                50,
+                sRecursos.getCursorMano(),
+                null,
+                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
+                sRecursos.getGRANATE(),
+                sRecursos.getBLANCO(),
+                null,
+                "",
+                true
+        );
+        panelVistaPrincipal.add(botonPause);
+
+        botonDetener = sObjGraficos.construirJButton(
+                "Detener",
+                botonPause.getX()+botonPause.getWidth()+10,
+                panelVistaPrincipal.getHeight()-100-20,
+                200,
+                50,
+                sRecursos.getCursorMano(),
+                null,
+                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
+                sRecursos.getGRANATE(),
+                sRecursos.getBLANCO(),
+                null,
+                "",
+                true
+        );
+        panelVistaPrincipal.add(botonDetener);
+
+        botonCambiarTiempo = sObjGraficos.construirJButton(
+                "Cambiar los parámetros",
+                botonPlay.getX(),
+                panelVistaPrincipal.getHeight()-50-10,        // abajo
+//                botonPlay.getY()+botonPlay.getHeight()+10,      // arriba
+                botonPlay.getWidth()*3+20,
+                50,
+                sRecursos.getCursorMano(),
+                null,
+                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
+                sRecursos.getGRANATE(),
+                sRecursos.getBLANCO(),
+                null,
+                "",
+                true
+        );
+        panelVistaPrincipal.add(botonCambiarTiempo);
     }
 
     public void moverVentana(){
