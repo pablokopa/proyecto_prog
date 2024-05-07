@@ -4,7 +4,6 @@ import app.view.services.ObjGraficos;
 import app.view.services.Recursos;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -80,41 +79,43 @@ public class TareasPomodoroTemporal extends JFrame {
 
         labelTiempoConcentracion = sObjGraficos.construirJLabel(
                 "25:00",
-                10,
-                40,
-                panelVistaPrincipal.getWidth()-20,
-                (panelVistaPrincipal.getHeight()/4)-20,
+                0,
+                75,
+                panelVistaPrincipal.getWidth(),
+                175,
                 null,
                 null,
-                sRecursos.getMonserratBold(100),
+                sRecursos.getMonserratBold(175),
                 sRecursos.getGRIS_CLARO(),
-                Color.BLACK,
+                sRecursos.getGRANATE(),
                 null,
-                "t"
+                "c"
         );
         panelVistaPrincipal.add(labelTiempoConcentracion);
 
         labelTiempoDescanso = sObjGraficos.construirJLabel(
                 "5:00",
-                10,
-                labelTiempoConcentracion.getHeight()+40,
-                panelVistaPrincipal.getWidth()-20,
-                (panelVistaPrincipal.getHeight()/4)-30,
+                0,
+                labelTiempoConcentracion.getHeight()+100,
+                panelVistaPrincipal.getWidth(),
+                195,
                 null,
                 null,
-                sRecursos.getMonserratBold(50),
+                sRecursos.getMonserratBold(75),
                 sRecursos.getGRIS_CLARO(),
-                Color.BLACK,
+                sRecursos.getGRANATE(),
                 sRecursos.getBordeGranate(),
                 "t"
         );
         panelVistaPrincipal.add(labelTiempoDescanso);
     }
 
+    /**
+     * Método para crear los botones de la vista principal.
+     */
     private void crearBotones(){
-        int xInicial = panelVistaPrincipal.getWidth();
-        int espacioOcupado = 620;
 
+        /* Boton play */
         botonPlay = sObjGraficos.construirJButton(
                 "Comenzar",
                 (panelVistaPrincipal.getWidth()-620)/2,
@@ -132,6 +133,7 @@ public class TareasPomodoroTemporal extends JFrame {
         );
         panelVistaPrincipal.add(botonPlay);
 
+        /* Boton pausa */
         botonPause = sObjGraficos.construirJButton(
                 "Pausar",
                 botonPlay.getX()+botonPlay.getWidth()+10,
@@ -149,6 +151,7 @@ public class TareasPomodoroTemporal extends JFrame {
         );
         panelVistaPrincipal.add(botonPause);
 
+        /* Boton detener */
         botonDetener = sObjGraficos.construirJButton(
                 "Detener",
                 botonPause.getX()+botonPause.getWidth()+10,
@@ -166,6 +169,7 @@ public class TareasPomodoroTemporal extends JFrame {
         );
         panelVistaPrincipal.add(botonDetener);
 
+        /* Boton cambiar tiempos de concentración y descanso */
         botonCambiarTiempo = sObjGraficos.construirJButton(
                 "Cambiar los parámetros",
                 botonPlay.getX(),
