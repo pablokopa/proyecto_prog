@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE, BLANCO, GRIS_CLARO;
-    private Font ArialDefault, ArialBold, ArialItalic, MontserratPlain, MonserratBold, MonserratItalic;
+    private Font MontserratPlain, MontserratBold, MontserratItalic;
     private Cursor cursorMano;
     private Border bordeGranate;
     private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword;
@@ -38,59 +38,37 @@ public class Recursos {
         GRIS_CLARO = new Color(245, 245, 245);
     }
 
-    /**
-     * Método privado para inicializar las fuentes.
-     * @param sizeLetra tamaño de la fuente
-     */
-    private void crearFuentes(int sizeLetra) {
-        ArialDefault = new Font("Arial", Font.PLAIN, sizeLetra);
-        ArialBold = new Font("Arial", Font.BOLD, sizeLetra);
-        ArialItalic = new Font("Arial" , Font.ITALIC, sizeLetra);
-    }
-
-
     // Cambiar fuente por otra Montserrat-Light/Plain
-    private void crearFuenteMonserratPlain(float sizeLetra) {
+    private void crearFuentesMontserrat(float sizeLetra) {
+
+        /* Crea la fuente MontserratPlain. Si no existe crea la fuente ArialPlain */
         try {
             InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Light.ttf");
             MontserratPlain = Font.createFont(Font.TRUETYPE_FONT, is);
             MontserratPlain = MontserratPlain.deriveFont(sizeLetra);
         } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
+            System.out.println("Error al cargar la fuente Montserrat-Light.ttf. Se cargará la fuente Arial.");
             MontserratPlain = new Font("Arial", Font.PLAIN, (int) sizeLetra);
-
         }
-    }
 
-    /**
-     * Método privado para inicializar la fuente MonserratBold.
-     * @param sizeLetra tamaño de la fuente
-     */
-    private void crearFuenteMonserratBold(float sizeLetra) {
+        /* Crea la fuente MontserratBold. Si no existe crea la fuente ArialBold */
         try {
             InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Bold.ttf");
-            MonserratBold = Font.createFont(Font.TRUETYPE_FONT, is);
-            MonserratBold = MonserratBold.deriveFont(sizeLetra);
+            MontserratBold = Font.createFont(Font.TRUETYPE_FONT, is);
+            MontserratBold = MontserratBold.deriveFont(sizeLetra);
         } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-            MonserratBold = new Font("Arial", Font.PLAIN, (int) sizeLetra);
-
+            System.out.println("Error al cargar la fuente Montserrat-Bold.ttf. Se cargará la fuente Arial.");
+            MontserratBold = new Font("Arial", Font.BOLD, (int) sizeLetra);
         }
-    }
 
-    /**
-     * Método privado para inicializar la fuente MonserratBold Italic.
-     * @param sizeLetra tamaño de la fuente
-     */
-    private void crearFuenteMonserratItalic(float sizeLetra) {
+        /* Crea la fuente MontserratItalic. Si no existe crea la fuente ArialItalic */
         try {
             InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Italic.ttf");
-            MonserratItalic = Font.createFont(Font.TRUETYPE_FONT, is);
-            MonserratItalic = MonserratItalic.deriveFont(sizeLetra);
+            MontserratItalic = Font.createFont(Font.TRUETYPE_FONT, is);
+            MontserratItalic = MontserratItalic.deriveFont(sizeLetra);
         } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-            MonserratItalic = new Font("Arial", Font.ITALIC, (int) sizeLetra);
-
+            System.out.println("error al cargar la fuente Montserrat-Italic.ttf. Se cargará la fuente Arial.");
+            MontserratItalic = new Font("Arial", Font.ITALIC, (int) sizeLetra);
         }
     }
 
@@ -141,57 +119,32 @@ public class Recursos {
     public Color getGRIS_CLARO() { return GRIS_CLARO; }
 
     /**
-     * Método para obtener la fuente ArialDefault.
+     * Método para obtener la fuente MontserratBold.
      * @param sizeLetra tamaño de la fuente
-     * @return La fuente ArialDefault.
-     */
-    public Font getFontTArialDefault(int sizeLetra) {
-        crearFuentes(sizeLetra);
-        return ArialDefault;
-    }
-
-    /**
-     * Método para obtener la fuente ArialBold.
-     * @param sizeLetra tamaño de la fuente
-     * @return La fuente ArialBold.
-     */
-    public Font getFontArialBold(int sizeLetra) {
-        crearFuentes(sizeLetra);
-        return ArialBold;
-    }
-
-    /**
-     * Método para obtener la fuente ArialItalic.
-     * @param sizeLetra tamaño de la fuente
-     * @return La fuente ArialItalic.
-     */
-    public Font getFontArialItalic(int sizeLetra) {
-        crearFuentes(sizeLetra);
-        return ArialItalic;
-    }
-
-    /**
-     * Método para obtener la fuente MonserratBold.
-     * @param sizeLetra tamaño de la fuente
-     * @return La fuente MonserratBold.
+     * @return La fuente MontserratBold.
      */
     public Font getMonserratBold(float sizeLetra) {
-        crearFuenteMonserratBold(sizeLetra);
-        return MonserratBold;
+        crearFuentesMontserrat(sizeLetra);
+        return MontserratBold;
     }
 
     /**
-     * Método para obtener la fuente MonserratBold Italic.
+     * Método para obtener la fuente MontserratBold Italic.
      * @param sizeLetra tamaño de la fuente
-     * @return La fuente MonserratBold Italic.
+     * @return La fuente MontserratBold Italic.
      */
     public Font getMonserratItalic(float sizeLetra) {
-        crearFuenteMonserratItalic(sizeLetra);
-        return MonserratItalic;
+        crearFuentesMontserrat(sizeLetra);
+        return MontserratItalic;
     }
 
+    /**
+     * Método para obtener la fuente MontserratPlain.
+     * @param sizeLetra tamaño de la fuente
+     * @return La fuente MontserratPlain.
+     */
     public Font getMontserratPlain(float sizeLetra) {
-        crearFuenteMonserratPlain(sizeLetra);
+        crearFuentesMontserrat(sizeLetra);
         return MontserratPlain;
     }
 
