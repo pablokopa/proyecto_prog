@@ -4,6 +4,8 @@ import app.view.services.ObjGraficos;
 import app.view.services.Recursos;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -132,6 +134,19 @@ public class TareasPomodoroTemporal extends JFrame {
                 "",
                 true
         );
+        botonPlay.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent evt) {
+                if (botonPlay.getModel().isPressed()) {
+                    botonPlay.setBackground(sRecursos.getBLANCO());
+                }
+                if (botonPlay.getModel().isRollover()) {
+                    botonPlay.setBackground(sRecursos.getGRANATE_MID_LIGHT());
+                } else {
+                    botonPlay.setBackground(sRecursos.getGRANATE());
+                }
+            }
+        });
         panelVistaPrincipal.add(botonPlay);
 
         /* Boton pausa */
@@ -150,6 +165,16 @@ public class TareasPomodoroTemporal extends JFrame {
                 "",
                 true
         );
+        botonPause.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent evt) {
+                if (botonPause.getModel().isRollover()) {
+                    botonPause.setBackground(sRecursos.getGRANATE_MID_LIGHT());
+                } else {
+                    botonPause.setBackground(sRecursos.getGRANATE());
+                }
+            }
+        });
         panelVistaPrincipal.add(botonPause);
 
         /* Boton detener */
@@ -168,14 +193,23 @@ public class TareasPomodoroTemporal extends JFrame {
                 "",
                 true
         );
+        botonDetener.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent evt) {
+                if (botonDetener.getModel().isRollover()) {
+                    botonDetener.setBackground(sRecursos.getGRANATE_MID_LIGHT());
+                } else {
+                    botonDetener.setBackground(sRecursos.getGRANATE());
+                }
+            }
+        });
         panelVistaPrincipal.add(botonDetener);
 
         /* Boton cambiar tiempos de concentración y descanso */
         botonCambiarTiempo = sObjGraficos.construirJButton(
                 "Cambiar los parámetros",
                 botonPlay.getX(),
-                panelVistaPrincipal.getHeight()-50-10,        // abajo
-//                botonPlay.getY()+botonPlay.getHeight()+10,      // arriba
+                panelVistaPrincipal.getHeight()-50-10,
                 botonPlay.getWidth()*3+20,
                 50,
                 sRecursos.getCursorMano(),
@@ -187,6 +221,16 @@ public class TareasPomodoroTemporal extends JFrame {
                 "",
                 true
         );
+        botonCambiarTiempo.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent evt) {
+                if (botonCambiarTiempo.getModel().isRollover()) {
+                    botonCambiarTiempo.setBackground(sRecursos.getGRANATE_MID_LIGHT());
+                } else {
+                    botonCambiarTiempo.setBackground(sRecursos.getGRANATE());
+                }
+            }
+        });
         panelVistaPrincipal.add(botonCambiarTiempo);
     }
 

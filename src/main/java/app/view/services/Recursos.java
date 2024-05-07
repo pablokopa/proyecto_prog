@@ -13,7 +13,7 @@ import java.io.InputStream;
  */
 public class Recursos {
     // Declaración de recursos gráficos
-    private Color GRANATE, BLANCO, GRIS_CLARO;
+    private Color GRANATE, BLANCO, GRIS_CLARO, GRANATE_MID_LIGHT;
     private Font MontserratPlain, MontserratBold, MontserratItalic;
     private Cursor cursorMano;
     private Border bordeGranate;
@@ -41,6 +41,7 @@ public class Recursos {
         GRANATE = new Color(82,0,0);
         BLANCO = new Color(255, 255, 255);
         GRIS_CLARO = new Color(245, 245, 245);
+        GRANATE_MID_LIGHT = new Color(100, 0, 0);
     }
 
     // Cambiar fuente por otra Montserrat-Light/Plain
@@ -113,6 +114,12 @@ public class Recursos {
      * @return El color GRANATE.
      */
     public Color getGRANATE() { return GRANATE; }
+
+    /**
+     * Método para obtener el color GRANATE_MID_LIGHT.
+     * @return El color GRANATE_MID_LIGHT.
+     */
+    public Color getGRANATE_MID_LIGHT() { return GRANATE_MID_LIGHT; }
 
     /**
      * Método para obtener el color BLANCO.
