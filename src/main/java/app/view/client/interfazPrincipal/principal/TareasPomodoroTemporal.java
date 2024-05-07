@@ -4,6 +4,7 @@ import app.view.services.ObjGraficos;
 import app.view.services.Recursos;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -95,15 +96,15 @@ public class TareasPomodoroTemporal extends JFrame {
 
         labelTiempoDescanso = sObjGraficos.construirJLabel(
                 "5:00",
-                0,
+                20,
                 labelTiempoConcentracion.getHeight()+100,
-                panelVistaPrincipal.getWidth(),
+                panelVistaPrincipal.getWidth()-40,
                 195,
                 null,
                 null,
                 sRecursos.getMonserratBold(75),
                 sRecursos.getGRIS_CLARO(),
-                sRecursos.getGRANATE(),
+                new Color(82,0,0,250),
                 sRecursos.getBordeGranate(),
                 "t"
         );
@@ -117,16 +118,16 @@ public class TareasPomodoroTemporal extends JFrame {
 
         /* Boton play */
         botonPlay = sObjGraficos.construirJButton(
-                "Comenzar",
+                null,
                 (panelVistaPrincipal.getWidth()-620)/2,
                 panelVistaPrincipal.getHeight()-100-20,
                 200,
                 50,
                 sRecursos.getCursorMano(),
+                sRecursos.getImagenPlay(),
                 null,
-                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
                 sRecursos.getGRANATE(),
-                sRecursos.getBLANCO(),
+                null,
                 null,
                 "",
                 true
@@ -135,16 +136,16 @@ public class TareasPomodoroTemporal extends JFrame {
 
         /* Boton pausa */
         botonPause = sObjGraficos.construirJButton(
-                "Pausar",
+                null,
                 botonPlay.getX()+botonPlay.getWidth()+10,
                 panelVistaPrincipal.getHeight()-100-20,
                 200,
                 50,
                 sRecursos.getCursorMano(),
+                sRecursos.getImagenPause(),
                 null,
-                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
                 sRecursos.getGRANATE(),
-                sRecursos.getBLANCO(),
+                null,
                 null,
                 "",
                 true
@@ -153,16 +154,16 @@ public class TareasPomodoroTemporal extends JFrame {
 
         /* Boton detener */
         botonDetener = sObjGraficos.construirJButton(
-                "Detener",
+                null,
                 botonPause.getX()+botonPause.getWidth()+10,
                 panelVistaPrincipal.getHeight()-100-20,
                 200,
                 50,
                 sRecursos.getCursorMano(),
+                new ImageIcon(sRecursos.getImagenStop().getImage().getScaledInstance(36,36, Image.SCALE_DEFAULT)),
                 null,
-                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
                 sRecursos.getGRANATE(),
-                sRecursos.getBLANCO(),
+                null,
                 null,
                 "",
                 true

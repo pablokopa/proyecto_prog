@@ -17,7 +17,7 @@ public class Recursos {
     private Font MontserratPlain, MontserratBold, MontserratItalic;
     private Cursor cursorMano;
     private Border bordeGranate;
-    private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword;
+    private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword, imagenPlay, imagenPause, imagenStop;
 
     /**
      * Constante de tamaño de letra estándar para los botones.
@@ -103,6 +103,9 @@ public class Recursos {
         imagenCerrar = new ImageIcon("src/main/resources/images/close.png");
         imagenUsuario = new ImageIcon("src/main/resources/images/user.png");
         imagenPassword = new ImageIcon("src/main/resources/images/password.png");
+        imagenPlay = new ImageIcon("src/main/resources/images/playbuttton.png");
+        imagenPause = new ImageIcon("src/main/resources/images/pausebutton.png");
+        imagenStop = new ImageIcon("src/main/resources/images/stopbutton.png");
     }
 
     /**
@@ -194,6 +197,24 @@ public class Recursos {
      * @return La imagen de la contraseña.
      */
     public ImageIcon getImagenPassword() { return imagenPassword; }
+
+    /**
+     * Método para obtener la imagen del botón de play.
+     * @return La imagen del botón de play.
+     */
+    public ImageIcon getImagenPlay() { return imagenPlay; }
+
+    /**
+     * Método para obtener la imagen del botón de pausa.
+     * @return La imagen del botón de pausa.
+     */
+    public ImageIcon getImagenPause() { return imagenPause; }
+
+    /**
+     * Método para obtener la imagen del botón de detener.
+     * @return La imagen del botón de detener.
+     */
+    public ImageIcon getImagenStop() { return imagenStop; }
 
     /**
      * Método para obtener la instancia única de la clase.
