@@ -80,21 +80,39 @@ public class GestorUsuarios {
         return false;
     }
 
-    /**
-     * Comprueba si el nombre de usuario ya existe o si tiene al menos 3 carácteres
-     * @param nombreUsuario (String) obtenida desde la interfaz de usuario
-     * @return true si fue creado correctamente, mensaje en la interfaz si no
-     */
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
-        Usuario usuario = new Usuario(nombreUsuario, null);
-        if (this.listaUsuarios.contains(usuario)){
-            textoComprobacion.setText("El nombre de usuario ya existe");
-            return false;
+        // Consulta SQL para buscar un nombre de usuario
+        String sql = "SELECT nombre FROM usuarios WHERE nombre = ?";
+
+        try (
+            // Establecer la conexión a la base de datos
+            Connection conexion = ConectarBD.conectar();
+            // Preparar la consulta SQL
+            PreparedStatement pstmt = conexion.prepareStatement(sql)
+        ) {
+            // Establecer el valor del parámetro de la consulta SQL
+            pstmt.setString(1, nombreUsuario);
+
+            // Ejecutar la consulta SQL y obtener los resultados
+            ResultSet rs = pstmt.executeQuery();
+
+            // Si se encontró un usuario, devolver false y mostrar un mensaje
+            if (rs.next()) {
+                textoComprobacion.setText("El nombre de usuario ya existe");
+                return false;
+            }
+        } catch (SQLException e) {
+            // Imprimir la traza de la excepción si ocurre un error
+            e.printStackTrace();
         }
-        else if (nombreUsuario.length()<3){
+
+        // Si el nombre de usuario tiene menos de 3 caracteres, devolver false y mostrar un mensaje
+        if (nombreUsuario.length()<3){
             textoComprobacion.setText("El nombre de usuario debe tener al menos 3 carácteres");
             return false;
         }
+
+        // Si no se encontró un usuario y el nombre de usuario tiene al menos 3 caracteres, devolver true
         return true;
     }
 
@@ -103,7 +121,7 @@ public class GestorUsuarios {
      * @param passwordUsuario (char[]) obtenida desde la interfaz de usuario
      * @return true si fue creado correctamente, mensaje en la interfaz si no
      */
-    public boolean comprobarPasswordUsuario(char[] passwordUsuario, JLabel textoComprobacion){
+    /*public boolean comprobarPasswordUsuario(char[] passwordUsuario, JLabel textoComprobacion){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
         if (passwordUsuario.length<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
@@ -119,7 +137,9 @@ public class GestorUsuarios {
             }
         }
         return true;
-    }
+    }*/
+
+
 
     /**
      * Cuenta el número de usuarios registrados
