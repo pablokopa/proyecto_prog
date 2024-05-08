@@ -80,6 +80,11 @@ public class GestorUsuarios {
         return false;
     }
 
+    /**
+     * Comprueba si el nombre de usuario tiene al menos 3 carácteres y no existe en la base de datos
+     * @param nombreUsuario obtenido desde la interfaz de usuario
+     * @return false si encuentra un usuario con el mismo nombre o si el nombre tiene menos de 3 carácteres, true si no
+     */
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
         // Consulta SQL para buscar un nombre de usuario
         String sql = "SELECT nombre FROM usuarios WHERE nombre = ?";
@@ -121,7 +126,7 @@ public class GestorUsuarios {
      * @param passwordUsuario (char[]) obtenida desde la interfaz de usuario
      * @return true si fue creado correctamente, mensaje en la interfaz si no
      */
-    /*public boolean comprobarPasswordUsuario(char[] passwordUsuario, JLabel textoComprobacion){
+    public boolean comprobarPasswordUsuario(char[] passwordUsuario, JLabel textoComprobacion){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
         if (passwordUsuario.length<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
@@ -137,16 +142,28 @@ public class GestorUsuarios {
             }
         }
         return true;
-    }*/
-
-
+    }
 
     /**
      * Cuenta el número de usuarios registrados
      * @return número total de usuarios registrados
      */
-    public int contarUsuarios(){
-        return this.listaUsuarios.size();
+     public int contarUsuarios(){
+         String sql = "SELECT COUNT(*) FROM usuarios";
+
+         try (
+             Connection conexion = ConectarBD.conectar();
+             PreparedStatement pstmt = conexion.prepareStatement(sql)
+         ) {
+             ResultSet rs = pstmt.executeQuery();
+             if(rs.next()){
+                return rs.getInt(1);
+             }
+         } catch (SQLException e) {
+             // Imprimela excepción si ocurre un error
+             e.printStackTrace();
+         }
+         return 0;
     }
 
     /**
@@ -205,41 +222,6 @@ public class GestorUsuarios {
                 return rs.getString("nombre");
             } else {
                 // Si no se encontró un usuario, devolver null
-                return null;
-            }
-        } catch (SQLException e) {
-            // Imprimir la traza de la excepción si ocurre un error
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Método para obtener el nombre de un usuario de la base de datos
-     * @param passwordUsuario contraseña a buscar en la base de datos
-     * @return la contraseña si fue encontrada correctamente, null si no se encontró
-     */
-    public String obtenerPasswordUsuario(char[] passwordUsuario) {
-        // Consulta SQL para obtenerla contraseña de un usuario
-        String sql = "SELECT password FROM usuarios WHERE password = ?";
-
-        try (
-                // Establece la conexión a la base de datos
-                Connection conexion = ConectarBD.conectar();
-                // Prepara la consulta SQL
-                PreparedStatement pstmt = conexion.prepareStatement(sql)
-        ) {
-            // Establece el valor del parámetro de la consulta SQL
-            pstmt.setString(1, passwordUsuario.toString());
-
-            // Ejecuta la consulta SQL y obtener los resultados
-            ResultSet rs = pstmt.executeQuery();
-
-            // Si se encontró la contraseña, devolver su nombre
-            if (rs.next()) {
-                return rs.getString("password");
-            } else {
-                // Si no se encontró la contraseña, devolver null
                 return null;
             }
         } catch (SQLException e) {
