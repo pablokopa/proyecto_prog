@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.basedatos.ConectarBD;
 import app.model.usuarios.GestorUsuarios;
 import app.model.usuarios.Usuario;
 import app.model.usuarios.UsuarioConectado;
@@ -40,6 +41,9 @@ public class LoginController {
 
                 Usuario usuarioTemporal = new Usuario(nombreUsuario, passwordUsuario);
                 if (gestorUsuarios.registrarUsuario(usuarioTemporal)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
+
+                    gestorUsuarios.insertarUsuario(usuarioTemporal.getNombreUsuario(), usuarioTemporal.getContraUsuario());
+
                     loginTemplate.getTextoComprobacion().setText("Usuario registrado correctamente");
                     loginTemplate.getTextoLogin().setText("Bienvenido, "+loginTemplate.getCuadroUsuario().getText()+"!");
                     loginTemplate.getCuadroUsuario().setText("");

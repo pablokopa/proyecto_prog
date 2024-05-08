@@ -1,8 +1,12 @@
 package app.model.usuarios;
+import app.model.basedatos.ConectarBD;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Clase que gestiona los usuarios
@@ -122,5 +126,33 @@ public class GestorUsuarios {
      */
     public int contarUsuarios(){
         return this.listaUsuarios.size();
+    }
+
+    /**
+     * Método para insertar un nuevo usuario en la base de datos
+     * @return true si el usuario fue insertado correctamente, false si ocurrió un error
+     */
+    public boolean insertarUsuario(String nombreUsuario, char[] passwordUsuario) {
+        // Consulta SQL para insertar un nuevo usuario
+        String sql = "INSERT INTO usuarios (nombre, password) VALUES (?, ?)";
+
+        try (
+            // Establece la conexión a la base de datos
+            Connection conexion = ConectarBD.conectar();
+            // Prepara la consulta SQL
+            PreparedStatement pstmt = conexion.prepareStatement(sql)
+        ) {
+            // Establece los valores de los parámetros de la consulta SQL
+            pstmt.setString(1, nombreUsuario);
+            pstmt.setString(2, new String(passwordUsuario));
+
+            // Ejecuta la consulta SQL
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            // Imprimela excepción si ocurre un error
+            e.printStackTrace();
+            return false;
+        }
     }
 }
