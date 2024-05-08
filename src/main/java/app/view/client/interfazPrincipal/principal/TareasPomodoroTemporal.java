@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,7 +20,8 @@ public class TareasPomodoroTemporal extends JFrame {
 
     private JPanel panelOpciones, panelVistaPrincipal, panelSuperior;
     private JLabel labelCerrarVentana, labelTiempoConcentracion, labelTiempoDescanso;
-    private JButton botonPlay, botonPause, botonDetener, botonCambiarTiempo;
+    private JButton botonPlay, botonPause, botonDetener, botonCambiarTiempo, botonConfirmarCambios;
+    private JTextField textMinutosConcentracion, textMinutosDescanso;
 
     TareasPomodoroTemporal() {
         this.sObjGraficos = ObjGraficos.getService();
@@ -36,6 +39,7 @@ public class TareasPomodoroTemporal extends JFrame {
         crearPaneles();
         crearLabels();
         crearBotones();
+        crearTextFields();
         moverVentana();
 
         /* Hacer visible la ventana */
@@ -147,6 +151,12 @@ public class TareasPomodoroTemporal extends JFrame {
                 }
             }
         });
+        botonPlay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                int minutos = Integer.valueOf(labelTiempoConcentracion.getText());
+            }
+        });
         panelVistaPrincipal.add(botonPlay);
 
         /* Boton pausa */
@@ -231,10 +241,98 @@ public class TareasPomodoroTemporal extends JFrame {
                 }
             }
         });
+        botonCambiarTiempo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                botonCambiarTiempo.setVisible(false);
+                botonPlay.setVisible(false);
+                botonPause.setVisible(false);
+                botonDetener.setVisible(false);
+                botonConfirmarCambios.setVisible(true);
+                textMinutosConcentracion.setVisible(true);
+                textMinutosDescanso.setVisible(true);
+            }
+        });
         panelVistaPrincipal.add(botonCambiarTiempo);
+
+        botonConfirmarCambios = sObjGraficos.construirJButton(
+            "Confirmar",
+            botonPlay.getX(),
+            panelVistaPrincipal.getHeight()-50-10,
+            botonPlay.getWidth()*3+20,
+            50,
+            sRecursos.getCursorMano(),
+            null,
+            sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
+            sRecursos.getGRANATE(),
+            sRecursos.getBLANCO(),
+            null,
+            "",
+            true
+        );
+        botonConfirmarCambios.setVisible(false);
+        botonConfirmarCambios.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (botonConfirmarCambios.getModel().isRollover()){
+                    botonConfirmarCambios.setBackground(sRecursos.getGRANATE_MID_LIGHT());
+                } else {
+                    botonConfirmarCambios.setBackground(sRecursos.getGRANATE());
+                }
+            }
+        });
+        botonConfirmarCambios.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                botonConfirmarCambios.setVisible(false);
+                textMinutosConcentracion.setVisible(false);
+                textMinutosDescanso.setVisible(false);
+                botonPlay.setVisible(true);
+                botonPause.setVisible(true);
+                botonDetener.setVisible(true);
+                botonCambiarTiempo.setVisible(true);
+
+            }
+        });
+        panelVistaPrincipal.add(botonConfirmarCambios);
     }
 
-    public void moverVentana(){
+    private void crearTextFields(){
+        textMinutosConcentracion = sObjGraficos.construirJTextField(
+                null,
+                20,
+                botonPlay.getY(),
+                (panelVistaPrincipal.getWidth()-50)/2,
+                50,
+                sRecursos.getMonserratBold(15),
+                Color.WHITE,
+                Color.DARK_GRAY,
+                sRecursos.getGRANATE(),
+                sRecursos.getBordeGranate(),
+                "c"
+        );
+        textMinutosConcentracion.setVisible(false);
+        panelVistaPrincipal.add(textMinutosConcentracion);
+
+        textMinutosDescanso = sObjGraficos.construirJTextField(
+                null,
+                textMinutosConcentracion.getX()+textMinutosConcentracion.getWidth()+10,
+                botonPlay.getY(),
+                (panelVistaPrincipal.getWidth()-50)/2,
+//                textMinutosConcentracion.getWidth(),
+                50,
+                sRecursos.getMonserratBold(15),
+                Color.WHITE,
+                Color.DARK_GRAY,
+                sRecursos.getGRANATE(),
+                sRecursos.getBordeGranate(),
+                "c"
+        );
+        textMinutosDescanso.setVisible(false);
+        panelVistaPrincipal.add(textMinutosDescanso);
+    }
+
+    private void moverVentana(){
         panelSuperior.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
