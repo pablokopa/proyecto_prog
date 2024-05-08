@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -130,6 +131,8 @@ public class GestorUsuarios {
 
     /**
      * Método para insertar un nuevo usuario en la base de datos
+     * @param nombreUsuario obtenido desde la interfaz de usuario
+     * @param passwordUsuario obtenido desde la interfaz de usuario
      * @return true si el usuario fue insertado correctamente, false si ocurrió un error
      */
     public boolean insertarUsuario(String nombreUsuario, char[] passwordUsuario) {
@@ -153,6 +156,76 @@ public class GestorUsuarios {
             // Imprimela excepción si ocurre un error
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * Método para obtener el nombre de un usuario de la base de datos
+     * @param nombreUsuario nombre de usuario a buscar en la base de datos
+     * @return el nombre si fue encontrado correctamente, null si no se encontró
+     */
+    public String obtenerNombreUsuario(String nombreUsuario) {
+        // Consulta SQL para obtener el nombre de un usuario
+        String sql = "SELECT nombre FROM usuarios WHERE nombre = ?";
+
+        try (
+            // Establece la conexión a la base de datos
+            Connection conexion = ConectarBD.conectar();
+            // Prepara la consulta SQL
+            PreparedStatement pstmt = conexion.prepareStatement(sql)
+        ) {
+            // Establece el valor del parámetro de la consulta SQL
+            pstmt.setString(1, nombreUsuario);
+
+            // Ejecuta la consulta SQL y obtener los resultados
+            ResultSet rs = pstmt.executeQuery();
+
+            // Si se encontró un usuario, devolver su nombre
+            if (rs.next()) {
+                return rs.getString("nombre");
+            } else {
+                // Si no se encontró un usuario, devolver null
+                return null;
+            }
+        } catch (SQLException e) {
+            // Imprimir la traza de la excepción si ocurre un error
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Método para obtener el nombre de un usuario de la base de datos
+     * @param passwordUsuario contraseña a buscar en la base de datos
+     * @return la contraseña si fue encontrada correctamente, null si no se encontró
+     */
+    public String obtenerPasswordUsuario(char[] passwordUsuario) {
+        // Consulta SQL para obtenerla contraseña de un usuario
+        String sql = "SELECT password FROM usuarios WHERE password = ?";
+
+        try (
+                // Establece la conexión a la base de datos
+                Connection conexion = ConectarBD.conectar();
+                // Prepara la consulta SQL
+                PreparedStatement pstmt = conexion.prepareStatement(sql)
+        ) {
+            // Establece el valor del parámetro de la consulta SQL
+            pstmt.setString(1, passwordUsuario.toString());
+
+            // Ejecuta la consulta SQL y obtener los resultados
+            ResultSet rs = pstmt.executeQuery();
+
+            // Si se encontró la contraseña, devolver su nombre
+            if (rs.next()) {
+                return rs.getString("password");
+            } else {
+                // Si no se encontró la contraseña, devolver null
+                return null;
+            }
+        } catch (SQLException e) {
+            // Imprimir la traza de la excepción si ocurre un error
+            e.printStackTrace();
+            return null;
         }
     }
 }

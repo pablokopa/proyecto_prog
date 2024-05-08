@@ -11,5 +11,6 @@ public class Main {
         LoginTemplate loginTemplate = new LoginTemplate(gestorUsuarios);
         ConectarBD.conectar();
         new LoginController(loginTemplate, gestorUsuarios);
+        System.out.println(gestorUsuarios.obtenerNombreUsuario("aaaa"));
     }
 }
