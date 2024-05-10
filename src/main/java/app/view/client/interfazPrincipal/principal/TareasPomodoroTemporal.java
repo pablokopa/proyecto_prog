@@ -357,6 +357,12 @@ public class TareasPomodoroTemporal extends JFrame {
         panelVistaPrincipal.add(textMinutosDescanso);
     }
 
+    /**
+     * Método para comprobar si el texto introducido en el JTextField es un número.
+     * @param text texto a comprobar
+     * @param textField JTextField a comprobar
+     * @return true si solo son números
+     */
     private boolean comprobarTextoMinutos(String text, JTextField textField){
         if (text.isBlank()){
             return false;
