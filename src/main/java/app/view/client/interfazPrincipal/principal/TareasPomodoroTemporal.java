@@ -7,10 +7,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class TareasPomodoroTemporal extends JFrame {
     private ObjGraficos sObjGraficos;
@@ -311,6 +308,21 @@ public class TareasPomodoroTemporal extends JFrame {
                 sRecursos.getBordeGranate(),
                 "c"
         );
+        textMinutosConcentracion.setText("Minutos de concentración");
+
+        textMinutosConcentracion.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                textMinutosConcentracion.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!comprobarTextoMinutos(textMinutosConcentracion.getText(), textMinutosConcentracion)){
+                    textMinutosConcentracion.setText("Minutos de concentración");
+                }
+            }
+        });
         textMinutosConcentracion.setVisible(false);
         panelVistaPrincipal.add(textMinutosConcentracion);
 
@@ -319,7 +331,6 @@ public class TareasPomodoroTemporal extends JFrame {
                 textMinutosConcentracion.getX()+textMinutosConcentracion.getWidth()+10,
                 botonPlay.getY(),
                 (panelVistaPrincipal.getWidth()-50)/2,
-//                textMinutosConcentracion.getWidth(),
                 50,
                 sRecursos.getMonserratBold(15),
                 Color.WHITE,
@@ -328,8 +339,34 @@ public class TareasPomodoroTemporal extends JFrame {
                 sRecursos.getBordeGranate(),
                 "c"
         );
+        textMinutosDescanso.setText("Minutos de descanso");
+        textMinutosDescanso.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                textMinutosDescanso.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!comprobarTextoMinutos(textMinutosDescanso.getText(), textMinutosDescanso)){
+                    textMinutosDescanso.setText("Minutos de descanso");
+                }
+            }
+        });
         textMinutosDescanso.setVisible(false);
         panelVistaPrincipal.add(textMinutosDescanso);
+    }
+
+    private boolean comprobarTextoMinutos(String text, JTextField textField){
+        if (text.isBlank()){
+            return false;
+        }
+        for (int i=0; i<text.length(); i++){
+            if (!Character.isDigit(text.charAt(i))){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void moverVentana(){
