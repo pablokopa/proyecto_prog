@@ -1,16 +1,12 @@
 package app.view.client.interfazPrincipal.principal;
 
+import app.view.services.ObjGraficos;
 import app.view.services.Recursos;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class TareasPomodoroLayout extends JFrame {
     private Recursos sRecursos;
@@ -20,26 +16,22 @@ public class TareasPomodoroLayout extends JFrame {
     private JButton botonInicio, botonPerfil, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonEstadisticas;
 
     TareasPomodoroLayout() {
-        this.sRecursos = Recursos.getService();
+        sRecursos = Recursos.getService();
 
+        this.setLayout(new BorderLayout());
         this.setSize(1100, 650);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(this);
         this.setUndecorated(false);
-//        this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
-
-        this.setLayout(new BorderLayout());
-
 
         crearPaneles();
         crearLabels();
         crearBotones();
+        redimensionarPaneles();
 
         this.setVisible(true);
-
-        redimensionarPaneles();
     }
 
     private void crearPaneles(){
@@ -47,7 +39,6 @@ public class TareasPomodoroLayout extends JFrame {
         panelIzquierda.setBackground(sRecursos.getGRANATE());
         panelIzquierda.setPreferredSize(new Dimension((int)(this.getWidth()*0.15), this.getHeight()));  //temporal setPreferredSize
         panelIzquierda.setLayout(new BoxLayout(panelIzquierda, BoxLayout.Y_AXIS));
-
 
         panelCentral = new JPanel();
         panelCentral.setBackground(sRecursos.getGRIS_CLARO());
@@ -72,55 +63,32 @@ public class TareasPomodoroLayout extends JFrame {
 
     private void crearBotones() {
 
-        botonInicio = new JButton("Inicio");
-        botonInicio.setBackground(sRecursos.getGRANATE());
-        botonInicio.setForeground(sRecursos.getBLANCO());
-        botonInicio.setMaximumSize(new Dimension(getWidth(), 50));
-        botonInicio.setFocusable(false);
-        botonInicio.setCursor(sRecursos.getCursorMano());
-        botonInicio.setFont(sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON));
-        botonInicio.setBorder(null);
-//        botonInicio.setContentAreaFilled(true);
+        botonInicio = ObjGraficos.construirJButton(
+                "Inicio",
+                getWidth(),
+                50,
+                sRecursos.getBLANCO(),
+                sRecursos.getGRANATE(),
+                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
+                sRecursos.getCursorMano(),
+                null,
+                null
+        );
 
-        botonInicio.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent evt) {
-                if (botonInicio.getModel().isPressed()) {
-                    botonInicio.setBackground(sRecursos.getBLANCO());
-                }
-                if (botonInicio.getModel().isRollover()) {
-                    botonInicio.setBackground(sRecursos.getGRANATE_MID_LIGHT());
-                } else {
-                    botonInicio.setBackground(sRecursos.getGRANATE());
-                }
-            }
-        });
-
-        botonAjustes = new JButton("Ajustes");
-        botonAjustes.setBackground(sRecursos.getGRANATE());
-        botonAjustes.setForeground(sRecursos.getBLANCO());
-        botonAjustes.setMaximumSize(new Dimension(getWidth(), 50));
-        botonAjustes.setFocusable(false);
-        botonAjustes.setCursor(sRecursos.getCursorMano());
-        botonAjustes.setFont(sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON));
-        botonAjustes.setBorder(null);
-        botonAjustes.setContentAreaFilled(true);
-
-        botonAjustes.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent evt) {
-                if (botonAjustes.getModel().isPressed()) {
-                    botonAjustes.setBackground(sRecursos.getBLANCO());
-                }
-                if (botonAjustes.getModel().isRollover()) {
-                    botonAjustes.setBackground(sRecursos.getGRANATE_MID_LIGHT());
-                } else {
-                    botonAjustes.setBackground(sRecursos.getGRANATE());
-                }
-            }
-        });
+        botonAjustes = ObjGraficos.construirJButton(
+                "Ajustes",
+                getWidth(),
+                50,
+                sRecursos.getGRANATE(),
+                sRecursos.getBLANCO(),
+                sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON),
+                sRecursos.getCursorMano(),
+                null,
+                null
+        );
 
         panelIzquierda.add(botonInicio);
+        panelIzquierda.add(Box.createVerticalGlue());   //espacio entre botones
         panelIzquierda.add(botonAjustes);
     }
 

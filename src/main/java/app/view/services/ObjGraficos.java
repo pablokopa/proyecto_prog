@@ -2,6 +2,8 @@ package app.view.services;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
@@ -105,6 +107,36 @@ public class ObjGraficos {
             default:
                 break;
         }
+        return boton;
+    }
+
+    public static JButton construirJButton(
+            String texto, int ancho, int alto, Color colorFondo, Color colorFuente,
+            Font fuente, Cursor cursor, Border borde, ImageIcon imagen
+    ) {
+        JButton boton = new JButton(texto);
+        boton.setPreferredSize(new Dimension(ancho, alto));
+//        boton.setMinimumSize(new Dimension(ancho, alto));
+        boton.setMaximumSize(new Dimension(ancho, alto));
+        boton.setFocusable(false);
+        boton.setCursor(cursor);
+        boton.setFont(fuente);
+        boton.setBackground(colorFondo);
+        boton.setForeground(colorFuente);
+        boton.setIcon(imagen);
+        boton.setBorder(borde);
+
+        boton.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (boton.getModel().isRollover()) {
+                    boton.setBackground(colorFondo.brighter());
+                } else {
+                    boton.setBackground(colorFondo);
+                }
+            }
+        });
+
         return boton;
     }
 

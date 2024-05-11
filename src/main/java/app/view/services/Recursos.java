@@ -16,7 +16,7 @@ public class Recursos {
     private Color GRANATE, BLANCO, GRIS_CLARO, GRANATE_MID_LIGHT;
     private Font MontserratPlain, MontserratBold, MontserratItalic;
     private Cursor cursorMano;
-    private Border bordeGranate;
+    private Border bordeGranate, borderBlanco;
     private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword, imagenPlay, imagenPause, imagenStop;
 
     /**
@@ -92,6 +92,7 @@ public class Recursos {
      */
     private void crearBordes() {
         bordeGranate = BorderFactory.createMatteBorder(0, 0, 2, 0, GRANATE);
+        borderBlanco = BorderFactory.createMatteBorder(0,0,1,0, BLANCO);
     }
 
     /**
@@ -174,6 +175,14 @@ public class Recursos {
      * @return El borde de color GRANATE.
      */
     public Border getBordeGranate() { return bordeGranate; }
+
+    /**
+     * Método para obtener el borde de color BLANCO.
+     * @return El borde de color BLANCO.
+     */
+    public Border getBorderBlanco() {
+        return borderBlanco;
+    }
 
     /**
      * Método para obtener la imagen de cierre.
