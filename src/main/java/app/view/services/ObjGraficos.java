@@ -2,6 +2,8 @@ package app.view.services;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
@@ -108,6 +110,36 @@ public class ObjGraficos {
         return boton;
     }
 
+    public static JButton construirJButton(
+            String texto, int ancho, int alto, Color colorFondo, Color colorFuente,
+            Font fuente, Cursor cursor, Border borde, ImageIcon imagen
+    ) {
+        JButton boton = new JButton(texto);
+        boton.setPreferredSize(new Dimension(ancho, alto));
+//        boton.setMinimumSize(new Dimension(ancho, alto));
+        boton.setMaximumSize(new Dimension(ancho, alto));
+        boton.setFocusable(false);
+        boton.setCursor(cursor);
+        boton.setFont(fuente);
+        boton.setBackground(colorFondo);
+        boton.setForeground(colorFuente);
+        boton.setIcon(imagen);
+        boton.setBorder(borde);
+
+        boton.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (boton.getModel().isRollover()) {
+                    boton.setBackground(colorFondo.brighter());
+                } else {
+                    boton.setBackground(colorFondo);
+                }
+            }
+        });
+
+        return boton;
+    }
+
     /**
      * Método para construir un JLabel.
      * @param texto El texto de la etiqueta.
@@ -149,9 +181,10 @@ public class ObjGraficos {
                 etiqueta.setHorizontalTextPosition(SwingConstants.LEFT);
                 break;
             case "t":
-                etiqueta.setHorizontalAlignment(SwingConstants.CENTER);
-                etiqueta.setVerticalTextPosition(SwingConstants.TOP);
-                etiqueta.setHorizontalTextPosition(SwingConstants.CENTER);
+                etiqueta.setHorizontalAlignment(SwingConstants.CENTER);     // posiciona el texto en el centro del label horizontalmente
+                etiqueta.setVerticalAlignment(SwingConstants.TOP);          // posiciona el texto en la parte de arriba del label verticalmente
+                etiqueta.setHorizontalTextPosition(SwingConstants.CENTER);  // posiciona el texto en el centro de la imagen horizontalmente (si existe en el label)
+                etiqueta.setVerticalTextPosition(SwingConstants.TOP);       // posiciona el texto por encima de la imagen verticalmente (si existe en el label)
                 break;
             case "b":
                 etiqueta.setHorizontalAlignment(SwingConstants.CENTER);

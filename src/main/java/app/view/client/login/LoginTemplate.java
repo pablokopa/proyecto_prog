@@ -57,6 +57,7 @@ public class LoginTemplate extends JFrame{
         setLocationRelativeTo(this);
         setResizable(false);
         setUndecorated(true);
+        setIconImage(sRecursos.getImagenLogo2().getImage());
         setVisible(true);
     }
 
@@ -121,11 +122,11 @@ public class LoginTemplate extends JFrame{
     public void crearJButtons(GestorUsuarios gestorUsuarios){
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonRegistrar);
 
         /* Botón de entrar */
-        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "center", true);
+        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonEntrar);
 
     }
@@ -136,19 +137,19 @@ public class LoginTemplate extends JFrame{
      */
     public void crearJLabels(){
         /* Imagen logo */
-        labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "center");
+        labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "");
         panelIzquierda.add(labelLogo);
 
         /* Imagen candado password */
-        labelPassword = sObjGraficos.construirJLabel(null, 25, 230, 32, 32, null, sRecursos.getImagenPassword(), null, null, null, null, "center");
+        labelPassword = sObjGraficos.construirJLabel(null, 25, 230, 32, 32, null, sRecursos.getImagenPassword(), null, null, null, null, "");
         panelDerecha.add(labelPassword);
 
         /* Imagen logo usuario */
-        labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "center");
+        labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
         panelDerecha.add(labelUsuario);
 
         /* Imagen cruz cerrar */
-        labelCerrar = sObjGraficos.construirJLabel(null, 360, 5, 40, 40, sRecursos.getCursorMano(), sRecursos.getImagenCerrar(), null, null, null, null, "center");
+        labelCerrar = sObjGraficos.construirJLabel(null, 360, 5, 40, 40, sRecursos.getCursorMano(), sRecursos.getImagenCerrar(), null, null, null, null, "");
         labelCerrar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) { // Cuando se haga click
