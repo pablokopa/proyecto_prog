@@ -5,6 +5,8 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Esta clase es un singleton que proporciona métodos para construir componentes de la interfaz de usuario.
@@ -56,6 +58,12 @@ public class ObjGraficos {
         return panel;
     }
 
+    /**
+     * Método para construir un JPanel con un layout específico.
+     * @param tipo El tipo de panel a construir. Puede ser "menu", "principal" o "superior".
+     * @param colorFondo El color de fondo del panel.
+     * @return El panel construido.
+     */
     public static JPanel construirPanelesPrincipales(String tipo, Color colorFondo){
         JPanel panel = new JPanel();
         panel.setBackground(colorFondo);
@@ -176,7 +184,7 @@ public class ObjGraficos {
      * @return Un JButton con un diseño personalizado según el tipo especificado.
      */
     public static JButton construirBotonesVentana(
-            String tipo, Color colorFondo, Color colorLinea
+            String tipo, Color colorFondo, Color colorLinea, JFrame frame
     ){
         JButton boton = new JButton() {
             @Override
@@ -205,6 +213,28 @@ public class ObjGraficos {
         boton.setBackground(colorFondo);
         boton.setCursor(Recursos.getService().getCursorMano());
         boton.setBorder(null);
+
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (tipo){
+                    case "minimizar":
+                        frame.setState(JFrame.ICONIFIED);
+                        break;
+                    case "maximizar":
+                        if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+                            frame.setExtendedState(JFrame.NORMAL);
+                        } else {
+                            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        }
+                        break;
+                    case "cerrar":
+                        frame.dispose();
+                        break;
+                }
+            }
+        });
+
         return boton;
     }
 

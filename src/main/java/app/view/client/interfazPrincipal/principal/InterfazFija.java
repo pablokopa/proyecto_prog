@@ -5,11 +5,12 @@ import app.view.services.Recursos;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 
 public class InterfazFija extends JFrame {
     private Recursos sRecursos;
+
+    int xRaton, yRaton, xNuevo, yNuevo;
 
     private JPanel panelSuperior, panelMenu, panelPrincipal;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
@@ -24,12 +25,13 @@ public class InterfazFija extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(this);
-        this.setUndecorated(false);
+        this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
         crearPaneles();
         crearBotones();
         redimensionarPaneles();
+        moverVentana();
 
         this.setVisible(true);
     }
@@ -45,9 +47,9 @@ public class InterfazFija extends JFrame {
     }
 
     private void crearBotones() {
-        botonMinimizar = ObjGraficos.construirBotonesVentana("minimizar", sRecursos.getBLANCO(), sRecursos.getGRANATE());
-        botonMaximizar = ObjGraficos.construirBotonesVentana("maximizar", sRecursos.getBLANCO(), sRecursos.getGRANATE());
-        botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE());
+        botonMinimizar = ObjGraficos.construirBotonesVentana("minimizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
+        botonMaximizar = ObjGraficos.construirBotonesVentana("maximizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
+        botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
 
         panelSuperior.add(botonMinimizar);
         panelSuperior.add(botonMaximizar);
@@ -80,6 +82,32 @@ public class InterfazFija extends JFrame {
                         panelMenu.revalidate();
                     }
                 });
+            }
+        });
+    }
+
+    private void moverVentana(){
+
+        panelSuperior.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                if (getExtendedState() == JFrame.MAXIMIZED_BOTH){
+                    setExtendedState(JFrame.NORMAL);
+                    xRaton = e.getX();
+                } else {
+                    xRaton = e.getX()+botonInicio.getWidth();
+                }
+                yRaton = e.getY();
+            }
+        });
+
+        panelSuperior.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                xNuevo = e.getXOnScreen();
+                yNuevo = e.getYOnScreen();
+                setLocation(xNuevo - xRaton, yNuevo - yRaton);
             }
         });
     }
