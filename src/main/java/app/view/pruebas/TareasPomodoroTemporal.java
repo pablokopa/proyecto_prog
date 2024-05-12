@@ -1,4 +1,4 @@
-package app.view.interfazPrincipal.principal;
+package app.view.pruebas;
 
 import services.ObjGraficos;
 import services.Recursos;

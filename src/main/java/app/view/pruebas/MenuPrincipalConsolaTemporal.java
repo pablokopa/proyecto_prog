@@ -1,4 +1,4 @@
-package app.view.interfazPrincipal.principal;
+package app.view.pruebas;
 
 import app.model.tareas.TareaToDo;
 import app.model.usuarios.Usuario;
