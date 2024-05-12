@@ -30,4 +30,5 @@ Los principales cambios realizados hna sido:
 2. Creación de una VPS en la que poder subir la base de datos.
 3. Implementación de la base de datos en el programa Java.
 4. Modificados todos los métodos para que funcionen a través de la base de datos.
-5. Realización de la interfaz fija y avance en otras pestañas (pomodoro y tareas).
+5. Implementado encriptación de las contraseñas del usuario. Aparecen hasheadas dentro de la base de datos.
+6. Realización de la interfaz fija y avance en otras pestañas (pomodoro y tareas).
