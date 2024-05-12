@@ -49,13 +49,13 @@ public class LoginController {
                 String nombreUsuario = loginTemplate.getCuadroUsuario().getText();
                 String passwordUsuario = String.valueOf(loginTemplate.getCuadroPassword().getPassword());
 
-                Usuario usuarioTemporal = new Usuario(nombreUsuario, passwordUsuario);
-                if (gestorUsuarios.conectarUsuario(usuarioTemporal, loginTemplate.getTextoComprobacion())) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+                if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, loginTemplate.getTextoComprobacion(), loginTemplate.getTextoLogin())) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
                     /* cambiar de ventana */
                     // *** pruebas ***
                     loginTemplate.getFrameLoginTemplate().dispose();
-                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(usuarioTemporal);
-                    menuPrincipal.elegirEnMenu();
+                    System.out.println("Conectado");
+//                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(usuarioTemporal);
+//                    menuPrincipal.elegirEnMenu();
                 }else{
                     loginTemplate.getTextoLogin().setText("Inicio de sesión fallido..");
                 }

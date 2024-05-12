@@ -41,7 +41,7 @@ public class GestorUsuarios {
         String passwordHashed = BCrypt.hashpw(passwordUsuario, BCrypt.gensalt());
 
         // Consulta SQL para insertar un nuevo usuario
-        String sql = "INSERT INTO usuarios (nombre, passwordHashed) VALUES (?, ?)";
+        String sql = "INSERT INTO usuario (nombreU, passwordU) VALUES (?, ?)";
 
         try (
                 Connection conexion = ConectarBD.conectar();                // Establece la conexión a la base de datos
@@ -59,26 +59,36 @@ public class GestorUsuarios {
     }
 
     /**
-     * Conecta un usuario si se encuentra en la lista y no está conectado
-     * @param usuario (Usuario)
-     * @return true si fue conectado correctamente
+     * Método para comprobar si un usuario está registrado en la base de datos y si la contraseña es correcta
+     * @param nombreUsuario (String) obtenido desde la interfaz de usuario
+     * @param passwordUsuario (String) obtenido desde la interfaz de usuario
+     * @param textoComprobacion (JLabel) para mostrar mensajes de error
+     * @param textoLogin (JLabel) para mostrar mensajes de error
+     * @return true si el usuario está registrado y la contraseña es correcta, false si no
      */
-    public boolean conectarUsuario (Usuario usuario, JLabel textoComprobacion){
+    public boolean conectarUsuario (String nombreUsuario, String passwordUsuario, JLabel textoComprobacion, JLabel textoLogin){
 
-
-
-        if (this.listaUsuarios.contains(usuario)){
-            int index = this.listaUsuarios.indexOf(usuario);
-            if (Arrays.equals(this.listaUsuarios.get(index).getContraUsuario(), usuario.getContraUsuario())){
-                System.out.println("Usuario conectado");
-                UsuarioConectado.getUsuarioConectado(usuario);
-                return true;
+        String consulta = "SELECT passwordU FROM usuario WHERE nombreU = ?";
+        try (
+            Connection conexion = ConectarBD.conectar();
+            PreparedStatement prepare = conexion.prepareStatement(consulta);
+        ) {
+            prepare.setString(1, nombreUsuario);
+            ResultSet resultado = prepare.executeQuery();
+            if (resultado.next()){
+                String passwordU = resultado.getString("passwordu");
+                if (!BCrypt.checkpw(passwordUsuario, passwordU)){
+                    textoComprobacion.setText("Contraseña incorrecta");
+                    return false;
+                }
+            } else {
+                textoComprobacion.setText("Usuario no registrado");
+                return false;
             }
-            textoComprobacion.setText("Contraseña incorrecta");
-            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        textoComprobacion.setText("Usuario no registrado");
-        return false;
+        return true;
     }
 
     /**
@@ -113,7 +123,7 @@ public class GestorUsuarios {
         }
 
         /* Consulta SQL para comprobar si el nombre de usuario existe */
-        String sql = "SELECT nombre FROM usuario WHERE nombre = ?";     // Consulta SQL para comprobar si el nombre de usuario existe
+        String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";     // Consulta SQL para comprobar si el nombre de usuario existe
         try (
             Connection conexion = ConectarBD.conectar();                // Establecer la conexión a la base de datos
             PreparedStatement pstmt = conexion.prepareStatement(sql)    // Preparar la consulta SQL
@@ -162,7 +172,7 @@ public class GestorUsuarios {
      * @return número total de usuarios registrados
      */
     public int contarUsuarios(){
-        String sql = "SELECT COUNT(*) FROM usuarios";
+        String sql = "SELECT COUNT(*) FROM usuario";
 
         try (
                 Connection conexion = ConectarBD.conectar();
