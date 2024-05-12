@@ -1,8 +1,12 @@
-package app.view.services;
+package services;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Esta clase es un singleton que proporciona métodos para construir componentes de la interfaz de usuario.
@@ -51,6 +55,29 @@ public class ObjGraficos {
         panel.setLayout(null);
         panel.setBackground(colorFondo);
         panel.setBorder(borde);
+        return panel;
+    }
+
+    /**
+     * Método para construir un JPanel con un layout específico.
+     * @param tipo El tipo de panel a construir. Puede ser "menu", "principal" o "superior".
+     * @param colorFondo El color de fondo del panel.
+     * @return El panel construido.
+     */
+    public static JPanel construirPanelesPrincipales(String tipo, Color colorFondo){
+        JPanel panel = new JPanel();
+        panel.setBackground(colorFondo);
+        switch (tipo){
+            case "menu":
+                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                break;
+            case "principal":
+                panel.setLayout(new BorderLayout());
+                break;
+            case "superior":
+                panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                break;
+        }
         return panel;
     }
 
@@ -109,6 +136,109 @@ public class ObjGraficos {
     }
 
     /**
+     * Construye un JButton con un diseño personalizado para un menú.
+     * El botón cambia su color de fondo cuando el cursor está sobre él.
+     *
+     * @param texto El texto del botón.
+     * @param ancho El ancho del botón.
+     * @param alto El alto del botón.
+     * @param colorFondo El color de fondo del botón.
+     * @param colorFuente El color del texto del botón.
+     * @return Un JButton con un diseño personalizado.
+     */
+    public static JButton construirBotonesMenu(
+            String texto, int ancho, int alto,
+            Color colorFondo, Color colorFuente
+    ) {
+        JButton boton = new JButton(texto);
+        boton.setPreferredSize(new Dimension(ancho, alto));
+        boton.setMaximumSize(new Dimension(ancho, alto));
+        boton.setFocusable(false);
+        boton.setCursor(Recursos.getService().getCursorMano());
+        boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
+        boton.setBackground(colorFondo);
+        boton.setForeground(colorFuente);
+        boton.setBorder(null);
+
+        boton.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (boton.getModel().isRollover()) {
+                    boton.setBackground(colorFondo.brighter());
+                } else {
+                    boton.setBackground(colorFondo);
+                }
+            }
+        });
+
+        return boton;
+    }
+
+    /**
+     * Construye un JButton con un diseño personalizado para una ventana.
+     * El botón puede ser de tipo "minimizar", "maximizar" o "cerrar", y cambia su diseño en consecuencia.
+     *
+     * @param tipo El tipo de botón a construir. Puede ser "minimizar", "maximizar" o "cerrar".
+     * @param colorFondo El color de fondo del botón.
+     * @param colorLinea El color de la línea que se dibuja en el botón.
+     * @return Un JButton con un diseño personalizado según el tipo especificado.
+     */
+    public static JButton construirBotonesVentana(
+            String tipo, Color colorFondo, Color colorLinea, JFrame frame
+    ){
+        JButton boton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.clearRect(0,0,getWidth(),getHeight());
+                super.paintComponent(g);
+                g2.setColor(colorLinea);
+                g2.setStroke(new BasicStroke(3));
+                switch (tipo){
+                    case "minimizar":
+                        g2.drawLine(5, getHeight()/2+3, getWidth()-5, getHeight()/2+3);
+                        break;
+                    case "maximizar":
+                        g2.drawRect(5,5, getWidth()-10, getHeight()-10);
+                        break;
+                    case "cerrar":
+                        g2.drawLine(5,5, getWidth()-5, getHeight()-5);
+                        g2.drawLine(getWidth()-5, 5, 5, getHeight()-5);
+                        break;
+                }
+                g2.dispose();
+            }
+        };
+        boton.setPreferredSize(new Dimension(40, 40));
+        boton.setBackground(colorFondo);
+        boton.setCursor(Recursos.getService().getCursorMano());
+        boton.setBorder(null);
+
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (tipo){
+                    case "minimizar":
+                        frame.setState(JFrame.ICONIFIED);
+                        break;
+                    case "maximizar":
+                        if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+                            frame.setExtendedState(JFrame.NORMAL);
+                        } else {
+                            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        }
+                        break;
+                    case "cerrar":
+                        frame.dispose();
+                        break;
+                }
+            }
+        });
+
+        return boton;
+    }
+
+    /**
      * Método para construir un JLabel.
      * @param texto El texto de la etiqueta.
      * @param x La posición x de la etiqueta.
@@ -149,9 +279,10 @@ public class ObjGraficos {
                 etiqueta.setHorizontalTextPosition(SwingConstants.LEFT);
                 break;
             case "t":
-                etiqueta.setHorizontalAlignment(SwingConstants.CENTER);
-                etiqueta.setVerticalTextPosition(SwingConstants.TOP);
-                etiqueta.setHorizontalTextPosition(SwingConstants.CENTER);
+                etiqueta.setHorizontalAlignment(SwingConstants.CENTER);     // posiciona el texto en el centro del label horizontalmente
+                etiqueta.setVerticalAlignment(SwingConstants.TOP);          // posiciona el texto en la parte de arriba del label verticalmente
+                etiqueta.setHorizontalTextPosition(SwingConstants.CENTER);  // posiciona el texto en el centro de la imagen horizontalmente (si existe en el label)
+                etiqueta.setVerticalTextPosition(SwingConstants.TOP);       // posiciona el texto por encima de la imagen verticalmente (si existe en el label)
                 break;
             case "b":
                 etiqueta.setHorizontalAlignment(SwingConstants.CENTER);

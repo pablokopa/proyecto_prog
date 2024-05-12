@@ -1,7 +1,7 @@
-package app.view.client.interfazPrincipal.principal;
+package app.view.pruebas;
 
-import app.view.services.ObjGraficos;
-import app.view.services.Recursos;
+import services.ObjGraficos;
+import services.Recursos;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -61,7 +61,7 @@ public class TareasTemplateTemporal extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         for (int i=0; i<100; i++){
-            JCheckBox checkBox = sObjGraficos.construirJCheckBox("Tarea "+i, 100, 100, sRecursos.getCursorMano(), sRecursos.getFontTArialDefault(13), sRecursos.getGRANATE());
+            JCheckBox checkBox = sObjGraficos.construirJCheckBox("Tarea "+i, 100, 100, sRecursos.getCursorMano(), sRecursos.getMonserratBold(13), sRecursos.getGRANATE());
             panel.add(checkBox);
         }
 
