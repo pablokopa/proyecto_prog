@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 /**
  * Clase que gestiona los usuarios
  */
@@ -22,33 +24,38 @@ public class GestorUsuarios {
         this.listaUsuarios = new ArrayList<>();
     }
 
-    // Getters
     /**
-     * @return lista de usuarios
+     * Método para insertar un nuevo usuario en la base de datos
+     * @param nombreUsuario obtenido desde la interfaz de usuario
+     * @param passwordUsuario obtenido desde la interfaz de usuario
+     * @return true si el usuario fue insertado correctamente, false si ocurrió un error
      */
-    public ArrayList<Usuario> getListaUsuarios() {
-        return this.listaUsuarios;
-    }
-
-    /**
-     * Crea un usuario si el nombre de usuario no existe
-     * @param usuario (Usuario)
-     * @return true si fue creado correctamente
-     */
-    public boolean registrarUsuario(Usuario usuario){
-        if (this.listaUsuarios.contains(usuario)){
+    public boolean registrarUsuario(String nombreUsuario, String passwordUsuario, JLabel textoComprobacion, JLabel textoLogin) {
+        if(!comprobarNombreUsuario(nombreUsuario, textoComprobacion)
+                || !comprobarPasswordUsuario(passwordUsuario, textoComprobacion)){
+            textoLogin.setText("Registro fallido..");
             return false;
         }
-        return this.listaUsuarios.add(usuario);
-    }
 
-    /**
-     * Elimina un usuario si se encuentra en la lista de usuarios
-     * @param usuario (Usuario)
-     * @return true si fue eliminado correctamente
-     */
-    public boolean eliminarUsuario (Usuario usuario){
-        return this.listaUsuarios.remove(usuario);
+        // Hashea la contraseña del usuario para más seguridad. Siempre es un String de 60 carácteres.
+        String passwordHashed = BCrypt.hashpw(passwordUsuario, BCrypt.gensalt());
+
+        // Consulta SQL para insertar un nuevo usuario
+        String sql = "INSERT INTO usuarios (nombre, passwordHashed) VALUES (?, ?)";
+
+        try (
+                Connection conexion = ConectarBD.conectar();                // Establece la conexión a la base de datos
+                PreparedStatement pstmt = conexion.prepareStatement(sql)    // Prepara la consulta SQL
+        ) {
+            pstmt.setString(1, nombreUsuario);                  // Establece el primer valor de la consulta SQL
+            pstmt.setString(2, passwordHashed);                 // Establece el segundo valor de la consulta SQL
+
+            pstmt.executeUpdate();                                          // Ejecuta la consulta SQL
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -57,6 +64,9 @@ public class GestorUsuarios {
      * @return true si fue conectado correctamente
      */
     public boolean conectarUsuario (Usuario usuario, JLabel textoComprobacion){
+
+
+
         if (this.listaUsuarios.contains(usuario)){
             int index = this.listaUsuarios.indexOf(usuario);
             if (Arrays.equals(this.listaUsuarios.get(index).getContraUsuario(), usuario.getContraUsuario())){
@@ -81,43 +91,46 @@ public class GestorUsuarios {
     }
 
     /**
+     * Elimina un usuario si se encuentra en la lista de usuarios
+     * @param usuario (Usuario)
+     * @return true si fue eliminado correctamente
+     */
+    public boolean eliminarUsuario (Usuario usuario){
+        return this.listaUsuarios.remove(usuario);
+    }
+
+    /**
      * Comprueba si el nombre de usuario tiene al menos 3 carácteres y no existe en la base de datos
      * @param nombreUsuario obtenido desde la interfaz de usuario
      * @return false si encuentra un usuario con el mismo nombre o si el nombre tiene menos de 3 carácteres, true si no
      */
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
-        // Consulta SQL para buscar un nombre de usuario
-        String sql = "SELECT nombre FROM usuarios WHERE nombre = ?";
 
-        try (
-            // Establecer la conexión a la base de datos
-            Connection conexion = ConectarBD.conectar();
-            // Preparar la consulta SQL
-            PreparedStatement pstmt = conexion.prepareStatement(sql)
-        ) {
-            // Establecer el valor del parámetro de la consulta SQL
-            pstmt.setString(1, nombreUsuario);
-
-            // Ejecutar la consulta SQL y obtener los resultados
-            ResultSet rs = pstmt.executeQuery();
-
-            // Si se encontró un usuario, devolver false y mostrar un mensaje
-            if (rs.next()) {
-                textoComprobacion.setText("El nombre de usuario ya existe");
-                return false;
-            }
-        } catch (SQLException e) {
-            // Imprimir la traza de la excepción si ocurre un error
-            e.printStackTrace();
-        }
-
-        // Si el nombre de usuario tiene menos de 3 caracteres, devolver false y mostrar un mensaje
+        /* Comprueba si el nombre de usuario tiene al menos 3 carácteres */
         if (nombreUsuario.length()<3){
             textoComprobacion.setText("El nombre de usuario debe tener al menos 3 carácteres");
             return false;
         }
 
-        // Si no se encontró un usuario y el nombre de usuario tiene al menos 3 caracteres, devolver true
+        /* Consulta SQL para comprobar si el nombre de usuario existe */
+        String sql = "SELECT nombre FROM usuario WHERE nombre = ?";     // Consulta SQL para comprobar si el nombre de usuario existe
+        try (
+            Connection conexion = ConectarBD.conectar();                // Establecer la conexión a la base de datos
+            PreparedStatement pstmt = conexion.prepareStatement(sql)    // Preparar la consulta SQL
+        ) {
+            pstmt.setString(1, nombreUsuario);              // Establece nombreUsuario al primer parámetro de la consulta SQL
+            ResultSet resultadoQuery = pstmt.executeQuery();             // Ejecutar la consulta SQL y obtener los resultados
+
+            // Si se encontró un usuario con el mismo nombre, devuelve false y muestra un mensaje
+            if (resultadoQuery.next()) {
+                textoComprobacion.setText("El nombre de usuario ya existe");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        /* Si no se encontró un usuario y el nombre de usuario tiene al menos 3 caracteres, devuelve true */
         return true;
     }
 
@@ -126,17 +139,17 @@ public class GestorUsuarios {
      * @param passwordUsuario (char[]) obtenida desde la interfaz de usuario
      * @return true si fue creado correctamente, mensaje en la interfaz si no
      */
-    public boolean comprobarPasswordUsuario(char[] passwordUsuario, JLabel textoComprobacion){
+    public boolean comprobarPasswordUsuario(String passwordUsuario, JLabel textoComprobacion){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
-        if (passwordUsuario.length<4){
+        if (passwordUsuario.length()<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
             return false;
         }
-        for (char caracter : passwordUsuario) {
-            if (caracter == ' ') {
+        for (int i=0; i<passwordUsuario.length(); i++) {
+            if (passwordUsuario.charAt(i) == ' ') {
                 textoComprobacion.setText("La contraseña no puede tener espacios en blanco");
                 return false;
-            } else if (caracteresNoPermitidos.indexOf(caracter) != -1) {
+            } else if (caracteresNoPermitidos.indexOf(passwordUsuario.charAt(i)) != -1) {
                 textoComprobacion.setText("La contraseña no puede tener carácteres extraños");
                 return false;
             }
@@ -148,86 +161,20 @@ public class GestorUsuarios {
      * Cuenta el número de usuarios registrados
      * @return número total de usuarios registrados
      */
-     public int contarUsuarios(){
-         String sql = "SELECT COUNT(*) FROM usuarios";
-
-         try (
-             Connection conexion = ConectarBD.conectar();
-             PreparedStatement pstmt = conexion.prepareStatement(sql)
-         ) {
-             ResultSet rs = pstmt.executeQuery();
-             if(rs.next()){
-                return rs.getInt(1);
-             }
-         } catch (SQLException e) {
-             // Imprimela excepción si ocurre un error
-             e.printStackTrace();
-         }
-         return 0;
-    }
-
-    /**
-     * Método para insertar un nuevo usuario en la base de datos
-     * @param nombreUsuario obtenido desde la interfaz de usuario
-     * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @return true si el usuario fue insertado correctamente, false si ocurrió un error
-     */
-    public boolean insertarUsuario(String nombreUsuario, char[] passwordUsuario) {
-        // Consulta SQL para insertar un nuevo usuario
-        String sql = "INSERT INTO usuarios (nombre, password) VALUES (?, ?)";
+    public int contarUsuarios(){
+        String sql = "SELECT COUNT(*) FROM usuarios";
 
         try (
-            // Establece la conexión a la base de datos
-            Connection conexion = ConectarBD.conectar();
-            // Prepara la consulta SQL
-            PreparedStatement pstmt = conexion.prepareStatement(sql)
+                Connection conexion = ConectarBD.conectar();
+                PreparedStatement pstmt = conexion.prepareStatement(sql)
         ) {
-            // Establece los valores de los parámetros de la consulta SQL
-            pstmt.setString(1, nombreUsuario);
-            pstmt.setString(2, new String(passwordUsuario));
-
-            // Ejecuta la consulta SQL
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            // Imprimela excepción si ocurre un error
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * Método para obtener el nombre de un usuario de la base de datos
-     * @param nombreUsuario nombre de usuario a buscar en la base de datos
-     * @return el nombre si fue encontrado correctamente, null si no se encontró
-     */
-    public String obtenerNombreUsuario(String nombreUsuario) {
-        // Consulta SQL para obtener el nombre de un usuario
-        String sql = "SELECT nombre FROM usuarios WHERE nombre = ?";
-
-        try (
-            // Establece la conexión a la base de datos
-            Connection conexion = ConectarBD.conectar();
-            // Prepara la consulta SQL
-            PreparedStatement pstmt = conexion.prepareStatement(sql)
-        ) {
-            // Establece el valor del parámetro de la consulta SQL
-            pstmt.setString(1, nombreUsuario);
-
-            // Ejecuta la consulta SQL y obtener los resultados
-            ResultSet rs = pstmt.executeQuery();
-
-            // Si se encontró un usuario, devolver su nombre
-            if (rs.next()) {
-                return rs.getString("nombre");
-            } else {
-                // Si no se encontró un usuario, devolver null
-                return null;
+            ResultSet resultadoQuery = pstmt.executeQuery();
+            if(resultadoQuery.next()){
+                return resultadoQuery.getInt(1);
             }
         } catch (SQLException e) {
-            // Imprimir la traza de la excepción si ocurre un error
             e.printStackTrace();
-            return null;
         }
+        return 0;
     }
 }
