@@ -1,7 +1,7 @@
-package app.view.client.interfazPrincipal.principal;
+package app.view.principal;
 
-import app.view.services.ObjGraficos;
-import app.view.services.Recursos;
+import services.ObjGraficos;
+import services.Recursos;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ public class InterfazFija extends JFrame {
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
 
-    InterfazFija() {
+    public InterfazFija() {
         sRecursos = Recursos.getService();
 
         this.setLayout(new BorderLayout());
@@ -91,7 +91,6 @@ public class InterfazFija extends JFrame {
         panelSuperior.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-
                 if (getExtendedState() == JFrame.MAXIMIZED_BOTH){
                     setExtendedState(JFrame.NORMAL);
                     xRaton = e.getX();

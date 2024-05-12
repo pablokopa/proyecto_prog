@@ -1,11 +1,10 @@
 package app.controller;
 
-import app.model.basedatos.ConectarBD;
 import app.model.usuarios.GestorUsuarios;
 import app.model.usuarios.Usuario;
 import app.model.usuarios.UsuarioConectado;
-import app.view.client.interfazPrincipal.principal.MenuPrincipalConsolaTemporal;
-import app.view.client.login.LoginTemplate;
+import app.view.interfazPrincipal.principal.MenuPrincipalConsolaTemporal;
+import app.view.login.LoginTemplate;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

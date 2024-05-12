@@ -1,7 +1,7 @@
-package app.view.client.interfazPrincipal.principal;
+package app.view.interfazPrincipal.principal;
 
-import app.view.services.ObjGraficos;
-import app.view.services.Recursos;
+import services.ObjGraficos;
+import services.Recursos;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

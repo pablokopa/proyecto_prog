@@ -1,8 +1,8 @@
-package app.view.client.login;
+package app.view.login;
 
-import app.view.services.Recursos;
+import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
-import app.view.services.ObjGraficos;
+import services.ObjGraficos;
 
 import javax.swing.*;
 import java.awt.*;
