@@ -7,14 +7,14 @@ import java.util.Objects;
  */
 public class Usuario {
     private final String nombreUsuario;     // Nombre de usuario; es único
-    private char[] contraUsuario;
+    private String contraUsuario;
 
     /**
      * Constructor
      * @param nombreUsuario nombre de usuario
      * @param contraUsuario contraseña de usuario
      */
-    public Usuario(String nombreUsuario, char[] contraUsuario){
+    public Usuario(String nombreUsuario, String contraUsuario){
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
     }
@@ -23,7 +23,7 @@ public class Usuario {
         return nombreUsuario;
     }
 
-    public char[] getContraUsuario() {
+    public String getContraUsuario() {
         return contraUsuario;
     }
 
@@ -38,17 +38,6 @@ public class Usuario {
         if (obj == this)    return true;
         Usuario userObj = (Usuario) obj;
         return Objects.equals(this.nombreUsuario, userObj.nombreUsuario);
-    }
-
-    /**
-     * Se utiliza automáticamente en el caso de utilizar HashSet, HashMap o HashTable,
-     * no se puede cambiar el nombre de usuario o podría causar problemas
-     * (No utilizado actualmente en el proyecto)
-     * @return hashCode de nombreUsuario
-     */
-    @Override
-    public int hashCode() {
-        return nombreUsuario.hashCode();
     }
 
     /**

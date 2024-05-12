@@ -83,16 +83,6 @@ public class Tarea {
     }
 
     /**
-     * Se utiliza automáticamente en el caso de utilizar HashSet, HashMap o HashTable,
-     * (No utilizado actualmente en el proyecto)
-     * @return hashCode de idTarea
-     */
-    @Override
-    public int hashCode() {
-        return idTarea.hashCode();
-    }
-
-    /**
      * Método toString
      * @return nombre de la tarea y descripción
      */

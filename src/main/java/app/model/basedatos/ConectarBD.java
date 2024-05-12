@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConectarBD {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/proyecto_progDB";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "kopelius123";
+    private static final String URL = "jdbc:postgresql://143.47.38.153:5432/baseproyecto";
+    private static final String USER = "app_rol";
+    private static final String PASSWORD = "password";
 
     // Método para establecer la conexión a la base de datos
     public static Connection conectar() {
@@ -25,7 +25,8 @@ public class ConectarBD {
         return conexion;
     }
 
-    // Método para cerrar la conexión
+    // Método para cerrar la conexión.
+    // No utilizado por ahora
     public static void cerrar(Connection conexion) {
         if (conexion != null) {
             try {
