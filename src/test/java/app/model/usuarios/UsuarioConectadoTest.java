@@ -16,7 +16,7 @@ class UsuarioConectadoTest {
      */
     @BeforeEach
     public void setUp(){
-        usuarioConectado = UsuarioConectado.getUsuarioConectado(new Usuario("Admin", new char[0]));
+        usuarioConectado = UsuarioConectado.getUsuarioConectado(new Usuario("Admin", ""));
     }
 
     /**
