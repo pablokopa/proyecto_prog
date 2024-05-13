@@ -24,7 +24,6 @@ public class MatrixMain {
         this.sRecursos = Recursos.getService();
         this.interfazFija = interfazFija;
         panelPrincipal = interfazFija.getPanelPrincipal();
-        panelPrincipal.setLayout(new BorderLayout());
 
         crearPaneles();
     }
@@ -39,26 +38,26 @@ public class MatrixMain {
 
         // Panel Arriba Izquierda
         panelArribaIzq = new JPanel();
-        panelArribaIzq.setBackground(new Color(   49, 203, 36 ));
-        panelMatrix.add(panelArribaIzq, BorderLayout.NORTH);
+        panelArribaIzq.setBackground(new Color(175,255,168));
+        panelMatrix.add(panelArribaIzq);
 
         // Panel Arriba Derecha
         panelArribaDer = new JPanel();
-        panelArribaDer.setBackground(new Color( 62, 177, 234 ));
+        panelArribaDer.setBackground(new Color(168,235,255));
         panelArribaDer.setBorder(new MatteBorder(0, 2, 0, 0, colorBorder));
-        panelMatrix.add(panelArribaDer, BorderLayout.WEST);
+        panelMatrix.add(panelArribaDer);
 
         // Panel Abajo Izquierda
         panelAbajoIzq = new JPanel();
-        panelAbajoIzq.setBackground(new Color( 255, 207, 28));
+        panelAbajoIzq.setBackground(new Color(255,221,122));
         panelAbajoIzq.setBorder(new MatteBorder(2, 0, 0, 0, colorBorder));
-        panelMatrix.add(panelAbajoIzq, BorderLayout.SOUTH);
+        panelMatrix.add(panelAbajoIzq);
 
         // Panel Abajo Izquierda
         panelAbajoDer = new JPanel();
-        panelAbajoDer.setBackground(new Color(  236, 42, 42));
+        panelAbajoDer.setBackground(new Color(255,149,149));
         panelAbajoDer.setBorder(new MatteBorder(2, 2, 0, 0, colorBorder));
-        panelMatrix.add(panelAbajoDer, BorderLayout.EAST);
+        panelMatrix.add(panelAbajoDer);
 
     }
 
