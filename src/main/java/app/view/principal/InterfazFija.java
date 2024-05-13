@@ -19,6 +19,8 @@ public class InterfazFija extends JFrame {
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
 
+    CardLayout cardLayout;
+
     public InterfazFija() {
         sRecursos = Recursos.getService();
 
@@ -32,7 +34,7 @@ public class InterfazFija extends JFrame {
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
         crearPaneles();
-        crearBotones();
+        crearBotones(panelPrincipal);
         redimensionarPaneles();
         moverVentana();
 
@@ -47,7 +49,7 @@ public class InterfazFija extends JFrame {
         this.panelMatrix = new MatrixMain();
         this.panelPomodoro = new NuevaPruebaPomo();
 
-        CardLayout cardLayout = new CardLayout();
+        cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
 
         this.add(panelMenu, BorderLayout.WEST);
@@ -62,7 +64,7 @@ public class InterfazFija extends JFrame {
         cardLayout.show(panelPrincipal, "matrix");
     }
 
-    private void crearBotones() {
+    private void crearBotones(JPanel panelPrincipal) {
         botonMinimizar = ObjGraficos.construirBotonesVentana("minimizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
         botonMaximizar = ObjGraficos.construirBotonesVentana("maximizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
         botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
@@ -71,12 +73,12 @@ public class InterfazFija extends JFrame {
         panelSuperior.add(botonMaximizar);
         panelSuperior.add(botonCerrar);
 
-        botonInicio = ObjGraficos.construirBotonesMenu("Inicio", getWidth(), 50, sRecursos.getBLANCO(), sRecursos.getGRANATE());
-        botonTareas = ObjGraficos.construirBotonesMenu("Tareas", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonMatrix = ObjGraficos.construirBotonesMenu("Matrix", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonPomodoro = ObjGraficos.construirBotonesMenu("Pomodoro", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonAjustes = ObjGraficos.construirBotonesMenu("Ajustes", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonCerrarSesion = ObjGraficos.construirBotonesMenu("Cerrar Sesión", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
+        botonInicio = ObjGraficos.construirBotonesMenu("Inicio", getWidth(), 50, sRecursos.getBLANCO(), sRecursos.getGRANATE(), panelPrincipal, cardLayout);
+        botonTareas = ObjGraficos.construirBotonesMenu("Tareas", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
+        botonMatrix = ObjGraficos.construirBotonesMenu("Matrix", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
+        botonPomodoro = ObjGraficos.construirBotonesMenu("Pomodoro", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
+        botonAjustes = ObjGraficos.construirBotonesMenu("Ajustes", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
+        botonCerrarSesion = ObjGraficos.construirBotonesMenu("Cerrar Sesión", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
 
         panelMenu.add(botonInicio);
         panelMenu.add(botonTareas);
@@ -127,13 +129,7 @@ public class InterfazFija extends JFrame {
         });
     }
 
-    public JPanel getPanelPrincipal() {
-        return panelPrincipal;
-    }
-
     public static void main(String[] args) {
         new InterfazFija();
-
-
     }
 }

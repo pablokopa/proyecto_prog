@@ -150,7 +150,8 @@ public class ObjGraficos {
      */
     public static JButton construirBotonesMenu(
             String texto, int ancho, int alto,
-            Color colorFondo, Color colorFuente
+            Color colorFondo, Color colorFuente,
+            JPanel panelPrincipal, CardLayout cardLayout
     ) {
         JButton boton = new JButton(texto);
         boton.setPreferredSize(new Dimension(ancho, alto));
@@ -169,6 +170,22 @@ public class ObjGraficos {
                     boton.setBackground(colorFondo.brighter());
                 } else {
                     boton.setBackground(colorFondo);
+                }
+            }
+        });
+
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (texto) {
+                    case "Pomodoro":
+                        cardLayout.show(panelPrincipal, "pomodoro");
+                        break;
+                    case "Matrix":
+                        cardLayout.show(panelPrincipal, "matrix");
+                        break;
+                    default:
+                        break;
                 }
             }
         });
