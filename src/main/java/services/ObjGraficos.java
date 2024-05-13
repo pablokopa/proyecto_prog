@@ -59,8 +59,8 @@ public class ObjGraficos {
     }
 
     /**
-     * Método para construir un JPanel con un layout específico.
-     * @param tipo El tipo de panel a construir. Puede ser "menu", "principal" o "superior".
+     * Construye los paneles principales de la interfaz fija (menú, central, superior y principal).
+     * @param tipo El tipo de panel a construir. Puede ser "menu", "central", "principal" o "superior".
      * @param colorFondo El color de fondo del panel.
      * @return El panel construido.
      */
@@ -71,8 +71,10 @@ public class ObjGraficos {
             case "menu":
                 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
                 break;
-            case "principal":
+            case "central":
                 panel.setLayout(new BorderLayout());
+                break;
+            case "principal":
                 break;
             case "superior":
                 panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -136,7 +138,7 @@ public class ObjGraficos {
     }
 
     /**
-     * Construye un JButton con un diseño personalizado para un menú.
+     * Construye los JButton con un diseño personalizado para el menú principal.
      * El botón cambia su color de fondo cuando el cursor está sobre él.
      *
      * @param texto El texto del botón.
@@ -175,7 +177,7 @@ public class ObjGraficos {
     }
 
     /**
-     * Construye un JButton con un diseño personalizado para una ventana.
+     * Construye los JButton de las acciones de la ventana (maximizar, minimizar, cerrar).
      * El botón puede ser de tipo "minimizar", "maximizar" o "cerrar", y cambia su diseño en consecuencia.
      *
      * @param tipo El tipo de botón a construir. Puede ser "minimizar", "maximizar" o "cerrar".
@@ -293,6 +295,23 @@ public class ObjGraficos {
                 break;
         }
         return etiqueta;
+    }
+
+    public static JLabel construirLabelsTiempo(
+            String texto, int x, int y, Font fuente,
+            Color colorFondo, Color colorFuente, Border borde
+    ) {
+        JLabel label = new JLabel(texto);
+        label.setLocation(x, y);
+        label.setForeground(colorFuente);
+        label.setFont(fuente);
+        label.setBorder(borde);
+        if (colorFondo != null) {
+            label.setOpaque(true);
+            label.setBackground(colorFondo);
+        }
+
+        return label;
     }
 
     /**
