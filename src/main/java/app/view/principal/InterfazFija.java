@@ -40,7 +40,7 @@ public class InterfazFija extends JFrame {
         panelMenu = ObjGraficos.construirPanelesPrincipales("menu", sRecursos.getGRANATE());
         panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
-        panelPrincipal = ObjGraficos.construirPanelesPrincipales("central", Color.CYAN);
+        panelPrincipal = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
 
         this.add(panelMenu, BorderLayout.WEST);
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
@@ -73,7 +73,7 @@ public class InterfazFija extends JFrame {
         panelMenu.add(botonCerrarSesion);
     }
 
-    private void redimensionarPaneles() {
+    public void redimensionarPaneles() {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -81,7 +81,14 @@ public class InterfazFija extends JFrame {
                     @Override
                     public void run() {
                         panelMenu.setPreferredSize(new Dimension((int)(getWidth()*0.15), getHeight()));
+
                         panelMenu.revalidate();
+
+                        System.out.println("panel principal ancho: " + panelPrincipal.getWidth());
+                        System.out.println("panel principal alto: " + panelPrincipal.getHeight());
+
+                        System.out.println("ancho: " + getWidth());
+                        System.out.println("alto: " + getWidth());
                     }
                 });
             }
