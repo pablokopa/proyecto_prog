@@ -21,3 +21,13 @@ Más concretamente, en los siguientes aspectos:
 4. Funcionalidades de las tareas (Usuario puede crear y eliminar tareas)
 
 ![Avance interfaz](/img/interfaz1.png)
+
+## Seguimiento_02_23
+Durante la segunda semana del proyecto hemos hecho todo lo relacionado con
+la base de datos y hemos avanzado en la interfaz principal.
+Los principales cambios realizados hna sido:
+1. Creación de la base de datos.
+2. Creación de una VPS en la que poder subir la base de datos.
+3. Implementación de la base de datos en el programa Java.
+4. Modificados todos los métodos para que funcionen a través de la base de datos.
+5. Realización de la interfaz fija y avance en otras pestañas (pomodoro y tareas).

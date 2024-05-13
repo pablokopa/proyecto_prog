@@ -1,5 +1,7 @@
 package app.view.principal;
 
+import app.view.matrix.MatrixMain;
+import app.view.pruebas.NuevaPruebaPomo;
 import services.ObjGraficos;
 import services.Recursos;
 
@@ -13,6 +15,7 @@ public class InterfazFija extends JFrame {
     int xRaton, yRaton, xNuevo, yNuevo;
 
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
+    private JPanel panelMatrix, panelPomodoro;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
 
@@ -40,10 +43,19 @@ public class InterfazFija extends JFrame {
         panelMenu = ObjGraficos.construirPanelesPrincipales("menu", sRecursos.getGRANATE());
         panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
-        panelPrincipal = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
+        panelPrincipal = ObjGraficos.construirPanelesPrincipales("central", Color.CYAN);
+        this.panelPomodoro = new NuevaPruebaPomo();
+        this.panelMatrix = new MatrixMain();
+
+        panelPrincipal.add(panelMatrix);
+        panelPrincipal.add(panelPomodoro);
+
+        panelMatrix.setVisible(false);
+        panelPomodoro.setVisible(false);
 
         this.add(panelMenu, BorderLayout.WEST);
-        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
+        panelCentral.add(panelMatrix, BorderLayout.CENTER);
+        panelCentral.add(panelPomodoro, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
         this.add(panelCentral, BorderLayout.CENTER);
     }
@@ -73,7 +85,7 @@ public class InterfazFija extends JFrame {
         panelMenu.add(botonCerrarSesion);
     }
 
-    public void redimensionarPaneles() {
+    private void redimensionarPaneles() {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -81,14 +93,7 @@ public class InterfazFija extends JFrame {
                     @Override
                     public void run() {
                         panelMenu.setPreferredSize(new Dimension((int)(getWidth()*0.15), getHeight()));
-
                         panelMenu.revalidate();
-
-                        System.out.println("panel principal ancho: " + panelPrincipal.getWidth());
-                        System.out.println("panel principal alto: " + panelPrincipal.getHeight());
-
-                        System.out.println("ancho: " + getWidth());
-                        System.out.println("alto: " + getWidth());
                     }
                 });
             }
