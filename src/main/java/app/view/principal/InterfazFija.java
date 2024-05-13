@@ -6,9 +6,10 @@ import services.ObjGraficos;
 import services.Recursos;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class InterfazFija extends JFrame {
@@ -23,7 +24,10 @@ public class InterfazFija extends JFrame {
 
     CardLayout cardLayout;
 
-    ArrayList<JButton> listaBotonesMenu;
+    ArrayList<JButton> listaBotonesMenuTodos;
+    ArrayList<JButton> listaBotonesMenuConVista;
+    String textoBotonActual;
+
 
     public InterfazFija() {
         sRecursos = Recursos.getService();
@@ -36,13 +40,15 @@ public class InterfazFija extends JFrame {
         this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
-        this.listaBotonesMenu = new ArrayList<JButton>();
+        this.listaBotonesMenuTodos = new ArrayList<JButton>();
+        this.listaBotonesMenuConVista = new ArrayList<JButton>();
 
         crearPaneles();
         crearBotones(panelPrincipal);
         redimensionarPaneles();
         moverVentana();
-        accionBotones();
+        botonesActionListener();
+        botonesChangeListener();
 
         this.setVisible(true);
     }
@@ -91,14 +97,14 @@ public class InterfazFija extends JFrame {
         panelMenu.add(botonCerrarSesion);
     }
 
-    private void accionBotones() {
-        listaBotonesMenu.add(botonInicio);
-        listaBotonesMenu.add(botonTareas);
-        listaBotonesMenu.add(botonMatrix);
-        listaBotonesMenu.add(botonPomodoro);
-        listaBotonesMenu.add(botonAjustes);
+    private void botonesActionListener() {
+        listaBotonesMenuConVista.add(botonInicio);
+        listaBotonesMenuConVista.add(botonTareas);
+        listaBotonesMenuConVista.add(botonMatrix);
+        listaBotonesMenuConVista.add(botonPomodoro);
+        listaBotonesMenuConVista.add(botonAjustes);
 
-        for (JButton boton : listaBotonesMenu){
+        for (JButton boton : listaBotonesMenuConVista){
             boton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -112,17 +118,46 @@ public class InterfazFija extends JFrame {
                     else {
                         contraerBotones();
                         cardLayout.show(panelPrincipal, textoBoton);
-                        boton.setPreferredSize(new Dimension(getWidth(), 100));
+                        boton.setPreferredSize(new Dimension(getWidth(), 75));
                         panelMenu.revalidate();
                     }
+
+                    textoBotonActual = textoBoton;
                 }
             });
         }
     }
 
     private void contraerBotones() {
-        for (JButton boton : listaBotonesMenu) {
+        for (JButton boton : listaBotonesMenuConVista) {
             boton.setPreferredSize(new Dimension(getWidth(), 50));
+            if (boton.getText().equals("Inicio")){
+                continue;
+            }
+            boton.setBackground(sRecursos.getGRANATE());
+        }
+    }
+
+    private void botonesChangeListener() {
+        listaBotonesMenuTodos.add(botonTareas);
+        listaBotonesMenuTodos.add(botonMatrix);
+        listaBotonesMenuTodos.add(botonPomodoro);
+        listaBotonesMenuTodos.add(botonAjustes);
+        listaBotonesMenuTodos.add(botonCerrarSesion);
+
+        for (JButton boton : listaBotonesMenuTodos) {
+            boton.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    if (boton.getModel().isRollover()) {
+                        boton.setBackground(sRecursos.getGRANATE().brighter());
+                    } else if (textoBotonActual.equals(boton.getText())) {
+                        boton.setBackground(sRecursos.getGRANATE().brighter());
+                    } else {
+                        boton.setBackground(sRecursos.getGRANATE());
+                    }
+                }
+            });
         }
     }
 

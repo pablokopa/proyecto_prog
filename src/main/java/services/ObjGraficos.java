@@ -162,17 +162,6 @@ public class ObjGraficos {
         boton.setForeground(colorFuente);
         boton.setBorder(null);
 
-        boton.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (boton.getModel().isRollover()) {
-                    boton.setBackground(colorFondo.brighter());
-                } else {
-                    boton.setBackground(colorFondo);
-                }
-            }
-        });
-
         return boton;
     }
 
