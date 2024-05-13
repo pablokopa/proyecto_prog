@@ -1,5 +1,7 @@
 package app.view.principal;
 
+import app.view.matrix.MatrixMain;
+import app.view.pruebas.NuevaPruebaPomo;
 import services.ObjGraficos;
 import services.Recursos;
 
@@ -13,6 +15,7 @@ public class InterfazFija extends JFrame {
     int xRaton, yRaton, xNuevo, yNuevo;
 
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
+    private JPanel panelMatrix, panelPomodoro;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
 
@@ -41,9 +44,18 @@ public class InterfazFija extends JFrame {
         panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
         panelPrincipal = ObjGraficos.construirPanelesPrincipales("central", Color.CYAN);
+        this.panelPomodoro = new NuevaPruebaPomo();
+        this.panelMatrix = new MatrixMain();
+
+        panelPrincipal.add(panelMatrix);
+        panelPrincipal.add(panelPomodoro);
+
+        panelMatrix.setVisible(false);
+        panelPomodoro.setVisible(false);
 
         this.add(panelMenu, BorderLayout.WEST);
-        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
+        panelCentral.add(panelMatrix, BorderLayout.CENTER);
+        panelCentral.add(panelPomodoro, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
         this.add(panelCentral, BorderLayout.CENTER);
     }
@@ -113,11 +125,8 @@ public class InterfazFija extends JFrame {
         });
     }
 
-    public JPanel getPanelPrincipal() {
-        return panelPrincipal;
-    }
-
     public static void main(String[] args) {
         new InterfazFija();
     }
+
 }

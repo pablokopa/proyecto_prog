@@ -1,30 +1,21 @@
 package app.view.pruebas;
 
-import app.view.principal.InterfazFija;
-import services.ObjGraficos;
 import services.Recursos;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
-public class NuevaPruebaPomo {
+public class NuevaPruebaPomo extends JPanel{
     private Recursos sRecursos;
 
-    private InterfazFija interfazFija;
-
-    private JPanel panelPrincipal;
-    private JPanel panelTiempos, panelBotones;
+    private JPanel panelTiempos, panelBotones, panelTiempoConcentracion, panelTiempoDescanso;
     private JLabel labelTiempoConcentracion, labelTiempoDescanso;
     private JButton botonPlay, botonPause, botonStop, botonCambiarTiempo, botonConfirmarCambios;
     private JTextField textMinutosConcentracion, textMinutosDescanso;
 
-    NuevaPruebaPomo(InterfazFija interfazFija){
+    public NuevaPruebaPomo(){
         this.sRecursos = Recursos.getService();
-        this.interfazFija = interfazFija;
-        panelPrincipal = interfazFija.getPanelPrincipal();
-        panelPrincipal.setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
 
         crearPaneles();
     }
@@ -32,54 +23,24 @@ public class NuevaPruebaPomo {
     private void crearPaneles() {
         panelTiempos = new JPanel();
         panelTiempos.setBackground(Color.BLUE);
-//        panelTiempos.setLayout(null);
+        panelTiempos.setLayout(new GridLayout(2, 1));
 
-        labelTiempoConcentracion = new JLabel("25:00");
-        labelTiempoConcentracion.setFont(sRecursos.getMonserratBold(175));
-        labelTiempoConcentracion.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
+        panelTiempoConcentracion = new JPanel();
+        panelTiempoConcentracion.setBackground(Color.GREEN);
+        panelTiempos.add(panelTiempoConcentracion);
 
-                        int anchoLetra = labelTiempoConcentracion.getFontMetrics(labelTiempoConcentracion.getFont()).stringWidth(labelTiempoConcentracion.getText());
-                        int anchoPanel = panelTiempos.getWidth();
+        panelTiempoDescanso = new JPanel();
+        panelTiempoDescanso.setBackground(Color.YELLOW);
+        panelTiempos.add(panelTiempoDescanso);
 
-                        double ratio = (double)anchoPanel / (double)anchoLetra;
+        panelTiempos.add(panelTiempoConcentracion);
+        panelTiempos.add(panelTiempoDescanso);
+        add(panelTiempos, BorderLayout.CENTER);
 
-                        int newFontSize = (int)(labelTiempoConcentracion.getFont().getSize() * ratio);
-                        labelTiempoConcentracion.setFont(sRecursos.getMonserratBold(newFontSize));
-
-                    }
-                });
-
-
-            }
-        });
-
-        panelTiempos.add(labelTiempoConcentracion);
-
-        panelPrincipal.add(panelTiempos, BorderLayout.CENTER);
 
         panelBotones = new JPanel();
         panelBotones.setBackground(Color.RED);
-        panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
-    }
-
-    private void crearLabels() {
-
-    }
-
-    private void crearBotones() {
-
-    }
-
-    private void crearTextFields() {
-
-    }
-
-    public static void main(String[] args) {
-        new NuevaPruebaPomo(new InterfazFija());
+//        panelBotones.setPreferredSize(new Dimension(width, (int)(heigth*0.5)));
+        add(panelBotones, BorderLayout.SOUTH);
     }
 }
