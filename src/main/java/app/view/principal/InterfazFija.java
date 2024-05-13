@@ -8,6 +8,8 @@ import services.Recursos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class InterfazFija extends JFrame {
     private Recursos sRecursos;
@@ -21,11 +23,12 @@ public class InterfazFija extends JFrame {
 
     CardLayout cardLayout;
 
+    ArrayList<JButton> listaBotonesMenu;
+
     public InterfazFija() {
         sRecursos = Recursos.getService();
 
         this.setLayout(new BorderLayout());
-
         this.setSize(1100, 650);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,10 +36,13 @@ public class InterfazFija extends JFrame {
         this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
+        this.listaBotonesMenu = new ArrayList<JButton>();
+
         crearPaneles();
         crearBotones(panelPrincipal);
         redimensionarPaneles();
         moverVentana();
+        accionBotones();
 
         this.setVisible(true);
     }
@@ -54,14 +60,10 @@ public class InterfazFija extends JFrame {
 
         this.add(panelMenu, BorderLayout.WEST);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
-        panelPrincipal.add(panelPomodoro, "pomodoro");
-        panelPrincipal.add(panelMatrix, "matrix");
+        panelPrincipal.add(panelPomodoro, "Pomodoro");
+        panelPrincipal.add(panelMatrix, "Matrix");
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         this.add(panelCentral, BorderLayout.CENTER);
-
-        /*** PARA TRABAJAR CON UNA VENTANA ESPECÍFICA --> Cambiar el nombre de abajo al nombre de la ventana
-         *                                                (los especificados al añadir el panel a panelPrincipal) ***/
-        cardLayout.show(panelPrincipal, "matrix");
     }
 
     private void crearBotones(JPanel panelPrincipal) {
@@ -73,12 +75,12 @@ public class InterfazFija extends JFrame {
         panelSuperior.add(botonMaximizar);
         panelSuperior.add(botonCerrar);
 
-        botonInicio = ObjGraficos.construirBotonesMenu("Inicio", getWidth(), 50, sRecursos.getBLANCO(), sRecursos.getGRANATE(), panelPrincipal, cardLayout);
-        botonTareas = ObjGraficos.construirBotonesMenu("Tareas", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
-        botonMatrix = ObjGraficos.construirBotonesMenu("Matrix", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
-        botonPomodoro = ObjGraficos.construirBotonesMenu("Pomodoro", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
-        botonAjustes = ObjGraficos.construirBotonesMenu("Ajustes", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
-        botonCerrarSesion = ObjGraficos.construirBotonesMenu("Cerrar Sesión", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO(), panelPrincipal, cardLayout);
+        botonInicio = ObjGraficos.construirBotonesMenu("Inicio", getWidth(), 50, sRecursos.getBLANCO(), sRecursos.getGRANATE());
+        botonTareas = ObjGraficos.construirBotonesMenu("Tareas", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
+        botonMatrix = ObjGraficos.construirBotonesMenu("Matrix", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
+        botonPomodoro = ObjGraficos.construirBotonesMenu("Pomodoro", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
+        botonAjustes = ObjGraficos.construirBotonesMenu("Ajustes", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
+        botonCerrarSesion = ObjGraficos.construirBotonesMenu("Cerrar Sesión", getWidth(),50, sRecursos.getGRANATE(), sRecursos.getBLANCO());;
 
         panelMenu.add(botonInicio);
         panelMenu.add(botonTareas);
@@ -87,6 +89,41 @@ public class InterfazFija extends JFrame {
         panelMenu.add(Box.createVerticalGlue());   //espacio entre botones
         panelMenu.add(botonAjustes);
         panelMenu.add(botonCerrarSesion);
+    }
+
+    private void accionBotones() {
+        listaBotonesMenu.add(botonInicio);
+        listaBotonesMenu.add(botonTareas);
+        listaBotonesMenu.add(botonMatrix);
+        listaBotonesMenu.add(botonPomodoro);
+        listaBotonesMenu.add(botonAjustes);
+
+        for (JButton boton : listaBotonesMenu){
+            boton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String textoBoton = boton.getText();
+
+                    if (textoBoton.equals("Inicio")){
+                        contraerBotones();
+                        cardLayout.show(panelPrincipal, textoBoton);
+                        panelMenu.revalidate();
+                    }
+                    else {
+                        contraerBotones();
+                        cardLayout.show(panelPrincipal, textoBoton);
+                        boton.setPreferredSize(new Dimension(getWidth(), 100));
+                        panelMenu.revalidate();
+                    }
+                }
+            });
+        }
+    }
+
+    private void contraerBotones() {
+        for (JButton boton : listaBotonesMenu) {
+            boton.setPreferredSize(new Dimension(getWidth(), 50));
+        }
     }
 
     private void redimensionarPaneles() {

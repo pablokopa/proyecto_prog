@@ -40,7 +40,6 @@ public class NuevaPruebaPomo extends JPanel{
 
         panelBotones = new JPanel();
         panelBotones.setBackground(Color.RED);
-//        panelBotones.setPreferredSize(new Dimension(width, (int)(heigth*0.5)));
         add(panelBotones, BorderLayout.SOUTH);
     }
 }

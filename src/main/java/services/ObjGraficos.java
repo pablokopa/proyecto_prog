@@ -150,12 +150,11 @@ public class ObjGraficos {
      */
     public static JButton construirBotonesMenu(
             String texto, int ancho, int alto,
-            Color colorFondo, Color colorFuente,
-            JPanel panelPrincipal, CardLayout cardLayout
+            Color colorFondo, Color colorFuente
     ) {
         JButton boton = new JButton(texto);
         boton.setPreferredSize(new Dimension(ancho, alto));
-        boton.setMaximumSize(new Dimension(ancho, alto));
+        boton.setMaximumSize(new Dimension(ancho, alto*2));
         boton.setFocusable(false);
         boton.setCursor(Recursos.getService().getCursorMano());
         boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
@@ -170,22 +169,6 @@ public class ObjGraficos {
                     boton.setBackground(colorFondo.brighter());
                 } else {
                     boton.setBackground(colorFondo);
-                }
-            }
-        });
-
-        boton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switch (texto) {
-                    case "Pomodoro":
-                        cardLayout.show(panelPrincipal, "pomodoro");
-                        break;
-                    case "Matrix":
-                        cardLayout.show(panelPrincipal, "matrix");
-                        break;
-                    default:
-                        break;
                 }
             }
         });
