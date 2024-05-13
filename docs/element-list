@@ -1,8 +1,9 @@
 app
 app.controller
+app.model.basedatos
 app.model.tareas
 app.model.usuarios
-app.view.interfaceUser.interfazPrincipal.principal
-app.view.interfaceUser.login
-app.view.interfaceUser.principal
-app.view.services
+app.view.login
+app.view.principal
+app.view.pruebas
+services

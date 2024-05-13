@@ -10,23 +10,25 @@ public class ConectarBD {
     private static final String USER = "app_rol";
     private static final String PASSWORD = "password";
 
-    // Método para establecer la conexión a la base de datos
+    /**
+     * Método para establecer la conexión con la base de datos.
+     * @return La conexión establecida.
+     */
     public static Connection conectar() {
         Connection conexion = null;
         try {
-            // Cargar el controlador JDBC
-            Class.forName("org.postgresql.Driver");
-
-            // Establecer la conexión
-            conexion = DriverManager.getConnection(URL, USER, PASSWORD);
+            Class.forName("org.postgresql.Driver");     // Cargar el controlador JDBC
+            conexion = DriverManager.getConnection(URL, USER, PASSWORD);        // Establecer la conexión
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return conexion;
     }
 
-    // Método para cerrar la conexión.
-    // No utilizado por ahora
+    /**
+     * Método para cerrar la conexión con la base de datos.
+     * @param conexion La conexión a cerrar.
+     */
     public static void cerrar(Connection conexion) {
         if (conexion != null) {
             try {

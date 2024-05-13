@@ -1,7 +1,5 @@
 package app.view.principal;
 
-import app.view.matrix.MatrixMain;
-import app.view.pruebas.NuevaPruebaPomo;
 import services.ObjGraficos;
 import services.Recursos;
 
@@ -12,24 +10,28 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class InterfazFija extends JFrame {
+/**
+ * Interfaz fija de la aplicación. Contiene el menú principal y la barra supeior.
+ * En ella aparecen el resto de las vistas del programa.
+ */
+public class InterfazPrincipal extends JFrame {
     private Recursos sRecursos;
 
-    int xRaton, yRaton, xNuevo, yNuevo;
+    private int xRaton, yRaton, xNuevo, yNuevo;
 
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
     private JPanel panelMatrix, panelPomodoro;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
 
-    CardLayout cardLayout;
+    private CardLayout cardLayout;
 
-    ArrayList<JButton> listaBotonesMenuTodos;
-    ArrayList<JButton> listaBotonesMenuConVista;
-    String textoBotonActual;
+    private ArrayList<JButton> listaBotonesMenuTodos;
+    private ArrayList<JButton> listaBotonesMenuConVista;
+    private String textoBotonActual = "";
 
 
-    public InterfazFija() {
+    public InterfazPrincipal() {
         sRecursos = Recursos.getService();
 
         this.setLayout(new BorderLayout());
@@ -44,7 +46,7 @@ public class InterfazFija extends JFrame {
         this.listaBotonesMenuConVista = new ArrayList<JButton>();
 
         crearPaneles();
-        crearBotones(panelPrincipal);
+        crearBotones();
         redimensionarPaneles();
         moverVentana();
         botonesActionListener();
@@ -53,13 +55,16 @@ public class InterfazFija extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Crea los paneles principales de la interfaz.
+     */
     private void crearPaneles(){
         panelMenu = ObjGraficos.construirPanelesPrincipales("menu", sRecursos.getGRANATE());
         panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
         panelPrincipal = ObjGraficos.construirPanelesPrincipales("principal", sRecursos.getGRIS_CLARO());
-        this.panelMatrix = new MatrixMain();
-        this.panelPomodoro = new NuevaPruebaPomo();
+        this.panelMatrix = new VistaMatrix();
+        this.panelPomodoro = new VistaPomodoro();
 
         cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
@@ -72,7 +77,10 @@ public class InterfazFija extends JFrame {
         this.add(panelCentral, BorderLayout.CENTER);
     }
 
-    private void crearBotones(JPanel panelPrincipal) {
+    /**
+     * Crea los botones del menú principal y los de control de ventana (max, min, cerrar).
+     */
+    private void crearBotones() {
         botonMinimizar = ObjGraficos.construirBotonesVentana("minimizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
         botonMaximizar = ObjGraficos.construirBotonesVentana("maximizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
         botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
@@ -97,6 +105,10 @@ public class InterfazFija extends JFrame {
         panelMenu.add(botonCerrarSesion);
     }
 
+    /**
+     * Añade ActionListener a los botones.
+     * Permite cambiar la vista al pulsar un botón del menú y cambia su tamaño.
+     */
     private void botonesActionListener() {
         listaBotonesMenuConVista.add(botonInicio);
         listaBotonesMenuConVista.add(botonTareas);
@@ -128,6 +140,9 @@ public class InterfazFija extends JFrame {
         }
     }
 
+    /**
+     * Utilizado en botonesActionListener para contraer los botones que ya no están seleccionados.
+     */
     private void contraerBotones() {
         for (JButton boton : listaBotonesMenuConVista) {
             boton.setPreferredSize(new Dimension(getWidth(), 50));
@@ -138,6 +153,10 @@ public class InterfazFija extends JFrame {
         }
     }
 
+    /**
+     * Añade ChangeListener a los botones.
+     * Cambia el color de fondo del botón al pasar el ratón por encima y permite que el botón seleccionado mantenga ese color.
+     */
     private void botonesChangeListener() {
         listaBotonesMenuTodos.add(botonTareas);
         listaBotonesMenuTodos.add(botonMatrix);
@@ -161,6 +180,10 @@ public class InterfazFija extends JFrame {
         }
     }
 
+    /**
+     * Método para redimensionar el panelMenu y que se ajusten el resto en consecuencia.
+     * Utiliza invokeLater para que se ejecute tras el resto de operaciones.
+     */
     private void redimensionarPaneles() {
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -176,8 +199,11 @@ public class InterfazFija extends JFrame {
         });
     }
 
+    /**
+     * Método para poder mover la ventana.
+     * Si la ventana está maximizada, vuelve a su estado normal antes de moverla.
+     */
     private void moverVentana(){
-
         panelSuperior.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -202,6 +228,6 @@ public class InterfazFija extends JFrame {
     }
 
     public static void main(String[] args) {
-        new InterfazFija();
+        new InterfazPrincipal();
     }
 }

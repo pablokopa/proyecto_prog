@@ -1,14 +1,14 @@
-package app.view.matrix;
+package app.view.principal;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 
-public class MatrixMain extends JPanel{
+public class VistaMatrix extends JPanel{
     private Color colorBorder;
     private JPanel panelArribaIzq, panelArribaDer, panelAbajoIzq, panelAbajoDer;
 
-    public MatrixMain(){
+    public VistaMatrix(){
         this.setLayout(new GridLayout(2,2));
 
         crearPaneles();

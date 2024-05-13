@@ -1,11 +1,11 @@
-package app.view.pruebas;
+package app.view.principal;
 
 import services.Recursos;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class NuevaPruebaPomo extends JPanel{
+public class VistaPomodoro extends JPanel{
     private Recursos sRecursos;
 
     private JPanel panelTiempos, panelBotones, panelTiempoConcentracion, panelTiempoDescanso;
@@ -13,7 +13,7 @@ public class NuevaPruebaPomo extends JPanel{
     private JButton botonPlay, botonPause, botonStop, botonCambiarTiempo, botonConfirmarCambios;
     private JTextField textMinutosConcentracion, textMinutosDescanso;
 
-    public NuevaPruebaPomo(){
+    public VistaPomodoro(){
         this.sRecursos = Recursos.getService();
         setLayout(new BorderLayout());
 
