@@ -43,16 +43,23 @@ public class InterfazFija extends JFrame {
         panelMenu = ObjGraficos.construirPanelesPrincipales("menu", sRecursos.getGRANATE());
         panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
+        panelPrincipal = ObjGraficos.construirPanelesPrincipales("principal", sRecursos.getGRIS_CLARO());
         this.panelMatrix = new MatrixMain();
         this.panelPomodoro = new NuevaPruebaPomo();
 
+        CardLayout cardLayout = new CardLayout();
+        panelPrincipal.setLayout(cardLayout);
 
-        /*** PARA TRABAJAR CON UNA VENTANA ESPECÍFICA COMENTA LA LÍNEA EN LA QUE SE AÑADEN LAS OTRAS A PANEL CENTRAL ***/
         this.add(panelMenu, BorderLayout.WEST);
-        panelCentral.add(panelMatrix, BorderLayout.CENTER);
-//        panelCentral.add(panelPomodoro, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
+        panelPrincipal.add(panelPomodoro, "pomodoro");
+        panelPrincipal.add(panelMatrix, "matrix");
+        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         this.add(panelCentral, BorderLayout.CENTER);
+
+        /*** PARA TRABAJAR CON UNA VENTANA ESPECÍFICA --> Cambiar el nombre de abajo al nombre de la ventana
+         *                                                (los especificados al añadir el panel a panelPrincipal) ***/
+        cardLayout.show(panelPrincipal, "matrix");
     }
 
     private void crearBotones() {
