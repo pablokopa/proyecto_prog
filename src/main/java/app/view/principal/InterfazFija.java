@@ -43,19 +43,14 @@ public class InterfazFija extends JFrame {
         panelMenu = ObjGraficos.construirPanelesPrincipales("menu", sRecursos.getGRANATE());
         panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
-        panelPrincipal = ObjGraficos.construirPanelesPrincipales("central", Color.CYAN);
-        this.panelPomodoro = new NuevaPruebaPomo();
         this.panelMatrix = new MatrixMain();
+        this.panelPomodoro = new NuevaPruebaPomo();
 
-        panelPrincipal.add(panelMatrix);
-        panelPrincipal.add(panelPomodoro);
 
-        panelMatrix.setVisible(false);
-        panelPomodoro.setVisible(false);
-
+        /*** PARA TRABAJAR CON UNA VENTANA ESPECÍFICA COMENTA LA LÍNEA EN LA QUE SE AÑADEN LAS OTRAS A PANEL CENTRAL ***/
         this.add(panelMenu, BorderLayout.WEST);
         panelCentral.add(panelMatrix, BorderLayout.CENTER);
-        panelCentral.add(panelPomodoro, BorderLayout.CENTER);
+//        panelCentral.add(panelPomodoro, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
         this.add(panelCentral, BorderLayout.CENTER);
     }
@@ -131,5 +126,7 @@ public class InterfazFija extends JFrame {
 
     public static void main(String[] args) {
         new InterfazFija();
+
+
     }
 }
