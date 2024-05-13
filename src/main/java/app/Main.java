@@ -7,7 +7,6 @@ import app.model.usuarios.GestorUsuarios;
 
 public class Main {
     public static void main(String[] args) {
-//        ConectarBD.conectar();
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
         LoginTemplate loginTemplate = new LoginTemplate(gestorUsuarios);
         new LoginController(loginTemplate, gestorUsuarios);

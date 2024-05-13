@@ -12,7 +12,7 @@ public class InterfazFija extends JFrame {
 
     int xRaton, yRaton, xNuevo, yNuevo;
 
-    private JPanel panelSuperior, panelMenu, panelPrincipal;
+    private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
 
@@ -38,12 +38,14 @@ public class InterfazFija extends JFrame {
 
     private void crearPaneles(){
         panelMenu = ObjGraficos.construirPanelesPrincipales("menu", sRecursos.getGRANATE());
-        panelPrincipal = ObjGraficos.construirPanelesPrincipales("principal", sRecursos.getGRIS_CLARO());
+        panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
+        panelPrincipal = ObjGraficos.construirPanelesPrincipales("central", Color.CYAN);
 
         this.add(panelMenu, BorderLayout.WEST);
-        panelPrincipal.add(panelSuperior, BorderLayout.NORTH);
-        this.add(panelPrincipal, BorderLayout.CENTER);
+        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
+        panelCentral.add(panelSuperior, BorderLayout.NORTH);
+        this.add(panelCentral, BorderLayout.CENTER);
     }
 
     private void crearBotones() {
@@ -109,6 +111,10 @@ public class InterfazFija extends JFrame {
                 setLocation(xNuevo - xRaton, yNuevo - yRaton);
             }
         });
+    }
+
+    public JPanel getPanelPrincipal() {
+        return panelPrincipal;
     }
 
     public static void main(String[] args) {
