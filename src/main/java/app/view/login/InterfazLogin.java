@@ -1,5 +1,6 @@
 package app.view.login;
 
+import app.model.basedatos.ConectarBD;
 import app.view.principal.InterfazPrincipal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
@@ -139,7 +140,7 @@ public class InterfazLogin extends JFrame{
                     textoLogin.setText("Bienvenido, "+ cuadroUsuario.getText()+"!");
                     cuadroUsuario.setText("");
                     cuadroPassword.setText("");
-                    textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
+                    textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios(textoComprobacion));
                 }
             }
         });
@@ -181,10 +182,6 @@ public class InterfazLogin extends JFrame{
         labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
         panelDerecha.add(labelUsuario);
 
-        /* Contador usuarios */
-        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
-        panelDerecha.add(textoNumeroUsuarios);
-
         /* Texto login */
         textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getMonserratBold(22), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
@@ -192,5 +189,13 @@ public class InterfazLogin extends JFrame{
         /* Label informativo; nombre y contraseña correctos */
         textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getMonserratItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
+
+        /* Contador usuarios */
+        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(textoComprobacion), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
+        panelDerecha.add(textoNumeroUsuarios);
+    }
+
+    public static void main(String[] args) {
+        new InterfazLogin(new GestorUsuarios());
     }
 }

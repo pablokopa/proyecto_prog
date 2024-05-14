@@ -22,7 +22,7 @@ public class Usuario {
         this.nombreUsuario = nombreUsuario;
         this.contraUsuario = contraUsuario;
     }
-
+/*
     public boolean agregarTarea(Tarea tarea){
         String consulta = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";
 
@@ -43,7 +43,7 @@ public class Usuario {
         }
 
         return true;
-    }
+    }*/
 
     public String getNombreUsuario() {
         return nombreUsuario;

@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import app.view.login.InterfazLogin;
 import org.mindrot.jbcrypt.BCrypt;
+import org.postgresql.util.PSQLException;
 
 /**
  * Clase que gestiona los usuarios
@@ -43,9 +45,10 @@ public class GestorUsuarios {
         String sql = "INSERT INTO usuario (nombreU, passwordU) VALUES (?, ?)";
 
         try (
-                Connection conexion = ConectarBD.conectar();                // Establece la conexión a la base de datos
-                PreparedStatement pstmt = conexion.prepareStatement(sql)    // Prepara la consulta SQL
+                Connection conexion = ConectarBD.conectar(textoComprobacion);                // Establece la conexión a la base de datos
         ) {
+            PreparedStatement pstmt = conexion.prepareStatement(sql);    // Prepara la consulta SQL
+
             pstmt.setString(1, nombreUsuario);                  // Establece el primer valor de la consulta SQL
             pstmt.setString(2, passwordHashed);                 // Establece el segundo valor de la consulta SQL
 
@@ -69,7 +72,7 @@ public class GestorUsuarios {
 
         String consulta = "SELECT passwordU FROM usuario WHERE nombreU = ?";
         try (
-            Connection conexion = ConectarBD.conectar();
+            Connection conexion = ConectarBD.conectar(textoComprobacion);
             PreparedStatement prepare = conexion.prepareStatement(consulta);
         ) {
             prepare.setString(1, nombreUsuario);
@@ -86,6 +89,7 @@ public class GestorUsuarios {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("CATCH EN GestorUsuarios.conectarUsuario()");
         }
 
 //        Usuario usuario = new Usuario(new Usuario(nombreUsuario, passwordUsuario));
@@ -125,21 +129,29 @@ public class GestorUsuarios {
 
         /* Consulta SQL para comprobar si el nombre de usuario existe */
         String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";     // Consulta SQL para comprobar si el nombre de usuario existe
-        try (
-            Connection conexion = ConectarBD.conectar();                // Establecer la conexión a la base de datos
-            PreparedStatement pstmt = conexion.prepareStatement(sql)    // Preparar la consulta SQL
-        ) {
-            pstmt.setString(1, nombreUsuario);              // Establece nombreUsuario al primer parámetro de la consulta SQL
-            ResultSet resultadoQuery = pstmt.executeQuery();             // Ejecutar la consulta SQL y obtener los resultados
 
-            // Si se encontró un usuario con el mismo nombre, devuelve false y muestra un mensaje
-            if (resultadoQuery.next()) {
-                textoComprobacion.setText("El nombre de usuario ya existe");
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Connection conexion = ConectarBD.conectar(sql, textoComprobacion);
+        ConectarBD.getPrepare().setString(1, nombreUsuario);
+
+
+//        try (
+//            Connection conexion = ConectarBD.conectar(textoComprobacion);                // Establecer la conexión a la base de datos
+//        ) {
+//            PreparedStatement pstmt = conexion.prepareStatement(sql);    // Preparar la consulta SQL
+//
+//            pstmt.setString(1, nombreUsuario);              // Establece nombreUsuario al primer parámetro de la consulta SQL
+//            ResultSet resultadoQuery = pstmt.executeQuery();             // Ejecutar la consulta SQL y obtener los resultados
+//
+//            // Si se encontró un usuario con el mismo nombre, devuelve false y muestra un mensaje
+//            if (resultadoQuery.next()) {
+//                textoComprobacion.setText("El nombre de usuario ya existe");
+//                return false;
+//            }
+//        } catch (SQLException e) {
+////            e.printStackTrace();
+//            System.out.println("CATCH EN GestorUsuarios.comprobarNombreUsuario");
+//            textoComprobacion.setText("No hay conexión");
+//        }
 
         /* Si no se encontró un usuario y el nombre de usuario tiene al menos 3 caracteres, devuelve true */
         return true;
@@ -172,19 +184,21 @@ public class GestorUsuarios {
      * Cuenta el número de usuarios registrados
      * @return número total de usuarios registrados
      */
-    public int contarUsuarios(){
+    public int contarUsuarios(JLabel textoComprobacion){
         String sql = "SELECT COUNT(*) FROM usuario";
 
         try (
-                Connection conexion = ConectarBD.conectar();
-                PreparedStatement pstmt = conexion.prepareStatement(sql)
+                Connection conexion = ConectarBD.conectar(textoComprobacion);
         ) {
+            PreparedStatement pstmt = conexion.prepareStatement(sql);
+
             ResultSet resultadoQuery = pstmt.executeQuery();
             if(resultadoQuery.next()){
                 return resultadoQuery.getInt(1);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | NullPointerException e) {
+            System.out.println("CATCH EN GestorUsuarios.contarUsuarios()");
+//            textoComprobacion.setText("No hay conexión");
         }
         return 0;
     }
