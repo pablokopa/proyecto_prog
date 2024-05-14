@@ -1,14 +1,13 @@
+/*
 package app.view.pruebas;
 
-import app.model.tareas.TareaToDo;
 import app.model.usuarios.Usuario;
-import app.model.usuarios.UsuarioConectado;
 
 import java.util.Scanner;
 
 public class MenuPrincipalConsolaTemporal {
     Scanner sc = new Scanner(System.in);
-    UsuarioConectado usuarioConectado;
+    Usuario usuario;
 
     String menuPrincipal = """
             (1) Crear tarea
@@ -21,7 +20,7 @@ public class MenuPrincipalConsolaTemporal {
             (0) Cerrar aplicación""";
 
     public MenuPrincipalConsolaTemporal(Usuario usuario){
-        usuarioConectado = UsuarioConectado.getUsuarioConectado(usuario);
+        this.usuario = Usuario.getUsuarioConectado(usuario);
     }
 
     public void elegirEnMenu(){
@@ -38,21 +37,21 @@ public class MenuPrincipalConsolaTemporal {
                 String descripcionTarea = sc.nextLine();
 
                 TareaToDo nuevaTarea = new TareaToDo(nombreTarea, descripcionTarea);
-                usuarioConectado.agregarTarea(nuevaTarea);
+                usuario.agregarTarea(nuevaTarea);
             }
 
             // completar tarea (ToDo)
             if (opcion == 2) {
-                usuarioConectado.verTareasToDo();
+                usuario.verTareasToDo();
 
                 System.out.println("Qué tarea deseas completar? (index)");
                 int index = Integer.parseInt(sc.nextLine())-1;
-                usuarioConectado.completarTarea(usuarioConectado.getListaTareasToDo().get(index));
+                usuario.completarTarea(usuario.getListaTareasToDo().get(index));
             }
 
             // modificar tarea
             if (opcion == 3) {
-                usuarioConectado.verTareas();
+                usuario.verTareas();
 
                 System.out.println("Qué tipo de tarea deseas modificar? \t\n(1) Por hacer\t\n(2) Completada");
                 int tipo = Integer.parseInt(sc.nextLine());
@@ -65,10 +64,10 @@ public class MenuPrincipalConsolaTemporal {
                 String descripcionTarea = sc.nextLine();
 
                 if (tipo == 1){
-                    usuarioConectado.modificarTarea(usuarioConectado.getListaTareasToDo().get(index), nombreTarea, descripcionTarea);
+                    usuario.modificarTarea(usuario.getListaTareasToDo().get(index), nombreTarea, descripcionTarea);
                 }
                 if (tipo == 2){
-                    usuarioConectado.modificarTarea(usuarioConectado.getListaTareasCompletadas().get(index), nombreTarea, descripcionTarea);
+                    usuario.modificarTarea(usuario.getListaTareasCompletadas().get(index), nombreTarea, descripcionTarea);
                 }
 
                 System.out.println("Opción aún no disponible");
@@ -76,7 +75,7 @@ public class MenuPrincipalConsolaTemporal {
 
             // eliminar tarea
             if (opcion == 4) {
-                usuarioConectado.verTareas();
+                usuario.verTareas();
 
                 System.out.println("Qué tipo de tarea deseas eliminar? \t\n(1) Por hacer\t\n(2) Completada");
                 int tipo = Integer.parseInt(sc.nextLine());
@@ -84,16 +83,16 @@ public class MenuPrincipalConsolaTemporal {
                 int index = Integer.parseInt(sc.nextLine())-1;
 
                 if (tipo == 1){
-                    usuarioConectado.eliminarTarea(usuarioConectado.getListaTareasToDo().get(index));
+                    usuario.eliminarTarea(usuario.getListaTareasToDo().get(index));
                 }
                 if (tipo == 2){
-                    usuarioConectado.eliminarTarea(usuarioConectado.getListaTareasCompletadas().get(index));
+                    usuario.eliminarTarea(usuario.getListaTareasCompletadas().get(index));
                 }
             }
 
             // ver tareas
             if (opcion == 5) {
-                usuarioConectado.verTareas();
+                usuario.verTareas();
             }
 
             // cambiar contraseña
@@ -114,3 +113,4 @@ public class MenuPrincipalConsolaTemporal {
     }
 
 }
+*/

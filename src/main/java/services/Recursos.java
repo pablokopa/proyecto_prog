@@ -17,7 +17,7 @@ public class Recursos {
     private Font MontserratPlain, MontserratBold, MontserratItalic;
     private Cursor cursorMano;
     private Border bordeGranate, borderBlanco;
-    private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword, imagenPlay, imagenPause, imagenStop;
+    private ImageIcon imagenLogo, imagenLogo2, imagenUsuario, imagenPassword, imagenPlay, imagenPause, imagenStop;
 
     /**
      * Constante de tamaño de letra estándar para los botones.
@@ -102,7 +102,6 @@ public class Recursos {
     private void crearImagenes() {
         imagenLogo = new ImageIcon("src/main/resources/images/logo1.png");
         imagenLogo2 = new ImageIcon("src/main/resources/images/logo2.png");
-        imagenCerrar = new ImageIcon("src/main/resources/images/close.png");
         imagenUsuario = new ImageIcon("src/main/resources/images/user.png");
         imagenPassword = new ImageIcon("src/main/resources/images/password.png");
         imagenPlay = new ImageIcon("src/main/resources/images/playbuttton.png");
@@ -183,12 +182,6 @@ public class Recursos {
     public Border getBorderBlanco() {
         return borderBlanco;
     }
-
-    /**
-     * Método para obtener la imagen de cierre.
-     * @return La imagen de cierre.
-     */
-    public ImageIcon getImagenCerrar() { return imagenCerrar; }
 
     /**
      * Método para obtener la imagen del logo.

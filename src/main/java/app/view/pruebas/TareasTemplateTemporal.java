@@ -78,7 +78,7 @@ public class TareasTemplateTemporal extends JFrame {
 
     private void crearLabels(){
         /* Label cerrar ventana */
-        labelCerrarVentana = sObjGraficos.construirJLabel(null,panelVistaPrincipal.getWidth()-50, 5, 40, 40, sRecursos.getCursorMano(), sRecursos.getImagenCerrar(), null, null, null, null, "r");
+        labelCerrarVentana = sObjGraficos.construirJLabel(null,panelVistaPrincipal.getWidth()-50, 5, 40, 40, sRecursos.getCursorMano(), null, null, null, null, null, "r");
         labelCerrarVentana.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

@@ -184,7 +184,7 @@ public class ObjGraficos {
                 g2.clearRect(0,0,getWidth(),getHeight());
                 super.paintComponent(g);
                 g2.setColor(colorLinea);
-                g2.setStroke(new BasicStroke(3));
+                g2.setStroke(new BasicStroke(1));
                 switch (tipo){
                     case "minimizar":
                         g2.drawLine(5, getHeight()/2+3, getWidth()-5, getHeight()/2+3);
@@ -193,8 +193,8 @@ public class ObjGraficos {
                         g2.drawRect(5,5, getWidth()-10, getHeight()-10);
                         break;
                     case "cerrar":
-                        g2.drawLine(5,5, getWidth()-5, getHeight()-5);
-                        g2.drawLine(getWidth()-5, 5, 5, getHeight()-5);
+                        g2.drawLine(6, 6,  getWidth()-6, getHeight()-6);
+                        g2.drawLine(getWidth()-6, 6, 6, getHeight()-6);
                         break;
                 }
                 g2.dispose();
