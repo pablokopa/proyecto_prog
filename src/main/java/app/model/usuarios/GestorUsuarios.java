@@ -2,7 +2,6 @@ package app.model.usuarios;
 import app.model.basedatos.ConectarBD;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
@@ -14,20 +13,14 @@ import org.mindrot.jbcrypt.BCrypt;
  * Clase que gestiona los usuarios
  */
 public class GestorUsuarios {
-    private final ArrayList<Usuario> listaUsuarios; // Lista de usuarios
 
     /**
-     * Constructor
-     */
-    public GestorUsuarios(){
-        this.listaUsuarios = new ArrayList<>();
-    }
-
-    /**
-     * Método para insertar un nuevo usuario en la base de datos
+     * Método para registrar un nuevo usuario en la base de datos
      * @param nombreUsuario obtenido desde la interfaz de usuario
      * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @return true si el usuario fue insertado correctamente, false si ocurrió un error
+     * @param textoComprobacion para mostrar mensajes de error
+     * @param textoLogin para mostrar mensajes
+     * @return true si el usuario fue registrado correctamente
      */
     public boolean registrarUsuario(String nombreUsuario, String passwordUsuario, JLabel textoComprobacion, JLabel textoLogin) {
         if(!comprobarNombreUsuario(nombreUsuario, textoComprobacion)
@@ -36,44 +29,36 @@ public class GestorUsuarios {
             return false;
         }
 
-        // Encripta la contraseña del usuario para más seguridad. Siempre es un String de 60 carácteres.
-        String passwordHashed = BCrypt.hashpw(passwordUsuario, BCrypt.gensalt());
+        try (Connection conexion = ConectarBD.conectar()) {
+            String passwordHashed = BCrypt.hashpw(passwordUsuario, BCrypt.gensalt());     // Encripta la contraseña del usuario para más seguridad. Siempre es un String de 60 carácteres.
 
-        // Consulta SQL para insertar un nuevo usuario
-        String sql = "INSERT INTO usuario (nombreU, passwordU) VALUES (?, ?)";
+            String sql = "INSERT INTO usuario (nombreU, passwordU) VALUES (?, ?)";        // Consulta SQL para insertar un nuevo usuario
+            PreparedStatement pstmt = conexion.prepareStatement(sql);                     // Prepara la consulta
+            pstmt.setString(1, nombreUsuario);                               // Establece el primer valor de la consulta SQL
+            pstmt.setString(2, passwordHashed);                              // Establece el segundo valor de la consulta SQL
 
-        try (
-                Connection conexion = ConectarBD.conectar();                // Establece la conexión a la base de datos
-                PreparedStatement pstmt = conexion.prepareStatement(sql)    // Prepara la consulta
-        ) {
-            pstmt.setString(1, nombreUsuario);                  // Establece el primer valor de la consulta SQL
-            pstmt.setString(2, passwordHashed);                 // Establece el segundo valor de la consulta SQL
-
-            pstmt.executeUpdate();                                          // Ejecuta la consulta SQL
+            pstmt.executeUpdate();                                                        // Ejecuta la consulta SQL
             return true;
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("CATCH EN GestorUsuarios.registrarUsuario()");
+        } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
             return false;
         }
     }
 
     /**
-     * Método para comprobar si un usuario está registrado en la base de datos y si la contraseña es correcta
-     * @param nombreUsuario (String) obtenido desde la interfaz de usuario
-     * @param passwordUsuario (String) obtenido desde la interfaz de usuario
-     * @param textoComprobacion (JLabel) para mostrar mensajes de error
-     * @param textoLogin (JLabel) para mostrar mensajes de error
-     * @return true si el usuario está registrado y la contraseña es correcta, false si no
+     * Método para conectar un usuario a la base de datos
+     * @param nombreUsuario obtenido desde la interfaz de usuario
+     * @param passwordUsuario obtenido desde la interfaz de usuario
+     * @param textoComprobacion para mostrar mensajes de error
+     * @return true si el usuario fue conectado correctamente
      */
-    public boolean conectarUsuario (String nombreUsuario, String passwordUsuario, JLabel textoComprobacion, JLabel textoLogin){
+    public boolean conectarUsuario (String nombreUsuario, String passwordUsuario, JLabel textoComprobacion){
 
-        String consulta = "SELECT passwordU FROM usuario WHERE nombreU = ?";
-        try (
-            Connection conexion = ConectarBD.conectar();
-            PreparedStatement prepare = conexion.prepareStatement(consulta)
-        ) {
+        try (Connection conexion = ConectarBD.conectar()) {
+            String sql = "SELECT passwordU FROM usuario WHERE nombreU = ?";
+            PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, nombreUsuario);
+
             ResultSet resultado = prepare.executeQuery();
             if (resultado.next()){
                 String passwordU = resultado.getString("passwordu");
@@ -85,56 +70,32 @@ public class GestorUsuarios {
                 textoComprobacion.setText("Usuario no registrado");
                 return false;
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("CATCH EN GestorUsuarios.conectarUsuario()");
+        } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
             return false;
         }
-
-//        Usuario usuario = new Usuario(new Usuario(nombreUsuario, passwordUsuario));
         return true;
     }
 
-    /**
-     * Desconecta un usuario si se encuentra en la lista y está conectado
-     * @param usuario (Usuario)
-     * @return true si fue desconectado correctamente
-     */
-    public boolean desconectarUsuario (Usuario usuario){
-        return false;
-    }
-
-    /**
-     * Elimina un usuario si se encuentra en la lista de usuarios
-     * @param usuario (Usuario)
-     * @return true si fue eliminado correctamente
-     */
-    public boolean eliminarUsuario (Usuario usuario){
-        return this.listaUsuarios.remove(usuario);
-    }
 
     /**
      * Comprueba si el nombre de usuario tiene al menos 3 carácteres y no existe en la base de datos
      * @param nombreUsuario obtenido desde la interfaz de usuario
-     * @return false si encuentra un usuario con el mismo nombre o si el nombre tiene menos de 3 carácteres, true si no
+     * @return true si es correcto
      */
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
 
-        /* Consulta SQL para comprobar si el nombre de usuario existe */
-        String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";     // Consulta SQL para comprobar si el nombre de usuario existe
-
-        try (
-                Connection conexion = ConectarBD.conectar();
-                PreparedStatement prepare = conexion.prepareStatement(sql)
-                ) {
+        try (Connection conexion = ConectarBD.conectar()) {
+            String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";     // Consulta SQL para comprobar si el nombre de usuario existe
+            PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, nombreUsuario);
+
             ResultSet resultadoQuery = prepare.executeQuery();
             if (resultadoQuery.next()) {
                 textoComprobacion.setText("El nombre de usuario ya existe");
                 return false;
             }
-        } catch (SQLException | ClassNotFoundException | NullPointerException e) {
-            System.out.println("CATCH EN GestorUsuarios.comprobarNombreUsuario");
+        } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
             return false;
         }
@@ -150,9 +111,10 @@ public class GestorUsuarios {
     }
 
     /**
-     * Comprueba si la contraseña tiene al menos 4 carácteres y no tiene espacios en blanco ni ciertos carácteres extraños
-     * @param passwordUsuario (char[]) obtenida desde la interfaz de usuario
-     * @return true si fue creado correctamente, mensaje en la interfaz si no
+     * Comprueba si la contraseña del usuario tiene al menos 4 carácteres y no tiene espacios en blanco
+     * @param passwordUsuario obtenido desde la interfaz de usuario
+     * @param textoComprobacion para mostrar mensajes de error
+     * @return true si es correcta
      */
     public boolean comprobarPasswordUsuario(String passwordUsuario, JLabel textoComprobacion){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
@@ -176,20 +138,16 @@ public class GestorUsuarios {
      * Cuenta el número de usuarios registrados
      * @return número total de usuarios registrados
      */
-    public int contarUsuarios(JLabel textoComprobacion){
+    public int contarUsuarios() {
         String sql = "SELECT COUNT(*) FROM usuario";
-
-        try (
-                Connection conexion = ConectarBD.conectar();
-                PreparedStatement pstmt = conexion.prepareStatement(sql)
-        ) {
-            ResultSet resultadoQuery = pstmt.executeQuery();
+        try (Connection conexion = ConectarBD.conectar()) {
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+            ResultSet resultadoQuery = prepare.executeQuery();
             if(resultadoQuery.next()){
                 return resultadoQuery.getInt(1);
             }
-        } catch (SQLException | ClassNotFoundException | NullPointerException e) {
-            System.out.println("CATCH EN GestorUsuarios.contarUsuarios()");
-//            textoComprobacion.setText("No hay conexión");
+        } catch (SQLException e) {
+            return 0;
         }
         return 0;
     }

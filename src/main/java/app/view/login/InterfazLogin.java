@@ -1,6 +1,5 @@
 package app.view.login;
 
-import app.model.basedatos.ConectarBD;
 import app.view.principal.InterfazPrincipal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
@@ -8,8 +7,6 @@ import services.ObjGraficos;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -17,19 +14,16 @@ import java.awt.event.MouseEvent;
  * Interfaz del login de la aplicación.
  */
 public class InterfazLogin extends JFrame{
-    private ObjGraficos sObjGraficos;
-    private Recursos sRecursos;
-    private GestorUsuarios gestorUsuarios;
+    private final ObjGraficos sObjGraficos;
+    private final Recursos sRecursos;
+    private final GestorUsuarios gestorUsuarios;
 
     private int mouseX, x;
     private int mouseY, y;
 
     private JLabel textoLogin, textoComprobacion, textoNumeroUsuarios;
-    private JLabel labelLogo, labelUsuario, labelPassword;
-
     private JTextField cuadroUsuario;
     private JPasswordField cuadroPassword;
-    private JButton botonEntrar, botonRegistrar, botonCerrar;
     private JPanel panelDerecha, panelIzquierda;
 
     /**
@@ -121,46 +115,41 @@ public class InterfazLogin extends JFrame{
      */
     public void crearJButtons(GestorUsuarios gestorUsuarios){
 
-        botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
+        JButton botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
         botonCerrar.setBounds(360,5,40,40);
+        botonCerrar.setForeground(Color.BLUE);
         panelDerecha.add(botonCerrar);
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
+        JButton botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonRegistrar);
 
-        botonRegistrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nombreUsuario = cuadroUsuario.getText();
-                String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
+        botonRegistrar.addActionListener(e -> {
+            String nombreUsuario = cuadroUsuario.getText();
+            String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
 
-                if (gestorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
-                    textoComprobacion.setText("Usuario registrado correctamente");
-                    textoLogin.setText("Bienvenido, "+ cuadroUsuario.getText()+"!");
-                    cuadroUsuario.setText("");
-                    cuadroPassword.setText("");
-                    textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios(textoComprobacion));
-                }
+            if (gestorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
+                textoComprobacion.setText("Usuario registrado correctamente");
+                textoLogin.setText("Bienvenido, "+ cuadroUsuario.getText()+"!");
+                cuadroUsuario.setText("");
+                cuadroPassword.setText("");
+                textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
             }
         });
 
         /* Botón de entrar */
-        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
+        JButton botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonEntrar);
 
-        botonEntrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nombreUsuario = cuadroUsuario.getText();
-                String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
+        botonEntrar.addActionListener(e -> {
+            String nombreUsuario = cuadroUsuario.getText();
+            String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
 
-                if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
-                    dispose();
-                    new InterfazPrincipal();
-                }else{
-                    textoLogin.setText("Inicio de sesión fallido..");
-                }
+            if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+                dispose();
+                new InterfazPrincipal();
+            }else{
+                textoLogin.setText("Inicio de sesión fallido..");
             }
         });
     }
@@ -171,15 +160,15 @@ public class InterfazLogin extends JFrame{
      */
     public void crearJLabels(){
         /* Imagen logo */
-        labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "");
+        JLabel labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "");
         panelIzquierda.add(labelLogo);
 
         /* Imagen candado password */
-        labelPassword = sObjGraficos.construirJLabel(null, 25, 230, 32, 32, null, sRecursos.getImagenPassword(), null, null, null, null, "");
+        JLabel labelPassword = sObjGraficos.construirJLabel(null, 25, 230, 32, 32, null, sRecursos.getImagenPassword(), null, null, null, null, "");
         panelDerecha.add(labelPassword);
 
         /* Imagen logo usuario */
-        labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
+        JLabel labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
         panelDerecha.add(labelUsuario);
 
         /* Texto login */
@@ -191,11 +180,7 @@ public class InterfazLogin extends JFrame{
         panelDerecha.add(textoComprobacion);
 
         /* Contador usuarios */
-        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(textoComprobacion), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
+        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
         panelDerecha.add(textoNumeroUsuarios);
-    }
-
-    public static void main(String[] args) {
-        new InterfazLogin(new GestorUsuarios());
     }
 }
