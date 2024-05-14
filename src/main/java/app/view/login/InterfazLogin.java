@@ -23,14 +23,12 @@ public class InterfazLogin extends JFrame{
     private int mouseX, x;
     private int mouseY, y;
 
-    private JLabel textoLogin;
-    private JLabel labelLogo, labelCerrar, labelUsuario, labelPassword;
-    private JLabel textoNumeroUsuarios;
-    private JLabel textoComprobacion;
+    private JLabel textoLogin, textoComprobacion, textoNumeroUsuarios;
+    private JLabel labelLogo, labelUsuario, labelPassword;
 
     private JTextField cuadroUsuario;
     private JPasswordField cuadroPassword;
-    private JButton botonEntrar, botonRegistrar;
+    private JButton botonEntrar, botonRegistrar, botonCerrar;
     private JPanel panelDerecha, panelIzquierda;
 
     /**
@@ -122,6 +120,10 @@ public class InterfazLogin extends JFrame{
      */
     public void crearJButtons(GestorUsuarios gestorUsuarios){
 
+        botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
+        botonCerrar.setBounds(360,5,40,40);
+        panelDerecha.add(botonCerrar);
+
         /* Botón de registrarse */
         botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonRegistrar);
@@ -154,7 +156,6 @@ public class InterfazLogin extends JFrame{
 
                 if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
                     dispose();
-                    System.out.println("Conectado al usuario "+nombreUsuario);
                     new InterfazPrincipal();
                 }else{
                     textoLogin.setText("Inicio de sesión fallido..");
@@ -179,16 +180,6 @@ public class InterfazLogin extends JFrame{
         /* Imagen logo usuario */
         labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
         panelDerecha.add(labelUsuario);
-
-        /* Imagen cruz cerrar */
-        labelCerrar = sObjGraficos.construirJLabel(null, 360, 5, 40, 40, sRecursos.getCursorMano(), sRecursos.getImagenCerrar(), null, null, null, null, "");
-        labelCerrar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) { // Cuando se haga click
-                dispose(); // Cerrar la ventana
-            }
-        });
-        panelDerecha.add(labelCerrar);
 
         /* Contador usuarios */
         textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");

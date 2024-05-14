@@ -1,3 +1,4 @@
+/*
 package app.view.pruebas;
 
 import app.model.usuarios.Usuario;
@@ -112,3 +113,4 @@ public class MenuPrincipalConsolaTemporal {
     }
 
 }
+*/

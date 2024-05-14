@@ -48,28 +48,6 @@ public class Tarea {
         return fechaCreacion;
     }
 
-    // Setters
-    public void setNombreTarea(String nombreTarea) {
-        this.nombreTarea = nombreTarea;
-    }
-    public void setDescripcionTarea(String descripcionTarea) {
-        this.descripcionTarea = descripcionTarea;
-    }
-
-
-    /**
-     * Comprueba si dos objetos (Tarea) tienen el mismo ID
-     * @param obj Tarea (o herencia) a comparar
-     * @return true si son iguales
-     */
- /*   @Override
-    public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass()) return false;
-        if (obj == this) return true;
-        Tarea tareaObj = (Tarea) obj;
-        return Objects.equals(this.idTarea, tareaObj.idTarea);
-    }*/
-
     /**
      * Método toString
      * @return nombre de la tarea y descripción
