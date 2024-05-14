@@ -1,21 +1,19 @@
 package app.controller;
 
 import app.model.usuarios.GestorUsuarios;
-import app.model.usuarios.Usuario;
 import app.model.usuarios.UsuarioConectado;
-import app.view.pruebas.MenuPrincipalConsolaTemporal;
-import app.view.login.LoginTemplate;
+import app.view.login.InterfazLogin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginController {
-    LoginTemplate loginTemplate;
+    InterfazLogin interfazLogin;
     GestorUsuarios gestorUsuarios;
     UsuarioConectado usuarioConectado;
 
-    public LoginController(LoginTemplate loginTemplate, GestorUsuarios gestorUsuarios){
-        this.loginTemplate = loginTemplate;
+    public LoginController(InterfazLogin interfazLogin, GestorUsuarios gestorUsuarios){
+        this.interfazLogin = interfazLogin;
         this.gestorUsuarios = gestorUsuarios;
 
         ponerAccionBotones();
@@ -24,18 +22,18 @@ public class LoginController {
     private void ponerAccionBotones(){
 
         /* Acción del botón registrar */
-        loginTemplate.getBotonRegistrar().addActionListener(new ActionListener() {
+        interfazLogin.getBotonRegistrar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nombreUsuario = loginTemplate.getCuadroUsuario().getText();
-                String passwordUsuario = String.valueOf(loginTemplate.getCuadroPassword().getPassword());
+                String nombreUsuario = interfazLogin.getCuadroUsuario().getText();
+                String passwordUsuario = String.valueOf(interfazLogin.getCuadroPassword().getPassword());
 
-                if (gestorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario, loginTemplate.getTextoComprobacion(), loginTemplate.getTextoLogin())){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
-                    loginTemplate.getTextoComprobacion().setText("Usuario registrado correctamente");
-                    loginTemplate.getTextoLogin().setText("Bienvenido, "+loginTemplate.getCuadroUsuario().getText()+"!");
-                    loginTemplate.getCuadroUsuario().setText("");
-                    loginTemplate.getCuadroPassword().setText("");
-                    loginTemplate.getTextoNumeroUsuarios().setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
+                if (gestorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario, interfazLogin.getTextoComprobacion(), interfazLogin.getTextoLogin())){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
+                    interfazLogin.getTextoComprobacion().setText("Usuario registrado correctamente");
+                    interfazLogin.getTextoLogin().setText("Bienvenido, "+ interfazLogin.getCuadroUsuario().getText()+"!");
+                    interfazLogin.getCuadroUsuario().setText("");
+                    interfazLogin.getCuadroPassword().setText("");
+                    interfazLogin.getTextoNumeroUsuarios().setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
                 }else{
                     System.out.println("El usuario no ha sido registrado por alguna razón desconocida");
                 }
@@ -43,21 +41,21 @@ public class LoginController {
         });
 
         /* Acción del botón entrar */
-        loginTemplate.getBotonEntrar().addActionListener(new ActionListener() {
+        interfazLogin.getBotonEntrar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nombreUsuario = loginTemplate.getCuadroUsuario().getText();
-                String passwordUsuario = String.valueOf(loginTemplate.getCuadroPassword().getPassword());
+                String nombreUsuario = interfazLogin.getCuadroUsuario().getText();
+                String passwordUsuario = String.valueOf(interfazLogin.getCuadroPassword().getPassword());
 
-                if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, loginTemplate.getTextoComprobacion(), loginTemplate.getTextoLogin())) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+                if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, interfazLogin.getTextoComprobacion(), interfazLogin.getTextoLogin())) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
                     /* cambiar de ventana */
                     // *** pruebas ***
-                    loginTemplate.getFrameLoginTemplate().dispose();
+                    interfazLogin.getFrameLoginTemplate().dispose();
                     System.out.println("Conectado");
 //                    MenuPrincipalConsolaTemporal menuPrincipal = new MenuPrincipalConsolaTemporal(usuarioTemporal);
 //                    menuPrincipal.elegirEnMenu();
                 }else{
-                    loginTemplate.getTextoLogin().setText("Inicio de sesión fallido..");
+                    interfazLogin.getTextoLogin().setText("Inicio de sesión fallido..");
                 }
             }
         });

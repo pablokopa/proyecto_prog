@@ -154,24 +154,13 @@ public class ObjGraficos {
     ) {
         JButton boton = new JButton(texto);
         boton.setPreferredSize(new Dimension(ancho, alto));
-        boton.setMaximumSize(new Dimension(ancho, alto));
+        boton.setMaximumSize(new Dimension(ancho, alto*2));
         boton.setFocusable(false);
         boton.setCursor(Recursos.getService().getCursorMano());
         boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
         boton.setBackground(colorFondo);
         boton.setForeground(colorFuente);
         boton.setBorder(null);
-
-        boton.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (boton.getModel().isRollover()) {
-                    boton.setBackground(colorFondo.brighter());
-                } else {
-                    boton.setBackground(colorFondo);
-                }
-            }
-        });
 
         return boton;
     }

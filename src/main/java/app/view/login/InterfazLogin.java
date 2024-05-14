@@ -10,11 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Esta clase representa la interfaz de inicio de sesión y registro de la aplicación.
- * Extiende de JFrame para proporcionar la funcionalidad de la ventana de la interfaz.
- * Contiene métodos para crear y configurar componentes de la interfaz.
+ * Interfaz del login de la aplicación.
  */
-public class LoginTemplate extends JFrame{
+public class InterfazLogin extends JFrame{
     private ObjGraficos sObjGraficos;
     private Recursos sRecursos;
     private GestorUsuarios gestorUsuarios;
@@ -33,11 +31,11 @@ public class LoginTemplate extends JFrame{
     private JPanel panelDerecha, panelIzquierda;
 
     /**
-     * Constructor de la clase LoginTemplate.
+     * Constructor de la clase InterfazLogin.
      * Inicializa los componentes de la interfaz de usuario y configura la ventana.
      * @param gestorUsuarios Gestor de usuarios para manejar la lógica de inicio de sesión y registro.
      */
-    public LoginTemplate(GestorUsuarios gestorUsuarios){
+    public InterfazLogin(GestorUsuarios gestorUsuarios){
         sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
         this.gestorUsuarios = gestorUsuarios;
