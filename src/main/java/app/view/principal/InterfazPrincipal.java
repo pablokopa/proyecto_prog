@@ -226,4 +226,8 @@ public class InterfazPrincipal extends JFrame {
             }
         });
     }
+
+    public static void main(String[] args) {
+        new InterfazPrincipal();
+    }
 }

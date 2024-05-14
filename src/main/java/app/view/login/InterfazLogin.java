@@ -116,8 +116,7 @@ public class InterfazLogin extends JFrame{
     public void crearJButtons(GestorUsuarios gestorUsuarios){
 
         JButton botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
-        botonCerrar.setBounds(360,5,40,40);
-        botonCerrar.setForeground(Color.BLUE);
+        botonCerrar.setBounds(360,5,35,35);
         panelDerecha.add(botonCerrar);
 
         /* Botón de registrarse */
@@ -182,5 +181,9 @@ public class InterfazLogin extends JFrame{
         /* Contador usuarios */
         textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
         panelDerecha.add(textoNumeroUsuarios);
+    }
+
+    public static void main(String[] args) {
+        new InterfazLogin(new GestorUsuarios());
     }
 }
