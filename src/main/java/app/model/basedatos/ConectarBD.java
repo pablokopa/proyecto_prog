@@ -15,23 +15,16 @@ public class ConectarBD {
     private static final String USER = "app_rol";
     private static final String PASSWORD = "password";
     private static Connection conexion;
-    private static PreparedStatement prepare;
+//    private static PreparedStatement prepare;
 
 
     /**
      * Método para establecer la conexión con la base de datos.
      * @return La conexión establecida.
      */
-    public static Connection conectar(String consulta, JLabel textoComprobacion) {
-        conexion = null;
-        try {
-            Class.forName("org.postgresql.Driver");     // Cargar el controlador JDBC
-            conexion = DriverManager.getConnection(URL, USER, PASSWORD);        // Establecer la conexión
-            prepare = conexion.prepareStatement(consulta);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("CATCH EN ConectarBD.conectar()");
-//            textoComprobacion.setText("No hay conexión");
-        }
+    public static Connection conectar() throws SQLException, ClassNotFoundException {
+        Class.forName("org.postgresql.Driver");     // Cargar el controlador JDBC
+        conexion = DriverManager.getConnection(URL, USER, PASSWORD);        // Establecer la conexión
         return conexion;
     }
 
@@ -39,9 +32,9 @@ public class ConectarBD {
         return conexion;
     }
 
-    public static PreparedStatement getPrepare() {
-        return prepare;
-    }
+//    public static PreparedStatement getPrepare() {
+//        return prepare;
+//    }
 
     /**
      * Método para cerrar la conexión con la base de datos.
