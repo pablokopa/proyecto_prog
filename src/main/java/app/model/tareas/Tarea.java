@@ -1,5 +1,6 @@
 package app.model.tareas;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -8,25 +9,12 @@ import java.util.UUID;
  */
 public class Tarea {
 
-    // Constantes de prioridad
-    /**
-     * (1) Prioridad importante
-     */
-    public static final int PRIORIDAD_IMPORTANTE = 1;
-    /**
-     * (2) Prioridad media
-     */
-    public static final int PRIORIDAD_MEDIA = 2;
-    /**
-     * (3) Prioridad baja
-     */
-    public static final int PRIORIDAD_BAJA = 3;
-
     // Atributos
     private String nombreTarea;
     private String descripcionTarea;
-    private final UUID idTarea;
-    private int prioridadTarea;
+    private Timestamp fechaCreacion;
+    private Timestamp fechaFinalizacion;
+    private boolean completada;
 
     /**
      * Constructor
@@ -36,7 +24,10 @@ public class Tarea {
     public Tarea(String nombreTarea, String descripcionTarea){
         this.nombreTarea = nombreTarea;
         this.descripcionTarea = descripcionTarea;
-        this.idTarea = UUID.randomUUID();
+        this.fechaCreacion = new Timestamp(System.currentTimeMillis());
+
+        this.fechaFinalizacion = null;
+        this.completada = false;
     }
 
     // Getters
@@ -53,6 +44,10 @@ public class Tarea {
         return descripcionTarea;
     }
 
+    public Timestamp getFechaCreacion() {
+        return fechaCreacion;
+    }
+
     // Setters
     public void setNombreTarea(String nombreTarea) {
         this.nombreTarea = nombreTarea;
@@ -61,26 +56,19 @@ public class Tarea {
         this.descripcionTarea = descripcionTarea;
     }
 
-    /**
-     * Establece la prioridad de la tarea
-     * @param prioridadTarea Constante de prioridad de Tarea
-     */
-    public void setPrioridadTarea(int prioridadTarea) {
-        this.prioridadTarea = prioridadTarea;
-    }
 
     /**
      * Comprueba si dos objetos (Tarea) tienen el mismo ID
      * @param obj Tarea (o herencia) a comparar
      * @return true si son iguales
      */
-    @Override
+ /*   @Override
     public boolean equals(Object obj) {
         if (obj == null || getClass() != obj.getClass()) return false;
         if (obj == this) return true;
         Tarea tareaObj = (Tarea) obj;
         return Objects.equals(this.idTarea, tareaObj.idTarea);
-    }
+    }*/
 
     /**
      * Método toString

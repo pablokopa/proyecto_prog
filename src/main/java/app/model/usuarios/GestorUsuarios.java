@@ -3,7 +3,6 @@ import app.model.basedatos.ConectarBD;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
@@ -88,6 +87,8 @@ public class GestorUsuarios {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+//        Usuario usuario = new Usuario(new Usuario(nombreUsuario, passwordUsuario));
         return true;
     }
 

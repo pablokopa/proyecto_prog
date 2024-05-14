@@ -1,11 +1,14 @@
 package app.view.login;
 
+import app.view.principal.InterfazPrincipal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
 import services.ObjGraficos;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -123,10 +126,41 @@ public class InterfazLogin extends JFrame{
         botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonRegistrar);
 
+        botonRegistrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nombreUsuario = cuadroUsuario.getText();
+                String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
+
+                if (gestorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
+                    textoComprobacion.setText("Usuario registrado correctamente");
+                    textoLogin.setText("Bienvenido, "+ cuadroUsuario.getText()+"!");
+                    cuadroUsuario.setText("");
+                    cuadroPassword.setText("");
+                    textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
+                }
+            }
+        });
+
         /* Botón de entrar */
         botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonEntrar);
 
+        botonEntrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nombreUsuario = cuadroUsuario.getText();
+                String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
+
+                if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+                    dispose();
+                    System.out.println("Conectado al usuario "+nombreUsuario);
+                    new InterfazPrincipal();
+                }else{
+                    textoLogin.setText("Inicio de sesión fallido..");
+                }
+            }
+        });
     }
 
     /**
@@ -167,32 +201,5 @@ public class InterfazLogin extends JFrame{
         /* Label informativo; nombre y contraseña correctos */
         textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getMonserratItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
-    }
-
-    // Getters para utilizar los componentes en el controlador
-    public JButton getBotonRegistrar(){
-        return botonRegistrar;
-    }
-    public JButton getBotonEntrar(){
-        return botonEntrar;
-    }
-    public JTextField getCuadroUsuario(){
-        return cuadroUsuario;
-    }
-    public JPasswordField getCuadroPassword(){
-        return cuadroPassword;
-    }
-    public JLabel getTextoLogin(){
-        return textoLogin;
-    }
-    public JLabel getTextoComprobacion(){
-        return textoComprobacion;
-    }
-    public Frame getFrameLoginTemplate(){
-        return this;
-    }
-
-    public JLabel getTextoNumeroUsuarios() {
-        return textoNumeroUsuarios;
     }
 }
