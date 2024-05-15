@@ -1,8 +1,6 @@
 package app.model.tareas;
 
 import java.sql.Timestamp;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Clase que representa una tarea
@@ -28,24 +26,6 @@ public class Tarea {
 
         this.fechaFinalizacion = null;
         this.completada = false;
-    }
-
-    // Getters
-    /**
-     * @return nombre de la tarea
-     */
-    public String getNombreTarea() {
-        return nombreTarea;
-    }
-    /**
-     * @return descripción de la tarea
-     */
-    public String getDescripcionTarea() {
-        return descripcionTarea;
-    }
-
-    public Timestamp getFechaCreacion() {
-        return fechaCreacion;
     }
 
     /**

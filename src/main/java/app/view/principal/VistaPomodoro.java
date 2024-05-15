@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class VistaPomodoro extends JPanel{
-    private Recursos sRecursos;
+    private final Recursos sRecursos;
 
     private JPanel panelTiempos, panelBotones, panelTiempoConcentracion, panelTiempoDescanso;
     private JLabel labelTiempoConcentracion, labelTiempoDescanso;

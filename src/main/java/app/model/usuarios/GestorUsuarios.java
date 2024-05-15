@@ -1,4 +1,5 @@
 package app.model.usuarios;
+
 import app.model.basedatos.ConectarBD;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class GestorUsuarios {
      * @return true si el usuario fue registrado correctamente
      */
     public boolean registrarUsuario(String nombreUsuario, String passwordUsuario, JLabel textoComprobacion, JLabel textoLogin) {
+        /* Comprueba si el nombre de usuario y la contraseña son correctos */
         if(!comprobarNombreUsuario(nombreUsuario, textoComprobacion)
                 || !comprobarPasswordUsuario(passwordUsuario, textoComprobacion)){
             textoLogin.setText("Registro fallido..");
@@ -55,6 +57,7 @@ public class GestorUsuarios {
     public boolean conectarUsuario (String nombreUsuario, String passwordUsuario, JLabel textoComprobacion){
 
         try (Connection conexion = ConectarBD.conectar()) {
+            /* Consulta SQL para obtener la contraseña del usuario */
             String sql = "SELECT passwordU FROM usuario WHERE nombreU = ?";
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, nombreUsuario);
@@ -62,6 +65,7 @@ public class GestorUsuarios {
             ResultSet resultado = prepare.executeQuery();
             if (resultado.next()){
                 String passwordU = resultado.getString("passwordu");
+                /* Comprueba si la contraseña del usuario es correcta */
                 if (!BCrypt.checkpw(passwordUsuario, passwordU)){
                     textoComprobacion.setText("Contraseña incorrecta");
                     return false;
@@ -74,6 +78,8 @@ public class GestorUsuarios {
             textoComprobacion.setText("No hay conexión");
             return false;
         }
+
+
         return true;
     }
 
@@ -86,10 +92,13 @@ public class GestorUsuarios {
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
 
         try (Connection conexion = ConectarBD.conectar()) {
-            String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";     // Consulta SQL para comprobar si el nombre de usuario existe
+
+            /* Consulta SQL para comprobar si el nombre de usuario existe */
+            String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, nombreUsuario);
 
+            /* Comprueba si el nombre de usuario ya existe en la base de datos */
             ResultSet resultadoQuery = prepare.executeQuery();
             if (resultadoQuery.next()) {
                 textoComprobacion.setText("El nombre de usuario ya existe");
@@ -118,11 +127,13 @@ public class GestorUsuarios {
      */
     public boolean comprobarPasswordUsuario(String passwordUsuario, JLabel textoComprobacion){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
+        /* Comprueba si la contraseña tiene al menos 4 carácteres */
         if (passwordUsuario.length()<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
             return false;
         }
         for (int i=0; i<passwordUsuario.length(); i++) {
+            /* Comprueba si la contraseña tiene espacios en blanco o carácteres no permitidos */
             if (passwordUsuario.charAt(i) == ' ') {
                 textoComprobacion.setText("La contraseña no puede tener espacios en blanco");
                 return false;
@@ -139,6 +150,7 @@ public class GestorUsuarios {
      * @return número total de usuarios registrados
      */
     public int contarUsuarios() {
+        /* Consulta SQL para contar el número de usuarios */
         String sql = "SELECT COUNT(*) FROM usuario";
         try (Connection conexion = ConectarBD.conectar()) {
             PreparedStatement prepare = conexion.prepareStatement(sql);

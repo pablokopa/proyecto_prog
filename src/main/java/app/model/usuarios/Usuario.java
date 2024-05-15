@@ -12,53 +12,45 @@ import java.util.Objects;
  * Clase Singleton que representa un usuario conectado.
  * Actúa como un gestor de tareas del propio usuario.
  */
-public class Usuario {
+public record Usuario(String nombreUsuario) {
     private static Usuario usuario = null;
 
-    private String nombreUsuario;
-    private String contraUsuario;
 
-    public Usuario(String nombreUsuario, String contraUsuario){
-        this.nombreUsuario = nombreUsuario;
-        this.contraUsuario = contraUsuario;
+    public Usuario getUsuarioConectado() {
+        return usuario;
     }
-/*
-    public boolean agregarTarea(Tarea tarea){
-        String consulta = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";
 
-        try(
-                Connection conexion = ConectarBD.conectar();
-                PreparedStatement prepare = conexion.prepareStatement(consulta);
-        ) {
-            prepare.setString(1, tarea.getNombreTarea());
-            prepare.setString(2, tarea.getDescripcionTarea());
-            prepare.setTimestamp(3, tarea.getFechaCreacion());
-            prepare.setString(4, this.getNombreUsuario());
 
-            prepare.executeQuery();
+    public boolean agregarTarea(Tarea tarea) {
+        String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaFinalizacionT, nombreU) VALUES (?, ?, ?, ?)";
 
+        try (Connection conexion = ConectarBD.conectar()) {
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+//            prepare.setString(1, tarea.getNombreTarea());
+//            prepare.setString(2, tarea.getDescripcionTarea());
+//            prepare.setTimestamp(3, tarea.getFechaCreacion());
+            prepare.setString(4, this.nombreUsuario());
+
+            prepare.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("CATCH EN agregarTarea()");
             return false;
         }
-
         return true;
-    }*/
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass())    return false;
-        if (obj == this)    return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == this) return true;
         Usuario userObj = (Usuario) obj;
         return Objects.equals(this.nombreUsuario, userObj.nombreUsuario);
     }
 
     /**
      * Método toString
+     *
      * @return nombre de usuario
      */
     @Override
