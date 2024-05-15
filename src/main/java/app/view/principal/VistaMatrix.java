@@ -13,10 +13,13 @@ public class VistaMatrix extends JPanel{
     private Recursos sRecursos;
 
     private Color colorGrisPrincipal;
-    private JPanel panelArribaIzq, panelArribaDer, panelAbajoIzq, panelAbajoDer;
-    private JPanel panelTituloArribaI, panelTareasArribaI, panelTituloArribaD, panelTareasArribaD;
-    private JPanel panelTituloAbajoI, panelTareasAbajoI, panelTituloAbajoD, panelTareasAbajoD;
-    private JLabel labelArribaIzq, labelArribaDer, labelAbajoIzq, labelAbajoDer;
+
+    private JPanel panelArribaI, panelArribaD, panelAbajoI, panelAbajoD;
+    private JPanel panelTituloArribaI, panelTituloArribaD, panelTituloAbajoI, panelTituloAbajoD;
+    private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
+
+    private JLabel labelArribaI, labelArribaD, labelAbajoI, labelAbajoD;
+    private JScrollPane scrollArribaI, scrollArribaD, scrollAbajoI, scrollAbajoD;
 
     public VistaMatrix(){
         sObjGraficos = ObjGraficos.getService();
@@ -32,14 +35,14 @@ public class VistaMatrix extends JPanel{
 
 /* Panel Arriba Izquierda */
         // Crear nuevos paneles
-        panelArribaIzq = new JPanel();
+        panelArribaI = new JPanel();
         panelTituloArribaI = new JPanel();
         panelTareasArribaI = new JPanel();
-        labelArribaIzq = new JLabel("No importante / No urgente");
-        labelArribaIzq.setFont(sRecursos.getMonserratBold(20));
+        labelArribaI = new JLabel("No importante / No urgente");
+        labelArribaI.setFont(sRecursos.getMonserratBold(20));
 
-        // Indicar layout
-        panelArribaIzq.setLayout(new BorderLayout());
+        // Configurar layout
+        panelArribaI.setLayout(new BorderLayout());
         panelTituloArribaI.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         // Cambiar color de fondo
@@ -47,24 +50,18 @@ public class VistaMatrix extends JPanel{
         panelTareasArribaI.setBackground(new Color(175,255,168));
 
         // Añadir borde
-        panelArribaIzq.setBorder(new MatteBorder(1, 10, 5, 5, sRecursos.getBLANCO()));
-
-        // Añadir elementos
-        panelTituloArribaI.add(labelArribaIzq);
-        panelArribaIzq.add(panelTituloArribaI, BorderLayout.NORTH);
-        panelArribaIzq.add(panelTareasArribaI, BorderLayout.CENTER);
-        add(panelArribaIzq);
+        panelArribaI.setBorder(new MatteBorder(1, 10, 5, 5, sRecursos.getBLANCO()));
 
 /* Panel Arriba Derecha */
         // Crear nuevos paneles
-        panelArribaDer = new JPanel();
+        panelArribaD = new JPanel();
         panelTituloArribaD = new JPanel();
         panelTareasArribaD = new JPanel();
-        labelArribaDer = new JLabel("No importante / Urgente");
-        labelArribaDer.setFont(sRecursos.getMonserratBold(20));
+        labelArribaD = new JLabel("No importante / Urgente");
+        labelArribaD.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
-        panelArribaDer.setLayout(new BorderLayout());
+        panelArribaD.setLayout(new BorderLayout());
         panelTituloArribaD.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
         // Cambiar color de fondo
@@ -72,24 +69,18 @@ public class VistaMatrix extends JPanel{
         panelTareasArribaD.setBackground(new Color(168,235,255));
 
         // Añadir borde
-        panelArribaDer.setBorder(new MatteBorder(1, 5, 5, 10, sRecursos.getBLANCO()));
-
-        // Añadir elementos
-        panelTituloArribaD.add(labelArribaDer);
-        panelArribaDer.add(panelTituloArribaD, BorderLayout.NORTH);
-        panelArribaDer.add(panelTareasArribaD, BorderLayout.CENTER);
-        add(panelArribaDer);
+        panelArribaD.setBorder(new MatteBorder(1, 5, 5, 10, sRecursos.getBLANCO()));
 
 /* Panel Abajo Izquierda */
         // Crear nuevos paneles
-        panelAbajoIzq = new JPanel();
+        panelAbajoI = new JPanel();
         panelTituloAbajoI = new JPanel();
         panelTareasAbajoI = new JPanel();
-        labelAbajoIzq = new JLabel("Importante / No urgente");
-        labelAbajoIzq.setFont(sRecursos.getMonserratBold(20));
+        labelAbajoI = new JLabel("Importante / No urgente");
+        labelAbajoI.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
-        panelAbajoIzq.setLayout(new BorderLayout());
+        panelAbajoI.setLayout(new BorderLayout());
         panelTituloAbajoI.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         // Cambiar color de fondo
@@ -97,24 +88,18 @@ public class VistaMatrix extends JPanel{
         panelTareasAbajoI.setBackground(new Color(255,221,122));
 
         // Añadir borde
-        panelAbajoIzq.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
-
-        // Añadir elementos
-        panelTituloAbajoI.add(labelAbajoIzq);
-        panelAbajoIzq.add(panelTituloAbajoI, BorderLayout.SOUTH);
-        panelAbajoIzq.add(panelTareasAbajoI, BorderLayout.CENTER);
-        add(panelAbajoIzq);
+        panelAbajoI.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
 
 /* Panel Abajo Derecha */
         // Crear nuevos paneles
-        panelAbajoDer = new JPanel();
+        panelAbajoD = new JPanel();
         panelTituloAbajoD = new JPanel();
         panelTareasAbajoD = new JPanel();
-        labelAbajoDer = new JLabel("Importante / Urgente");
-        labelAbajoDer.setFont(sRecursos.getMonserratBold(20));
+        labelAbajoD = new JLabel("Importante / Urgente");
+        labelAbajoD.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
-        panelAbajoDer.setLayout(new BorderLayout());
+        panelAbajoD.setLayout(new BorderLayout());
         panelTituloAbajoD.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
         // Cambiar color de fondo
@@ -122,12 +107,36 @@ public class VistaMatrix extends JPanel{
         panelTareasAbajoD.setBackground(new Color(255,149,149));
 
         // Añadir borde
-        panelAbajoDer.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
+        panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
-        // Añadir elementos
-        panelTituloAbajoD.add(labelAbajoDer);
-        panelAbajoDer.add(panelTituloAbajoD, BorderLayout.SOUTH);
-        panelAbajoDer.add(panelTareasAbajoD, BorderLayout.CENTER);
-        add(panelAbajoDer);
+/* AÑADIR ELEMENTOS */
+        /*for (int i=0; i<100; i++){
+            JLabel label = new JLabel("aaaa");
+            panelTareasArribaI.add(label);
+        }*/
+
+        // Añadir elementos arriba izquierda
+        panelTituloArribaI.add(labelArribaI);
+        panelArribaI.add(panelTituloArribaI, BorderLayout.NORTH);
+        panelArribaI.add(panelTareasArribaI, BorderLayout.CENTER);
+        add(panelArribaI);
+
+        // Añadir elementos arriba derecha
+        panelTituloArribaD.add(labelArribaD);
+        panelArribaD.add(panelTituloArribaD, BorderLayout.NORTH);
+        panelArribaD.add(panelTareasArribaD, BorderLayout.CENTER);
+        add(panelArribaD);
+
+        // Añadir elementos abajo izquierda
+        panelTituloAbajoI.add(labelAbajoI);
+        panelAbajoI.add(panelTituloAbajoI, BorderLayout.SOUTH);
+        panelAbajoI.add(panelTareasAbajoI, BorderLayout.CENTER);
+        add(panelAbajoI);
+
+        // Añadir elementos abajo derecha
+        panelTituloAbajoD.add(labelAbajoD);
+        panelAbajoD.add(panelTituloAbajoD, BorderLayout.SOUTH);
+        panelAbajoD.add(panelTareasAbajoD, BorderLayout.CENTER);
+        add(panelAbajoD);
     }
 }
