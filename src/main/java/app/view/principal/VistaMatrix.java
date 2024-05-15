@@ -3,6 +3,7 @@ package app.view.principal;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import services.ObjGraficos;
 import services.Recursos;
@@ -44,6 +45,13 @@ public class VistaMatrix extends JPanel{
         // Configurar layout
         panelArribaI.setLayout(new BorderLayout());
         panelTituloArribaI.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTareasArribaI.setLayout(new GridLayout(100,3));
+
+        // Crear y configurar scroll
+        scrollArribaI = new JScrollPane(panelTareasArribaI);
+        scrollArribaI.setBorder(null);
+        scrollArribaI.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
+        scrollArribaI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Cambiar color de fondo
         panelTituloArribaI.setBackground(new Color(175,255,168));
@@ -110,15 +118,20 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
 /* AÑADIR ELEMENTOS */
-        /*for (int i=0; i<100; i++){
-            JLabel label = new JLabel("aaaa");
-            panelTareasArribaI.add(label);
-        }*/
+        for (int i=0; i<100; i++){
+            JPanel panel = new JPanel();
+            JLabel label = new JLabel("Prueba: "+i);
+            panel.setBorder(new MatteBorder(1, 1, 0, 1, Color.BLACK));
+            panel.setBackground(new Color(175,255,168));
+
+            panel.add(label);
+            panelTareasArribaI.add(panel);
+        }
 
         // Añadir elementos arriba izquierda
         panelTituloArribaI.add(labelArribaI);
         panelArribaI.add(panelTituloArribaI, BorderLayout.NORTH);
-        panelArribaI.add(panelTareasArribaI, BorderLayout.CENTER);
+        panelArribaI.add(scrollArribaI, BorderLayout.CENTER);
         add(panelArribaI);
 
         // Añadir elementos arriba derecha
@@ -138,5 +151,40 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.add(panelTituloAbajoD, BorderLayout.SOUTH);
         panelAbajoD.add(panelTareasAbajoD, BorderLayout.CENTER);
         add(panelAbajoD);
+    }
+}
+
+class WhiteScrollBarUI extends BasicScrollBarUI {
+    @Override
+    protected JButton createDecreaseButton(int orientation) {
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(0, 0));
+        button.setMinimumSize(new Dimension(0, 0));
+        button.setMaximumSize(new Dimension(0, 0));
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        return button;
+    }
+
+    @Override
+    protected JButton createIncreaseButton(int orientation) {
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(0, 0));
+        button.setMinimumSize(new Dimension(0, 0));
+        button.setMaximumSize(new Dimension(0, 0));
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        return button;
+    }
+
+    @Override
+    protected void configureScrollBarColors() {
+        this.thumbColor = Color.WHITE;
+        this.trackColor = new Color(0, 0, 0, 0); // Color transparente
+        this.thumbDarkShadowColor = new Color(0, 0, 0, 0);
+        this.thumbHighlightColor = new Color(0, 0, 0, 0);
+        this.thumbLightShadowColor = new Color(0, 0, 0, 0);
     }
 }
