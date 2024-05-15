@@ -71,7 +71,7 @@ public class InterfazPrincipal extends JFrame {
 
         this.add(panelMenu, BorderLayout.WEST);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
-        panelPrincipal.add(panelPomodoro, "Pomodoro");
+        //panelPrincipal.add(panelPomodoro, "Pomodoro");
         panelPrincipal.add(panelMatrix, "Matrix");
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         this.add(panelCentral, BorderLayout.CENTER);
