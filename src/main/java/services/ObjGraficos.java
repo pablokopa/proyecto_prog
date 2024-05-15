@@ -184,7 +184,7 @@ public class ObjGraficos {
                 g2.clearRect(0,0,getWidth(),getHeight());
                 super.paintComponent(g);
                 g2.setColor(colorLinea);
-                g2.setStroke(new BasicStroke(1));
+                g2.setStroke(new BasicStroke(3));
                 switch (tipo){
                     case "minimizar":
                         g2.drawLine(5, getHeight()/2+3, getWidth()-5, getHeight()/2+3);
