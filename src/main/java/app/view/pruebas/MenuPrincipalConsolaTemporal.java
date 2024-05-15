@@ -1,6 +1,7 @@
 package app.view.pruebas;
 
 import app.model.basedatos.ConectarBD;
+import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import app.model.usuarios.Usuario;
 
@@ -12,6 +13,7 @@ import java.util.Scanner;
 public class MenuPrincipalConsolaTemporal {
     Scanner sc = new Scanner(System.in);
     Usuario usuario;
+    GestorTareas gestorTareas;
 
     String menuPrincipal = """
             (1) Crear tarea
@@ -23,8 +25,10 @@ public class MenuPrincipalConsolaTemporal {
             (7*) Desconectar usuario
             (0) Cerrar aplicación""";
 
-    public MenuPrincipalConsolaTemporal(Usuario usuario) {
-        this.usuario = usuario;
+    public MenuPrincipalConsolaTemporal(GestorTareas gestorTareas) {
+        this.gestorTareas = gestorTareas;
+        this.usuario = gestorTareas.getUsuario();
+
         elegirEnMenu();
     }
 
@@ -110,7 +114,10 @@ public class MenuPrincipalConsolaTemporal {
 
             // ver tareas
             if (opcion == 5) {
-//                usuario.verTareas();
+                gestorTareas.getTareasDeBase();
+                for (Tarea tarea : gestorTareas.getListaTareas()){
+                    System.out.println(tarea);
+                }
             }
 
             // cambiar contraseña

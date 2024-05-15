@@ -28,6 +28,14 @@ public class Tarea {
         this.completada = false;
     }
 
+    public Tarea(String nombreTarea, String descripcionTarea, Timestamp fechaCreacion, Timestamp fechaFinalizacion, Boolean completada){
+        this.nombreTarea = nombreTarea;
+        this.descripcionTarea = descripcionTarea;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaFinalizacion = fechaFinalizacion;
+        this.completada = completada;
+    }
+
     public Timestamp getFechaCreacion() {
         return fechaCreacion;
     }
@@ -38,6 +46,6 @@ public class Tarea {
      */
     @Override
     public String toString() {
-        return this.nombreTarea + ": " + this.descripcionTarea;      // añade id tarea temporalmente para pruebas
+        return this.nombreTarea + ": " + this.descripcionTarea + " - " + this.fechaCreacion;      // añade id tarea temporalmente para pruebas
     }
 }
