@@ -1,8 +1,6 @@
 package app.model.tareas;
 
 import java.sql.Timestamp;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Clase que representa una tarea
@@ -30,18 +28,12 @@ public class Tarea {
         this.completada = false;
     }
 
-    // Getters
-    /**
-     * @return nombre de la tarea
-     */
-    public String getNombreTarea() {
-        return nombreTarea;
-    }
-    /**
-     * @return descripción de la tarea
-     */
-    public String getDescripcionTarea() {
-        return descripcionTarea;
+    public Tarea(String nombreTarea, String descripcionTarea, Timestamp fechaCreacion, Timestamp fechaFinalizacion, Boolean completada){
+        this.nombreTarea = nombreTarea;
+        this.descripcionTarea = descripcionTarea;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaFinalizacion = fechaFinalizacion;
+        this.completada = completada;
     }
 
     public Timestamp getFechaCreacion() {
@@ -54,6 +46,6 @@ public class Tarea {
      */
     @Override
     public String toString() {
-        return this.nombreTarea + ": " + this.descripcionTarea;      // añade id tarea temporalmente para pruebas
+        return this.nombreTarea + ": " + this.descripcionTarea + " - " + this.fechaCreacion;      // añade id tarea temporalmente para pruebas
     }
 }

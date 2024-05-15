@@ -13,52 +13,59 @@ import java.util.Objects;
  * Actúa como un gestor de tareas del propio usuario.
  */
 public class Usuario {
-    private static Usuario usuario = null;
-
+    private static Usuario usuario;
     private String nombreUsuario;
-    private String contraUsuario;
 
-    public Usuario(String nombreUsuario, String contraUsuario){
+    private Usuario(String nombreUsuario){
         this.nombreUsuario = nombreUsuario;
-        this.contraUsuario = contraUsuario;
     }
-/*
-    public boolean agregarTarea(Tarea tarea){
-        String consulta = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";
 
-        try(
-                Connection conexion = ConectarBD.conectar();
-                PreparedStatement prepare = conexion.prepareStatement(consulta);
-        ) {
-            prepare.setString(1, tarea.getNombreTarea());
-            prepare.setString(2, tarea.getDescripcionTarea());
-            prepare.setTimestamp(3, tarea.getFechaCreacion());
-            prepare.setString(4, this.getNombreUsuario());
-
-            prepare.executeQuery();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+    public static Usuario setUsuarioConectado(String nombreUsuario){
+        if (usuario == null){
+            usuario = new Usuario(nombreUsuario);
         }
+        return usuario;
+    }
 
-        return true;
-    }*/
+    public static Usuario getUsuario(){
+        return usuario;
+    }
 
     public String getNombreUsuario() {
         return nombreUsuario;
     }
 
+    public boolean agregarTarea(Tarea tarea) {
+        String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaFinalizacionT, nombreU) VALUES (?, ?, ?, ?)";
+
+        try (Connection conexion = ConectarBD.conectar()) {
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+//            prepare.setString(1, tarea.getNombreTarea());
+//            prepare.setString(2, tarea.getDescripcionTarea());
+//            prepare.setTimestamp(3, tarea.getFechaCreacion());
+//            prepare.setString(4, this.nombreUsuario());
+
+            prepare.executeUpdate();
+        } catch (SQLException e) {
+//            e.printStackTrace();
+            System.out.println("CATCH EN agregarTarea()");
+            return false;
+        }
+        return true;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass())    return false;
-        if (obj == this)    return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == this) return true;
         Usuario userObj = (Usuario) obj;
         return Objects.equals(this.nombreUsuario, userObj.nombreUsuario);
     }
 
     /**
      * Método toString
+     *
      * @return nombre de usuario
      */
     @Override

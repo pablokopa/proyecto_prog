@@ -4,8 +4,6 @@ import services.ObjGraficos;
 import services.Recursos;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.ArrayList;
  * En ella aparecen el resto de las vistas del programa.
  */
 public class InterfazPrincipal extends JFrame {
-    private Recursos sRecursos;
+    private final Recursos sRecursos;
 
     private int xRaton, yRaton, xNuevo, yNuevo;
 
@@ -26,8 +24,6 @@ public class InterfazPrincipal extends JFrame {
 
     private CardLayout cardLayout;
 
-    private ArrayList<JButton> listaBotonesMenuTodos;
-    private ArrayList<JButton> listaBotonesMenuConVista;
     private String textoBotonActual = "";
 
 
@@ -41,9 +37,6 @@ public class InterfazPrincipal extends JFrame {
         this.setLocationRelativeTo(this);
         this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
-
-        this.listaBotonesMenuTodos = new ArrayList<JButton>();
-        this.listaBotonesMenuConVista = new ArrayList<JButton>();
 
         crearPaneles();
         crearBotones();
@@ -71,7 +64,7 @@ public class InterfazPrincipal extends JFrame {
 
         this.add(panelMenu, BorderLayout.WEST);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
-        panelPrincipal.add(panelPomodoro, "Pomodoro");
+//        panelPrincipal.add(panelPomodoro, "Pomodoro");
         panelPrincipal.add(panelMatrix, "Matrix");
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         this.add(panelCentral, BorderLayout.CENTER);
@@ -94,7 +87,7 @@ public class InterfazPrincipal extends JFrame {
         botonMatrix = ObjGraficos.construirBotonesMenu("Matrix", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
         botonPomodoro = ObjGraficos.construirBotonesMenu("Pomodoro", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
         botonAjustes = ObjGraficos.construirBotonesMenu("Ajustes", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonCerrarSesion = ObjGraficos.construirBotonesMenu("Cerrar Sesión", getWidth(),50, sRecursos.getGRANATE(), sRecursos.getBLANCO());;
+        botonCerrarSesion = ObjGraficos.construirBotonesMenu("Cerrar Sesión", getWidth(),50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
 
         panelMenu.add(botonInicio);
         panelMenu.add(botonTareas);
@@ -110,6 +103,7 @@ public class InterfazPrincipal extends JFrame {
      * Permite cambiar la vista al pulsar un botón del menú y cambia su tamaño.
      */
     private void botonesActionListener() {
+        ArrayList<JButton> listaBotonesMenuConVista = new ArrayList<>();
         listaBotonesMenuConVista.add(botonInicio);
         listaBotonesMenuConVista.add(botonTareas);
         listaBotonesMenuConVista.add(botonMatrix);
@@ -117,25 +111,21 @@ public class InterfazPrincipal extends JFrame {
         listaBotonesMenuConVista.add(botonAjustes);
 
         for (JButton boton : listaBotonesMenuConVista){
-            boton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String textoBoton = boton.getText();
+            boton.addActionListener(e -> {
+                String textoBoton = boton.getText();
 
-                    if (textoBoton.equals("Inicio")){
-                        contraerBotones();
-                        cardLayout.show(panelPrincipal, textoBoton);
-                        panelMenu.revalidate();
-                    }
-                    else {
-                        contraerBotones();
-                        cardLayout.show(panelPrincipal, textoBoton);
-                        boton.setPreferredSize(new Dimension(getWidth(), 75));
-                        panelMenu.revalidate();
-                    }
-
-                    textoBotonActual = textoBoton;
+                if (textoBoton.equals("Inicio")){
+                    contraerBotones(listaBotonesMenuConVista);
                 }
+                else {
+                    contraerBotones(listaBotonesMenuConVista);
+                    boton.setPreferredSize(new Dimension(getWidth(), 75));
+                }
+                cardLayout.show(panelPrincipal, textoBoton);
+                panelMenu.revalidate();
+
+                // Guarda el texto del botón seleccionado para evitar que pierda el color 'seleccionado' por el ChangeListener
+                textoBotonActual = textoBoton;
             });
         }
     }
@@ -143,7 +133,7 @@ public class InterfazPrincipal extends JFrame {
     /**
      * Utilizado en botonesActionListener para contraer los botones que ya no están seleccionados.
      */
-    private void contraerBotones() {
+    private void contraerBotones(ArrayList<JButton> listaBotonesMenuConVista) {
         for (JButton boton : listaBotonesMenuConVista) {
             boton.setPreferredSize(new Dimension(getWidth(), 50));
             if (boton.getText().equals("Inicio")){
@@ -158,6 +148,7 @@ public class InterfazPrincipal extends JFrame {
      * Cambia el color de fondo del botón al pasar el ratón por encima y permite que el botón seleccionado mantenga ese color.
      */
     private void botonesChangeListener() {
+        ArrayList<JButton> listaBotonesMenuTodos = new ArrayList<>();
         listaBotonesMenuTodos.add(botonTareas);
         listaBotonesMenuTodos.add(botonMatrix);
         listaBotonesMenuTodos.add(botonPomodoro);
@@ -165,16 +156,13 @@ public class InterfazPrincipal extends JFrame {
         listaBotonesMenuTodos.add(botonCerrarSesion);
 
         for (JButton boton : listaBotonesMenuTodos) {
-            boton.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    if (boton.getModel().isRollover()) {
-                        boton.setBackground(sRecursos.getGRANATE().brighter());
-                    } else if (textoBotonActual.equals(boton.getText())) {
-                        boton.setBackground(sRecursos.getGRANATE().brighter());
-                    } else {
-                        boton.setBackground(sRecursos.getGRANATE());
-                    }
+            boton.addChangeListener(e -> {
+                if (boton.getModel().isRollover()) {
+                    boton.setBackground(sRecursos.getGRANATE().brighter());
+                } else if (textoBotonActual.equals(boton.getText())) {
+                    boton.setBackground(sRecursos.getGRANATE().brighter());
+                } else {
+                    boton.setBackground(sRecursos.getGRANATE());
                 }
             });
         }

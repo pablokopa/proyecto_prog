@@ -1,13 +1,19 @@
-/*
 package app.view.pruebas;
 
+import app.model.basedatos.ConectarBD;
+import app.model.tareas.GestorTareas;
+import app.model.tareas.Tarea;
 import app.model.usuarios.Usuario;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuPrincipalConsolaTemporal {
     Scanner sc = new Scanner(System.in);
     Usuario usuario;
+    GestorTareas gestorTareas;
 
     String menuPrincipal = """
             (1) Crear tarea
@@ -19,11 +25,14 @@ public class MenuPrincipalConsolaTemporal {
             (7*) Desconectar usuario
             (0) Cerrar aplicación""";
 
-    public MenuPrincipalConsolaTemporal(Usuario usuario){
-        this.usuario = Usuario.getUsuarioConectado(usuario);
+    public MenuPrincipalConsolaTemporal(GestorTareas gestorTareas) {
+        this.gestorTareas = gestorTareas;
+        this.usuario = gestorTareas.getUsuario();
+
+        elegirEnMenu();
     }
 
-    public void elegirEnMenu(){
+    public void elegirEnMenu() {
 
         while (true) {
             System.out.println(menuPrincipal);
@@ -36,38 +45,51 @@ public class MenuPrincipalConsolaTemporal {
                 System.out.println("Descripción de la tarea: ");
                 String descripcionTarea = sc.nextLine();
 
-                TareaToDo nuevaTarea = new TareaToDo(nombreTarea, descripcionTarea);
-                usuario.agregarTarea(nuevaTarea);
+                Tarea tarea = new Tarea(nombreTarea, descripcionTarea);
+                String sql = "INSERT INTO tarea (nombret, descripciont, fechaCreaciont, nombreu) values (?, ?, ?, ?)";
+                try(Connection conexion = ConectarBD.conectar()) {
+                    PreparedStatement prepare = conexion.prepareStatement(sql);
+
+                    prepare.setString(1, nombreTarea);
+                    prepare.setString(2, descripcionTarea);
+                    prepare.setTimestamp(3, tarea.getFechaCreacion());
+                    prepare.setString(4, usuario.getNombreUsuario());
+
+                    prepare.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println("CATCH EN MenuPrincipalConsolaTemporal.opcion1");
+                    e.printStackTrace();
+                }
             }
 
             // completar tarea (ToDo)
             if (opcion == 2) {
-                usuario.verTareasToDo();
+//                usuario.verTareasToDo();
 
                 System.out.println("Qué tarea deseas completar? (index)");
-                int index = Integer.parseInt(sc.nextLine())-1;
-                usuario.completarTarea(usuario.getListaTareasToDo().get(index));
+                int index = Integer.parseInt(sc.nextLine()) - 1;
+//                usuario.completarTarea(usuario.getListaTareasToDo().get(index));
             }
 
             // modificar tarea
             if (opcion == 3) {
-                usuario.verTareas();
+//                usuario.verTareas();
 
                 System.out.println("Qué tipo de tarea deseas modificar? \t\n(1) Por hacer\t\n(2) Completada");
                 int tipo = Integer.parseInt(sc.nextLine());
                 System.out.println("Qué tarea deseas modificar? (index)");
-                int index = Integer.parseInt(sc.nextLine())-1;
+                int index = Integer.parseInt(sc.nextLine()) - 1;
 
                 System.out.println("Nuevo nombre de tarea: ");
                 String nombreTarea = sc.nextLine();
                 System.out.println("Nueva descripción de tarea: ");
                 String descripcionTarea = sc.nextLine();
 
-                if (tipo == 1){
-                    usuario.modificarTarea(usuario.getListaTareasToDo().get(index), nombreTarea, descripcionTarea);
+                if (tipo == 1) {
+//                    usuario.modificarTarea(usuario.getListaTareasToDo().get(index), nombreTarea, descripcionTarea);
                 }
-                if (tipo == 2){
-                    usuario.modificarTarea(usuario.getListaTareasCompletadas().get(index), nombreTarea, descripcionTarea);
+                if (tipo == 2) {
+//                    usuario.modificarTarea(usuario.getListaTareasCompletadas().get(index), nombreTarea, descripcionTarea);
                 }
 
                 System.out.println("Opción aún no disponible");
@@ -75,24 +97,27 @@ public class MenuPrincipalConsolaTemporal {
 
             // eliminar tarea
             if (opcion == 4) {
-                usuario.verTareas();
+//                usuario.verTareas();
 
                 System.out.println("Qué tipo de tarea deseas eliminar? \t\n(1) Por hacer\t\n(2) Completada");
                 int tipo = Integer.parseInt(sc.nextLine());
                 System.out.println("Qué tarea deseas eliminar? (index)");
-                int index = Integer.parseInt(sc.nextLine())-1;
+                int index = Integer.parseInt(sc.nextLine()) - 1;
 
-                if (tipo == 1){
-                    usuario.eliminarTarea(usuario.getListaTareasToDo().get(index));
+                if (tipo == 1) {
+//                    usuario.eliminarTarea(usuario.getListaTareasToDo().get(index));
                 }
-                if (tipo == 2){
-                    usuario.eliminarTarea(usuario.getListaTareasCompletadas().get(index));
+                if (tipo == 2) {
+//                    usuario.eliminarTarea(usuario.getListaTareasCompletadas().get(index));
                 }
             }
 
             // ver tareas
             if (opcion == 5) {
-                usuario.verTareas();
+                gestorTareas.getTareasDeBase();
+                for (Tarea tarea : gestorTareas.getListaTareas()){
+                    System.out.println(tarea);
+                }
             }
 
             // cambiar contraseña
@@ -111,6 +136,4 @@ public class MenuPrincipalConsolaTemporal {
             }
         }
     }
-
 }
-*/

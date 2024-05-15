@@ -2,11 +2,7 @@ package services;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Esta clase es un singleton que proporciona métodos para construir componentes de la interfaz de usuario.
@@ -184,17 +180,23 @@ public class ObjGraficos {
                 g2.clearRect(0,0,getWidth(),getHeight());
                 super.paintComponent(g);
                 g2.setColor(colorLinea);
-                g2.setStroke(new BasicStroke(1));
+                g2.setStroke(new BasicStroke(3));
                 switch (tipo){
                     case "minimizar":
-                        g2.drawLine(5, getHeight()/2+3, getWidth()-5, getHeight()/2+3);
+                        g2.drawLine(10, getHeight()/2+3, getWidth()-10, getHeight()/2+3);
                         break;
                     case "maximizar":
-                        g2.drawRect(5,5, getWidth()-10, getHeight()-10);
+                        g2.drawLine(11, 9, 11, 6);
+                        g2.drawLine(11, 6, getWidth()-9, 6);
+                        g2.drawLine(getWidth()-8, 6, getWidth()-8, getHeight()-11);
+                        g2.drawLine(getWidth()-9, getHeight()-11, getWidth()-14, getHeight()-11);
+                        g2.drawRect(6,12, getWidth()-20, getHeight()-18);
                         break;
                     case "cerrar":
-                        g2.drawLine(6, 6,  getWidth()-6, getHeight()-6);
-                        g2.drawLine(getWidth()-6, 6, 6, getHeight()-6);
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.drawLine(8, 8,  getWidth()-6, getHeight()-6);
+                        g2.drawLine(getWidth()-6, 8, 8, getHeight()-6);
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
                         break;
                 }
                 g2.dispose();
@@ -202,27 +204,25 @@ public class ObjGraficos {
         };
         boton.setPreferredSize(new Dimension(40, 40));
         boton.setBackground(colorFondo);
+
         boton.setCursor(Recursos.getService().getCursorMano());
         boton.setBorder(null);
 
-        boton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switch (tipo){
-                    case "minimizar":
-                        frame.setState(JFrame.ICONIFIED);
-                        break;
-                    case "maximizar":
-                        if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-                            frame.setExtendedState(JFrame.NORMAL);
-                        } else {
-                            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                        }
-                        break;
-                    case "cerrar":
-                        frame.dispose();
-                        break;
-                }
+        boton.addActionListener(e -> {
+            switch (tipo){
+                case "minimizar":
+                    frame.setState(JFrame.ICONIFIED);
+                    break;
+                case "maximizar":
+                    if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+                        frame.setExtendedState(JFrame.NORMAL);
+                    } else {
+                        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    }
+                    break;
+                case "cerrar":
+                    frame.dispose();
+                    break;
             }
         });
 
@@ -346,12 +346,10 @@ public class ObjGraficos {
 
     /**
      * Método para construir un JPasswordField.
-     * @param texto El texto inicial del campo de contraseña.
      * @param x La posición x del campo de contraseña.
      * @param y La posición y del campo de contraseña.
      * @param ancho El ancho del campo de contraseña.
      * @param alto El alto del campo de contraseña.
-     * @param fuente La fuente del texto del campo de contraseña.
      * @param colorFondo El color de fondo del campo de contraseña.
      * @param colorFuente El color del texto del campo de contraseña.
      * @param colorCaret El color del caret del campo de contraseña.
@@ -360,13 +358,12 @@ public class ObjGraficos {
      * @return El campo de contraseña construido.
      */
     public JPasswordField construirJPasswordField(
-            String texto, int x, int y, int ancho, int alto, Font fuente, Color colorFondo,
+            int x, int y, int ancho, int alto, Color colorFondo,
             Color colorFuente, Color colorCaret, Border borde, String direccion
     ) {
         passwordField = new JPasswordField();
         passwordField.setLocation(x, y);
         passwordField.setSize(ancho, alto);
-        passwordField.setText(texto);
         passwordField.setForeground(colorFuente);
         passwordField.setBackground(colorFondo);
         passwordField.setCaretColor(colorCaret);
@@ -518,7 +515,7 @@ public class ObjGraficos {
             String cadena, int x, int y, int ancho, int alto, Font fuente,
             Color colorFondo, Color colorFuente, String direccion
     ) {
-        comboBox = new JComboBox<String>();
+        comboBox = new JComboBox<>();
         comboBox.setLocation(x, y);
         comboBox.setSize(ancho, alto);
         for (String item : cadena.split("_")) {
