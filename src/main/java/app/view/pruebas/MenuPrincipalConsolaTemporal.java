@@ -1,7 +1,12 @@
 package app.view.pruebas;
 
+import app.model.basedatos.ConectarBD;
+import app.model.tareas.Tarea;
 import app.model.usuarios.Usuario;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuPrincipalConsolaTemporal {
@@ -19,7 +24,8 @@ public class MenuPrincipalConsolaTemporal {
             (0) Cerrar aplicación""";
 
     public MenuPrincipalConsolaTemporal(Usuario usuario) {
-//        this.usuario = Usuario.getUsuarioConectado(usuario);
+        this.usuario = usuario;
+        elegirEnMenu();
     }
 
     public void elegirEnMenu() {
@@ -35,8 +41,21 @@ public class MenuPrincipalConsolaTemporal {
                 System.out.println("Descripción de la tarea: ");
                 String descripcionTarea = sc.nextLine();
 
-//                TareaToDo nuevaTarea = new TareaToDo(nombreTarea, descripcionTarea);
-//                usuario.agregarTarea(nuevaTarea);
+                Tarea tarea = new Tarea(nombreTarea, descripcionTarea);
+                String sql = "INSERT INTO tarea (nombret, descripciont, fechaCreaciont, nombreu) values (?, ?, ?, ?)";
+                try(Connection conexion = ConectarBD.conectar()) {
+                    PreparedStatement prepare = conexion.prepareStatement(sql);
+
+                    prepare.setString(1, nombreTarea);
+                    prepare.setString(2, descripcionTarea);
+                    prepare.setTimestamp(3, tarea.getFechaCreacion());
+                    prepare.setString(4, usuario.getNombreUsuario());
+
+                    prepare.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println("CATCH EN MenuPrincipalConsolaTemporal.opcion1");
+                    e.printStackTrace();
+                }
             }
 
             // completar tarea (ToDo)

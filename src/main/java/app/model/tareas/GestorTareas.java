@@ -13,7 +13,7 @@ public class GestorTareas {
     private Usuario usuario;
 
     public GestorTareas(Usuario usuario) {
-//        this.usuario = usuario.getUsuario();
+        this.usuario = usuario.getUsuario();
     }
 
     private void getTareasDeBase(){
@@ -23,7 +23,7 @@ public class GestorTareas {
 
         try (Connection conexion = ConectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
-            prepare.setString(1, usuario.nombreUsuario());
+            prepare.setString(1, Usuario.getUsuario().getNombreUsuario());
 
         } catch (SQLException e) {
             System.out.println("eo");

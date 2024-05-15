@@ -12,14 +12,28 @@ import java.util.Objects;
  * Clase Singleton que representa un usuario conectado.
  * Actúa como un gestor de tareas del propio usuario.
  */
-public record Usuario(String nombreUsuario) {
-    private static Usuario usuario = null;
+public class Usuario {
+    private static Usuario usuario;
+    private String nombreUsuario;
 
+    private Usuario(String nombreUsuario){
+        this.nombreUsuario = nombreUsuario;
+    }
 
-    public Usuario getUsuarioConectado() {
+    public static Usuario setUsuarioConectado(String nombreUsuario){
+        if (usuario == null){
+            usuario = new Usuario(nombreUsuario);
+        }
         return usuario;
     }
 
+    public static Usuario getUsuario(){
+        return usuario;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
 
     public boolean agregarTarea(Tarea tarea) {
         String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaFinalizacionT, nombreU) VALUES (?, ?, ?, ?)";
@@ -29,7 +43,7 @@ public record Usuario(String nombreUsuario) {
 //            prepare.setString(1, tarea.getNombreTarea());
 //            prepare.setString(2, tarea.getDescripcionTarea());
 //            prepare.setTimestamp(3, tarea.getFechaCreacion());
-            prepare.setString(4, this.nombreUsuario());
+//            prepare.setString(4, this.nombreUsuario());
 
             prepare.executeUpdate();
         } catch (SQLException e) {
@@ -39,6 +53,7 @@ public record Usuario(String nombreUsuario) {
         }
         return true;
     }
+
 
     @Override
     public boolean equals(Object obj) {

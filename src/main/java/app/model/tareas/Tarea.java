@@ -28,6 +28,10 @@ public class Tarea {
         this.completada = false;
     }
 
+    public Timestamp getFechaCreacion() {
+        return fechaCreacion;
+    }
+
     /**
      * Método toString
      * @return nombre de la tarea y descripción
