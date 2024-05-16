@@ -15,7 +15,7 @@ public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE, BLANCO, GRIS_CLARO, GRANATE_MID_LIGHT;
     private Font MontserratPlain, MontserratBold, MontserratItalic;
-    private Cursor cursorMano;
+    private Cursor cursorMano, cursorNormal, cursorEscribir, cursorRedimensionar;
     private Border bordeGranate, borderBlanco;
     private ImageIcon imagenLogo, imagenLogo2, imagenUsuario, imagenPassword, imagenPlay, imagenPause, imagenStop;
 
@@ -84,6 +84,7 @@ public class Recursos {
      */
     private void crearCursores() {
         cursorMano = new Cursor(Cursor.HAND_CURSOR);
+        cursorNormal = new Cursor(Cursor.DEFAULT_CURSOR);
     }
 
     /**
@@ -168,6 +169,13 @@ public class Recursos {
      * @return El cursor de tipo mano.
      */
     public Cursor getCursorMano() { return cursorMano; }
+
+    /**
+     * Método para obtener el cursor normal.
+     * @return El cursor normal.
+     */
+    public Cursor getCursorNormal() { return cursorNormal; }
+
 
     /**
      * Método para obtener el borde de color GRANATE.

@@ -61,8 +61,11 @@ public class ObjGraficos {
      * @return El panel construido.
      */
     public static JPanel construirPanelesPrincipales(String tipo, Color colorFondo){
+        Recursos sRecursos = Recursos.getService();
+
         JPanel panel = new JPanel();
         panel.setBackground(colorFondo);
+        panel.setCursor(sRecursos.getCursorNormal());
         switch (tipo){
             case "menu":
                 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -150,7 +153,7 @@ public class ObjGraficos {
     ) {
         JButton boton = new JButton(texto);
         boton.setPreferredSize(new Dimension(ancho, alto));
-        boton.setMaximumSize(new Dimension(ancho, alto*2));
+        boton.setMaximumSize(new Dimension(ancho, alto));
         boton.setFocusable(false);
         boton.setCursor(Recursos.getService().getCursorMano());
         boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
@@ -194,8 +197,8 @@ public class ObjGraficos {
                         break;
                     case "cerrar":
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                        g2.drawLine(8, 8,  getWidth()-6, getHeight()-6);
-                        g2.drawLine(getWidth()-6, 8, 8, getHeight()-6);
+                        g2.drawLine(8, 8,  getWidth()-8, getHeight()-8);
+                        g2.drawLine(getWidth()-8, 8, 8, getHeight()-8);
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
                         break;
                 }
