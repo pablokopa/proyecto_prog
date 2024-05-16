@@ -1,5 +1,4 @@
 app
-app.controller
 app.model.basedatos
 app.model.tareas
 app.model.usuarios
