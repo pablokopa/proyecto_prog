@@ -20,6 +20,7 @@ public class VistaMatrix extends JPanel{
     private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
 
     private JLabel labelArribaI, labelArribaD, labelAbajoI, labelAbajoD;
+    private JLabel labelAddArribaI, labelAddArribaD, labelAddAbajoI, labelAddAbajoD;
     private JScrollPane scrollArribaI, scrollArribaD, scrollAbajoI, scrollAbajoD;
 
     public VistaMatrix(){
@@ -45,7 +46,7 @@ public class VistaMatrix extends JPanel{
         // Configurar layout
         panelArribaI.setLayout(new BorderLayout());
         panelTituloArribaI.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panelTareasArribaI.setLayout(new GridLayout(100,3));
+        panelTareasArribaI.setLayout(new GridLayout(5,5));
 
         // Crear y configurar scroll
         scrollArribaI = new JScrollPane(panelTareasArribaI);
@@ -118,11 +119,14 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
 /* AÑADIR ELEMENTOS */
-        for (int i=0; i<100; i++){
+        for (int i=0; i<35; i++){
             JPanel panel = new JPanel();
-            JLabel label = new JLabel("Prueba: "+i);
-            panel.setBorder(new MatteBorder(1, 1, 0, 1, Color.BLACK));
-            panel.setBackground(new Color(175,255,168));
+            panel.setLayout(new GridLayout(1,2));
+            JLabel label = new JLabel("Tarea: "+i);
+
+            label.setFont(sRecursos.getMonserratBold(15));
+            panel.setBorder(new MatteBorder(1, 1, 1, 1, colorGrisPrincipal));
+            panel.setBackground(new Color(0,0,0,0));
 
             panel.add(label);
             panelTareasArribaI.add(panel);
