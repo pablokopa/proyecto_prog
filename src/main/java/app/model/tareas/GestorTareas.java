@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class GestorTareas {
-    private ArrayList<Tarea> listaTareas;
-    private Usuario usuario;
+    private final ArrayList<Tarea> listaTareas;
+    private final Usuario usuario;
 
     public GestorTareas() {
-        this.usuario = Usuario.getUsuario();
+        this.usuario = Usuario.getUsuarioConectado();
         this.listaTareas = new ArrayList<>();
     }
 
@@ -19,16 +19,19 @@ public class GestorTareas {
         return usuario;
     }
 
+    /**
+     * Obtiene las tareas del usuario registrado de la base de datos y las añade a una lista para reducir el número de consultas.
+     */
     public void getTareasDeBase(){
         String sql = "select * from tarea where nombreu = ?";
 
         try (Connection conexion = ConectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
-            prepare.setString(1, usuario.getNombreUsuario());
+            prepare.setString(1, usuario.getNombreU());
 
             prepare.executeQuery();
             ResultSet resultado = prepare.getResultSet();
-            int i = 0;
+            /* Obtiene los resultados y añade las tareas a la lista */
             while (resultado.next()){
                 String nombreT = resultado.getString("nombret");
                 String descripcionT = resultado.getString("descripciont");
@@ -36,11 +39,8 @@ public class GestorTareas {
                 Timestamp fechaFinalizacionT = resultado.getTimestamp("fechafinalizaciont");
                 Boolean completadaT = resultado.getBoolean("completadat");
 
-                Tarea tarea = new Tarea(nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT);
+                Tarea tarea = new Tarea(nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU());
                 this.listaTareas.add(tarea);
-
-                i++;
-                System.out.println(i + "tarea añadida a la lista");
             }
         } catch (SQLException e) {
             System.out.println("CATCH EN GestorTareas.getTareasDeBase()");
@@ -48,9 +48,31 @@ public class GestorTareas {
         }
     }
 
-    public ArrayList<Tarea> getListaTareas(){
-//        getTareasDeBase();
-        return this.listaTareas;
+    /**
+     * Añade una tarea a la base de datos y a la lista de tareas.
+     * @param tarea tarea a añadir
+     * @return true si se ha añadido correctamente
+     */
+    public boolean agregarTarea(Tarea tarea) {
+        String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";
+
+        try (Connection conexion = ConectarBD.conectar()) {
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+            prepare.setString(1, tarea.getNombreT());
+            prepare.setString(2, tarea.getDescripcionT());
+            prepare.setTimestamp(3, tarea.getFechaCreacionT());
+            prepare.setString(4, usuario.getNombreU());
+
+            prepare.executeUpdate();
+            this.listaTareas.add(tarea);
+        } catch (SQLException e) {
+            System.out.println("CATCH EN agregarTarea()");
+            return false;
+        }
+        return true;
     }
 
+    public ArrayList<Tarea> getListaTareas(){
+        return this.listaTareas;
+    }
 }
