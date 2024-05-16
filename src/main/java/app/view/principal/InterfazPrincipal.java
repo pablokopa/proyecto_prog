@@ -44,6 +44,7 @@ public class InterfazPrincipal extends JFrame {
         moverVentana();
         botonesActionListener();
         botonesChangeListener();
+        cursorBorde();
 
         this.setVisible(true);
     }
@@ -211,6 +212,34 @@ public class InterfazPrincipal extends JFrame {
                 xNuevo = e.getXOnScreen();
                 yNuevo = e.getYOnScreen();
                 setLocation(xNuevo - xRaton, yNuevo - yRaton);
+            }
+        });
+    }
+
+
+    private void cursorBorde () {
+        this.addMouseMotionListener(new MouseMotionAdapter() {
+//            @Override
+//            public void mouseDragged(MouseEvent e) {
+//                super.mouseDragged(e);
+//            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+//                super.mouseMoved(e);
+                if (e.getX() == getWidth()) {
+                    System.out.println("borde derecho");
+                }
+                if (e.getX() == 0){
+                    System.out.println("borde izquierdo");
+//                    panelMenu.setCursor(new Cursor(Cursor.W_RESIZE_CURSOR));
+                }
+                if (e.getY() == getHeight()) {
+                    System.out.println("borde inferior");
+                }
+                if (e.getY() == 0) {
+                    System.out.println("borde superior");
+                }
             }
         });
     }
