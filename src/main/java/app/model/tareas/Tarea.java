@@ -6,38 +6,42 @@ import java.sql.Timestamp;
  * Clase que representa una tarea
  */
 public class Tarea {
+    private String nombreT;
+    private String descripcionT;
+    private Timestamp fechaCreacionT;
+    private Timestamp fechaFinalizacionT;
+    private boolean completadaT;
+    private String nombreU;
 
-    // Atributos
-    private String nombreTarea;
-    private String descripcionTarea;
-    private Timestamp fechaCreacion;
-    private Timestamp fechaFinalizacion;
-    private boolean completada;
+    public Tarea(String nombreT, String descripcionT, String nombreU){
+        this.nombreT = nombreT;
+        this.descripcionT = descripcionT;
+        this.fechaCreacionT = new Timestamp(System.currentTimeMillis());
+        this.nombreU = nombreU;
 
-    /**
-     * Constructor
-     * @param nombreTarea nombre de la tarea
-     * @param descripcionTarea descripción de la tarea
-     */
-    public Tarea(String nombreTarea, String descripcionTarea){
-        this.nombreTarea = nombreTarea;
-        this.descripcionTarea = descripcionTarea;
-        this.fechaCreacion = new Timestamp(System.currentTimeMillis());
-
-        this.fechaFinalizacion = null;
-        this.completada = false;
+        this.fechaFinalizacionT = null;
+        this.completadaT = false;
     }
 
-    public Tarea(String nombreTarea, String descripcionTarea, Timestamp fechaCreacion, Timestamp fechaFinalizacion, Boolean completada){
-        this.nombreTarea = nombreTarea;
-        this.descripcionTarea = descripcionTarea;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaFinalizacion = fechaFinalizacion;
-        this.completada = completada;
+    public Tarea(String nombreT, String descripcionT, Timestamp fechaCreacionT, Timestamp fechaFinalizacionT, Boolean completadaT, String nombreU){
+        this.nombreT = nombreT;
+        this.descripcionT = descripcionT;
+        this.fechaCreacionT = fechaCreacionT;
+        this.fechaFinalizacionT = fechaFinalizacionT;
+        this.completadaT = completadaT;
+        this.nombreU = nombreU;
     }
 
-    public Timestamp getFechaCreacion() {
-        return fechaCreacion;
+    public String getNombreT() {
+        return nombreT;
+    }
+
+    public String getDescripcionT() {
+        return descripcionT;
+    }
+
+    public Timestamp getFechaCreacionT() {
+        return fechaCreacionT;
     }
 
     /**
@@ -46,6 +50,7 @@ public class Tarea {
      */
     @Override
     public String toString() {
-        return this.nombreTarea + ": " + this.descripcionTarea + " - " + this.fechaCreacion;      // añade id tarea temporalmente para pruebas
+//        return this.nombreT + ": " + this.descripcionT + " - " + this.fechaCreacionT;
+        return "tarea: "+ nombreT +" - "+ descripcionT +" - "+ fechaCreacionT +" - "+ fechaFinalizacionT +" - "+ completadaT+" - "+ nombreU;
     }
 }
