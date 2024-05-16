@@ -1,7 +1,6 @@
 package app.view.login;
 
 import app.model.tareas.GestorTareas;
-import app.model.usuarios.Usuario;
 import app.view.pruebas.MenuPrincipalConsolaTemporal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
@@ -57,6 +56,8 @@ public class InterfazLogin extends JFrame{
         setUndecorated(true);
         setIconImage(sRecursos.getImagenLogo2().getImage());
         setVisible(true);
+
+        this.actualizarContadorUsuarios();
     }
 
     /**
@@ -150,7 +151,6 @@ public class InterfazLogin extends JFrame{
 
             if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
                 dispose();
-                Usuario.setUsuarioConectado(nombreUsuario);
                 new MenuPrincipalConsolaTemporal(new GestorTareas());
             }else{
                 textoLogin.setText("Inicio de sesión fallido..");
@@ -184,8 +184,12 @@ public class InterfazLogin extends JFrame{
         panelDerecha.add(textoComprobacion);
 
         /* Contador usuarios */
-        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
+        textoNumeroUsuarios = sObjGraficos.construirJLabel("", -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
         panelDerecha.add(textoNumeroUsuarios);
+    }
+
+    public void actualizarContadorUsuarios(){
+        textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
     }
 
     public static void main(String[] args) {
