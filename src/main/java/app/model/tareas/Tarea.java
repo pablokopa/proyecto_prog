@@ -48,6 +48,10 @@ public class Tarea {
         return completadaT;
     }
 
+    public void setCompletadaT(boolean completadaT) {
+        this.completadaT = completadaT;
+    }
+
     /**
      * Método toString
      * @return nombre de la tarea y descripción

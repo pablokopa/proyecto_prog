@@ -112,13 +112,13 @@ public class Recursos {
         imagenPause = new ImageIcon("src/main/resources/images/pausebutton.png");
         imagenStop = new ImageIcon("src/main/resources/images/stopbutton.png");
 
-//        Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH);
-//        imagenCheck = new ImageIcon(imageC);
-        imagenCheck = new ImageIcon("src/main/resources/images/checkResized.png");      // 64 x 64
+        Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(48,48, Image.SCALE_SMOOTH);
+        imagenCheck = new ImageIcon(imageC);
+//        imagenCheck = new ImageIcon("src/main/resources/images/checkResized.png");      // 64 x 64
 
-//        Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-//        imagenCheckSinCheck = new ImageIcon(imageCsC);
-        imagenCheckSinCheck = new ImageIcon("src/main/resources/images/checkSinCheckResized.png");      // 64 x 64
+        Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+        imagenCheckSinCheck = new ImageIcon(imageCsC);
+//        imagenCheckSinCheck = new ImageIcon("src/main/resources/images/checkSinCheckResized.png");      // 64 x 64
     }
 
     /**

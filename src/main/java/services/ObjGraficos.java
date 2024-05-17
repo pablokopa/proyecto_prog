@@ -5,6 +5,8 @@ import app.model.tareas.Tarea;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Esta clase es un singleton que proporciona métodos para construir componentes de la interfaz de usuario.
@@ -13,6 +15,8 @@ import java.awt.*;
 public class ObjGraficos {
     private ObjGraficos(){} // Constructor privado para evitar instanciación
     static private ObjGraficos servicio; // Instancia única de la clase
+
+    private static final Recursos sRecursos = Recursos.getService();
 
     /**
      * Método para obtener la instancia única de la clase.
@@ -408,8 +412,6 @@ public class ObjGraficos {
      * @return El panel construido.
      */
     public static JPanel construirPanelesPrincipales(String tipo, Color colorFondo){
-        Recursos sRecursos = Recursos.getService();
-
         JPanel panel = new JPanel();
         panel.setBackground(colorFondo);
         panel.setCursor(sRecursos.getCursorNormal());
@@ -426,38 +428,6 @@ public class ObjGraficos {
                 panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
                 break;
         }
-        return panel;
-    }
-
-    /**
-     * Construye los paneles de la interfaz de usuario.
-     * @param tarea La tarea a añadir al panel.
-     * @return El panel construido.
-     */
-    public static JPanel construirPanelTarea (
-        Tarea tarea
-    ) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(Short.MAX_VALUE, 75));
-        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, 75));
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-
-        JLabel labelImagen = new JLabel();
-        if (tarea.getCompletadaT()){
-            labelImagen.setIcon(Recursos.getService().getImagenCheck());
-        } else {
-            labelImagen.setIcon(Recursos.getService().getImagenCheckSinCheck());
-        }
-
-//        JPanel panelTarea = new JPanel();
-
-        JLabel labelTitulo = new JLabel(tarea.getNombreT());
-        labelTitulo.setFont(Recursos.getService().getMonserratBold(16));
-
-        panel.add(labelImagen, BorderLayout.WEST);
-        panel.add(labelTitulo, BorderLayout.CENTER);
-
         return panel;
     }
 
@@ -533,7 +503,7 @@ public class ObjGraficos {
         boton.setPreferredSize(new Dimension(40, 40));
         boton.setBackground(colorFondo);
 
-        boton.setCursor(Recursos.getService().getCursorMano());
+        boton.setCursor(sRecursos.getCursorMano());
         boton.setBorder(null);
 
         boton.addActionListener(e -> {
@@ -576,8 +546,8 @@ public class ObjGraficos {
         boton.setPreferredSize(new Dimension(ancho, alto));
         boton.setMaximumSize(new Dimension(ancho, alto));
         boton.setFocusable(false);
-        boton.setCursor(Recursos.getService().getCursorMano());
-        boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
+        boton.setCursor(sRecursos.getCursorMano());
+        boton.setFont(sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON));
         boton.setBackground(colorFondo);
         boton.setForeground(colorFuente);
         boton.setBorder(null);
