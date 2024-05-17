@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
- * Clase que gestiona los usuarios
+ * Clase que gestiona los usuarios. Hace las operaciones relacionadas con la base de datos. (Registro, conexión, comprobación de datos, etc)
  */
 public class GestorUsuarios {
 
@@ -48,13 +48,14 @@ public class GestorUsuarios {
     }
 
     /**
-     * Método para conectar un usuario a la base de datos
+     * Comprueba las credenciales y conecta al usuario si son correctas.
      * @param nombreUsuario obtenido desde la interfaz de usuario
      * @param passwordUsuario obtenido desde la interfaz de usuario
      * @param textoComprobacion para mostrar mensajes de error
      * @return true si el usuario fue conectado correctamente
      */
     public boolean conectarUsuario (String nombreUsuario, String passwordUsuario, JLabel textoComprobacion){
+        String passwordUsuarioHashed;
 
         try (Connection conexion = ConectarBD.conectar()) {
             /* Consulta SQL para obtener la contraseña del usuario */
@@ -64,9 +65,9 @@ public class GestorUsuarios {
 
             ResultSet resultado = prepare.executeQuery();
             if (resultado.next()){
-                String passwordU = resultado.getString("passwordu");
+                passwordUsuarioHashed = resultado.getString("passwordu");
                 /* Comprueba si la contraseña del usuario es correcta */
-                if (!BCrypt.checkpw(passwordUsuario, passwordU)){
+                if (!BCrypt.checkpw(passwordUsuario, passwordUsuarioHashed)){
                     textoComprobacion.setText("Contraseña incorrecta");
                     return false;
                 }
@@ -79,7 +80,7 @@ public class GestorUsuarios {
             return false;
         }
 
-
+        Usuario.setUsuarioConectado(nombreUsuario, passwordUsuarioHashed);
         return true;
     }
 
@@ -127,11 +128,13 @@ public class GestorUsuarios {
      */
     public boolean comprobarPasswordUsuario(String passwordUsuario, JLabel textoComprobacion){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
+
         /* Comprueba si la contraseña tiene al menos 4 carácteres */
         if (passwordUsuario.length()<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
             return false;
         }
+
         for (int i=0; i<passwordUsuario.length(); i++) {
             /* Comprueba si la contraseña tiene espacios en blanco o carácteres no permitidos */
             if (passwordUsuario.charAt(i) == ' ') {

@@ -1,13 +1,9 @@
 package app.view.pruebas;
 
-import app.model.basedatos.ConectarBD;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import app.model.usuarios.Usuario;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuPrincipalConsolaTemporal {
@@ -17,9 +13,9 @@ public class MenuPrincipalConsolaTemporal {
 
     String menuPrincipal = """
             (1) Crear tarea
-            (2) Completar tarea
-            (3) Modificar tarea
-            (4) Eliminar tarea
+            (2*) Completar tarea
+            (3*) Modificar tarea
+            (4*) Eliminar tarea
             (5) Ver tareas
             (6*) Cambiar contraseña
             (7*) Desconectar usuario
@@ -45,21 +41,7 @@ public class MenuPrincipalConsolaTemporal {
                 System.out.println("Descripción de la tarea: ");
                 String descripcionTarea = sc.nextLine();
 
-                Tarea tarea = new Tarea(nombreTarea, descripcionTarea);
-                String sql = "INSERT INTO tarea (nombret, descripciont, fechaCreaciont, nombreu) values (?, ?, ?, ?)";
-                try(Connection conexion = ConectarBD.conectar()) {
-                    PreparedStatement prepare = conexion.prepareStatement(sql);
-
-                    prepare.setString(1, nombreTarea);
-                    prepare.setString(2, descripcionTarea);
-                    prepare.setTimestamp(3, tarea.getFechaCreacion());
-                    prepare.setString(4, usuario.getNombreUsuario());
-
-                    prepare.executeUpdate();
-                } catch (SQLException e) {
-                    System.out.println("CATCH EN MenuPrincipalConsolaTemporal.opcion1");
-                    e.printStackTrace();
-                }
+                gestorTareas.crearTarea(new Tarea(nombreTarea, descripcionTarea, usuario.getNombreU()));
             }
 
             // completar tarea (ToDo)
@@ -114,9 +96,11 @@ public class MenuPrincipalConsolaTemporal {
 
             // ver tareas
             if (opcion == 5) {
+                int i=0;
                 gestorTareas.getTareasDeBase();
                 for (Tarea tarea : gestorTareas.getListaTareas()){
-                    System.out.println(tarea);
+                    i++;
+                    System.out.println(i+": "+tarea);
                 }
             }
 
