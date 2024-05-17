@@ -1,7 +1,6 @@
 package app.model.tareas;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 /**
  * Clase que representa una tarea

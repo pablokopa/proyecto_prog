@@ -1,7 +1,6 @@
 package app;
 
 import app.model.tareas.GestorTareas;
-import app.model.usuarios.Usuario;
 import app.view.login.InterfazLogin;
 import app.model.usuarios.GestorUsuarios;
 import app.view.principal.InterfazPrincipal;

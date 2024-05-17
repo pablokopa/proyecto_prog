@@ -22,7 +22,6 @@ public class Usuario {
         } else {
             System.out.println("Ya hay un usuario conectado");
         }
-//        return usuario;
     }
 
     public static Usuario getUsuarioConectado(){

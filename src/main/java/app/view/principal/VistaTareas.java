@@ -3,6 +3,7 @@ package app.view.principal;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import app.model.usuarios.Usuario;
+import app.view.pruebas.PanelTareaEspecifica;
 import services.Recursos;
 
 import javax.swing.*;
@@ -20,7 +21,6 @@ public class VistaTareas extends JPanel {
 
     private JPanel panelTareasToDo, panelTareasCompletadas, panelInformacionTarea, panelListaTareasToDo, panelListaTareasCompletadas;
     private JLabel labelTituloListaTareasToDo, labelTituloInformacionTarea, labelCrearNuevaTarea, labelTituloListaTareasCompletadas;
-//    private JLabel
 
     public VistaTareas(GestorTareas gestorTareas) {
         this.gestorTareas = gestorTareas;
@@ -78,7 +78,6 @@ public class VistaTareas extends JPanel {
         panelListaTareasCompletadas.setLayout(new BoxLayout(panelListaTareasCompletadas, BoxLayout.Y_AXIS));
         panelListaTareasCompletadas.setBackground(Color.yellow);
         panelTareasCompletadas.add(panelListaTareasCompletadas, BorderLayout.CENTER);
-
     }
 
     private void crearLabels() {
@@ -108,9 +107,7 @@ public class VistaTareas extends JPanel {
         labelTituloInformacionTarea.setHorizontalAlignment(SwingConstants.CENTER);
         labelTituloInformacionTarea.setBackground(Color.lightGray);
         labelTituloInformacionTarea.setOpaque(true);
-//        labelTituloInformacionTarea.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));
         panelInformacionTarea.add(labelTituloInformacionTarea, BorderLayout.NORTH);
-
     }
 
     private void addTareas() {
@@ -118,12 +115,34 @@ public class VistaTareas extends JPanel {
         ArrayList<Tarea> listaTareas = gestorTareas.getListaTareas();
 
         for (Tarea tarea : listaTareas) {
-            JPanel panelTarea = construirPanelTarea(tarea);
+            PanelTareaEspecifica panelTarea = new PanelTareaEspecifica(tarea, gestorTareas);
 
-            panelTarea.getComponent(1).addMouseListener(new MouseAdapter() {
+            /* Completa la tarea al hacer click en el check y lo cambia en consecuencia */
+            panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (gestorTareas.completarTarea(tarea)){
+                        if (tarea.getCompletadaT()){
+                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
+                            panelListaTareasCompletadas.add(panelTarea);
+                            panelListaTareasToDo.remove(panelTarea);
+                        } else {
+                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
+                            panelListaTareasToDo.add(panelTarea);
+                            panelListaTareasCompletadas.remove(panelTarea);
+
+                        }
+                    }
+                    repaint();
+                    revalidate();
+                }
+            });
+
+            panelTarea.getPanelTarea().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     System.out.println("Click en " + tarea.getNombreT());
+                    System.out.println(tarea);
                 }
             });
 
@@ -133,62 +152,5 @@ public class VistaTareas extends JPanel {
                 panelListaTareasToDo.add(panelTarea);
             }
         }
-    }
-
-
-    /**
-     * Construye los paneles de la interfaz de usuario.
-     * @param tarea La tarea a añadir al panel.
-     * @return El panel construido.
-     */
-    public JPanel construirPanelTarea (Tarea tarea) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(Short.MAX_VALUE, 75));
-        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, 75));
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-
-        JLabel labelImagen = crearLabelImagenDentro(tarea);
-        JPanel panelTarea = crearPanelTareaDentro(tarea);
-
-        panel.add(labelImagen, BorderLayout.WEST);
-        panel.add(panelTarea, BorderLayout.CENTER);
-
-        return panel;
-    }
-
-    private JLabel crearLabelImagenDentro(Tarea tarea) {
-        JLabel labelImagen = new JLabel();
-        if (tarea.getCompletadaT()){
-            labelImagen.setIcon(sRecursos.getImagenCheck());
-        } else {
-            labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
-        }
-
-        labelImagen.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (gestorTareas.completarTarea(tarea)){
-                    if (tarea.getCompletadaT()){
-                        labelImagen.setIcon(sRecursos.getImagenCheck());
-                    } else {
-                        labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
-                    }
-                }
-            }
-        });
-        return labelImagen;
-    }
-
-    private JPanel crearPanelTareaDentro(Tarea tarea){
-        JPanel panelTarea = new JPanel();
-        panelTarea.setLayout(new BorderLayout());
-
-        JLabel labelTitulo = new JLabel();
-        labelTitulo.setFont(sRecursos.getMonserratBold(16));
-        labelTitulo.setText(tarea.getNombreT());
-
-        panelTarea.add(labelTitulo, BorderLayout.CENTER);
-        return panelTarea;
     }
 }
