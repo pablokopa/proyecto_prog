@@ -33,13 +33,14 @@ public class GestorTareas {
             ResultSet resultado = prepare.getResultSet();
             /* Obtiene los resultados y añade las tareas a la lista */
             while (resultado.next()){
+                int idT = resultado.getInt("idt");
                 String nombreT = resultado.getString("nombret");
                 String descripcionT = resultado.getString("descripciont");
                 Timestamp fechaCreacionT = resultado.getTimestamp("fechacreaciont");
                 Timestamp fechaFinalizacionT = resultado.getTimestamp("fechafinalizaciont");
                 Boolean completadaT = resultado.getBoolean("completadat");
 
-                Tarea tarea = new Tarea(nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU());
+                Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU());
                 this.listaTareas.add(tarea);
             }
         } catch (SQLException e) {
@@ -53,7 +54,7 @@ public class GestorTareas {
      * @param tarea tarea a añadir
      * @return true si se ha añadido correctamente
      */
-    public boolean crearTarea(Tarea tarea) {
+    public void crearTarea(Tarea tarea) {
         String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";
 
         try (Connection conexion = ConectarBD.conectar()) {
@@ -67,6 +68,31 @@ public class GestorTareas {
             this.listaTareas.add(tarea);
         } catch (SQLException e) {
             System.out.println("CATCH EN agregarTarea()");
+        }
+    }
+
+    public boolean completarTarea(Tarea tarea){
+        String sql = "UPDATE tarea SET completadaT = ?, fechaFinalizacionT = ? WHERE idT = ?";
+
+        try (Connection conexion = ConectarBD.conectar()){
+
+            if (tarea.getCompletadaT()){
+                tarea.setCompletadaT(false);
+                tarea.setFechaFinalizacionT(null);
+            } else {
+                tarea.setCompletadaT(true);
+                tarea.setFechaFinalizacionT(new Timestamp(System.currentTimeMillis()));
+            }
+
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+            prepare.setBoolean(1, tarea.getCompletadaT());
+            prepare.setTimestamp(2, tarea.getFechaFinalizacionT());
+            prepare.setInt(3, tarea.getIdT());
+
+            prepare.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("CATCH EN completarTarea()");
+            e.printStackTrace();
             return false;
         }
         return true;

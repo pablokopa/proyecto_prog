@@ -168,12 +168,12 @@ public class VistaTareas extends JPanel {
         labelImagen.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (tarea.getCompletadaT()){
-                    tarea.setCompletadaT(false);
-                    labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
-                } else {
-                    tarea.setCompletadaT(true);
-                    labelImagen.setIcon(sRecursos.getImagenCheck());
+                if (gestorTareas.completarTarea(tarea)){
+                    if (tarea.getCompletadaT()){
+                        labelImagen.setIcon(sRecursos.getImagenCheck());
+                    } else {
+                        labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
+                    }
                 }
             }
         });
