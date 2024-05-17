@@ -17,7 +17,10 @@ public class Recursos {
     private Font MontserratPlain, MontserratBold, MontserratItalic;
     private Cursor cursorMano, cursorNormal, cursorEscribir, cursorRedimensionar;
     private Border bordeGranate, borderBlanco;
-    private ImageIcon imagenLogo, imagenLogo2, imagenUsuario, imagenPassword, imagenPlay, imagenPause, imagenStop;
+    private ImageIcon imagenLogo, imagenLogo2;
+    private ImageIcon imagenUsuario, imagenPassword;
+    private ImageIcon imagenPlay, imagenPause, imagenStop;
+    private ImageIcon imagenCheck, imagenCheckSinCheck;
 
     /**
      * Constante de tamaño de letra estándar para los botones.
@@ -108,6 +111,14 @@ public class Recursos {
         imagenPlay = new ImageIcon("src/main/resources/images/playbuttton.png");
         imagenPause = new ImageIcon("src/main/resources/images/pausebutton.png");
         imagenStop = new ImageIcon("src/main/resources/images/stopbutton.png");
+
+//        Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(32,32, Image.SCALE_SMOOTH);
+//        imagenCheck = new ImageIcon(imageC);
+        imagenCheck = new ImageIcon("src/main/resources/images/checkResized.png");      // 64 x 64
+
+//        Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+//        imagenCheckSinCheck = new ImageIcon(imageCsC);
+        imagenCheckSinCheck = new ImageIcon("src/main/resources/images/checkSinCheckResized.png");      // 64 x 64
     }
 
     /**
@@ -232,6 +243,18 @@ public class Recursos {
      * @return La imagen del botón de detener.
      */
     public ImageIcon getImagenStop() { return imagenStop; }
+
+    /**
+     * Método para obtener la imagen del check.
+     * @return La imagen del check.
+     */
+    public ImageIcon getImagenCheck() { return imagenCheck; }
+
+    /**
+     * Método para obtener la imagen del check sin check.
+     * @return La imagen del check sin check.
+     */
+    public ImageIcon getImagenCheckSinCheck() { return imagenCheckSinCheck; }
 
     /**
      * Método para obtener la instancia única de la clase.

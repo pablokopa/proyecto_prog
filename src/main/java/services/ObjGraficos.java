@@ -1,5 +1,7 @@
 package services;
 
+import app.model.tareas.Tarea;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -51,34 +53,6 @@ public class ObjGraficos {
         panel.setLayout(null);
         panel.setBackground(colorFondo);
         panel.setBorder(borde);
-        return panel;
-    }
-
-    /**
-     * Construye los paneles principales de la interfaz fija (menú, central, superior y principal).
-     * @param tipo El tipo de panel a construir. Puede ser "menu", "central", "principal" o "superior".
-     * @param colorFondo El color de fondo del panel.
-     * @return El panel construido.
-     */
-    public static JPanel construirPanelesPrincipales(String tipo, Color colorFondo){
-        Recursos sRecursos = Recursos.getService();
-
-        JPanel panel = new JPanel();
-        panel.setBackground(colorFondo);
-        panel.setCursor(sRecursos.getCursorNormal());
-        switch (tipo){
-            case "menu":
-                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                break;
-            case "central":
-                panel.setLayout(new BorderLayout());
-                break;
-            case "principal":
-                break;
-            case "superior":
-                panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-                break;
-        }
         return panel;
     }
 
@@ -137,102 +111,6 @@ public class ObjGraficos {
     }
 
     /**
-     * Construye los JButton con un diseño personalizado para el menú principal.
-     * El botón cambia su color de fondo cuando el cursor está sobre él.
-     *
-     * @param texto El texto del botón.
-     * @param ancho El ancho del botón.
-     * @param alto El alto del botón.
-     * @param colorFondo El color de fondo del botón.
-     * @param colorFuente El color del texto del botón.
-     * @return Un JButton con un diseño personalizado.
-     */
-    public static JButton construirBotonesMenu(
-            String texto, int ancho, int alto,
-            Color colorFondo, Color colorFuente
-    ) {
-        JButton boton = new JButton(texto);
-        boton.setPreferredSize(new Dimension(ancho, alto));
-        boton.setMaximumSize(new Dimension(ancho, alto));
-        boton.setFocusable(false);
-        boton.setCursor(Recursos.getService().getCursorMano());
-        boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
-        boton.setBackground(colorFondo);
-        boton.setForeground(colorFuente);
-        boton.setBorder(null);
-
-        return boton;
-    }
-
-    /**
-     * Construye los JButton de las acciones de la ventana (maximizar, minimizar, cerrar).
-     * El botón puede ser de tipo "minimizar", "maximizar" o "cerrar", y cambia su diseño en consecuencia.
-     *
-     * @param tipo El tipo de botón a construir. Puede ser "minimizar", "maximizar" o "cerrar".
-     * @param colorFondo El color de fondo del botón.
-     * @param colorLinea El color de la línea que se dibuja en el botón.
-     * @return Un JButton con un diseño personalizado según el tipo especificado.
-     */
-    public static JButton construirBotonesVentana(
-            String tipo, Color colorFondo, Color colorLinea, JFrame frame
-    ){
-        JButton boton = new JButton() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.clearRect(0,0,getWidth(),getHeight());
-                super.paintComponent(g);
-                g2.setColor(colorLinea);
-                g2.setStroke(new BasicStroke(3));
-                switch (tipo){
-                    case "minimizar":
-                        g2.drawLine(10, getHeight()/2+3, getWidth()-10, getHeight()/2+3);
-                        break;
-                    case "maximizar":
-                        g2.drawLine(11, 9, 11, 6);
-                        g2.drawLine(11, 6, getWidth()-9, 6);
-                        g2.drawLine(getWidth()-8, 6, getWidth()-8, getHeight()-11);
-                        g2.drawLine(getWidth()-9, getHeight()-11, getWidth()-14, getHeight()-11);
-                        g2.drawRect(6,12, getWidth()-20, getHeight()-18);
-                        break;
-                    case "cerrar":
-                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                        g2.drawLine(8, 8,  getWidth()-8, getHeight()-8);
-                        g2.drawLine(getWidth()-8, 8, 8, getHeight()-8);
-                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-                        break;
-                }
-                g2.dispose();
-            }
-        };
-        boton.setPreferredSize(new Dimension(40, 40));
-        boton.setBackground(colorFondo);
-
-        boton.setCursor(Recursos.getService().getCursorMano());
-        boton.setBorder(null);
-
-        boton.addActionListener(e -> {
-            switch (tipo){
-                case "minimizar":
-                    frame.setState(JFrame.ICONIFIED);
-                    break;
-                case "maximizar":
-                    if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-                        frame.setExtendedState(JFrame.NORMAL);
-                    } else {
-                        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    }
-                    break;
-                case "cerrar":
-                    frame.dispose();
-                    break;
-            }
-        });
-
-        return boton;
-    }
-
-    /**
      * Método para construir un JLabel.
      * @param texto El texto de la etiqueta.
      * @param x La posición x de la etiqueta.
@@ -287,23 +165,6 @@ public class ObjGraficos {
                 break;
         }
         return etiqueta;
-    }
-
-    public static JLabel construirLabelsTiempo(
-            String texto, int x, int y, Font fuente,
-            Color colorFondo, Color colorFuente, Border borde
-    ) {
-        JLabel label = new JLabel(texto);
-        label.setLocation(x, y);
-        label.setForeground(colorFuente);
-        label.setFont(fuente);
-        label.setBorder(borde);
-        if (colorFondo != null) {
-            label.setOpaque(true);
-            label.setBackground(colorFondo);
-        }
-
-        return label;
     }
 
     /**
@@ -538,5 +399,189 @@ public class ObjGraficos {
                 break;
         }
         return comboBox;
+    }
+
+    /**
+     * Construye los paneles principales de la interfaz fija (menú, central, superior y principal).
+     * @param tipo El tipo de panel a construir. Puede ser "menu", "central", "principal" o "superior".
+     * @param colorFondo El color de fondo del panel.
+     * @return El panel construido.
+     */
+    public static JPanel construirPanelesPrincipales(String tipo, Color colorFondo){
+        Recursos sRecursos = Recursos.getService();
+
+        JPanel panel = new JPanel();
+        panel.setBackground(colorFondo);
+        panel.setCursor(sRecursos.getCursorNormal());
+        switch (tipo){
+            case "menu":
+                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                break;
+            case "central":
+                panel.setLayout(new BorderLayout());
+                break;
+            case "principal":
+                break;
+            case "superior":
+                panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                break;
+        }
+        return panel;
+    }
+
+    /**
+     * Construye los paneles de la interfaz de usuario.
+     * @param tarea La tarea a añadir al panel.
+     * @return El panel construido.
+     */
+    public static JPanel construirPanelTarea (
+        Tarea tarea
+    ) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setPreferredSize(new Dimension(Short.MAX_VALUE, 75));
+        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, 75));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+
+        JLabel labelImagen = new JLabel();
+        if (tarea.getCompletadaT()){
+            labelImagen.setIcon(Recursos.getService().getImagenCheck());
+        } else {
+            labelImagen.setIcon(Recursos.getService().getImagenCheckSinCheck());
+        }
+
+//        JPanel panelTarea = new JPanel();
+
+        JLabel labelTitulo = new JLabel(tarea.getNombreT());
+        labelTitulo.setFont(Recursos.getService().getMonserratBold(16));
+
+        panel.add(labelImagen, BorderLayout.WEST);
+        panel.add(labelTitulo, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    /**
+     * Construye los JLabels con el texto y las propiedades especificadas.
+     * @param texto El texto del JLabel.
+     * @param x La posición x del JLabel.
+     * @param y La posición y del JLabel.
+     * @param fuente La fuente del texto del JLabel.
+     * @param colorFondo El color de fondo del JLabel.
+     * @param colorFuente El color del texto del JLabel.
+     * @param borde El borde del JLabel.
+     * @return El JLabel construido.
+     */
+    public static JLabel construirLabelsTiempo(
+            String texto, int x, int y, Font fuente,
+            Color colorFondo, Color colorFuente, Border borde
+    ) {
+        JLabel label = new JLabel(texto);
+        label.setLocation(x, y);
+        label.setForeground(colorFuente);
+        label.setFont(fuente);
+        label.setBorder(borde);
+        if (colorFondo != null) {
+            label.setOpaque(true);
+            label.setBackground(colorFondo);
+        }
+
+        return label;
+    }
+
+    /**
+     * Construye los JButton de las acciones de la ventana (maximizar, minimizar, cerrar).
+     * El botón puede ser de tipo "minimizar", "maximizar" o "cerrar", y cambia su diseño en consecuencia.
+     *
+     * @param tipo El tipo de botón a construir. Puede ser "minimizar", "maximizar" o "cerrar".
+     * @param colorFondo El color de fondo del botón.
+     * @param colorLinea El color de la línea que se dibuja en el botón.
+     * @return Un JButton con un diseño personalizado según el tipo especificado.
+     */
+    public static JButton construirBotonesVentana(
+            String tipo, Color colorFondo, Color colorLinea, JFrame frame
+    ){
+        JButton boton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.clearRect(0,0,getWidth(),getHeight());
+                super.paintComponent(g);
+                g2.setColor(colorLinea);
+                g2.setStroke(new BasicStroke(3));
+                switch (tipo){
+                    case "minimizar":
+                        g2.drawLine(10, getHeight()/2+3, getWidth()-10, getHeight()/2+3);
+                        break;
+                    case "maximizar":
+                        g2.drawLine(11, 9, 11, 6);
+                        g2.drawLine(11, 6, getWidth()-9, 6);
+                        g2.drawLine(getWidth()-8, 6, getWidth()-8, getHeight()-11);
+                        g2.drawLine(getWidth()-9, getHeight()-11, getWidth()-14, getHeight()-11);
+                        g2.drawRect(6,12, getWidth()-20, getHeight()-18);
+                        break;
+                    case "cerrar":
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.drawLine(8, 8,  getWidth()-8, getHeight()-8);
+                        g2.drawLine(getWidth()-8, 8, 8, getHeight()-8);
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+                        break;
+                }
+                g2.dispose();
+            }
+        };
+        boton.setPreferredSize(new Dimension(40, 40));
+        boton.setBackground(colorFondo);
+
+        boton.setCursor(Recursos.getService().getCursorMano());
+        boton.setBorder(null);
+
+        boton.addActionListener(e -> {
+            switch (tipo){
+                case "minimizar":
+                    frame.setState(JFrame.ICONIFIED);
+                    break;
+                case "maximizar":
+                    if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+                        frame.setExtendedState(JFrame.NORMAL);
+                    } else {
+                        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    }
+                    break;
+                case "cerrar":
+                    frame.dispose();
+                    break;
+            }
+        });
+
+        return boton;
+    }
+
+    /**
+     * Construye los JButton con un diseño personalizado para el menú principal.
+     * El botón cambia su color de fondo cuando el cursor está sobre él.
+     *
+     * @param texto El texto del botón.
+     * @param ancho El ancho del botón.
+     * @param alto El alto del botón.
+     * @param colorFondo El color de fondo del botón.
+     * @param colorFuente El color del texto del botón.
+     * @return Un JButton con un diseño personalizado.
+     */
+    public static JButton construirBotonesMenu(
+            String texto, int ancho, int alto,
+            Color colorFondo, Color colorFuente
+    ) {
+        JButton boton = new JButton(texto);
+        boton.setPreferredSize(new Dimension(ancho, alto));
+        boton.setMaximumSize(new Dimension(ancho, alto));
+        boton.setFocusable(false);
+        boton.setCursor(Recursos.getService().getCursorMano());
+        boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
+        boton.setBackground(colorFondo);
+        boton.setForeground(colorFuente);
+        boton.setBorder(null);
+
+        return boton;
     }
 }
