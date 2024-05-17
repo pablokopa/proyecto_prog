@@ -44,6 +44,10 @@ public class Tarea {
         return fechaCreacionT;
     }
 
+    public boolean getCompletadaT() {
+        return completadaT;
+    }
+
     /**
      * Método toString
      * @return nombre de la tarea y descripción

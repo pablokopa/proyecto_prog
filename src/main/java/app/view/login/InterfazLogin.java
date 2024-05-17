@@ -1,6 +1,7 @@
 package app.view.login;
 
 import app.model.tareas.GestorTareas;
+import app.view.principal.InterfazPrincipal;
 import app.view.pruebas.MenuPrincipalConsolaTemporal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
@@ -151,7 +152,8 @@ public class InterfazLogin extends JFrame{
 
             if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
                 dispose();
-                new MenuPrincipalConsolaTemporal(new GestorTareas());
+//                new MenuPrincipalConsolaTemporal(new GestorTareas());
+                new InterfazPrincipal(new GestorTareas());
             }else{
                 textoLogin.setText("Inicio de sesión fallido..");
             }

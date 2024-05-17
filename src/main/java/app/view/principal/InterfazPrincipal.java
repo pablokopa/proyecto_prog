@@ -1,5 +1,7 @@
 package app.view.principal;
 
+import app.model.tareas.GestorTareas;
+import app.model.usuarios.Usuario;
 import services.ObjGraficos;
 import services.Recursos;
 
@@ -15,10 +17,13 @@ import java.util.ArrayList;
 public class InterfazPrincipal extends JFrame {
     private final Recursos sRecursos;
 
+    GestorTareas gestorTareas;
+    Usuario usuario;
+
     private int xRaton, yRaton, xNuevo, yNuevo;
 
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
-    private JPanel panelMatrix, panelPomodoro;
+    private JPanel panelTareas, panelMatrix, panelPomodoro;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
 
@@ -27,8 +32,11 @@ public class InterfazPrincipal extends JFrame {
     private String textoBotonActual = "";
 
 
-    public InterfazPrincipal() {
-        sRecursos = Recursos.getService();
+    public InterfazPrincipal(GestorTareas gestorTareas) {
+        this.sRecursos = Recursos.getService();
+
+        this.gestorTareas = gestorTareas;
+        this.usuario = gestorTareas.getUsuario();
 
         this.setLayout(new BorderLayout());
         this.setSize(1100, 650);
@@ -57,6 +65,7 @@ public class InterfazPrincipal extends JFrame {
         panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
         panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
         panelPrincipal = ObjGraficos.construirPanelesPrincipales("principal", sRecursos.getGRIS_CLARO());
+        this.panelTareas = new VistaTareas(gestorTareas);
         this.panelMatrix = new VistaMatrix();
         this.panelPomodoro = new VistaPomodoro();
 
@@ -65,7 +74,8 @@ public class InterfazPrincipal extends JFrame {
 
         this.add(panelMenu, BorderLayout.WEST);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
-//        panelPrincipal.add(panelPomodoro, "Pomodoro");
+        panelPrincipal.add(panelTareas, "Tareas");
+        panelPrincipal.add(panelPomodoro, "Pomodoro");
         panelPrincipal.add(panelMatrix, "Matrix");
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         this.add(panelCentral, BorderLayout.CENTER);
@@ -242,9 +252,5 @@ public class InterfazPrincipal extends JFrame {
                 }
             }
         });
-    }
-
-    public static void main(String[] args) {
-        new InterfazPrincipal();
     }
 }

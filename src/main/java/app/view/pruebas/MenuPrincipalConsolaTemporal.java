@@ -41,7 +41,7 @@ public class MenuPrincipalConsolaTemporal {
                 System.out.println("Descripción de la tarea: ");
                 String descripcionTarea = sc.nextLine();
 
-                gestorTareas.agregarTarea(new Tarea(nombreTarea, descripcionTarea, usuario.getNombreU()));
+                gestorTareas.crearTarea(new Tarea(nombreTarea, descripcionTarea, usuario.getNombreU()));
             }
 
             // completar tarea (ToDo)

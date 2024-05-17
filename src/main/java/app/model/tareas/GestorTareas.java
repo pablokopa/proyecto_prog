@@ -53,7 +53,7 @@ public class GestorTareas {
      * @param tarea tarea a añadir
      * @return true si se ha añadido correctamente
      */
-    public boolean agregarTarea(Tarea tarea) {
+    public boolean crearTarea(Tarea tarea) {
         String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";
 
         try (Connection conexion = ConectarBD.conectar()) {
