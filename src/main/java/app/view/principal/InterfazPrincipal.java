@@ -25,11 +25,18 @@ public class InterfazPrincipal extends JFrame {
     private int xRelativoFrame, yRelativoFrame, xRelativoPantalla, yRelativoPantalla;
 
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
-    private JPanel panelTareas, panelMatrix, panelPomodoro;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
+    private VistaTareas panelTareas;
+    private VistaMatrix panelMatrix;
+    private VistaPomodoro panelPomodoro;
 
     private CardLayout cardLayout;
+
+
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private Dimension dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
+    private Dimension dimensionPantallaNormal = new Dimension(1100, 650);
 
     private String textoBotonActual = "";
 
@@ -41,10 +48,11 @@ public class InterfazPrincipal extends JFrame {
         this.usuario = gestorTareas.getUsuario();
 
         this.setLayout(new BorderLayout());
-        this.setSize(1100, 650);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        this.setSize(dimensionPantallaCompleta);
+        this.setLocation(0,0);
+
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(this);
         this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
@@ -87,18 +95,21 @@ public class InterfazPrincipal extends JFrame {
     }
 
     /**
-     * Crea los botones del menú principal y los de control de ventana (max, min, cerrar).
+     * Crea los botones de control de la ventana principal con el método estático construirBotonesVentana y los añade
      */
     private void crearBotonesVentana() {
-        botonMinimizar = ObjGraficos.construirBotonesVentana("minimizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
-        botonMaximizar = ObjGraficos.construirBotonesVentana("maximizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
-        botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
+        botonMinimizar = construirBotonesVentana("minimizar");
+        botonMaximizar = construirBotonesVentana("maximizar");
+        botonCerrar = construirBotonesVentana("cerrar");
 
         panelSuperior.add(botonMinimizar);
         panelSuperior.add(botonMaximizar);
         panelSuperior.add(botonCerrar);
     }
 
+    /**
+     * Crea los botones del menú principal con el método templateBotonesMEnu y los añade
+     */
     private void crearBotonesMenu() {
         botonInicio = templateBotonesMenu("Inicio");
         botonTareas = templateBotonesMenu("Tareas");
@@ -146,6 +157,12 @@ public class InterfazPrincipal extends JFrame {
                 else if (textoBoton.equals("Inicio")){
                     System.out.println("inicio");
                     contraerBotones(listaBotonesMenuConVista);
+                }
+                else if (textoBoton.equals("Tareas")){
+                    System.out.println("Tareas");
+                    contraerBotones(listaBotonesMenuConVista);
+                    boton.setPreferredSize(new Dimension(getWidth(), 75));
+                    panelTareas.setGeneralCardLayout();
                 }
                 /* Si es cualquier otro botón, se cambia a la vista seleccionada, expande el botón seleccionado y contrae el resto de botones */
                 else {
@@ -226,14 +243,29 @@ public class InterfazPrincipal extends JFrame {
     }
 
     /**
-     * Método para poder mover la ventana.
-     * Si la ventana está maximizada, vuelve a su estado normal antes de moverla.
+     * Método para mover y maximizar la ventana.
      */
     private void moverVentana(){
         panelSuperior.addMouseListener(new MouseAdapter() {
+
+            /* Permite maximizar o minimizar la ventana dando doble click sobre el panel superior */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2){
+                    if (getSize().getWidth() == dimensionPantallaCompleta.width && getSize().getHeight() == dimensionPantallaCompleta.height) {
+                        setSize(dimensionPantallaNormal);
+                        setLocationRelativeTo(null);
+                    } else {
+                        setSize(dimensionPantallaCompleta);
+                        setLocation(0,0);
+                    }
+                }
+            }
+
+            /* Obtiene la posición del ratón relativa al frame */
             @Override
             public void mousePressed(MouseEvent e) {
-                xRelativoFrame = e.getX() + (int)(getWidth()*0.15);
+                xRelativoFrame = e.getX() + (int)(getWidth()*0.15);     // Suma el tamaño del menú para obtener la posición x relativa al frame real
                 yRelativoFrame = e.getY();
             }
         });
@@ -241,12 +273,11 @@ public class InterfazPrincipal extends JFrame {
         panelSuperior.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (getExtendedState()  == JFrame.MAXIMIZED_BOTH) {
+                if (getSize().getWidth() == dimensionPantallaCompleta.width && getSize().getHeight() == dimensionPantallaCompleta.height) {
                     int anchoAntes = getWidth();
-                    setExtendedState(JFrame.NORMAL);
-                    double proporcionDiferencia = 1.0*anchoAntes/getWidth();
-                    xRelativoFrame =(int) Math.round((e.getX() + getWidth()*0.15) / proporcionDiferencia);
-                    System.out.println(xRelativoFrame);
+                    setSize(dimensionPantallaNormal);
+                    double proporcionDiferencia = 1.0*anchoAntes/getWidth();            // La diferencia entre la ventana maximizada y no, aprox: 1920/1100 = 1.7
+                    xRelativoFrame =(int) Math.round((e.getX() + getWidth()*0.15) / proporcionDiferencia);  // Divide la xRelativoFrame entre la proporción para obtener la nueva posición de x al cambiar de tamaño la ventana
                 }
                 xRelativoPantalla = e.getXOnScreen();
                 yRelativoPantalla = e.getYOnScreen();
@@ -283,7 +314,7 @@ public class InterfazPrincipal extends JFrame {
     }
 
     /**
-     * Construye los paneles principales de la interfaz fija (menú, central, superior y principal).
+     * Construye los paneles principales (menú, central, superior y principal).
      * @param tipo El tipo de panel a construir. Puede ser "menu", "central", "principal" o "superior".
      * @return El panel construido.
      */
@@ -294,6 +325,7 @@ public class InterfazPrincipal extends JFrame {
             case "menu":
                 panel.setBackground(sRecursos.getGRANATE());
                 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                panel.setPreferredSize(new Dimension((int)(getWidth()*0.15), getHeight()));
                 break;
             case "central":
                 panel.setLayout(new BorderLayout());
@@ -330,5 +362,75 @@ public class InterfazPrincipal extends JFrame {
         boton.setBorder(null);
 
         return boton;
+    }
+
+    /**
+     * Construye los JButton de las acciones de la ventana (maximizar, minimizar, cerrar).
+     * El botón puede ser de tipo "minimizar", "maximizar" o "cerrar", y cambia su diseño en consecuencia.
+     *
+     * @param tipo El tipo de botón a construir. Puede ser "minimizar", "maximizar" o "cerrar".
+     * @param colorFondo El color de fondo del botón.
+     * @param colorLinea El color de la línea que se dibuja en el botón.
+     * @return Un JButton con un diseño personalizado según el tipo especificado.
+     */
+    private JButton construirBotonesVentana(String tipo) {
+        JButton boton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.clearRect(0, 0, getWidth(), getHeight());
+                super.paintComponent(g);
+                g2.setColor(sRecursos.getGRANATE());
+                g2.setStroke(new BasicStroke(3));
+                switch (tipo) {
+                    case "minimizar":
+                        g2.drawLine(10, getHeight() / 2 + 3, getWidth() - 10, getHeight() / 2 + 3);
+                        break;
+                    case "maximizar":
+                        g2.drawLine(11, 9, 11, 6);
+                        g2.drawLine(11, 6, getWidth() - 9, 6);
+                        g2.drawLine(getWidth() - 8, 6, getWidth() - 8, getHeight() - 11);
+                        g2.drawLine(getWidth() - 9, getHeight() - 11, getWidth() - 14, getHeight() - 11);
+                        g2.drawRect(6, 12, getWidth() - 20, getHeight() - 18);
+                        break;
+                    case "cerrar":
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.drawLine(8, 8, getWidth() - 8, getHeight() - 8);
+                        g2.drawLine(getWidth() - 8, 8, 8, getHeight() - 8);
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+                        break;
+                }
+                g2.dispose();
+            }
+        };
+        boton.setPreferredSize(new Dimension(40, 40));
+        boton.setBackground(sRecursos.getBLANCO());
+        boton.setCursor(sRecursos.getCursorMano());
+        boton.setBorder(null);
+
+        addActionListenerBotonesVentana(boton, tipo);
+        return boton;
+    }
+
+    private void addActionListenerBotonesVentana(JButton boton, String tipo) {
+        boton.addActionListener(e -> {
+            switch (tipo){
+                case "minimizar":
+                    setState(JFrame.ICONIFIED);
+                    break;
+                case "maximizar":
+                    if (getSize().getWidth() == dimensionPantallaCompleta.width && getSize().getHeight() == dimensionPantallaCompleta.height) {
+                        setSize(dimensionPantallaNormal);
+                        setLocationRelativeTo(null);
+                    } else {
+                        setSize(dimensionPantallaCompleta);
+                        setLocation(0,0);
+                    }
+                    break;
+                case "cerrar":
+                    dispose();
+                    break;
+            }
+        });
     }
 }

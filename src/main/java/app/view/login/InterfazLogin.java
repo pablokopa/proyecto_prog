@@ -120,7 +120,7 @@ public class InterfazLogin extends JFrame{
      */
     public void crearJButtons(GestorUsuarios gestorUsuarios){
 
-        botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
+        botonCerrar = construirBotonCerrar();
         botonCerrar.setBounds(360,5,35,35);
         panelDerecha.add(botonCerrar);
 
@@ -190,5 +190,38 @@ public class InterfazLogin extends JFrame{
 
     public void actualizarContadorUsuarios(){
         textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
+    }
+
+    /**
+     * Construye el JButton de cerrar la ventana.
+     * @return Un JButton con un diseño personalizado.
+     */
+    public JButton construirBotonCerrar(){
+        JButton boton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.clearRect(0,0,getWidth(),getHeight());
+                super.paintComponent(g);
+                g2.setColor(sRecursos.getGRANATE());
+                g2.setStroke(new BasicStroke(3));
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.drawLine(8, 8,  getWidth()-8, getHeight()-8);
+                g2.drawLine(getWidth()-8, 8, 8, getHeight()-8);
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+                g2.dispose();
+            }
+        };
+        boton.setPreferredSize(new Dimension(40, 40));
+        boton.setBackground(sRecursos.getBLANCO());
+
+        boton.setCursor(sRecursos.getCursorMano());
+        boton.setBorder(null);
+
+        boton.addActionListener(e -> {
+            dispose();
+        });
+
+        return boton;
     }
 }

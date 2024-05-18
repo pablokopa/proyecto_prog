@@ -1,23 +1,20 @@
 package app.view.templates;
 
-import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import services.Recursos;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelTareaEspecifica extends JPanel {
+public class TemplatePanelTareaEspecifica extends JPanel {
     Recursos sRecursos = Recursos.getService();
 
-    GestorTareas gestorTareas;
     Tarea tarea;
 
     JLabel labelImagen;
     JPanel panelTarea;
 
-    public PanelTareaEspecifica(Tarea tarea, GestorTareas gestorTareas) {
-        this.gestorTareas = gestorTareas;
+    public TemplatePanelTareaEspecifica(Tarea tarea) {
         this.tarea = tarea;
 
         this.setLayout(new BorderLayout());
