@@ -3,7 +3,7 @@ package app.view.principal;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import app.model.usuarios.Usuario;
-import app.view.pruebas.PanelTareaEspecifica;
+import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 import javax.swing.*;
@@ -20,16 +20,16 @@ public class VistaTareas extends JPanel {
     private final Usuario usuario;
 
     private JPanel panelColumnaTareasToDo, panelColumnaTareasCompletadas, panelColumnaInformacionExtra;
-    private JPanel panelListaTareasToDo, panelListaTareasCompletadas, panelInformacionNuevaTarea;
+    private JPanel panelListaTareasToDo, panelListaTareasCompletadas, panelInformacionNuevaTarea, panelInformacionTareaSeleccionada, panelInformacionGeneral, panelInformacionCrearNuevaTarea;
     private JScrollPane scroolPanelListaTareasToDo, scroolPanelListaTareasCompletadas;
-    private JLabel labelTituloTareasToDo, labelCrearNuevaTarea, labelTituloTareasCompletadas, labelTituloInformacionNuevaTarea;
+    private JLabel labelTituloTareasToDo, labelCrearNuevaTarea, labelTituloTareasCompletadas, labelTituloInformacionNuevaTarea, labelTituloInformacionGeneral, labelTituloInformacionTareaSeleccionada;
 
-    private final CardLayout cardLayout;
+    private CardLayout cardLayout;
 
     public VistaTareas(GestorTareas gestorTareas) {
         this.gestorTareas = gestorTareas;
         this.usuario = gestorTareas.getUsuario();
-        this.cardLayout = new CardLayout();
+        cardLayout = new CardLayout();
 
         this.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -38,6 +38,8 @@ public class VistaTareas extends JPanel {
         construirColumnaTareasCompletadas();
         construirColumnaInformacionExtra();
         addTareas();
+
+        setGeneralCardLayout();
     }
 
     /**
@@ -86,7 +88,7 @@ public class VistaTareas extends JPanel {
         labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-//                gestorTareas.crearTarea();
+                cardLayout.show(panelColumnaInformacionExtra, "InfoNueva");
             }
         });
     }
@@ -144,19 +146,105 @@ public class VistaTareas extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         add(panelColumnaInformacionExtra, gbc);
 
+        /* Panel donde se muestra la información de la tarea seleccionada */
+        this.panelInformacionGeneral = new JPanel();
+        panelInformacionGeneral.setLayout(new BorderLayout());
+        panelInformacionGeneral.setBackground(Color.orange);
+        panelColumnaInformacionExtra.add(panelInformacionGeneral, "InfoGeneral");
+
+        /* Título de la columna información extra */
+        this.labelTituloInformacionGeneral = new JLabel("Info General");
+        labelTituloInformacionGeneral.setFont(sRecursos.getMonserratBold(25));
+        labelTituloInformacionGeneral.setHorizontalAlignment(SwingConstants.CENTER);
+        labelTituloInformacionGeneral.setBackground(Color.lightGray);
+        labelTituloInformacionGeneral.setOpaque(true);
+        panelInformacionGeneral.add(labelTituloInformacionGeneral, BorderLayout.NORTH);
+
+        /* Panel donde se muestra la información de la tarea seleccionada */
+        this.panelInformacionTareaSeleccionada = new JPanel();
+        panelInformacionTareaSeleccionada.setLayout(new BorderLayout());
+        panelInformacionTareaSeleccionada.setBackground(Color.orange);
+        panelColumnaInformacionExtra.add(panelInformacionTareaSeleccionada, "InfoSeleccionada");
+
+        /* Título de la columna información extra */
+        this.labelTituloInformacionTareaSeleccionada = new JLabel("Tarea Seleccionada");
+        labelTituloInformacionTareaSeleccionada.setFont(sRecursos.getMonserratBold(25));
+        labelTituloInformacionTareaSeleccionada.setHorizontalAlignment(SwingConstants.CENTER);
+        labelTituloInformacionTareaSeleccionada.setBackground(Color.lightGray);
+        labelTituloInformacionTareaSeleccionada.setOpaque(true);
+        panelInformacionTareaSeleccionada.add(labelTituloInformacionTareaSeleccionada, BorderLayout.NORTH);
+
+        /* Panel donde se muestra la información de la tarea seleccionada */
+        this.panelInformacionNuevaTarea = new JPanel();
+        panelInformacionNuevaTarea.setLayout(new BorderLayout());
+        panelInformacionNuevaTarea.setBackground(Color.orange);
+        panelColumnaInformacionExtra.add(panelInformacionNuevaTarea, "InfoNueva");
+
         /* Título de la columna información extra */
         this.labelTituloInformacionNuevaTarea = new JLabel("Nueva tarea");
         labelTituloInformacionNuevaTarea.setFont(sRecursos.getMonserratBold(25));
         labelTituloInformacionNuevaTarea.setHorizontalAlignment(SwingConstants.CENTER);
         labelTituloInformacionNuevaTarea.setBackground(Color.lightGray);
         labelTituloInformacionNuevaTarea.setOpaque(true);
-        panelColumnaInformacionExtra.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
+        panelInformacionNuevaTarea.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
 
-        /* Panel donde se muestra la información de la tarea seleccionada */
-        this.panelInformacionNuevaTarea = new JPanel();
-        panelInformacionNuevaTarea.setLayout(new BorderLayout());
-        panelInformacionNuevaTarea.setBackground(Color.orange);
-        panelColumnaInformacionExtra.add(panelInformacionNuevaTarea, "Crear nueva tarea");
+        this.panelInformacionCrearNuevaTarea = new JPanel();
+        panelInformacionCrearNuevaTarea.setLayout(new GridBagLayout());
+
+
+        JTextField textFieldNombreTarea = new JTextField();
+        textFieldNombreTarea.setPreferredSize(new Dimension(0, 50));
+        textFieldNombreTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getGRIS_CLARO()));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 0.05;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
+
+        JTextArea textAreaDescripcionTarea = new JTextArea();
+        textAreaDescripcionTarea.setPreferredSize(new Dimension(0, 50));
+        textAreaDescripcionTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getGRANATE()));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0.85;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionCrearNuevaTarea.add(textAreaDescripcionTarea, gbc);
+
+        JPanel panelSelectorEtiquetas = new JPanel();
+        panelSelectorEtiquetas.setPreferredSize(new Dimension(0, 50));
+        panelSelectorEtiquetas.setLayout(new FlowLayout());
+        panelSelectorEtiquetas.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1;
+        gbc.weighty = 0.05;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionCrearNuevaTarea.add(panelSelectorEtiquetas, gbc);
+
+        JButton botonCrearTarea = new JButton("Crear tarea");
+        botonCrearTarea.setPreferredSize(new Dimension(0, 50));
+        botonCrearTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 1;
+        gbc.weighty = 0.05;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionCrearNuevaTarea.add(botonCrearTarea, gbc);
+
+        botonCrearTarea.addActionListener(e -> {
+            String nombre = textFieldNombreTarea.getText();
+            String descripcion = textAreaDescripcionTarea.getText();
+            Tarea tarea = new Tarea(nombre, descripcion, usuario.getNombreU());
+            gestorTareas.crearTarea(tarea);
+            TemplatePanelTareaEspecifica templateTarea = new TemplatePanelTareaEspecifica(tarea);
+            panelListaTareasToDo.add(templateTarea);
+            repaint();
+            revalidate();
+        });
+
+        panelInformacionNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
 
     /**
@@ -169,7 +257,7 @@ public class VistaTareas extends JPanel {
 
         /* Recorre la lista de tareas y utiliza el template PanelTareaEspecífica para mostrarlas */
         for (Tarea tarea : listaTareas) {
-            PanelTareaEspecifica panelTarea = new PanelTareaEspecifica(tarea, gestorTareas);
+            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
 
             /* Añade un MouseListener al icono del check que completa la tarea al hacer click sobre él y cambia la tarea de columna */
             panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
@@ -194,8 +282,7 @@ public class VistaTareas extends JPanel {
             panelTarea.getPanelTarea().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("Click en " + tarea.getNombreT());
-                    System.out.println(tarea);
+                    cardLayout.show(panelColumnaInformacionExtra, "InfoSeleccionada");
                 }
             });
 
@@ -206,5 +293,9 @@ public class VistaTareas extends JPanel {
                 panelListaTareasToDo.add(panelTarea);
             }
         }
+    }
+
+    public void setGeneralCardLayout(){
+        cardLayout.show(panelColumnaInformacionExtra, "InfoGeneral");
     }
 }

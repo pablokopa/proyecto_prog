@@ -4,7 +4,6 @@ import app.model.tareas.GestorTareas;
 import app.model.usuarios.GestorUsuarios;
 import app.model.usuarios.Usuario;
 import app.view.login.InterfazLogin;
-import services.ObjGraficos;
 import services.Recursos;
 
 import javax.swing.*;
@@ -33,10 +32,7 @@ public class InterfazPrincipal extends JFrame {
 
     private CardLayout cardLayout;
 
-
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private Dimension dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
-    private Dimension dimensionPantallaNormal = new Dimension(1100, 650);
+    private Dimension dimensionPantallaCompleta, dimensionPantallaNormal;
 
     private String textoBotonActual = "";
 
@@ -46,6 +42,10 @@ public class InterfazPrincipal extends JFrame {
 
         this.gestorTareas = gestorTareas;
         this.usuario = gestorTareas.getUsuario();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
+        dimensionPantallaNormal = new Dimension(1100, 650);
 
         this.setLayout(new BorderLayout());
 
@@ -147,7 +147,6 @@ public class InterfazPrincipal extends JFrame {
 
                 /* Si el botón es Cerrar Sesión desconecta al usuario y vuelve a la ventana de login. Los botones no cambian de tamaño porque no es una vista */
                 if (textoBoton.equals("Cerrar Sesión")) {
-                    System.out.println("cerrar");
                     dispose();
                     Usuario.desconectarUsuario();
                     new InterfazLogin(new GestorUsuarios());
@@ -155,18 +154,15 @@ public class InterfazPrincipal extends JFrame {
                 }
                 /* Si el botón es Inicio se cambia a la vista inicio y contrae todos los botones. Inicio no se expande por estética */
                 else if (textoBoton.equals("Inicio")){
-                    System.out.println("inicio");
                     contraerBotones(listaBotonesMenuConVista);
                 }
                 else if (textoBoton.equals("Tareas")){
-                    System.out.println("Tareas");
                     contraerBotones(listaBotonesMenuConVista);
                     boton.setPreferredSize(new Dimension(getWidth(), 75));
                     panelTareas.setGeneralCardLayout();
                 }
                 /* Si es cualquier otro botón, se cambia a la vista seleccionada, expande el botón seleccionado y contrae el resto de botones */
                 else {
-                    System.out.println("otro");
                     contraerBotones(listaBotonesMenuConVista);
                     boton.setPreferredSize(new Dimension(getWidth(), 75));
                 }
@@ -369,8 +365,6 @@ public class InterfazPrincipal extends JFrame {
      * El botón puede ser de tipo "minimizar", "maximizar" o "cerrar", y cambia su diseño en consecuencia.
      *
      * @param tipo El tipo de botón a construir. Puede ser "minimizar", "maximizar" o "cerrar".
-     * @param colorFondo El color de fondo del botón.
-     * @param colorLinea El color de la línea que se dibuja en el botón.
      * @return Un JButton con un diseño personalizado según el tipo especificado.
      */
     private JButton construirBotonesVentana(String tipo) {
