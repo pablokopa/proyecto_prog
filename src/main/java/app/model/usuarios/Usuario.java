@@ -24,6 +24,10 @@ public class Usuario {
         }
     }
 
+    public static void desconectarUsuario(){
+        usuario = null;
+    }
+
     public static Usuario getUsuarioConectado(){
         return usuario;
     }

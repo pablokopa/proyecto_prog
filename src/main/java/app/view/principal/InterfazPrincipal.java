@@ -1,7 +1,9 @@
 package app.view.principal;
 
 import app.model.tareas.GestorTareas;
+import app.model.usuarios.GestorUsuarios;
 import app.model.usuarios.Usuario;
+import app.view.login.InterfazLogin;
 import services.ObjGraficos;
 import services.Recursos;
 
@@ -111,31 +113,45 @@ public class InterfazPrincipal extends JFrame {
 
     /**
      * Añade ActionListener a los botones.
-     * Permite cambiar la vista al pulsar un botón del menú y cambia su tamaño.
+     * Permite cambiar la vista al pulsar un botón del menú y cambia su tamaño o desconecta al usuario.
      */
     private void botonesActionListener() {
+        /* Añade los botones necesarios a un ArrayList temporal para reducir la cantidad de código */
         ArrayList<JButton> listaBotonesMenuConVista = new ArrayList<>();
         listaBotonesMenuConVista.add(botonInicio);
         listaBotonesMenuConVista.add(botonTareas);
         listaBotonesMenuConVista.add(botonMatrix);
         listaBotonesMenuConVista.add(botonPomodoro);
         listaBotonesMenuConVista.add(botonAjustes);
+        listaBotonesMenuConVista.add(botonCerrarSesion);
 
         for (JButton boton : listaBotonesMenuConVista){
             boton.addActionListener(e -> {
                 String textoBoton = boton.getText();
 
-                if (textoBoton.equals("Inicio")){
+                /* Si el botón es Cerrar Sesión desconecta al usuario y vuelve a la ventana de login. Los botones no cambian de tamaño porque no es una vista */
+                if (textoBoton.equals("Cerrar Sesión")) {
+                    System.out.println("cerrar");
+                    dispose();
+                    Usuario.desconectarUsuario();
+                    new InterfazLogin(new GestorUsuarios());
+                    return;
+                }
+                /* Si el botón es Inicio se cambia a la vista inicio y contrae todos los botones. Inicio no se expande por estética */
+                else if (textoBoton.equals("Inicio")){
+                    System.out.println("inicio");
                     contraerBotones(listaBotonesMenuConVista);
                 }
+                /* Si es cualquier otro botón, se cambia a la vista seleccionada, expande el botón seleccionado y contrae el resto de botones */
                 else {
+                    System.out.println("otro");
                     contraerBotones(listaBotonesMenuConVista);
                     boton.setPreferredSize(new Dimension(getWidth(), 75));
                 }
-                cardLayout.show(panelPrincipal, textoBoton);
+                cardLayout.show(panelPrincipal, textoBoton);        // Muestra la ventana del botón seleccionado
                 panelMenu.revalidate();
 
-                // Guarda el texto del botón seleccionado para evitar que pierda el color 'seleccionado' por el ChangeListener
+                /* Guarda el texto del botón seleccionado para evitar que pierda el color 'seleccionado' por el ChangeListener */
                 textoBotonActual = textoBoton;
             });
         }
@@ -159,6 +175,7 @@ public class InterfazPrincipal extends JFrame {
      * Cambia el color de fondo del botón al pasar el ratón por encima y permite que el botón seleccionado mantenga ese color.
      */
     private void botonesChangeListener() {
+        /* Añade los botones necesarios a un ArrayList temporal para reducir la cantidad de código */
         ArrayList<JButton> listaBotonesMenuTodos = new ArrayList<>();
         listaBotonesMenuTodos.add(botonTareas);
         listaBotonesMenuTodos.add(botonMatrix);
@@ -168,11 +185,16 @@ public class InterfazPrincipal extends JFrame {
 
         for (JButton boton : listaBotonesMenuTodos) {
             boton.addChangeListener(e -> {
+                /* Cambia el color del botón al pasar el ratón por encima */
                 if (boton.getModel().isRollover()) {
                     boton.setBackground(sRecursos.getGRANATE().brighter());
-                } else if (textoBotonActual.equals(boton.getText())) {
+                }
+                /* Mantiene el color del botón seleccionado */
+                else if (textoBotonActual.equals(boton.getText())) {
                     boton.setBackground(sRecursos.getGRANATE().brighter());
-                } else {
+                }
+                /* Restaura el color del botón al sacar el ratón de encima */
+                else {
                     boton.setBackground(sRecursos.getGRANATE());
                 }
             });

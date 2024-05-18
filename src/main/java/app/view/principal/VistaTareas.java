@@ -40,20 +40,20 @@ public class VistaTareas extends JPanel {
         addTareas();
     }
 
-    public void crearPaneles() {
-    }
-
+    /**
+     * Construye la columna de tareas por hacer
+     */
     private void construirColumnaTareasToDo() {
         /* Columna Tareas To Do */
         this.panelColumnaTareasToDo = new JPanel();
         panelColumnaTareasToDo.setLayout(new BorderLayout());
         panelColumnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
         panelColumnaTareasToDo.setBackground(Color.GREEN);
-        panelColumnaTareasToDo.setPreferredSize(new Dimension(200, 0));
-        gbc.gridx = 0;      // Columna 1
-        gbc.gridy = 0;      // Fila 0
-        gbc.weightx = 0.3;  // Ocupa x% del espacio horizontal
-        gbc.weighty = 1;    // Ocupa y% del espacio vertical
+        panelColumnaTareasToDo.setPreferredSize(new Dimension(200, 0));   // Tiene que ser igual en todas las columnas apra que 'gbc.weightx' funcione correctamente
+        gbc.gridx = 0;                          // Columna 1
+        gbc.gridy = 0;                          // Fila 0
+        gbc.weightx = 0.28;                      // Ocupa x% del espacio horizontal
+        gbc.weighty = 1;                        // Ocupa y% del espacio vertical
         gbc.fill = GridBagConstraints.BOTH;     // Se expande en ambas direcciones
         add(panelColumnaTareasToDo, gbc);
 
@@ -91,6 +91,9 @@ public class VistaTareas extends JPanel {
         });
     }
 
+    /**
+     * Construye la columna de tareas completadas
+     */
     private void construirColumnaTareasCompletadas() {
         /* Columna Tareas Completadas */
         this.panelColumnaTareasCompletadas = new JPanel();
@@ -98,11 +101,11 @@ public class VistaTareas extends JPanel {
         panelColumnaTareasCompletadas.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
         panelColumnaTareasCompletadas.setBackground(Color.RED);
         panelColumnaTareasCompletadas.setPreferredSize(new Dimension(200, 0));
-        gbc.gridx = 1;      // Columna 2
-        gbc.gridy = 0;      // Fila 0
-        gbc.weightx = 0.3;  // Ocupa x% del espacio horizontal
-        gbc.weighty = 1;    // Ocupa y% del espacio vertical
-        gbc.fill = GridBagConstraints.BOTH;     // Se expande en ambas direcciones
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 0.28;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
         add(panelColumnaTareasCompletadas, gbc);
 
         /* Título de la columna completadas */
@@ -124,6 +127,9 @@ public class VistaTareas extends JPanel {
         panelColumnaTareasCompletadas.add(scroolPanelListaTareasCompletadas, BorderLayout.CENTER);
     }
 
+    /**
+     * Construye la columna de información extra
+     */
     private void construirColumnaInformacionExtra() {
         /* Columna Información Extra */
         this.panelColumnaInformacionExtra = new JPanel();
@@ -131,11 +137,11 @@ public class VistaTareas extends JPanel {
         panelColumnaInformacionExtra.setBackground(Color.BLUE);
         panelColumnaInformacionExtra.setBorder(new MatteBorder(0, 5, 10, 10, sRecursos.getBLANCO()));
         panelColumnaInformacionExtra.setPreferredSize(new Dimension(200, 0));
-        gbc.gridx = 2;          // Columna 3
-        gbc.gridy = 0;          // Fila 0
-        gbc.weightx = 0.4;      // Ocupa x% del espacio horizontal
-        gbc.weighty = 1;        // Ocupa y% del espacio vertical
-        gbc.fill = GridBagConstraints.BOTH;     // Se expande en ambas direcciones
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weightx = 0.44;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
         add(panelColumnaInformacionExtra, gbc);
 
         /* Título de la columna información extra */
@@ -144,7 +150,7 @@ public class VistaTareas extends JPanel {
         labelTituloInformacionNuevaTarea.setHorizontalAlignment(SwingConstants.CENTER);
         labelTituloInformacionNuevaTarea.setBackground(Color.lightGray);
         labelTituloInformacionNuevaTarea.setOpaque(true);
-        panelInformacionNuevaTarea.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
+        panelColumnaInformacionExtra.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
 
         /* Panel donde se muestra la información de la tarea seleccionada */
         this.panelInformacionNuevaTarea = new JPanel();
