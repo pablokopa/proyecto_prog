@@ -1,12 +1,8 @@
 package services;
 
-import app.model.tareas.Tarea;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Esta clase es un singleton que proporciona métodos para construir componentes de la interfaz de usuario.
@@ -406,32 +402,6 @@ public class ObjGraficos {
     }
 
     /**
-     * Construye los paneles principales de la interfaz fija (menú, central, superior y principal).
-     * @param tipo El tipo de panel a construir. Puede ser "menu", "central", "principal" o "superior".
-     * @param colorFondo El color de fondo del panel.
-     * @return El panel construido.
-     */
-    public static JPanel construirPanelesPrincipales(String tipo, Color colorFondo){
-        JPanel panel = new JPanel();
-        panel.setBackground(colorFondo);
-        panel.setCursor(sRecursos.getCursorNormal());
-        switch (tipo){
-            case "menu":
-                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                break;
-            case "central":
-                panel.setLayout(new BorderLayout());
-                break;
-            case "principal":
-                break;
-            case "superior":
-                panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-                break;
-        }
-        return panel;
-    }
-
-    /**
      * Construye los JLabels con el texto y las propiedades especificadas.
      * @param texto El texto del JLabel.
      * @param x La posición x del JLabel.
@@ -523,34 +493,6 @@ public class ObjGraficos {
                     break;
             }
         });
-
-        return boton;
-    }
-
-    /**
-     * Construye los JButton con un diseño personalizado para el menú principal.
-     * El botón cambia su color de fondo cuando el cursor está sobre él.
-     *
-     * @param texto El texto del botón.
-     * @param ancho El ancho del botón.
-     * @param alto El alto del botón.
-     * @param colorFondo El color de fondo del botón.
-     * @param colorFuente El color del texto del botón.
-     * @return Un JButton con un diseño personalizado.
-     */
-    public static JButton construirBotonesMenu(
-            String texto, int ancho, int alto,
-            Color colorFondo, Color colorFuente
-    ) {
-        JButton boton = new JButton(texto);
-        boton.setPreferredSize(new Dimension(ancho, alto));
-        boton.setMaximumSize(new Dimension(ancho, alto));
-        boton.setFocusable(false);
-        boton.setCursor(sRecursos.getCursorMano());
-        boton.setFont(sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON));
-        boton.setBackground(colorFondo);
-        boton.setForeground(colorFuente);
-        boton.setBorder(null);
 
         return boton;
     }

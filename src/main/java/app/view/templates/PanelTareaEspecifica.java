@@ -1,8 +1,7 @@
-package app.view.pruebas;
+package app.view.templates;
 
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
-import app.view.principal.VistaTareas;
 import services.Recursos;
 
 import javax.swing.*;

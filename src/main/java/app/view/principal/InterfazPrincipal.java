@@ -22,7 +22,7 @@ public class InterfazPrincipal extends JFrame {
     GestorTareas gestorTareas;
     Usuario usuario;
 
-    private int xRaton, yRaton, xNuevo, yNuevo;
+    private int xRelativoFrame, yRelativoFrame, xRelativoPantalla, yRelativoPantalla;
 
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
     private JPanel panelTareas, panelMatrix, panelPomodoro;
@@ -49,11 +49,14 @@ public class InterfazPrincipal extends JFrame {
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
         crearPaneles();
-        crearBotones();
-        redimensionarPaneles();
-        moverVentana();
+
+        crearBotonesVentana();
+        crearBotonesMenu();
         botonesActionListener();
         botonesChangeListener();
+
+        redimensionarPaneles();
+        moverVentana();
         cursorBorde();
 
         this.setVisible(true);
@@ -63,10 +66,10 @@ public class InterfazPrincipal extends JFrame {
      * Crea los paneles principales de la interfaz.
      */
     private void crearPaneles(){
-        panelMenu = ObjGraficos.construirPanelesPrincipales("menu", sRecursos.getGRANATE());
-        panelCentral = ObjGraficos.construirPanelesPrincipales("central", sRecursos.getGRIS_CLARO());
-        panelSuperior = ObjGraficos.construirPanelesPrincipales("superior", sRecursos.getBLANCO());
-        panelPrincipal = ObjGraficos.construirPanelesPrincipales("principal", sRecursos.getGRIS_CLARO());
+        panelMenu = templatePanelesPrincipales("menu");
+        panelCentral = templatePanelesPrincipales("central");
+        panelSuperior = templatePanelesPrincipales("superior");
+        panelPrincipal = templatePanelesPrincipales("principal");
         this.panelTareas = new VistaTareas(gestorTareas);
         this.panelMatrix = new VistaMatrix();
         this.panelPomodoro = new VistaPomodoro();
@@ -75,18 +78,18 @@ public class InterfazPrincipal extends JFrame {
         panelPrincipal.setLayout(cardLayout);
 
         this.add(panelMenu, BorderLayout.WEST);
+        this.add(panelCentral, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
+        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
         panelPrincipal.add(panelTareas, "Tareas");
         panelPrincipal.add(panelPomodoro, "Pomodoro");
         panelPrincipal.add(panelMatrix, "Matrix");
-        panelCentral.add(panelPrincipal, BorderLayout.CENTER);
-        this.add(panelCentral, BorderLayout.CENTER);
     }
 
     /**
      * Crea los botones del menú principal y los de control de ventana (max, min, cerrar).
      */
-    private void crearBotones() {
+    private void crearBotonesVentana() {
         botonMinimizar = ObjGraficos.construirBotonesVentana("minimizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
         botonMaximizar = ObjGraficos.construirBotonesVentana("maximizar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
         botonCerrar = ObjGraficos.construirBotonesVentana("cerrar", sRecursos.getBLANCO(), sRecursos.getGRANATE(), this);
@@ -94,13 +97,15 @@ public class InterfazPrincipal extends JFrame {
         panelSuperior.add(botonMinimizar);
         panelSuperior.add(botonMaximizar);
         panelSuperior.add(botonCerrar);
+    }
 
-        botonInicio = ObjGraficos.construirBotonesMenu("Inicio", getWidth(), 50, sRecursos.getBLANCO(), sRecursos.getGRANATE());
-        botonTareas = ObjGraficos.construirBotonesMenu("Tareas", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonMatrix = ObjGraficos.construirBotonesMenu("Matrix", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonPomodoro = ObjGraficos.construirBotonesMenu("Pomodoro", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonAjustes = ObjGraficos.construirBotonesMenu("Ajustes", getWidth(), 50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
-        botonCerrarSesion = ObjGraficos.construirBotonesMenu("Cerrar Sesión", getWidth(),50, sRecursos.getGRANATE(), sRecursos.getBLANCO());
+    private void crearBotonesMenu() {
+        botonInicio = templateBotonesMenu("Inicio");
+        botonTareas = templateBotonesMenu("Tareas");
+        botonMatrix = templateBotonesMenu("Matrix");
+        botonPomodoro = templateBotonesMenu("Pomodoro");
+        botonAjustes = templateBotonesMenu("Ajustes");
+        botonCerrarSesion = templateBotonesMenu("Cerrar Sesión");
 
         panelMenu.add(botonInicio);
         panelMenu.add(botonTareas);
@@ -228,26 +233,27 @@ public class InterfazPrincipal extends JFrame {
         panelSuperior.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (getExtendedState() == JFrame.MAXIMIZED_BOTH){
-                    setExtendedState(JFrame.NORMAL);
-                    xRaton = e.getX();
-                } else {
-                    xRaton = e.getX()+botonInicio.getWidth();
-                }
-                yRaton = e.getY();
+                xRelativoFrame = e.getX() + (int)(getWidth()*0.15);
+                yRelativoFrame = e.getY();
             }
         });
 
         panelSuperior.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                xNuevo = e.getXOnScreen();
-                yNuevo = e.getYOnScreen();
-                setLocation(xNuevo - xRaton, yNuevo - yRaton);
+                if (getExtendedState()  == JFrame.MAXIMIZED_BOTH) {
+                    int anchoAntes = getWidth();
+                    setExtendedState(JFrame.NORMAL);
+                    double proporcionDiferencia = 1.0*anchoAntes/getWidth();
+                    xRelativoFrame =(int) Math.round((e.getX() + getWidth()*0.15) / proporcionDiferencia);
+                    System.out.println(xRelativoFrame);
+                }
+                xRelativoPantalla = e.getXOnScreen();
+                yRelativoPantalla = e.getYOnScreen();
+                setLocation(xRelativoPantalla - xRelativoFrame, yRelativoPantalla - yRelativoFrame);
             }
         });
     }
-
 
     private void cursorBorde () {
         this.addMouseMotionListener(new MouseMotionAdapter() {
@@ -274,5 +280,55 @@ public class InterfazPrincipal extends JFrame {
                 }
             }
         });
+    }
+
+    /**
+     * Construye los paneles principales de la interfaz fija (menú, central, superior y principal).
+     * @param tipo El tipo de panel a construir. Puede ser "menu", "central", "principal" o "superior".
+     * @return El panel construido.
+     */
+    private JPanel templatePanelesPrincipales(String tipo){
+        JPanel panel = new JPanel();
+        panel.setCursor(sRecursos.getCursorNormal());
+        switch (tipo){
+            case "menu":
+                panel.setBackground(sRecursos.getGRANATE());
+                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                break;
+            case "central":
+                panel.setLayout(new BorderLayout());
+                break;
+            case "principal":
+                break;
+            case "superior":
+                panel.setBackground(sRecursos.getBLANCO());
+                panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                break;
+        }
+        return panel;
+    }
+
+    /**
+     * Construye los JButton del Menú con el diseño requerido.
+     * @param texto El texto del botón.
+     * @return Un JButton con el diseño personalizado.
+     */
+    private JButton templateBotonesMenu(String texto) {
+        JButton boton = new JButton(texto);
+        boton.setPreferredSize(new Dimension(getWidth(), 50));
+        boton.setMaximumSize(new Dimension(getWidth(), 50));
+        boton.setFocusable(false);
+        boton.setCursor(sRecursos.getCursorMano());
+        boton.setFont(sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON));
+        if (texto.equals("Inicio")){
+            boton.setBackground(sRecursos.getBLANCO());
+            boton.setForeground(sRecursos.getGRANATE());
+        } else {
+            boton.setBackground(sRecursos.getGRANATE());
+            boton.setForeground(sRecursos.getBLANCO());
+        }
+        boton.setBorder(null);
+
+        return boton;
     }
 }
