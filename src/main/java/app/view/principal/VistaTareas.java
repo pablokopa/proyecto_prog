@@ -36,6 +36,7 @@ public class VistaTareas extends JPanel {
         construirColumnaTareasToDo();
         construirColumnaTareasCompletadas();
         construirColumnaInformacionExtra();
+
         addTareas();
 
         setGeneralCardLayout();
@@ -45,7 +46,7 @@ public class VistaTareas extends JPanel {
      * Construye la columna de tareas por hacer
      */
     private void construirColumnaTareasToDo() {
-        /* Columna Tareas To Do */
+        /* Crea la columna Tareas To Do */
         this.panelColumnaTareasToDo = new JPanel();
         panelColumnaTareasToDo.setLayout(new BorderLayout());
         panelColumnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
@@ -53,27 +54,18 @@ public class VistaTareas extends JPanel {
         panelColumnaTareasToDo.setPreferredSize(new Dimension(200, 0));   // Tiene que ser igual en todas las columnas apra que 'gbc.weightx' funcione correctamente
         gbc.gridx = 0;                          // Columna 1
         gbc.gridy = 0;                          // Fila 0
-        gbc.weightx = 0.28;                      // Ocupa x% del espacio horizontal
+        gbc.weightx = 0.28;                     // Ocupa x% del espacio horizontal
         gbc.weighty = 1;                        // Ocupa y% del espacio vertical
         gbc.fill = GridBagConstraints.BOTH;     // Se expande en ambas direcciones
         add(panelColumnaTareasToDo, gbc);
 
         /* Título de la columna to do */
-        this.labelTituloTareasToDo = new JLabel("Tareas por hacer");
-        labelTituloTareasToDo.setFont(sRecursos.getMonserratBold(25));
-        labelTituloTareasToDo.setHorizontalAlignment(SwingConstants.CENTER);
-        labelTituloTareasToDo.setBackground(Color.lightGray);
-        labelTituloTareasToDo.setOpaque(true);
+        this.labelTituloTareasToDo = crearLabelTituloDeColumna("Tareas por hacer");
         panelColumnaTareasToDo.add(labelTituloTareasToDo, BorderLayout.NORTH);
 
         /* Panel donde están las tareas to do y convertido a JScrollPane */
         this.panelListaTareasToDo = new JPanel();
-        panelListaTareasToDo.setLayout(new BoxLayout(panelListaTareasToDo, BoxLayout.Y_AXIS));
-        panelListaTareasToDo.setBackground(Color.yellow);
-
-        this.scroolPanelListaTareasToDo = new JScrollPane(panelListaTareasToDo);
-        scroolPanelListaTareasToDo.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroolPanelListaTareasToDo.setBorder(null);
+        this.scroolPanelListaTareasToDo = crearPanelListaTareas(panelListaTareasToDo);
         panelColumnaTareasToDo.add(scroolPanelListaTareasToDo, BorderLayout.CENTER);
 
         /* Label para crear nueva tarea */
@@ -110,21 +102,12 @@ public class VistaTareas extends JPanel {
         add(panelColumnaTareasCompletadas, gbc);
 
         /* Título de la columna completadas */
-        this.labelTituloTareasCompletadas = new JLabel("Tareas completadas");
-        labelTituloTareasCompletadas.setFont(sRecursos.getMonserratBold(25));
-        labelTituloTareasCompletadas.setHorizontalAlignment(SwingConstants.CENTER);
-        labelTituloTareasCompletadas.setBackground(Color.lightGray);
-        labelTituloTareasCompletadas.setOpaque(true);
+        this.labelTituloTareasCompletadas = crearLabelTituloDeColumna("Tareas completadas");
         panelColumnaTareasCompletadas.add(labelTituloTareasCompletadas, BorderLayout.NORTH);
 
         /* Panel donde están las tareas completadas y convertido a JScrollPane */
         this.panelListaTareasCompletadas = new JPanel();
-        panelListaTareasCompletadas.setLayout(new BoxLayout(panelListaTareasCompletadas, BoxLayout.Y_AXIS));
-        panelListaTareasCompletadas.setBackground(Color.yellow);
-
-        this.scroolPanelListaTareasCompletadas = new JScrollPane(panelListaTareasCompletadas);
-        scroolPanelListaTareasCompletadas.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroolPanelListaTareasCompletadas.setBorder(null);
+        this.scroolPanelListaTareasCompletadas = crearPanelListaTareas(panelListaTareasCompletadas);
         panelColumnaTareasCompletadas.add(scroolPanelListaTareasCompletadas, BorderLayout.CENTER);
     }
 
@@ -145,48 +128,59 @@ public class VistaTareas extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         add(panelColumnaInformacionExtra, gbc);
 
-        /* Panel donde se muestra la información de la tarea seleccionada */
+        cardGeneralColumnaInformacionExtra();
+        cardTareaSeleccionadaColumnaInformacionExtra();
+        cardNuevaTareaColumnaInformacionExtra();
+    }
+
+    /**
+     * Card donde se muestra la información general de las tareas
+     * Se incluye en la columna de información extra.
+     */
+    private void cardGeneralColumnaInformacionExtra() {
+        /* Card donde se muestra la información de la tarea seleccionada */
         this.panelInformacionGeneral = new JPanel();
         panelInformacionGeneral.setLayout(new BorderLayout());
         panelInformacionGeneral.setBackground(Color.orange);
         panelColumnaInformacionExtra.add(panelInformacionGeneral, "InfoGeneral");
 
-        /* Título de la columna información extra */
-        this.labelTituloInformacionGeneral = new JLabel("Info General");
-        labelTituloInformacionGeneral.setFont(sRecursos.getMonserratBold(25));
-        labelTituloInformacionGeneral.setHorizontalAlignment(SwingConstants.CENTER);
-        labelTituloInformacionGeneral.setBackground(Color.lightGray);
-        labelTituloInformacionGeneral.setOpaque(true);
+        /* Título de la columna Información Extra en el card Info General */
+        this.labelTituloInformacionGeneral = crearLabelTituloDeColumna("Info General");
         panelInformacionGeneral.add(labelTituloInformacionGeneral, BorderLayout.NORTH);
+    }
 
-        /* Panel donde se muestra la información de la tarea seleccionada */
+    /**
+     * Card donde se muestra la información de la tarea seleccionada
+     * Se incluye en la columna de información extra.
+     */
+    private void cardTareaSeleccionadaColumnaInformacionExtra() {
+        /* Card donde se muestra la información de la tarea seleccionada */
         this.panelInformacionTareaSeleccionada = new JPanel();
         panelInformacionTareaSeleccionada.setLayout(new BorderLayout());
         panelInformacionTareaSeleccionada.setBackground(Color.orange);
         panelColumnaInformacionExtra.add(panelInformacionTareaSeleccionada, "InfoSeleccionada");
 
-        /* Título de la columna información extra */
-        this.labelTituloInformacionTareaSeleccionada = new JLabel("Tarea Seleccionada");
-        labelTituloInformacionTareaSeleccionada.setFont(sRecursos.getMonserratBold(25));
-        labelTituloInformacionTareaSeleccionada.setHorizontalAlignment(SwingConstants.CENTER);
-        labelTituloInformacionTareaSeleccionada.setBackground(Color.lightGray);
-        labelTituloInformacionTareaSeleccionada.setOpaque(true);
+        /* Título de la columna Información Extra en el card Tarea Seleccionada */
+        this.labelTituloInformacionTareaSeleccionada = crearLabelTituloDeColumna("Tarea Seleccionada");
         panelInformacionTareaSeleccionada.add(labelTituloInformacionTareaSeleccionada, BorderLayout.NORTH);
+    }
 
-        /* Panel donde se muestra la información de la tarea seleccionada */
+    /**
+     * Card donde se muestran los campos para crear una nueva tarea.
+     * Se incluye en la columna de información extra.
+     */
+    private void cardNuevaTareaColumnaInformacionExtra() {
+        /* Card donde se muestra la información de la tarea seleccionada */
         this.panelInformacionNuevaTarea = new JPanel();
         panelInformacionNuevaTarea.setLayout(new BorderLayout());
         panelInformacionNuevaTarea.setBackground(Color.orange);
         panelColumnaInformacionExtra.add(panelInformacionNuevaTarea, "InfoNueva");
 
-        /* Título de la columna información extra */
-        this.labelTituloInformacionNuevaTarea = new JLabel("Nueva tarea");
-        labelTituloInformacionNuevaTarea.setFont(sRecursos.getMonserratBold(25));
-        labelTituloInformacionNuevaTarea.setHorizontalAlignment(SwingConstants.CENTER);
-        labelTituloInformacionNuevaTarea.setBackground(Color.lightGray);
-        labelTituloInformacionNuevaTarea.setOpaque(true);
+        /* Título de la columna Información Extra en el card Nueva Tarea */
+        this.labelTituloInformacionNuevaTarea = crearLabelTituloDeColumna("Nueva Tarea");
         panelInformacionNuevaTarea.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
 
+        /* Panel donde se introduce la información de la nueva tarea */
         this.panelInformacionCrearNuevaTarea = new JPanel();
         panelInformacionCrearNuevaTarea.setLayout(new GridBagLayout());
 
@@ -196,7 +190,7 @@ public class VistaTareas extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1;
-        gbc.weighty = 0.05;
+        gbc.weighty = 0.01;
         gbc.fill = GridBagConstraints.BOTH;
         panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
 
@@ -206,7 +200,7 @@ public class VistaTareas extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1;
-        gbc.weighty = 0.85;
+        gbc.weighty = 0.97;
         gbc.fill = GridBagConstraints.BOTH;
         panelInformacionCrearNuevaTarea.add(textAreaDescripcionTarea, gbc);
 
@@ -217,7 +211,7 @@ public class VistaTareas extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1;
-        gbc.weighty = 0.05;
+        gbc.weighty = 0.01;
         gbc.fill = GridBagConstraints.BOTH;
         panelInformacionCrearNuevaTarea.add(panelSelectorEtiquetas, gbc);
 
@@ -227,7 +221,7 @@ public class VistaTareas extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 1;
-        gbc.weighty = 0.05;
+        gbc.weighty = 0.01;
         gbc.fill = GridBagConstraints.BOTH;
         panelInformacionCrearNuevaTarea.add(botonCrearTarea, gbc);
 
@@ -247,6 +241,7 @@ public class VistaTareas extends JPanel {
         panelInformacionNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
 
+
     /**
      * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
      */
@@ -259,28 +254,79 @@ public class VistaTareas extends JPanel {
         }
     }
 
+    /**
+     * Crea un JLabel con el texto que se le pasa y lo devuelve con el diseño requerido para el título de la columna.
+     * @param texto Texto que se le quiere poner al JLabel
+     * @return JLabel con el texto que se le ha pasado
+     */
+    private JLabel crearLabelTituloDeColumna(String texto){
+        JLabel labelTitulo = new JLabel(texto);
+        labelTitulo.setFont(sRecursos.getMonserratBold(25));
+        labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        labelTitulo.setBackground(Color.lightGray);
+        labelTitulo.setOpaque(true);
+        return labelTitulo;
+    }
+
+    /**
+     * Crea un scrollPane con el panel de la lista de tareas y le añade el diseño requerido
+     * @param panel Panel donde se añadirán las tareas
+     * @return JScrollPane con el panel de tareas
+     */
+    private JScrollPane crearPanelListaTareas(JPanel panel){
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.yellow);
+
+        JScrollPane scrollPanel = new JScrollPane(panel);
+        scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPanel.setBorder(null);
+        return scrollPanel;
+    }
+
+    /**
+     * Cambia el cardLayout de la columna de información extra al  card General Info
+     */
     public void setGeneralCardLayout(){
         cardLayout.show(panelColumnaInformacionExtra, "InfoGeneral");
     }
 
+    /**
+     * Añade una tarea al panel de tareas por hacer
+     * @param panelTarea Panel de la tarea que se quiere añadir
+     */
     public void añadirAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.add(panelTarea);
     }
 
+    /**
+     * Añade una tarea al panel de tareas completadas
+     * @param panelTarea Panel de la tarea que se quiere añadir
+     */
     public void añadirAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.add(panelTarea);
     }
 
+    /**
+     * Cambia una tarea de columna de tareas por hacer a tareas completadas
+     * @param panelTarea Panel de la tarea que se quiere cambiar de columna
+     */
     public void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.add(panelTarea);
         panelListaTareasCompletadas.remove(panelTarea);
     }
 
+    /**
+     * Cambia una tarea de columna de tareas completadas a tareas por hacer
+     * @param panelTarea Panel de la tarea que se quiere cambiar de columna
+     */
     public void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.add(panelTarea);
         panelListaTareasToDo.remove(panelTarea);
     }
 
+    /**
+     * Actualiza la vista de las tareas
+     */
     public void actualizarVistaTareas(){
         repaint();
         revalidate();

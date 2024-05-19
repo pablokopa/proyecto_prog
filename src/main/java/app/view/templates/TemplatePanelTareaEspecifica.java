@@ -10,18 +10,20 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Clase que crea un panel (template) con la información de una tarea específica y añade funciones.
+ * Hecho en una clase aparte por su complejidad y poder utilizarlo en diferentes partes de la aplicación.
+ */
 public class TemplatePanelTareaEspecifica extends JPanel {
-    Recursos sRecursos = Recursos.getService();
+    private final Recursos sRecursos = Recursos.getService();
+    private final Tarea tarea;
+    private final GestorTareas gestorTareas;
+    private final VistaTareas vistaTareas;
 
-    Tarea tarea;
-    GestorTareas gestorTareas;
+    private final TemplatePanelTareaEspecifica esto;
 
-    VistaTareas vistaTareas;
-
-    JLabel labelImagen;
-    JPanel panelTarea;
-
-    TemplatePanelTareaEspecifica esto;
+    private JLabel labelImagen;
+    private JPanel panelTarea;
 
     public TemplatePanelTareaEspecifica(Tarea tarea, GestorTareas gestorTareas, VistaTareas vistaTareas) {
         this.tarea = tarea;
@@ -39,6 +41,9 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         crearPanelTarea();
     }
 
+    /**
+     * Crea un label con una imagen de un check y lo añade al panel.
+     */
     private void crearLabelImagen() {
         this.labelImagen = new JLabel();
 
@@ -56,6 +61,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
             vistaTareas.añadirAColumnaToDo(esto);
         }
 
+        /* Al hacer click en la tarea, se marca como completada o no y se cambia de columna */
         labelImagen.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -75,6 +81,9 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         add(labelImagen, BorderLayout.WEST);
     }
 
+    /**
+     * Crea un panel con el nombre de la tarea y lo añade al panel.
+     */
     private void crearPanelTarea (){
         this.panelTarea = new JPanel();
         panelTarea.setLayout(new BorderLayout());
