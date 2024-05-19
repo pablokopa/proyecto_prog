@@ -33,7 +33,7 @@ Más concretamente, en los siguientes aspectos:
 ## Seguimiento_02_23
 Durante la segunda semana del proyecto hemos hecho todo lo relacionado con
 la **base de datos** y hemos avanzado en la **interfaz principal**.
-Los principales cambios realizados hna sido:
+Los cambios realizados han sido:
 1. Cambiado el proyecto de IntelIJ a **Maven**
 2. Creación de la **base de datos** (Base, esquema, tablas, roles, permisos, etc).
 3. Creación de una **VPS** en la que poder subir la base de datos para que el usuario tenga su progreso en cualquier ordenador.

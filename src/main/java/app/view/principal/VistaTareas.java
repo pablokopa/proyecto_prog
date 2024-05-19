@@ -11,7 +11,6 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class VistaTareas extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
@@ -191,7 +190,6 @@ public class VistaTareas extends JPanel {
         this.panelInformacionCrearNuevaTarea = new JPanel();
         panelInformacionCrearNuevaTarea.setLayout(new GridBagLayout());
 
-
         JTextField textFieldNombreTarea = new JTextField();
         textFieldNombreTarea.setPreferredSize(new Dimension(0, 50));
         textFieldNombreTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getGRIS_CLARO()));
@@ -233,11 +231,24 @@ public class VistaTareas extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         panelInformacionCrearNuevaTarea.add(botonCrearTarea, gbc);
 
+        botonCrearTarea.addActionListener(e -> {
+            String nombre = textFieldNombreTarea.getText();
+            if (nombre.isBlank()){
+                System.out.println("Tarea sin nombre no posible");
+                return;
+            }
+            String descripcion = textAreaDescripcionTarea.getText();
+            Tarea tarea = new Tarea(nombre, descripcion, usuario.getNombreU());
+            gestorTareas.crearTarea(tarea);
+            new TemplatePanelTareaEspecifica(tarea, gestorTareas, this);
+            actualizarVistaTareas();
+        });
+
         panelInformacionNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
 
     /**
-     * Recupera las tareas del usuario de la base de datos, y les añade las funciones (Listener) necesarias
+     * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
      */
     private void addTareas() {
         gestorTareas.getTareasDeBase();     // Llama al método que obtiene las tareas del usuario de la base de datos y las guarda en una lista
@@ -263,13 +274,16 @@ public class VistaTareas extends JPanel {
     public void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.add(panelTarea);
         panelListaTareasCompletadas.remove(panelTarea);
-        pintar();
     }
 
     public void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.add(panelTarea);
         panelListaTareasToDo.remove(panelTarea);
-        pintar();
+    }
+
+    public void actualizarVistaTareas(){
+        repaint();
+        revalidate();
     }
 
     public JPanel getPanelColumnaInformacionExtra() {
@@ -278,10 +292,5 @@ public class VistaTareas extends JPanel {
 
     public CardLayout getCardLayout() {
         return cardLayout;
-    }
-
-    public void pintar(){
-        repaint();
-        revalidate();
     }
 }

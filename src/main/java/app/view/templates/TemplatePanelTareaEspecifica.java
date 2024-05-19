@@ -68,6 +68,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
                         vistaTareas.cambiarAColumnaToDo(esto);
                     }
                 }
+                vistaTareas.actualizarVistaTareas();
             }
         });
 
