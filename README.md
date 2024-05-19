@@ -16,9 +16,9 @@ en la parte gráfica de la **interfaz de inicio de sesión** y en las
 **principales funcionalidades** del programa.
 Más concretamente, en los siguientes aspectos:
 1. Creación de clases principales.
-2. Hecha la interfaz de inicio de sesión.
-3. Búsqueda de las imágenes y png utilizados en el programa
-4. Creadas clases Servicios y ObjRecursos para facilitar la creación de Swing.
+2. Búsqueda de las imágenes y png utilizados en el programa
+3. Creadas clases Servicios y ObjRecursos para facilitar la creación de Swing sin Layouts.
+4. Hecha la interfaz de inicio de sesión.
 5. Métodos de usuario (Registrar y Conectar).
 6. Métodos de las tareas (Crear, Modificar y Eliminar).
 7. Métodos para añadir **restricciones en el nombre y la contraseña** del usuario.

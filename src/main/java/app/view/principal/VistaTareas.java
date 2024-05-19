@@ -233,21 +233,6 @@ public class VistaTareas extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         panelInformacionCrearNuevaTarea.add(botonCrearTarea, gbc);
 
-        botonCrearTarea.addActionListener(e -> {
-            String nombre = textFieldNombreTarea.getText();
-            if (nombre.isBlank()){
-                System.out.println("Tarea sin nombre no posible");
-                return;
-            }
-            String descripcion = textAreaDescripcionTarea.getText();
-            Tarea tarea = new Tarea(nombre, descripcion, usuario.getNombreU());
-            gestorTareas.crearTarea(tarea);
-            TemplatePanelTareaEspecifica templateTarea = new TemplatePanelTareaEspecifica(tarea);
-            panelListaTareasToDo.add(templateTarea);
-            repaint();
-            revalidate();
-        });
-
         panelInformacionNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
 
@@ -255,51 +240,48 @@ public class VistaTareas extends JPanel {
      * Recupera las tareas del usuario de la base de datos, y les añade las funciones (Listener) necesarias
      */
     private void addTareas() {
-        /* Obtiene las tareas del usuario de la base de datos y las guarda en un ArrayList */
-        gestorTareas.getTareasDeBase();
-        ArrayList<Tarea> listaTareas = gestorTareas.getListaTareas();
+        gestorTareas.getTareasDeBase();     // Llama al método que obtiene las tareas del usuario de la base de datos y las guarda en una lista
 
-        /* Recorre la lista de tareas y utiliza el template PanelTareaEspecífica para mostrarlas */
-        for (Tarea tarea : listaTareas) {
-            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
-
-            /* Añade un MouseListener al icono del check que completa la tarea al hacer click sobre él y cambia la tarea de columna */
-            panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (gestorTareas.completarTarea(tarea)){
-                        if (tarea.getCompletadaT()){
-                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
-                            panelListaTareasCompletadas.add(panelTarea);
-                            panelListaTareasToDo.remove(panelTarea);
-                        } else {
-                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
-                            panelListaTareasToDo.add(panelTarea);
-                            panelListaTareasCompletadas.remove(panelTarea);
-                        }
-                    }
-                    repaint();
-                    revalidate();
-                }
-            });
-
-            panelTarea.getPanelTarea().addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    cardLayout.show(panelColumnaInformacionExtra, "InfoSeleccionada");
-                }
-            });
-
-            /* Al iniciar la aplicación; si la tarea está completada la añade al panel de tareas completadas, si no, la añade al panel de tareas por hacer */
-            if (tarea.getCompletadaT()){
-                panelListaTareasCompletadas.add(panelTarea);
-            } else {
-                panelListaTareasToDo.add(panelTarea);
-            }
+        /* Utiliza el template PanelTareaEspecífica para mostrarlas y aplicarle los Listener convenientes */
+        for (Tarea tarea : gestorTareas.getListaTareas()) {
+            new TemplatePanelTareaEspecifica(tarea, gestorTareas, this);
         }
     }
 
     public void setGeneralCardLayout(){
         cardLayout.show(panelColumnaInformacionExtra, "InfoGeneral");
+    }
+
+    public void añadirAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+        panelListaTareasToDo.add(panelTarea);
+    }
+
+    public void añadirAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+        panelListaTareasCompletadas.add(panelTarea);
+    }
+
+    public void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+        panelListaTareasToDo.add(panelTarea);
+        panelListaTareasCompletadas.remove(panelTarea);
+        pintar();
+    }
+
+    public void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+        panelListaTareasCompletadas.add(panelTarea);
+        panelListaTareasToDo.remove(panelTarea);
+        pintar();
+    }
+
+    public JPanel getPanelColumnaInformacionExtra() {
+        return panelColumnaInformacionExtra;
+    }
+
+    public CardLayout getCardLayout() {
+        return cardLayout;
+    }
+
+    public void pintar(){
+        repaint();
+        revalidate();
     }
 }
