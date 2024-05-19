@@ -235,6 +235,10 @@ public class VistaTareas extends JPanel {
 
         botonCrearTarea.addActionListener(e -> {
             String nombre = textFieldNombreTarea.getText();
+            if (nombre.isBlank()){
+                System.out.println("Tarea sin nombre no posible");
+                return;
+            }
             String descripcion = textAreaDescripcionTarea.getText();
             Tarea tarea = new Tarea(nombre, descripcion, usuario.getNombreU());
             gestorTareas.crearTarea(tarea);
