@@ -52,7 +52,6 @@ public class GestorTareas {
     /**
      * Añade una tarea a la base de datos y a la lista de tareas.
      * @param tarea tarea a añadir
-     * @return true si se ha añadido correctamente
      */
     public void crearTarea(Tarea tarea) {
         String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";

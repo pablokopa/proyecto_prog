@@ -12,7 +12,7 @@ public class Tarea {
     private Timestamp fechaCreacionT;
     private Timestamp fechaFinalizacionT;
     private boolean completadaT;
-    private String nombreU;
+    private final String nombreU;
 
     public Tarea(String nombreT, String descripcionT, String nombreU){
         this.nombreT = nombreT;

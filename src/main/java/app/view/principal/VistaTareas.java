@@ -1,5 +1,6 @@
 package app.view.principal;
 
+import app.controller.ControladorTareas;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import app.model.usuarios.Usuario;
@@ -13,19 +14,25 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class VistaTareas extends JPanel {
+
+    private ControladorTareas controladorTareas;
+
     private final Recursos sRecursos = Recursos.getService();
     private final GridBagConstraints gbc;
     private final GestorTareas gestorTareas;
     private final Usuario usuario;
 
     private JPanel panelColumnaTareasToDo, panelColumnaTareasCompletadas, panelColumnaInformacionExtra;
-    private JPanel panelListaTareasToDo, panelListaTareasCompletadas, panelInformacionNuevaTarea, panelInformacionTareaSeleccionada, panelInformacionGeneral, panelInformacionCrearNuevaTarea;
+    private JPanel panelListaTareasToDo, panelListaTareasCompletadas, panelInformacionNuevaTarea, panelInformacionTareaSeleccionada, panelInformacionGeneral, panelInformacionCrearNuevaTarea, panelPrincipalInformacionTareaSeleccionada;
     private JScrollPane scroolPanelListaTareasToDo, scroolPanelListaTareasCompletadas;
     private JLabel labelTituloTareasToDo, labelCrearNuevaTarea, labelTituloTareasCompletadas, labelTituloInformacionNuevaTarea, labelTituloInformacionGeneral, labelTituloInformacionTareaSeleccionada;
 
-    private CardLayout cardLayout;
+    private final CardLayout cardLayout;
 
     public VistaTareas(GestorTareas gestorTareas) {
+
+        this.controladorTareas = new ControladorTareas(gestorTareas, this);
+
         this.gestorTareas = gestorTareas;
         this.usuario = gestorTareas.getUsuario();
         cardLayout = new CardLayout();
@@ -51,7 +58,7 @@ public class VistaTareas extends JPanel {
         panelColumnaTareasToDo.setLayout(new BorderLayout());
         panelColumnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
         panelColumnaTareasToDo.setBackground(Color.GREEN);
-        panelColumnaTareasToDo.setPreferredSize(new Dimension(200, 0));   // Tiene que ser igual en todas las columnas apra que 'gbc.weightx' funcione correctamente
+        panelColumnaTareasToDo.setPreferredSize(new Dimension(200, 0));   // Tiene que ser igual en todas las columnas para que 'gbc.weightx' funcione correctamente
         gbc.gridx = 0;                          // Columna 1
         gbc.gridy = 0;                          // Fila 0
         gbc.weightx = 0.28;                     // Ocupa x% del espacio horizontal
@@ -69,6 +76,7 @@ public class VistaTareas extends JPanel {
         panelColumnaTareasToDo.add(scroolPanelListaTareasToDo, BorderLayout.CENTER);
 
         /* Label para crear nueva tarea */
+//        this.labelCrearNuevaTarea = crearLabelTituloDeColumna("Crear nueva tarea");
         this.labelCrearNuevaTarea = new JLabel("Crear nueva tarea");
         labelCrearNuevaTarea.setFont(sRecursos.getMonserratBold(25));
         labelCrearNuevaTarea.setHorizontalAlignment(SwingConstants.CENTER);
@@ -227,15 +235,8 @@ public class VistaTareas extends JPanel {
 
         botonCrearTarea.addActionListener(e -> {
             String nombre = textFieldNombreTarea.getText();
-            if (nombre.isBlank()){
-                System.out.println("Tarea sin nombre no posible");
-                return;
-            }
             String descripcion = textAreaDescripcionTarea.getText();
-            Tarea tarea = new Tarea(nombre, descripcion, usuario.getNombreU());
-            gestorTareas.crearTarea(tarea);
-            new TemplatePanelTareaEspecifica(tarea, gestorTareas, this);
-            actualizarVistaTareas();
+            controladorTareas.crearTarea(nombre, descripcion);
         });
 
         panelInformacionNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
@@ -294,7 +295,7 @@ public class VistaTareas extends JPanel {
      * Añade una tarea al panel de tareas por hacer
      * @param panelTarea Panel de la tarea que se quiere añadir
      */
-    public void añadirAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+    public void addAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.add(panelTarea);
     }
 
@@ -302,7 +303,7 @@ public class VistaTareas extends JPanel {
      * Añade una tarea al panel de tareas completadas
      * @param panelTarea Panel de la tarea que se quiere añadir
      */
-    public void añadirAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+    public void addAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.add(panelTarea);
     }
 

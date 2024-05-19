@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class InterfazPrincipal extends JFrame {
     private final Recursos sRecursos;
 
-    GestorTareas gestorTareas;
-    Usuario usuario;
+    private final GestorTareas gestorTareas;
+//    private final Usuario usuario;
 
     private int xRelativoFrame, yRelativoFrame, xRelativoPantalla, yRelativoPantalla;
 
@@ -31,8 +31,8 @@ public class InterfazPrincipal extends JFrame {
     private VistaPomodoro panelPomodoro;
 
     private CardLayout cardLayout;
-
-    private Dimension dimensionPantallaCompleta, dimensionPantallaNormal;
+    private ArrayList<JButton> listaBotonesMenu;
+    private final Dimension dimensionPantallaCompleta, dimensionPantallaNormal;
 
     private String textoBotonActual = "";
 
@@ -41,7 +41,7 @@ public class InterfazPrincipal extends JFrame {
         this.sRecursos = Recursos.getService();
 
         this.gestorTareas = gestorTareas;
-        this.usuario = gestorTareas.getUsuario();
+//        this.usuario = gestorTareas.getUsuario();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
@@ -65,7 +65,6 @@ public class InterfazPrincipal extends JFrame {
 
         redimensionarPaneles();
         moverVentana();
-        cursorBorde();
 
         this.setVisible(true);
     }
@@ -125,6 +124,8 @@ public class InterfazPrincipal extends JFrame {
         panelMenu.add(Box.createVerticalGlue());   //espacio entre botones
         panelMenu.add(botonAjustes);
         panelMenu.add(botonCerrarSesion);
+
+        addBotonesALista();
     }
 
     /**
@@ -132,45 +133,29 @@ public class InterfazPrincipal extends JFrame {
      * Permite cambiar la vista al pulsar un botón del menú y cambia su tamaño o desconecta al usuario.
      */
     private void botonesActionListener() {
-        /* Añade los botones necesarios a un ArrayList temporal para reducir la cantidad de código */
-        ArrayList<JButton> listaBotonesMenuConVista = new ArrayList<>();
-        listaBotonesMenuConVista.add(botonInicio);
-        listaBotonesMenuConVista.add(botonTareas);
-        listaBotonesMenuConVista.add(botonMatrix);
-        listaBotonesMenuConVista.add(botonPomodoro);
-        listaBotonesMenuConVista.add(botonAjustes);
-        listaBotonesMenuConVista.add(botonCerrarSesion);
-
-        for (JButton boton : listaBotonesMenuConVista){
+        for (JButton boton : listaBotonesMenu){
             boton.addActionListener(e -> {
                 String textoBoton = boton.getText();
 
-                /* Si el botón es Cerrar Sesión desconecta al usuario y vuelve a la ventana de login. Los botones no cambian de tamaño porque no es una vista */
-                if (textoBoton.equals("Cerrar Sesión")) {
-                    dispose();
-                    Usuario.desconectarUsuario();
-                    new InterfazLogin(new GestorUsuarios());
-                    return;
+                switch (textoBoton) {
+                    case "Cerrar Sesión":   // Si el botón es Cerrar Sesión, se desconecta al usuario y vuelve a la ventana de login
+                        dispose();
+                        Usuario.desconectarUsuario();
+                        new InterfazLogin(new GestorUsuarios());
+                        return;
+                    case "Inicio":      // Si el botón es Inicio, contrae el resto de botones
+                        contraerBotones(listaBotonesMenu);
+                        break;
+                    case "Tareas":      // Si el botón es Tareas, se cambia el card de la columna Información Extra de la VistaTareas y continua a default
+                        panelTareas.setGeneralCardLayout();
+                    default:            // Si es cualquier otro botón, expande el botón seleccionado y contrae el resto de botones
+                        contraerBotones(listaBotonesMenu);
+                        boton.setPreferredSize(new Dimension(getWidth(), 75));
                 }
-                /* Si el botón es Inicio se cambia a la vista inicio y contrae todos los botones. Inicio no se expande por estética */
-                else if (textoBoton.equals("Inicio")){
-                    contraerBotones(listaBotonesMenuConVista);
-                }
-                else if (textoBoton.equals("Tareas")){
-                    contraerBotones(listaBotonesMenuConVista);
-                    boton.setPreferredSize(new Dimension(getWidth(), 75));
-                    panelTareas.setGeneralCardLayout();
-                }
-                /* Si es cualquier otro botón, se cambia a la vista seleccionada, expande el botón seleccionado y contrae el resto de botones */
-                else {
-                    contraerBotones(listaBotonesMenuConVista);
-                    boton.setPreferredSize(new Dimension(getWidth(), 75));
-                }
-                cardLayout.show(panelPrincipal, textoBoton);        // Muestra la ventana del botón seleccionado
+                cardLayout.show(panelPrincipal, textoBoton);        // Muestra la ventana del botón seleccionado en el menú principal
                 panelMenu.revalidate();
 
-                /* Guarda el texto del botón seleccionado para evitar que pierda el color 'seleccionado' por el ChangeListener */
-                textoBotonActual = textoBoton;
+                textoBotonActual = textoBoton;    // Guarda el texto del botón seleccionado para mantenerlo con el color 'seleccionado'
             });
         }
     }
@@ -193,16 +178,12 @@ public class InterfazPrincipal extends JFrame {
      * Cambia el color de fondo del botón al pasar el ratón por encima y permite que el botón seleccionado mantenga ese color.
      */
     private void botonesChangeListener() {
-        /* Añade los botones necesarios a un ArrayList temporal para reducir la cantidad de código */
-        ArrayList<JButton> listaBotonesMenuTodos = new ArrayList<>();
-        listaBotonesMenuTodos.add(botonTareas);
-        listaBotonesMenuTodos.add(botonMatrix);
-        listaBotonesMenuTodos.add(botonPomodoro);
-        listaBotonesMenuTodos.add(botonAjustes);
-        listaBotonesMenuTodos.add(botonCerrarSesion);
-
-        for (JButton boton : listaBotonesMenuTodos) {
+        for (JButton boton : listaBotonesMenu) {
             boton.addChangeListener(e -> {
+                /* Si el botón es Inicio, no cambia de color */
+                if (boton.getText().equals("Inicio")) {
+                    return;
+                }
                 /* Cambia el color del botón al pasar el ratón por encima */
                 if (boton.getModel().isRollover()) {
                     boton.setBackground(sRecursos.getGRANATE().brighter());
@@ -278,33 +259,6 @@ public class InterfazPrincipal extends JFrame {
                 xRelativoPantalla = e.getXOnScreen();
                 yRelativoPantalla = e.getYOnScreen();
                 setLocation(xRelativoPantalla - xRelativoFrame, yRelativoPantalla - yRelativoFrame);
-            }
-        });
-    }
-
-    private void cursorBorde () {
-        this.addMouseMotionListener(new MouseMotionAdapter() {
-//            @Override
-//            public void mouseDragged(MouseEvent e) {
-//                super.mouseDragged(e);
-//            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-//                super.mouseMoved(e);
-                if (e.getX() == getWidth()) {
-                    System.out.println("borde derecho");
-                }
-                if (e.getX() == 0){
-                    System.out.println("borde izquierdo");
-//                    panelMenu.setCursor(new Cursor(Cursor.W_RESIZE_CURSOR));
-                }
-                if (e.getY() == getHeight()) {
-                    System.out.println("borde inferior");
-                }
-                if (e.getY() == 0) {
-                    System.out.println("borde superior");
-                }
             }
         });
     }
@@ -403,9 +357,17 @@ public class InterfazPrincipal extends JFrame {
         boton.setBorder(null);
 
         addActionListenerBotonesVentana(boton, tipo);
+
         return boton;
     }
 
+    /**
+     * Añade ActionListener a los botones de la ventana.
+     * Permite minimizar, maximizar o cerrar la ventana.
+     *
+     * @param boton El botón al que añadir el ActionListener.
+     * @param tipo El tipo de botón. Puede ser "minimizar", "maximizar" o "cerrar".
+     */
     private void addActionListenerBotonesVentana(JButton boton, String tipo) {
         boton.addActionListener(e -> {
             switch (tipo){
@@ -426,5 +388,18 @@ public class InterfazPrincipal extends JFrame {
                     break;
             }
         });
+    }
+
+    /**
+     * Añade los botones del menú a una lista para poder aplicarle las funciones.
+     */
+    private void addBotonesALista(){
+        this.listaBotonesMenu = new ArrayList<>();
+        listaBotonesMenu.add(botonInicio);
+        listaBotonesMenu.add(botonTareas);
+        listaBotonesMenu.add(botonMatrix);
+        listaBotonesMenu.add(botonPomodoro);
+        listaBotonesMenu.add(botonAjustes);
+        listaBotonesMenu.add(botonCerrarSesion);
     }
 }

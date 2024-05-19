@@ -11,8 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Clase que crea un panel (template) con la información de una tarea específica y añade funciones.
- * Hecho en una clase aparte por su complejidad y poder utilizarlo en diferentes partes de la aplicación.
+ * Clase que crea un panel con la información de una tarea y le añade funciones.
+ * Incluye el panel creado en la columna correspondiente de la VistaTareas.
  */
 public class TemplatePanelTareaEspecifica extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
@@ -25,6 +25,14 @@ public class TemplatePanelTareaEspecifica extends JPanel {
     private JLabel labelImagen;
     private JPanel panelTarea;
 
+    /**
+     * Constructor de la clase.
+     * Crea un panel con la información de una tarea y le añade funciones.
+     * Incluye el panel creado en la columna correspondiente de la VistaTareas.
+     * @param tarea tarea a mostrar
+     * @param gestorTareas gestor de tareas
+     * @param vistaTareas vista de tareas
+     */
     public TemplatePanelTareaEspecifica(Tarea tarea, GestorTareas gestorTareas, VistaTareas vistaTareas) {
         this.tarea = tarea;
         this.gestorTareas = gestorTareas;
@@ -56,9 +64,9 @@ public class TemplatePanelTareaEspecifica extends JPanel {
 
         /* Al iniciar la aplicación; si la tarea está completada la añade al panel de tareas completadas, si no, la añade al panel de tareas por hacer */
         if (tarea.getCompletadaT()){
-            vistaTareas.añadirAColumnaCompletada(esto);
+            vistaTareas.addAColumnaCompletada(esto);
         } else {
-            vistaTareas.añadirAColumnaToDo(esto);
+            vistaTareas.addAColumnaToDo(esto);
         }
 
         /* Al hacer click en la tarea, se marca como completada o no y se cambia de columna */

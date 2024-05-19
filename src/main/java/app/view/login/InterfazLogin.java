@@ -218,9 +218,8 @@ public class InterfazLogin extends JFrame{
         boton.setCursor(sRecursos.getCursorMano());
         boton.setBorder(null);
 
-        boton.addActionListener(e -> {
-            dispose();
-        });
+        /* Listener para cerrar la ventana */
+        boton.addActionListener(e -> dispose());
 
         return boton;
     }
