@@ -97,6 +97,22 @@ public class GestorTareas {
         return true;
     }
 
+    public boolean eliminarTarea(Tarea tarea){
+        String sql = "delete from tarea where idt = ? and nombreu = ?";
+
+        try(Connection conexion = ConectarBD.conectar()){
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+            prepare.setInt(1, tarea.getIdT());
+            prepare.setString(2, tarea.getNombreU());
+            prepare.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
     public ArrayList<Tarea> getListaTareas(){
         return this.listaTareas;
     }

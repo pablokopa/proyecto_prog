@@ -3,7 +3,6 @@ package app.view.principal;
 import app.controller.ControladorTareas;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
-import app.model.usuarios.Usuario;
 import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
@@ -15,17 +14,18 @@ import java.awt.event.MouseEvent;
 
 public class VistaTareas extends JPanel {
 
-    private ControladorTareas controladorTareas;
+    private final ControladorTareas controladorTareas;
 
     private final Recursos sRecursos = Recursos.getService();
     private final GridBagConstraints gbc;
     private final GestorTareas gestorTareas;
-    private final Usuario usuario;
 
-    private JPanel panelColumnaTareasToDo, panelColumnaTareasCompletadas, panelColumnaInformacionExtra;
-    private JPanel panelListaTareasToDo, panelListaTareasCompletadas, panelInformacionNuevaTarea, panelInformacionTareaSeleccionada, panelInformacionGeneral, panelInformacionCrearNuevaTarea, panelPrincipalInformacionTareaSeleccionada;
-    private JScrollPane scroolPanelListaTareasToDo, scroolPanelListaTareasCompletadas;
-    private JLabel labelTituloTareasToDo, labelCrearNuevaTarea, labelTituloTareasCompletadas, labelTituloInformacionNuevaTarea, labelTituloInformacionGeneral, labelTituloInformacionTareaSeleccionada;
+    private JPanel columnaInformacion;
+    private JPanel panelListaTareasToDo;
+    private JPanel panelListaTareasCompletadas;
+    private JLabel labelNombreTarea, labelDescripcionTarea, labelEtiquetasTarea;
+
+    private Tarea  tareaSeleccionada;
 
     private final CardLayout cardLayout;
 
@@ -34,11 +34,12 @@ public class VistaTareas extends JPanel {
         this.controladorTareas = new ControladorTareas(gestorTareas, this);
 
         this.gestorTareas = gestorTareas;
-        this.usuario = gestorTareas.getUsuario();
         cardLayout = new CardLayout();
 
         this.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
+
+        this.tareaSeleccionada = null;
 
         construirColumnaTareasToDo();
         construirColumnaTareasCompletadas();
@@ -46,7 +47,7 @@ public class VistaTareas extends JPanel {
 
         addTareas();
 
-        setGeneralCardLayout();
+        setCardGeneral();
     }
 
     /**
@@ -54,40 +55,40 @@ public class VistaTareas extends JPanel {
      */
     private void construirColumnaTareasToDo() {
         /* Crea la columna Tareas To Do */
-        this.panelColumnaTareasToDo = new JPanel();
-        panelColumnaTareasToDo.setLayout(new BorderLayout());
-        panelColumnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
-        panelColumnaTareasToDo.setBackground(Color.GREEN);
-        panelColumnaTareasToDo.setPreferredSize(new Dimension(200, 0));   // Tiene que ser igual en todas las columnas para que 'gbc.weightx' funcione correctamente
+        JPanel columnaTareasToDo = new JPanel();
+        columnaTareasToDo.setLayout(new BorderLayout());
+        columnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
+        columnaTareasToDo.setBackground(Color.GREEN);
+        columnaTareasToDo.setPreferredSize(new Dimension(200, 0));   // Tiene que ser igual en todas las columnas para que 'gbc.weightx' funcione correctamente
         gbc.gridx = 0;                          // Columna 1
         gbc.gridy = 0;                          // Fila 0
         gbc.weightx = 0.28;                     // Ocupa x% del espacio horizontal
         gbc.weighty = 1;                        // Ocupa y% del espacio vertical
         gbc.fill = GridBagConstraints.BOTH;     // Se expande en ambas direcciones
-        add(panelColumnaTareasToDo, gbc);
+        add(columnaTareasToDo, gbc);
 
         /* Título de la columna to do */
-        this.labelTituloTareasToDo = crearLabelTituloDeColumna("Tareas por hacer");
-        panelColumnaTareasToDo.add(labelTituloTareasToDo, BorderLayout.NORTH);
+        JLabel labelTituloTareasToDo = crearLabelTituloDeColumna("Tareas por hacer");
+        columnaTareasToDo.add(labelTituloTareasToDo, BorderLayout.NORTH);
 
         /* Panel donde están las tareas to do y convertido a JScrollPane */
         this.panelListaTareasToDo = new JPanel();
-        this.scroolPanelListaTareasToDo = crearPanelListaTareas(panelListaTareasToDo);
-        panelColumnaTareasToDo.add(scroolPanelListaTareasToDo, BorderLayout.CENTER);
+        JScrollPane scroolPanelListaTareasToDo = crearPanelListaTareas(panelListaTareasToDo);
+        columnaTareasToDo.add(scroolPanelListaTareasToDo, BorderLayout.CENTER);
 
         /* Label para crear nueva tarea */
 //        this.labelCrearNuevaTarea = crearLabelTituloDeColumna("Crear nueva tarea");
-        this.labelCrearNuevaTarea = new JLabel("Crear nueva tarea");
+        JLabel labelCrearNuevaTarea = new JLabel("Crear nueva tarea");
         labelCrearNuevaTarea.setFont(sRecursos.getMonserratBold(25));
         labelCrearNuevaTarea.setHorizontalAlignment(SwingConstants.CENTER);
         labelCrearNuevaTarea.setBackground(Color.lightGray);
         labelCrearNuevaTarea.setOpaque(true);
-        panelColumnaTareasToDo.add(labelCrearNuevaTarea, BorderLayout.SOUTH);
+        columnaTareasToDo.add(labelCrearNuevaTarea, BorderLayout.SOUTH);
 
         labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                cardLayout.show(panelColumnaInformacionExtra, "InfoNueva");
+                cardLayout.show(columnaInformacion, "cardNuevaTarea");
             }
         });
     }
@@ -97,26 +98,26 @@ public class VistaTareas extends JPanel {
      */
     private void construirColumnaTareasCompletadas() {
         /* Columna Tareas Completadas */
-        this.panelColumnaTareasCompletadas = new JPanel();
-        panelColumnaTareasCompletadas.setLayout(new BorderLayout());
-        panelColumnaTareasCompletadas.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
-        panelColumnaTareasCompletadas.setBackground(Color.RED);
-        panelColumnaTareasCompletadas.setPreferredSize(new Dimension(200, 0));
+        JPanel columnaTareasCompletadas = new JPanel();
+        columnaTareasCompletadas.setLayout(new BorderLayout());
+        columnaTareasCompletadas.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
+        columnaTareasCompletadas.setBackground(Color.RED);
+        columnaTareasCompletadas.setPreferredSize(new Dimension(200, 0));
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 0.28;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
-        add(panelColumnaTareasCompletadas, gbc);
+        add(columnaTareasCompletadas, gbc);
 
         /* Título de la columna completadas */
-        this.labelTituloTareasCompletadas = crearLabelTituloDeColumna("Tareas completadas");
-        panelColumnaTareasCompletadas.add(labelTituloTareasCompletadas, BorderLayout.NORTH);
+        JLabel labelTituloTareasCompletadas = crearLabelTituloDeColumna("Tareas completadas");
+        columnaTareasCompletadas.add(labelTituloTareasCompletadas, BorderLayout.NORTH);
 
         /* Panel donde están las tareas completadas y convertido a JScrollPane */
         this.panelListaTareasCompletadas = new JPanel();
-        this.scroolPanelListaTareasCompletadas = crearPanelListaTareas(panelListaTareasCompletadas);
-        panelColumnaTareasCompletadas.add(scroolPanelListaTareasCompletadas, BorderLayout.CENTER);
+        JScrollPane scroolPanelListaTareasCompletadas = crearPanelListaTareas(panelListaTareasCompletadas);
+        columnaTareasCompletadas.add(scroolPanelListaTareasCompletadas, BorderLayout.CENTER);
     }
 
     /**
@@ -124,72 +125,124 @@ public class VistaTareas extends JPanel {
      */
     private void construirColumnaInformacionExtra() {
         /* Columna Información Extra */
-        this.panelColumnaInformacionExtra = new JPanel();
-        panelColumnaInformacionExtra.setLayout(cardLayout);
-        panelColumnaInformacionExtra.setBackground(Color.BLUE);
-        panelColumnaInformacionExtra.setBorder(new MatteBorder(0, 5, 10, 10, sRecursos.getBLANCO()));
-        panelColumnaInformacionExtra.setPreferredSize(new Dimension(200, 0));
+        this.columnaInformacion = new JPanel();
+        columnaInformacion.setLayout(cardLayout);
+        columnaInformacion.setBackground(Color.BLUE);
+        columnaInformacion.setBorder(new MatteBorder(0, 5, 10, 10, sRecursos.getBLANCO()));
+        columnaInformacion.setPreferredSize(new Dimension(200, 0));
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.weightx = 0.44;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
-        add(panelColumnaInformacionExtra, gbc);
+        add(columnaInformacion, gbc);
 
-        cardGeneralColumnaInformacionExtra();
-        cardTareaSeleccionadaColumnaInformacionExtra();
-        cardNuevaTareaColumnaInformacionExtra();
+        crearCardGeneral();
+        crearCardTareaSeleccionada();
+        crearCardNuevaTarea();
     }
 
     /**
      * Card donde se muestra la información general de las tareas
      * Se incluye en la columna de información extra.
      */
-    private void cardGeneralColumnaInformacionExtra() {
+    private void crearCardGeneral() {
         /* Card donde se muestra la información de la tarea seleccionada */
-        this.panelInformacionGeneral = new JPanel();
-        panelInformacionGeneral.setLayout(new BorderLayout());
-        panelInformacionGeneral.setBackground(Color.orange);
-        panelColumnaInformacionExtra.add(panelInformacionGeneral, "InfoGeneral");
+        JPanel cardGeneral = new JPanel();
+        cardGeneral.setLayout(new BorderLayout());
+        cardGeneral.setBackground(Color.orange);
+        columnaInformacion.add(cardGeneral, "cardGeneral");
 
         /* Título de la columna Información Extra en el card Info General */
-        this.labelTituloInformacionGeneral = crearLabelTituloDeColumna("Info General");
-        panelInformacionGeneral.add(labelTituloInformacionGeneral, BorderLayout.NORTH);
+        JLabel labelTituloInformacionGeneral = crearLabelTituloDeColumna("Información General");
+        cardGeneral.add(labelTituloInformacionGeneral, BorderLayout.NORTH);
     }
 
     /**
      * Card donde se muestra la información de la tarea seleccionada
      * Se incluye en la columna de información extra.
      */
-    private void cardTareaSeleccionadaColumnaInformacionExtra() {
+    private void crearCardTareaSeleccionada() {
         /* Card donde se muestra la información de la tarea seleccionada */
-        this.panelInformacionTareaSeleccionada = new JPanel();
-        panelInformacionTareaSeleccionada.setLayout(new BorderLayout());
-        panelInformacionTareaSeleccionada.setBackground(Color.orange);
-        panelColumnaInformacionExtra.add(panelInformacionTareaSeleccionada, "InfoSeleccionada");
+        JPanel cardTareaSeleccionada = new JPanel();
+        cardTareaSeleccionada.setLayout(new BorderLayout());
+        cardTareaSeleccionada.setBackground(Color.orange);
+        columnaInformacion.add(cardTareaSeleccionada, "cardTareaSeleccionada");
 
         /* Título de la columna Información Extra en el card Tarea Seleccionada */
-        this.labelTituloInformacionTareaSeleccionada = crearLabelTituloDeColumna("Tarea Seleccionada");
-        panelInformacionTareaSeleccionada.add(labelTituloInformacionTareaSeleccionada, BorderLayout.NORTH);
+        JLabel tituloTareaSeleccionada = crearLabelTituloDeColumna("Tarea Seleccionada");
+        cardTareaSeleccionada.add(tituloTareaSeleccionada, BorderLayout.NORTH);
+
+        JPanel panelInformacionTarea = new JPanel();
+        panelInformacionTarea.setLayout(new GridBagLayout());
+        panelInformacionTarea.setBackground(Color.orange);
+        cardTareaSeleccionada.add(panelInformacionTarea, BorderLayout.CENTER);
+
+        this.labelNombreTarea = new JLabel("Nombre de la tarea");
+        labelNombreTarea.setFont(sRecursos.getMonserratBold(20));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 0.01;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionTarea.add(labelNombreTarea, gbc);
+
+        this.labelDescripcionTarea = new JLabel("Descripción de la tarea");
+        labelDescripcionTarea.setFont(sRecursos.getMonserratBold(20));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0.97;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionTarea.add(labelDescripcionTarea, gbc);
+
+        this.labelEtiquetasTarea = new JLabel("Etiquetas de la tarea");
+        labelEtiquetasTarea.setFont(sRecursos.getMonserratBold(20));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1;
+        gbc.weighty = 0.01;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionTarea.add(labelEtiquetasTarea, gbc);
+
+        JButton eliminarTarea = new JButton("Eliminar tarea");
+        eliminarTarea.setFont(sRecursos.getMonserratBold(20));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 1;
+        gbc.weighty = 0.01;
+        gbc.fill = GridBagConstraints.BOTH;
+        panelInformacionTarea.add(eliminarTarea, gbc);
+
+        eliminarTarea.addActionListener(e -> {
+            int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
+            if (opcion == JOptionPane.YES_OPTION){
+                if (tareaSeleccionada.getCompletadaT()){
+//                    panelListaTareasCompletadas.remove();
+                }
+                gestorTareas.eliminarTarea(tareaSeleccionada);
+                actualizarVistaTareas();
+            }
+        });
     }
 
     /**
      * Card donde se muestran los campos para crear una nueva tarea.
      * Se incluye en la columna de información extra.
      */
-    private void cardNuevaTareaColumnaInformacionExtra() {
+    private void crearCardNuevaTarea() {
         /* Card donde se muestra la información de la tarea seleccionada */
-        this.panelInformacionNuevaTarea = new JPanel();
-        panelInformacionNuevaTarea.setLayout(new BorderLayout());
-        panelInformacionNuevaTarea.setBackground(Color.orange);
-        panelColumnaInformacionExtra.add(panelInformacionNuevaTarea, "InfoNueva");
+        JPanel cardNuevaTarea = new JPanel();
+        cardNuevaTarea.setLayout(new BorderLayout());
+        cardNuevaTarea.setBackground(Color.orange);
+        columnaInformacion.add(cardNuevaTarea, "cardNuevaTarea");
 
         /* Título de la columna Información Extra en el card Nueva Tarea */
-        this.labelTituloInformacionNuevaTarea = crearLabelTituloDeColumna("Nueva Tarea");
-        panelInformacionNuevaTarea.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
+        JLabel labelTituloInformacionNuevaTarea = crearLabelTituloDeColumna("Nueva Tarea");
+        cardNuevaTarea.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
 
         /* Panel donde se introduce la información de la nueva tarea */
-        this.panelInformacionCrearNuevaTarea = new JPanel();
+        JPanel panelInformacionCrearNuevaTarea = new JPanel();
         panelInformacionCrearNuevaTarea.setLayout(new GridBagLayout());
 
         JTextField textFieldNombreTarea = new JTextField();
@@ -239,7 +292,7 @@ public class VistaTareas extends JPanel {
             controladorTareas.crearTarea(nombre, descripcion);
         });
 
-        panelInformacionNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
+        cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
 
 
@@ -287,8 +340,16 @@ public class VistaTareas extends JPanel {
     /**
      * Cambia el cardLayout de la columna de información extra al  card General Info
      */
-    public void setGeneralCardLayout(){
-        cardLayout.show(panelColumnaInformacionExtra, "InfoGeneral");
+    public void setCardGeneral(){
+        cardLayout.show(columnaInformacion, "cardGeneral");
+    }
+
+    public void setCardTareaSeleccionada(Tarea tarea){
+        this.tareaSeleccionada = tarea;
+        labelNombreTarea.setText(tareaSeleccionada.getNombreT());
+        labelDescripcionTarea.setText(tareaSeleccionada.getDescripcionT());
+        cardLayout.show(columnaInformacion, "cardTareaSeleccionada");
+        actualizarVistaTareas();
     }
 
     /**
@@ -333,8 +394,8 @@ public class VistaTareas extends JPanel {
         revalidate();
     }
 
-    public JPanel getPanelColumnaInformacionExtra() {
-        return panelColumnaInformacionExtra;
+    public JPanel getColumnaInformacion() {
+        return columnaInformacion;
     }
 
     public CardLayout getCardLayout() {

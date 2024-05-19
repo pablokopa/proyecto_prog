@@ -147,7 +147,7 @@ public class InterfazPrincipal extends JFrame {
                         contraerBotones(listaBotonesMenu);
                         break;
                     case "Tareas":      // Si el botón es Tareas, se cambia el card de la columna Información Extra de la VistaTareas y continua a default
-                        panelTareas.setGeneralCardLayout();
+                        panelTareas.setCardGeneral();
                     default:            // Si es cualquier otro botón, expande el botón seleccionado y contrae el resto de botones
                         contraerBotones(listaBotonesMenu);
                         boton.setPreferredSize(new Dimension(getWidth(), 75));

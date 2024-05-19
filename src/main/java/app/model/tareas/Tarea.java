@@ -59,6 +59,10 @@ public class Tarea {
         return completadaT;
     }
 
+    public String getNombreU() {
+        return nombreU;
+    }
+
     public void setCompletadaT(boolean completadaT) {
         this.completadaT = completadaT;
     }

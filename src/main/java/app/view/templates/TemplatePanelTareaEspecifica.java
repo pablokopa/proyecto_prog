@@ -103,7 +103,8 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         panelTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                vistaTareas.getCardLayout().show(vistaTareas.getPanelColumnaInformacionExtra(), "InfoSeleccionada");
+                vistaTareas.setCardTareaSeleccionada(tarea);
+                vistaTareas.actualizarVistaTareas();
             }
         });
 
