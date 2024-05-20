@@ -15,9 +15,12 @@ public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE, BLANCO, GRIS_CLARO, GRANATE_MID_LIGHT;
     private Font MontserratPlain, MontserratBold, MontserratItalic;
-    private Cursor cursorMano;
+    private Cursor cursorMano, cursorNormal, cursorEscribir, cursorRedimensionar;
     private Border bordeGranate, borderBlanco;
-    private ImageIcon imagenLogo, imagenLogo2, imagenCerrar, imagenUsuario, imagenPassword, imagenPlay, imagenPause, imagenStop;
+    private ImageIcon imagenLogo, imagenLogo2;
+    private ImageIcon imagenUsuario, imagenPassword;
+    private ImageIcon imagenPlay, imagenPause, imagenStop;
+    private ImageIcon imagenCheck, imagenCheckSinCheck;
 
     /**
      * Constante de tamaño de letra estándar para los botones.
@@ -84,6 +87,7 @@ public class Recursos {
      */
     private void crearCursores() {
         cursorMano = new Cursor(Cursor.HAND_CURSOR);
+        cursorNormal = new Cursor(Cursor.DEFAULT_CURSOR);
     }
 
     /**
@@ -102,12 +106,19 @@ public class Recursos {
     private void crearImagenes() {
         imagenLogo = new ImageIcon("src/main/resources/images/logo1.png");
         imagenLogo2 = new ImageIcon("src/main/resources/images/logo2.png");
-        imagenCerrar = new ImageIcon("src/main/resources/images/close.png");
         imagenUsuario = new ImageIcon("src/main/resources/images/user.png");
         imagenPassword = new ImageIcon("src/main/resources/images/password.png");
         imagenPlay = new ImageIcon("src/main/resources/images/playbuttton.png");
         imagenPause = new ImageIcon("src/main/resources/images/pausebutton.png");
         imagenStop = new ImageIcon("src/main/resources/images/stopbutton.png");
+
+        Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(48,48, Image.SCALE_SMOOTH);
+        imagenCheck = new ImageIcon(imageC);
+//        imagenCheck = new ImageIcon("src/main/resources/images/checkResized.png");      // 64 x 64
+
+        Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+        imagenCheckSinCheck = new ImageIcon(imageCsC);
+//        imagenCheckSinCheck = new ImageIcon("src/main/resources/images/checkSinCheckResized.png");      // 64 x 64
     }
 
     /**
@@ -171,6 +182,13 @@ public class Recursos {
     public Cursor getCursorMano() { return cursorMano; }
 
     /**
+     * Método para obtener el cursor normal.
+     * @return El cursor normal.
+     */
+    public Cursor getCursorNormal() { return cursorNormal; }
+
+
+    /**
      * Método para obtener el borde de color GRANATE.
      * @return El borde de color GRANATE.
      */
@@ -183,12 +201,6 @@ public class Recursos {
     public Border getBorderBlanco() {
         return borderBlanco;
     }
-
-    /**
-     * Método para obtener la imagen de cierre.
-     * @return La imagen de cierre.
-     */
-    public ImageIcon getImagenCerrar() { return imagenCerrar; }
 
     /**
      * Método para obtener la imagen del logo.
@@ -231,6 +243,18 @@ public class Recursos {
      * @return La imagen del botón de detener.
      */
     public ImageIcon getImagenStop() { return imagenStop; }
+
+    /**
+     * Método para obtener la imagen del check.
+     * @return La imagen del check.
+     */
+    public ImageIcon getImagenCheck() { return imagenCheck; }
+
+    /**
+     * Método para obtener la imagen del check sin check.
+     * @return La imagen del check sin check.
+     */
+    public ImageIcon getImagenCheckSinCheck() { return imagenCheckSinCheck; }
 
     /**
      * Método para obtener la instancia única de la clase.

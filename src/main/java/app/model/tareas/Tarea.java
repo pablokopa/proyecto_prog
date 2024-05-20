@@ -1,85 +1,74 @@
 package app.model.tareas;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.sql.Timestamp;
 
 /**
  * Clase que representa una tarea
  */
 public class Tarea {
+    private int idT;
+    private String nombreT;
+    private String descripcionT;
+    private Timestamp fechaCreacionT;
+    private Timestamp fechaFinalizacionT;
+    private boolean completadaT;
+    private final String nombreU;
 
-    // Constantes de prioridad
-    /**
-     * (1) Prioridad importante
-     */
-    public static final int PRIORIDAD_IMPORTANTE = 1;
-    /**
-     * (2) Prioridad media
-     */
-    public static final int PRIORIDAD_MEDIA = 2;
-    /**
-     * (3) Prioridad baja
-     */
-    public static final int PRIORIDAD_BAJA = 3;
+    public Tarea(String nombreT, String descripcionT, String nombreU){
+        this.nombreT = nombreT;
+        this.descripcionT = descripcionT;
+        this.nombreU = nombreU;
 
-    // Atributos
-    private String nombreTarea;
-    private String descripcionTarea;
-    private final UUID idTarea;
-    private int prioridadTarea;
+        this.fechaCreacionT = new Timestamp(System.currentTimeMillis());
 
-    /**
-     * Constructor
-     * @param nombreTarea nombre de la tarea
-     * @param descripcionTarea descripción de la tarea
-     */
-    public Tarea(String nombreTarea, String descripcionTarea){
-        this.nombreTarea = nombreTarea;
-        this.descripcionTarea = descripcionTarea;
-        this.idTarea = UUID.randomUUID();
+        this.fechaFinalizacionT = null;
+        this.completadaT = false;
     }
 
-    // Getters
-    /**
-     * @return nombre de la tarea
-     */
-    public String getNombreTarea() {
-        return nombreTarea;
-    }
-    /**
-     * @return descripción de la tarea
-     */
-    public String getDescripcionTarea() {
-        return descripcionTarea;
+    public Tarea(int idT, String nombreT, String descripcionT, Timestamp fechaCreacionT, Timestamp fechaFinalizacionT, Boolean completadaT, String nombreU){
+        this.idT = idT;
+        this.nombreT = nombreT;
+        this.descripcionT = descripcionT;
+        this.fechaCreacionT = fechaCreacionT;
+        this.fechaFinalizacionT = fechaFinalizacionT;
+        this.completadaT = completadaT;
+        this.nombreU = nombreU;
     }
 
-    // Setters
-    public void setNombreTarea(String nombreTarea) {
-        this.nombreTarea = nombreTarea;
-    }
-    public void setDescripcionTarea(String descripcionTarea) {
-        this.descripcionTarea = descripcionTarea;
+    public int getIdT() {
+        return idT;
     }
 
-    /**
-     * Establece la prioridad de la tarea
-     * @param prioridadTarea Constante de prioridad de Tarea
-     */
-    public void setPrioridadTarea(int prioridadTarea) {
-        this.prioridadTarea = prioridadTarea;
+    public String getNombreT() {
+        return nombreT;
     }
 
-    /**
-     * Comprueba si dos objetos (Tarea) tienen el mismo ID
-     * @param obj Tarea (o herencia) a comparar
-     * @return true si son iguales
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass()) return false;
-        if (obj == this) return true;
-        Tarea tareaObj = (Tarea) obj;
-        return Objects.equals(this.idTarea, tareaObj.idTarea);
+    public String getDescripcionT() {
+        return descripcionT;
+    }
+
+    public Timestamp getFechaCreacionT() {
+        return fechaCreacionT;
+    }
+
+    public Timestamp getFechaFinalizacionT() {
+        return fechaFinalizacionT;
+    }
+
+    public boolean getCompletadaT() {
+        return completadaT;
+    }
+
+    public String getNombreU() {
+        return nombreU;
+    }
+
+    public void setCompletadaT(boolean completadaT) {
+        this.completadaT = completadaT;
+    }
+
+    public void setFechaFinalizacionT(Timestamp fechaFinalizacionT) {
+        this.fechaFinalizacionT = fechaFinalizacionT;
     }
 
     /**
@@ -88,6 +77,6 @@ public class Tarea {
      */
     @Override
     public String toString() {
-        return this.nombreTarea + ": " + this.descripcionTarea;      // añade id tarea temporalmente para pruebas
+        return "tarea: "+ idT + " - " + nombreT +" - "+ descripcionT +" - "+ fechaCreacionT +" - "+ fechaFinalizacionT +" - "+ completadaT+" - "+ nombreU ;
     }
 }

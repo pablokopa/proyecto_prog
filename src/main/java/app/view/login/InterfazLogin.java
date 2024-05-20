@@ -1,5 +1,7 @@
 package app.view.login;
 
+import app.model.tareas.GestorTareas;
+import app.view.principal.InterfazPrincipal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
 import services.ObjGraficos;
@@ -10,34 +12,29 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Esta clase representa la interfaz de inicio de sesión y registro de la aplicación.
- * Extiende de JFrame para proporcionar la funcionalidad de la ventana de la interfaz.
- * Contiene métodos para crear y configurar componentes de la interfaz.
+ * Interfaz del login de la aplicación.
  */
-public class LoginTemplate extends JFrame{
-    private ObjGraficos sObjGraficos;
-    private Recursos sRecursos;
-    private GestorUsuarios gestorUsuarios;
+public class InterfazLogin extends JFrame{
+    private final ObjGraficos sObjGraficos;
+    private final Recursos sRecursos;
+    private final GestorUsuarios gestorUsuarios;
 
     private int mouseX, x;
     private int mouseY, y;
 
-    private JLabel textoLogin;
-    private JLabel labelLogo, labelCerrar, labelUsuario, labelPassword;
-    private JLabel textoNumeroUsuarios;
-    private JLabel textoComprobacion;
-
+    private JButton botonCerrar, botonRegistrar, botonEntrar;
+    private JLabel labelLogo, labelUsuario, labelPassword;
+    private JLabel textoLogin, textoComprobacion, textoNumeroUsuarios;
     private JTextField cuadroUsuario;
     private JPasswordField cuadroPassword;
-    private JButton botonEntrar, botonRegistrar;
     private JPanel panelDerecha, panelIzquierda;
 
     /**
-     * Constructor de la clase LoginTemplate.
+     * Constructor de la clase InterfazLogin.
      * Inicializa los componentes de la interfaz de usuario y configura la ventana.
      * @param gestorUsuarios Gestor de usuarios para manejar la lógica de inicio de sesión y registro.
      */
-    public LoginTemplate(GestorUsuarios gestorUsuarios){
+    public InterfazLogin(GestorUsuarios gestorUsuarios){
         sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
         this.gestorUsuarios = gestorUsuarios;
@@ -59,6 +56,8 @@ public class LoginTemplate extends JFrame{
         setUndecorated(true);
         setIconImage(sRecursos.getImagenLogo2().getImage());
         setVisible(true);
+
+        this.actualizarContadorUsuarios();
     }
 
     /**
@@ -111,7 +110,7 @@ public class LoginTemplate extends JFrame{
      * Crea y configura el campo de contraseña para la contraseña del usuario.
      */
     public void crearJPasswordField(){
-        cuadroPassword = sObjGraficos.construirJPasswordField(null, (panelDerecha.getWidth() - 260) / 2, 220, 260, 40, sRecursos.getMonserratBold(13), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
+        cuadroPassword = sObjGraficos.construirJPasswordField((panelDerecha.getWidth() - 260) / 2, 220, 260, 40, Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
         panelDerecha.add(cuadroPassword);
     }
 
@@ -121,14 +120,42 @@ public class LoginTemplate extends JFrame{
      */
     public void crearJButtons(GestorUsuarios gestorUsuarios){
 
+        botonCerrar = construirBotonCerrar();
+        botonCerrar.setBounds(360,5,35,35);
+        panelDerecha.add(botonCerrar);
+
         /* Botón de registrarse */
         botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonRegistrar);
+
+        botonRegistrar.addActionListener(e -> {
+            String nombreUsuario = cuadroUsuario.getText();
+            String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
+
+            if (gestorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
+                textoComprobacion.setText("Usuario registrado correctamente");
+                textoLogin.setText("Bienvenido, "+ cuadroUsuario.getText()+"!");
+                cuadroUsuario.setText("");
+                cuadroPassword.setText("");
+                textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
+            }
+        });
 
         /* Botón de entrar */
         botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonEntrar);
 
+        botonEntrar.addActionListener(e -> {
+            String nombreUsuario = cuadroUsuario.getText();
+            String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
+
+            if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+                dispose();
+                new InterfazPrincipal(new GestorTareas());
+            }else{
+                textoLogin.setText("Inicio de sesión fallido..");
+            }
+        });
     }
 
     /**
@@ -148,20 +175,6 @@ public class LoginTemplate extends JFrame{
         labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
         panelDerecha.add(labelUsuario);
 
-        /* Imagen cruz cerrar */
-        labelCerrar = sObjGraficos.construirJLabel(null, 360, 5, 40, 40, sRecursos.getCursorMano(), sRecursos.getImagenCerrar(), null, null, null, null, "");
-        labelCerrar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) { // Cuando se haga click
-                dispose(); // Cerrar la ventana
-            }
-        });
-        panelDerecha.add(labelCerrar);
-
-        /* Contador usuarios */
-        textoNumeroUsuarios = sObjGraficos.construirJLabel("Nº Usuarios: "+gestorUsuarios.contarUsuarios(), -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
-        panelDerecha.add(textoNumeroUsuarios);
-
         /* Texto login */
         textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getMonserratBold(22), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
@@ -169,32 +182,45 @@ public class LoginTemplate extends JFrame{
         /* Label informativo; nombre y contraseña correctos */
         textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getMonserratItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
+
+        /* Contador usuarios */
+        textoNumeroUsuarios = sObjGraficos.construirJLabel("", -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
+        panelDerecha.add(textoNumeroUsuarios);
     }
 
-    // Getters para utilizar los componentes en el controlador
-    public JButton getBotonRegistrar(){
-        return botonRegistrar;
-    }
-    public JButton getBotonEntrar(){
-        return botonEntrar;
-    }
-    public JTextField getCuadroUsuario(){
-        return cuadroUsuario;
-    }
-    public JPasswordField getCuadroPassword(){
-        return cuadroPassword;
-    }
-    public JLabel getTextoLogin(){
-        return textoLogin;
-    }
-    public JLabel getTextoComprobacion(){
-        return textoComprobacion;
-    }
-    public Frame getFrameLoginTemplate(){
-        return this;
+    public void actualizarContadorUsuarios(){
+        textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
     }
 
-    public JLabel getTextoNumeroUsuarios() {
-        return textoNumeroUsuarios;
+    /**
+     * Construye el JButton de cerrar la ventana.
+     * @return Un JButton con un diseño personalizado.
+     */
+    public JButton construirBotonCerrar(){
+        JButton boton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.clearRect(0,0,getWidth(),getHeight());
+                super.paintComponent(g);
+                g2.setColor(sRecursos.getGRANATE());
+                g2.setStroke(new BasicStroke(3));
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.drawLine(8, 8,  getWidth()-8, getHeight()-8);
+                g2.drawLine(getWidth()-8, 8, 8, getHeight()-8);
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+                g2.dispose();
+            }
+        };
+        boton.setPreferredSize(new Dimension(40, 40));
+        boton.setBackground(sRecursos.getBLANCO());
+
+        boton.setCursor(sRecursos.getCursorMano());
+        boton.setBorder(null);
+
+        /* Listener para cerrar la ventana */
+        boton.addActionListener(e -> dispose());
+
+        return boton;
     }
 }

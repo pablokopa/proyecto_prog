@@ -16,6 +16,8 @@ public class ObjGraficos {
     private ObjGraficos(){} // Constructor privado para evitar instanciación
     static private ObjGraficos servicio; // Instancia única de la clase
 
+    private static final Recursos sRecursos = Recursos.getService();
+
     /**
      * Método para obtener la instancia única de la clase.
      * Si la instancia no existe, se crea.
@@ -338,12 +340,10 @@ public class ObjGraficos {
 
     /**
      * Método para construir un JPasswordField.
-     * @param texto El texto inicial del campo de contraseña.
      * @param x La posición x del campo de contraseña.
      * @param y La posición y del campo de contraseña.
      * @param ancho El ancho del campo de contraseña.
      * @param alto El alto del campo de contraseña.
-     * @param fuente La fuente del texto del campo de contraseña.
      * @param colorFondo El color de fondo del campo de contraseña.
      * @param colorFuente El color del texto del campo de contraseña.
      * @param colorCaret El color del caret del campo de contraseña.
@@ -352,13 +352,12 @@ public class ObjGraficos {
      * @return El campo de contraseña construido.
      */
     public JPasswordField construirJPasswordField(
-            String texto, int x, int y, int ancho, int alto, Font fuente, Color colorFondo,
+            int x, int y, int ancho, int alto, Color colorFondo,
             Color colorFuente, Color colorCaret, Border borde, String direccion
     ) {
         passwordField = new JPasswordField();
         passwordField.setLocation(x, y);
         passwordField.setSize(ancho, alto);
-        passwordField.setText(texto);
         passwordField.setForeground(colorFuente);
         passwordField.setBackground(colorFondo);
         passwordField.setCaretColor(colorCaret);
@@ -510,7 +509,7 @@ public class ObjGraficos {
             String cadena, int x, int y, int ancho, int alto, Font fuente,
             Color colorFondo, Color colorFuente, String direccion
     ) {
-        comboBox = new JComboBox<String>();
+        comboBox = new JComboBox<>();
         comboBox.setLocation(x, y);
         comboBox.setSize(ancho, alto);
         for (String item : cadena.split("_")) {

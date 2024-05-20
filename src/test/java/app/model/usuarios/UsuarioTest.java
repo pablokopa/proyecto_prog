@@ -1,6 +1,5 @@
 package app.model.usuarios;
 
-import app.model.tareas.TareaToDo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,15 +7,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class UsuarioConectadoTest {
-    private UsuarioConectado usuarioConectado;
+class UsuarioTest {
+    private Usuario usuario;
 
     /**
      * Inicializa el gestor de tareas
      */
     @BeforeEach
     public void setUp(){
-        usuarioConectado = UsuarioConectado.getUsuarioConectado(new Usuario("Admin", new char[0]));
+        usuario = Usuario.getUsuarioConectado(new Usuario("Admin", ""));
     }
 
     /**
@@ -25,7 +24,7 @@ class UsuarioConectadoTest {
     @Test
     @DisplayName("Agregar tarea correctamente")
     public void agregarTareaCorrectamente(){
-        assertTrue(usuarioConectado.agregarTarea(new TareaToDo("nombre", "descripcion")));
+        assertTrue(usuario.agregarTarea(new TareaToDo("nombre", "descripcion")));
     }
 
     /**
@@ -35,8 +34,8 @@ class UsuarioConectadoTest {
     @DisplayName("Completar tarea correctamente")
     public void completarTareaCorrectamente(){
         TareaToDo tarea = new TareaToDo("nombre", "descripcion");
-        usuarioConectado.agregarTarea(tarea);
-        assertTrue(usuarioConectado.completarTarea(tarea));
+        usuario.agregarTarea(tarea);
+        assertTrue(usuario.completarTarea(tarea));
     }
 
     /**
@@ -46,9 +45,9 @@ class UsuarioConectadoTest {
     @DisplayName("Tarea Completada Es Instancia de TareaCompletada")
     public void completarTareaInstanciaTareaCompletada(){
         TareaToDo tarea = new TareaToDo("nombre", "descripcion");
-        usuarioConectado.agregarTarea(tarea);
-        usuarioConectado.completarTarea(tarea);
-        assertFalse(usuarioConectado.getListaTareasCompletadas().isEmpty());
+        usuario.agregarTarea(tarea);
+        usuario.completarTarea(tarea);
+        assertFalse(usuario.getListaTareasCompletadas().isEmpty());
     }
 
     /**
@@ -58,8 +57,8 @@ class UsuarioConectadoTest {
     @DisplayName("Eliminar tarea to-do correctamente")
     public void eliminarTareaToDoCorrectamente(){
         TareaToDo tarea = new TareaToDo("nombre", "descripcion");
-        usuarioConectado.agregarTarea(tarea);
-        assertTrue(usuarioConectado.eliminarTarea(tarea));
+        usuario.agregarTarea(tarea);
+        assertTrue(usuario.eliminarTarea(tarea));
     }
 
     /**
@@ -69,7 +68,7 @@ class UsuarioConectadoTest {
     @DisplayName("Eliminar tarea completada correctamente")
     public void eliminarTareaCompletadaCorrectamente(){
         TareaToDo tareaToDo = new TareaToDo("nombre", "descripcion");
-        usuarioConectado.completarTarea(tareaToDo);
-        assertTrue(usuarioConectado.eliminarTarea(usuarioConectado.getListaTareasCompletadas().getFirst()));
+        usuario.completarTarea(tareaToDo);
+        assertTrue(usuario.eliminarTarea(usuario.getListaTareasCompletadas().getFirst()));
     }
 }

@@ -3,41 +3,45 @@ package app.model.usuarios;
 import java.util.Objects;
 
 /**
- * Clase Usuario
+ * Clase Singleton que representa a un Usuario conectado.
  */
 public class Usuario {
-    private final String nombreUsuario;     // Nombre de usuario; es único
-    private String contraUsuario;
+    private static Usuario usuario;
 
-    /**
-     * Constructor
-     * @param nombreUsuario nombre de usuario
-     * @param contraUsuario contraseña de usuario
-     */
-    public Usuario(String nombreUsuario, String contraUsuario){
-        this.nombreUsuario = nombreUsuario;
-        this.contraUsuario = contraUsuario;
+    private String nombreU;
+    private String passwordU;
+
+    private Usuario(String nombreU, String passwordU){
+        this.nombreU = nombreU;
+        this.passwordU = passwordU;
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public static void setUsuarioConectado(String nombreUsuario, String passwordU){
+        if (usuario == null){
+            usuario = new Usuario(nombreUsuario, passwordU);
+        } else {
+            System.out.println("Ya hay un usuario conectado");
+        }
     }
 
-    public String getContraUsuario() {
-        return contraUsuario;
+    public static void desconectarUsuario(){
+        usuario = null;
     }
 
-    /**
-     * Comprueba si dos objetos (Usuario) tienen el mismo nombre de usuario
-     * @param obj usuario a comparar
-     * @return true si son iguales
-     */
+    public static Usuario getUsuarioConectado(){
+        return usuario;
+    }
+
+    public String getNombreU() {
+        return nombreU;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass())    return false;
-        if (obj == this)    return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == this) return true;
         Usuario userObj = (Usuario) obj;
-        return Objects.equals(this.nombreUsuario, userObj.nombreUsuario);
+        return Objects.equals(this.nombreU, userObj.nombreU);
     }
 
     /**
@@ -46,6 +50,6 @@ public class Usuario {
      */
     @Override
     public String toString() {
-        return this.nombreUsuario;
+        return this.nombreU;
     }
 }

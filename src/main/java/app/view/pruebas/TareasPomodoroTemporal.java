@@ -1,3 +1,4 @@
+
 package app.view.pruebas;
 
 import services.ObjGraficos;
@@ -66,7 +67,7 @@ public class TareasPomodoroTemporal extends JFrame {
                 40,
                 40,
                 sRecursos.getCursorMano(),
-                sRecursos.getImagenCerrar(),
+                sRecursos.getImagenStop(),
                 null,
                 null,
                 null,

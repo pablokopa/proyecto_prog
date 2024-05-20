@@ -1,9 +1,7 @@
 package app.view.pruebas;
 
-import app.view.principal.InterfazFija;
-
 public class NuevaPruebaPomo {
-    InterfazFija interfazFija = new InterfazFija();
+//    InterfazFija interfazFija = new InterfazFija();
 
     NuevaPruebaPomo(){
 
