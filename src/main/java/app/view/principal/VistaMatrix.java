@@ -3,8 +3,6 @@ package app.view.principal;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
@@ -16,7 +14,12 @@ public class VistaMatrix extends JPanel{
     private ObjGraficos sObjGraficos;
     private Recursos sRecursos;
 
-    private Color colorGrisPrincipal;
+    private Color colorGrisPrincipal = new Color(59,59,59);
+    private Color colorGrisSecundario = new Color(220,220,220);
+    private Color colorVerde = new Color(175,255,168);
+    private Color colorAmarillo = new Color(255,255,168);
+    private Color colorRojo = new Color(255,168,168);
+    private Color colorAzul = new Color(168,235,255);
 
     private JPanel panelArribaI, panelArribaD, panelAbajoI, panelAbajoD;
     private JPanel panelTituloArribaI, panelTituloArribaD, panelTituloAbajoI, panelTituloAbajoD;
@@ -35,29 +38,38 @@ public class VistaMatrix extends JPanel{
         crearPaneles();
     }
 
-    /* CREAR PANELES*/
-    private void crearTareas(){
+    /**
+     * Método para crear las tareas de los paneles.
+     * @param color Color de fondo de los paneles.
+     */
+    private void crearTareas(Color color){
         JPanel panel = new JPanel();
         JLabel label = new JLabel("Tarea");
 
+        // Ajustar layout y posición de label
+        panel.setLayout(new BorderLayout());
+        panel.setPreferredSize(new Dimension(50, 70)); // Tamaño del panel
+        label.setHorizontalAlignment(JLabel.CENTER); // Alineación del texto
+
         // Tipo de fuente
         label.setFont(sRecursos.getMonserratBold(15));
+        label.setForeground(colorGrisPrincipal); // Color de la letra
 
         // Borde
-        Border matteBorder = new MatteBorder(0, 0, 2, 0, Color.WHITE);
-        panel.setBorder(matteBorder);
+        Border bordeVisible = new MatteBorder(3,3,3,3, colorGrisPrincipal);
+        Border bordeMargen = new MatteBorder(5,20,5,20, color);
+        Border compound = BorderFactory.createCompoundBorder(bordeMargen,bordeVisible);
+        panel.setBorder(compound);
 
         // Color de fondo
-        panel.setBackground(new Color(0,0,0,0));
+        panel.setBackground(colorGrisSecundario);
 
         // Añadir tarea
-        panel.add(label);
+        panel.add(label, BorderLayout.CENTER);
         panelTareasArribaI.add(panel);
     }
 
     private void crearPaneles() {
-        colorGrisPrincipal = new Color(59,59,59);
-
 /* Panel Arriba Izquierda */
         // Crear nuevos paneles
         panelArribaI = new JPanel();
@@ -78,8 +90,8 @@ public class VistaMatrix extends JPanel{
         scrollArribaI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Cambiar color de fondo
-        panelTituloArribaI.setBackground(new Color(175,255,168));
-        panelTareasArribaI.setBackground(new Color(175,255,168));
+        panelTituloArribaI.setBackground(colorVerde);
+        panelTareasArribaI.setBackground(colorVerde);
 
         // Añadir borde
         panelArribaI.setBorder(new MatteBorder(1, 10, 5, 5, sRecursos.getBLANCO()));
@@ -97,8 +109,8 @@ public class VistaMatrix extends JPanel{
         panelTituloArribaD.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
         // Cambiar color de fondo
-        panelTituloArribaD.setBackground(new Color(168,235,255));
-        panelTareasArribaD.setBackground(new Color(168,235,255));
+        panelTituloArribaD.setBackground(colorAzul);
+        panelTareasArribaD.setBackground(colorAzul);
 
         // Añadir borde
         panelArribaD.setBorder(new MatteBorder(1, 5, 5, 10, sRecursos.getBLANCO()));
@@ -116,8 +128,8 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoI.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         // Cambiar color de fondo
-        panelTituloAbajoI.setBackground(new Color(255,221,122));
-        panelTareasAbajoI.setBackground(new Color(255,221,122));
+        panelTituloAbajoI.setBackground(colorAmarillo);
+        panelTareasAbajoI.setBackground(colorAmarillo);
 
         // Añadir borde
         panelAbajoI.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
@@ -135,15 +147,15 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoD.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
         // Cambiar color de fondo
-        panelTituloAbajoD.setBackground(new Color(255,149,149));
-        panelTareasAbajoD.setBackground(new Color(255,149,149));
+        panelTituloAbajoD.setBackground(colorRojo);
+        panelTareasAbajoD.setBackground(colorRojo);
 
         // Añadir borde
         panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
 /* AÑADIR ELEMENTOS */
         for (int i=0; i<35; i++){
-            crearTareas();
+            crearTareas(colorVerde);
         }
 
         // Añadir elementos arriba izquierda
@@ -207,8 +219,8 @@ class WhiteScrollBarUI extends BasicScrollBarUI {
 
     @Override
     protected void configureScrollBarColors() {
-        this.thumbColor = new Color(240, 240, 240);
-        this.trackColor = new Color(220, 220, 220); // Color transparente
+        this.thumbColor = new Color(59,59,59);
+        this.trackColor = new Color(220, 220, 220);
         this.thumbDarkShadowColor = new Color(0, 0, 0, 0);
         this.thumbHighlightColor = new Color(0, 0, 0, 0);
         this.thumbLightShadowColor = new Color(0, 0, 0, 0);
