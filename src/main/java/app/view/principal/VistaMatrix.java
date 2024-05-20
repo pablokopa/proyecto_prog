@@ -29,6 +29,11 @@ public class VistaMatrix extends JPanel{
     private JLabel labelAddArribaI, labelAddArribaD, labelAddAbajoI, labelAddAbajoD;
     private JScrollPane scrollArribaI, scrollArribaD, scrollAbajoI, scrollAbajoD;
 
+    private JButton botonAddArribaD = new JButton("Añadir tarea");
+    private JButton botonAddArribaI = new JButton("Añadir tarea");
+    private JButton botonAddAbajoD = new JButton("Añadir tarea");
+    private JButton botonAddAbajoI = new JButton("Añadir tarea");
+
     public VistaMatrix(){
         sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
@@ -100,6 +105,12 @@ public class VistaMatrix extends JPanel{
         scrollArribaI.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
         scrollArribaI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
+        // Personalizar botón
+        botonAddArribaI.setFont(sRecursos.getMonserratBold(12));
+        botonAddArribaI.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
+        botonAddArribaI.setBackground(colorGrisPrincipal);
+        botonAddArribaI.setForeground(colorVerde);
+
         // Cambiar color de fondo
         panelTituloArribaI.setBackground(colorVerde);
         panelTareasArribaI.setBackground(colorVerde);
@@ -125,6 +136,12 @@ public class VistaMatrix extends JPanel{
         scrollArribaD.setBorder(null);
         scrollArribaD.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
         scrollArribaD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
+
+        // Personalizar botón
+        botonAddArribaD.setFont(sRecursos.getMonserratBold(12));
+        botonAddArribaD.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
+        botonAddArribaD.setBackground(colorGrisPrincipal);
+        botonAddArribaD.setForeground(colorAzul);
 
         // Cambiar color de fondo
         panelTituloArribaD.setBackground(colorAzul);
@@ -152,6 +169,12 @@ public class VistaMatrix extends JPanel{
         scrollAbajoI.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
         scrollAbajoI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
+        // Personalizar botón
+        botonAddAbajoI.setFont(sRecursos.getMonserratBold(12));
+        botonAddAbajoI.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
+        botonAddAbajoI.setBackground(colorGrisPrincipal);
+        botonAddAbajoI.setForeground(colorAmarillo);
+
         // Cambiar color de fondo
         panelTituloAbajoI.setBackground(colorAmarillo);
         panelTareasAbajoI.setBackground(colorAmarillo);
@@ -178,6 +201,12 @@ public class VistaMatrix extends JPanel{
         scrollAbajoD.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
         scrollAbajoD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
+        // Personalizar botón
+        botonAddAbajoD.setFont(sRecursos.getMonserratBold(12));
+        botonAddAbajoD.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
+        botonAddAbajoD.setBackground(colorGrisPrincipal);
+        botonAddAbajoD.setForeground(colorRojo);
+
         // Cambiar color de fondo
         panelTituloAbajoD.setBackground(colorRojo);
         panelTareasAbajoD.setBackground(colorRojo);
@@ -195,11 +224,13 @@ public class VistaMatrix extends JPanel{
 
         // Añadir elementos arriba izquierda
         panelTituloArribaI.add(labelArribaI);
+        panelTituloArribaI.add(botonAddArribaI, BorderLayout.EAST);
         panelArribaI.add(panelTituloArribaI, BorderLayout.NORTH);
         panelArribaI.add(scrollArribaI, BorderLayout.CENTER);
         add(panelArribaI);
 
         // Añadir elementos arriba derecha
+        panelTituloArribaD.add(botonAddArribaD, BorderLayout.WEST);
         panelTituloArribaD.add(labelArribaD);
         panelArribaD.add(panelTituloArribaD, BorderLayout.NORTH);
         panelArribaD.add(scrollArribaD, BorderLayout.CENTER);
@@ -207,11 +238,13 @@ public class VistaMatrix extends JPanel{
 
         // Añadir elementos abajo izquierda
         panelTituloAbajoI.add(labelAbajoI);
+        panelTituloAbajoI.add(botonAddAbajoI, BorderLayout.EAST);
         panelAbajoI.add(panelTituloAbajoI, BorderLayout.SOUTH);
         panelAbajoI.add(scrollAbajoI, BorderLayout.CENTER);
         add(panelAbajoI);
 
         // Añadir elementos abajo derecha
+        panelTituloAbajoD.add(botonAddAbajoD, BorderLayout.WEST);
         panelTituloAbajoD.add(labelAbajoD);
         panelAbajoD.add(panelTituloAbajoD, BorderLayout.SOUTH);
         panelAbajoD.add(scrollAbajoD, BorderLayout.CENTER);
