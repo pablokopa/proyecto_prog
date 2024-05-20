@@ -2,6 +2,9 @@ package app.view.principal;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
@@ -46,7 +49,7 @@ public class VistaMatrix extends JPanel{
         // Configurar layout
         panelArribaI.setLayout(new BorderLayout());
         panelTituloArribaI.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panelTareasArribaI.setLayout(new GridLayout(5,5));
+        panelTareasArribaI.setLayout(new BoxLayout(panelTareasArribaI, BoxLayout.Y_AXIS));
 
         // Crear y configurar scroll
         scrollArribaI = new JScrollPane(panelTareasArribaI);
@@ -121,11 +124,13 @@ public class VistaMatrix extends JPanel{
 /* AÑADIR ELEMENTOS */
         for (int i=0; i<35; i++){
             JPanel panel = new JPanel();
-            panel.setLayout(new GridLayout(1,2));
             JLabel label = new JLabel("Tarea: "+i);
 
             label.setFont(sRecursos.getMonserratBold(15));
-            panel.setBorder(new MatteBorder(1, 1, 1, 1, colorGrisPrincipal));
+
+            Border matteBorder = new MatteBorder(1, 1, 1, 1, Color.WHITE);
+            panel.setBorder(matteBorder);
+
             panel.setBackground(new Color(0,0,0,0));
 
             panel.add(label);
@@ -155,6 +160,14 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.add(panelTituloAbajoD, BorderLayout.SOUTH);
         panelAbajoD.add(panelTareasAbajoD, BorderLayout.CENTER);
         add(panelAbajoD);
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.add(new VistaMatrix());
+        frame.setVisible(true);
     }
 }
 
