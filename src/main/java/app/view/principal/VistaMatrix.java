@@ -35,6 +35,26 @@ public class VistaMatrix extends JPanel{
         crearPaneles();
     }
 
+    /* CREAR PANELES*/
+    private void crearTareas(){
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Tarea");
+
+        // Tipo de fuente
+        label.setFont(sRecursos.getMonserratBold(15));
+
+        // Borde
+        Border matteBorder = new MatteBorder(0, 0, 2, 0, Color.WHITE);
+        panel.setBorder(matteBorder);
+
+        // Color de fondo
+        panel.setBackground(new Color(0,0,0,0));
+
+        // Añadir tarea
+        panel.add(label);
+        panelTareasArribaI.add(panel);
+    }
+
     private void crearPaneles() {
         colorGrisPrincipal = new Color(59,59,59);
 
@@ -123,18 +143,7 @@ public class VistaMatrix extends JPanel{
 
 /* AÑADIR ELEMENTOS */
         for (int i=0; i<35; i++){
-            JPanel panel = new JPanel();
-            JLabel label = new JLabel("Tarea: "+i);
-
-            label.setFont(sRecursos.getMonserratBold(15));
-
-            Border matteBorder = new MatteBorder(1, 1, 1, 1, Color.WHITE);
-            panel.setBorder(matteBorder);
-
-            panel.setBackground(new Color(0,0,0,0));
-
-            panel.add(label);
-            panelTareasArribaI.add(panel);
+            crearTareas();
         }
 
         // Añadir elementos arriba izquierda
@@ -165,7 +174,7 @@ public class VistaMatrix extends JPanel{
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(1000, 800);
         frame.add(new VistaMatrix());
         frame.setVisible(true);
     }
@@ -198,8 +207,8 @@ class WhiteScrollBarUI extends BasicScrollBarUI {
 
     @Override
     protected void configureScrollBarColors() {
-        this.thumbColor = Color.WHITE;
-        this.trackColor = new Color(0, 0, 0, 0); // Color transparente
+        this.thumbColor = new Color(240, 240, 240);
+        this.trackColor = new Color(220, 220, 220); // Color transparente
         this.thumbDarkShadowColor = new Color(0, 0, 0, 0);
         this.thumbHighlightColor = new Color(0, 0, 0, 0);
         this.thumbLightShadowColor = new Color(0, 0, 0, 0);
