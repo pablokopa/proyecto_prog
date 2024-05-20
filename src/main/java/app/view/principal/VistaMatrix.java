@@ -42,13 +42,14 @@ public class VistaMatrix extends JPanel{
      * Método para crear las tareas de los paneles.
      * @param color Color de fondo de los paneles.
      */
-    private void crearTareas(Color color){
+    private void crearTareas(Color color, JPanel lugar){
         JPanel panel = new JPanel();
         JLabel label = new JLabel("Tarea");
 
         // Ajustar layout y posición de label
         panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(50, 70)); // Tamaño del panel
+        Dimension panelSize = new Dimension(60, 60);
+        panel.setPreferredSize(panelSize);
         label.setHorizontalAlignment(JLabel.CENTER); // Alineación del texto
 
         // Tipo de fuente
@@ -66,7 +67,7 @@ public class VistaMatrix extends JPanel{
 
         // Añadir tarea
         panel.add(label, BorderLayout.CENTER);
-        panelTareasArribaI.add(panel);
+        lugar.add(panel);
     }
 
     private void crearPaneles() {
@@ -107,6 +108,13 @@ public class VistaMatrix extends JPanel{
         // Indicar layout
         panelArribaD.setLayout(new BorderLayout());
         panelTituloArribaD.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        panelTareasArribaD.setLayout(new BoxLayout(panelTareasArribaD, BoxLayout.Y_AXIS));
+
+        // Crear y configurar scroll
+        scrollArribaD = new JScrollPane(panelTareasArribaD);
+        scrollArribaD.setBorder(null);
+        scrollArribaD.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
+        scrollArribaD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Cambiar color de fondo
         panelTituloArribaD.setBackground(colorAzul);
@@ -126,6 +134,13 @@ public class VistaMatrix extends JPanel{
         // Indicar layout
         panelAbajoI.setLayout(new BorderLayout());
         panelTituloAbajoI.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTareasAbajoI.setLayout(new BoxLayout(panelTareasAbajoI, BoxLayout.Y_AXIS));
+
+        // Crear y configurar scroll
+        scrollAbajoI = new JScrollPane(panelTareasAbajoI);
+        scrollAbajoI.setBorder(null);
+        scrollAbajoI.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
+        scrollAbajoI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Cambiar color de fondo
         panelTituloAbajoI.setBackground(colorAmarillo);
@@ -145,6 +160,13 @@ public class VistaMatrix extends JPanel{
         // Indicar layout
         panelAbajoD.setLayout(new BorderLayout());
         panelTituloAbajoD.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        panelTareasAbajoD.setLayout(new BoxLayout(panelTareasAbajoD, BoxLayout.Y_AXIS));
+
+        // Crear y configurar scroll
+        scrollAbajoD = new JScrollPane(panelTareasAbajoD);
+        scrollAbajoD.setBorder(null);
+        scrollAbajoD.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
+        scrollAbajoD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Cambiar color de fondo
         panelTituloAbajoD.setBackground(colorRojo);
@@ -154,8 +176,11 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
 /* AÑADIR ELEMENTOS */
-        for (int i=0; i<35; i++){
-            crearTareas(colorVerde);
+        for (int i=0; i<3; i++){
+            crearTareas(colorVerde, panelTareasArribaI);
+            crearTareas(colorAzul, panelTareasArribaD);
+            crearTareas(colorAmarillo, panelTareasAbajoI);
+            crearTareas(colorRojo, panelTareasAbajoD);
         }
 
         // Añadir elementos arriba izquierda
@@ -167,19 +192,19 @@ public class VistaMatrix extends JPanel{
         // Añadir elementos arriba derecha
         panelTituloArribaD.add(labelArribaD);
         panelArribaD.add(panelTituloArribaD, BorderLayout.NORTH);
-        panelArribaD.add(panelTareasArribaD, BorderLayout.CENTER);
+        panelArribaD.add(scrollArribaD, BorderLayout.CENTER);
         add(panelArribaD);
 
         // Añadir elementos abajo izquierda
         panelTituloAbajoI.add(labelAbajoI);
         panelAbajoI.add(panelTituloAbajoI, BorderLayout.SOUTH);
-        panelAbajoI.add(panelTareasAbajoI, BorderLayout.CENTER);
+        panelAbajoI.add(scrollAbajoI, BorderLayout.CENTER);
         add(panelAbajoI);
 
         // Añadir elementos abajo derecha
         panelTituloAbajoD.add(labelAbajoD);
         panelAbajoD.add(panelTituloAbajoD, BorderLayout.SOUTH);
-        panelAbajoD.add(panelTareasAbajoD, BorderLayout.CENTER);
+        panelAbajoD.add(scrollAbajoD, BorderLayout.CENTER);
         add(panelAbajoD);
     }
 
