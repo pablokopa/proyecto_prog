@@ -46,19 +46,27 @@ public class VistaMatrix extends JPanel{
         JPanel panel = new JPanel();
         JLabel label = new JLabel("Tarea");
 
-        // Ajustar layout y posición de label
-        panel.setLayout(new BorderLayout());
-        Dimension panelSize = new Dimension(60, 60);
-        panel.setPreferredSize(panelSize);
+        // Layout
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Configurar restricciones
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+
+        // Dimensiones de los paneles
+        panel.setMaximumSize(new Dimension(760,60));
         label.setHorizontalAlignment(JLabel.CENTER); // Alineación del texto
 
-        // Tipo de fuente
+        // Tipo y color de fuente
         label.setFont(sRecursos.getMonserratBold(15));
         label.setForeground(colorGrisPrincipal); // Color de la letra
 
         // Borde
         Border bordeVisible = new MatteBorder(3,3,3,3, colorGrisPrincipal);
-        Border bordeMargen = new MatteBorder(5,20,5,20, color);
+        Border bordeMargen = new MatteBorder(15,20,0,20, color);
         Border compound = BorderFactory.createCompoundBorder(bordeMargen,bordeVisible);
         panel.setBorder(compound);
 
@@ -66,7 +74,7 @@ public class VistaMatrix extends JPanel{
         panel.setBackground(colorGrisSecundario);
 
         // Añadir tarea
-        panel.add(label, BorderLayout.CENTER);
+        panel.add(label, gbc);
         lugar.add(panel);
     }
 
@@ -176,7 +184,7 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
 /* AÑADIR ELEMENTOS */
-        for (int i=0; i<3; i++){
+        for (int i=0; i<2; i++){
             crearTareas(colorVerde, panelTareasArribaI);
             crearTareas(colorAzul, panelTareasArribaD);
             crearTareas(colorAmarillo, panelTareasAbajoI);
