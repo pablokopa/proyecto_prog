@@ -31,6 +31,7 @@ public class GestorTareas {
 
             prepare.executeQuery();
             ResultSet resultado = prepare.getResultSet();
+
             /* Obtiene los resultados y añade las tareas a la lista */
             while (resultado.next()){
                 int idT = resultado.getInt("idt");

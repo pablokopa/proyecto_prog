@@ -18,7 +18,7 @@ public class ControladorTareas {
 
 //        gestorTareas.addObserver(vistaTareas);
     }
-
+/*
     public void crearTarea(String nombreT, String descripcionT) {
         if (nombreT.isBlank()){
             System.out.println("Tarea sin nombre no posible");
@@ -28,5 +28,5 @@ public class ControladorTareas {
         gestorTareas.crearTarea(tarea);
         new TemplatePanelTareaEspecifica(tarea, gestorTareas, vistaTareas);
         vistaTareas.actualizarVistaTareas();
-    }
+    }*/
 }

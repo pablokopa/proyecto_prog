@@ -7,8 +7,6 @@ import services.Recursos;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Clase que crea un panel con la información de una tarea y le añade funciones.
@@ -17,13 +15,11 @@ import java.awt.event.MouseEvent;
 public class TemplatePanelTareaEspecifica extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
     private final Tarea tarea;
-    private final GestorTareas gestorTareas;
-    private final VistaTareas vistaTareas;
-
-    private final TemplatePanelTareaEspecifica esto;
 
     private JLabel labelImagen;
     private JPanel panelTarea;
+
+    private int idT;
 
     /**
      * Constructor de la clase.
@@ -35,10 +31,8 @@ public class TemplatePanelTareaEspecifica extends JPanel {
      */
     public TemplatePanelTareaEspecifica(Tarea tarea, GestorTareas gestorTareas, VistaTareas vistaTareas) {
         this.tarea = tarea;
-        this.gestorTareas = gestorTareas;
-        this.vistaTareas = vistaTareas;
 
-        this.esto = this;
+        this.idT = tarea.getIdT();
 
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(Short.MAX_VALUE, 75));
@@ -54,38 +48,6 @@ public class TemplatePanelTareaEspecifica extends JPanel {
      */
     private void crearLabelImagen() {
         this.labelImagen = new JLabel();
-
-        /* Pone el check correspondiente cuando se abre la aplicación */
-        if (tarea.getCompletadaT()){
-            labelImagen.setIcon(sRecursos.getImagenCheck());
-        } else {
-            labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
-        }
-
-        /* Al iniciar la aplicación; si la tarea está completada la añade al panel de tareas completadas, si no, la añade al panel de tareas por hacer */
-        if (tarea.getCompletadaT()){
-            vistaTareas.addAColumnaCompletada(esto);
-        } else {
-            vistaTareas.addAColumnaToDo(esto);
-        }
-
-        /* Al hacer click en la tarea, se marca como completada o no y se cambia de columna */
-        labelImagen.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (gestorTareas.completarTarea(tarea)){
-                    if (tarea.getCompletadaT()){
-                        labelImagen.setIcon(sRecursos.getImagenCheck());
-                        vistaTareas.cambiarAColumnaCompletada(esto);
-                    } else {
-                        labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
-                        vistaTareas.cambiarAColumnaToDo(esto);
-                    }
-                }
-                vistaTareas.actualizarVistaTareas();
-            }
-        });
-
         add(labelImagen, BorderLayout.WEST);
     }
 
@@ -100,15 +62,23 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         labelTitulo.setFont(sRecursos.getMonserratBold(16));
         labelTitulo.setText(tarea.getNombreT());
 
-        panelTarea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                vistaTareas.setCardTareaSeleccionada(tarea);
-                vistaTareas.actualizarVistaTareas();
-            }
-        });
-
         panelTarea.add(labelTitulo, BorderLayout.CENTER);
         add(panelTarea, BorderLayout.CENTER);
+    }
+
+    public JLabel getLabelImagen() {
+        return labelImagen;
+    }
+
+    public JPanel getPanelTarea() {
+        return panelTarea;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)    return true;
+        if (obj == null || obj.getClass() != this.getClass())   return false;
+        TemplatePanelTareaEspecifica template = (TemplatePanelTareaEspecifica) obj;
+        return this.idT == template.idT;
     }
 }
