@@ -24,6 +24,8 @@ public class VistaMatrix extends JPanel{
     private JPanel panelArribaI, panelArribaD, panelAbajoI, panelAbajoD;
     private JPanel panelTituloArribaI, panelTituloArribaD, panelTituloAbajoI, panelTituloAbajoD;
     private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
+    private JPanel panelTituloArribaIIzq, panelTituloArribaIDer, panelTituloArribaDIzq, panelTituloArribaDDer;
+    private JPanel panelTituloAbajoIIzq, panelTituloAbajoIDer, panelTituloAbajoDIzq, panelTituloAbajoDDer;
 
     private JLabel labelArribaI, labelArribaD, labelAbajoI, labelAbajoD;
     private JLabel labelAddArribaI, labelAddArribaD, labelAddAbajoI, labelAddAbajoD;
@@ -91,12 +93,17 @@ public class VistaMatrix extends JPanel{
         panelArribaI = new JPanel();
         panelTituloArribaI = new JPanel();
         panelTareasArribaI = new JPanel();
+        panelTituloArribaIIzq = new JPanel();
+        panelTituloArribaIDer = new JPanel();
+
         labelArribaI = new JLabel("No importante / No urgente");
         labelArribaI.setFont(sRecursos.getMonserratBold(20));
 
         // Configurar layout
         panelArribaI.setLayout(new BorderLayout());
-        panelTituloArribaI.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTituloArribaI.setLayout(new GridLayout(1,2));
+        panelTituloArribaIIzq.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTituloArribaIDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasArribaI.setLayout(new BoxLayout(panelTareasArribaI, BoxLayout.Y_AXIS));
 
         // Crear y configurar scroll
@@ -113,6 +120,8 @@ public class VistaMatrix extends JPanel{
 
         // Cambiar color de fondo
         panelTituloArribaI.setBackground(colorVerde);
+        panelTituloArribaIIzq.setBackground(colorVerde);
+        panelTituloArribaIDer.setBackground(colorVerde);
         panelTareasArribaI.setBackground(colorVerde);
 
         // Añadir borde
@@ -123,12 +132,17 @@ public class VistaMatrix extends JPanel{
         panelArribaD = new JPanel();
         panelTituloArribaD = new JPanel();
         panelTareasArribaD = new JPanel();
+        panelTituloArribaDIzq = new JPanel();
+        panelTituloArribaDDer = new JPanel();
+
         labelArribaD = new JLabel("No importante / Urgente");
         labelArribaD.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
         panelArribaD.setLayout(new BorderLayout());
-        panelTituloArribaD.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        panelTituloArribaD.setLayout(new GridLayout(1,2));
+        panelTituloArribaDIzq.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTituloArribaDDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasArribaD.setLayout(new BoxLayout(panelTareasArribaD, BoxLayout.Y_AXIS));
 
         // Crear y configurar scroll
@@ -145,6 +159,8 @@ public class VistaMatrix extends JPanel{
 
         // Cambiar color de fondo
         panelTituloArribaD.setBackground(colorAzul);
+        panelTituloArribaDIzq.setBackground(colorAzul);
+        panelTituloArribaDDer.setBackground(colorAzul);
         panelTareasArribaD.setBackground(colorAzul);
 
         // Añadir borde
@@ -155,12 +171,17 @@ public class VistaMatrix extends JPanel{
         panelAbajoI = new JPanel();
         panelTituloAbajoI = new JPanel();
         panelTareasAbajoI = new JPanel();
+        panelTituloAbajoIIzq = new JPanel();
+        panelTituloAbajoIDer = new JPanel();
+
         labelAbajoI = new JLabel("Importante / No urgente");
         labelAbajoI.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
         panelAbajoI.setLayout(new BorderLayout());
-        panelTituloAbajoI.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTituloAbajoI.setLayout(new GridLayout(1,2));
+        panelTituloAbajoIIzq.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTituloAbajoIDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasAbajoI.setLayout(new BoxLayout(panelTareasAbajoI, BoxLayout.Y_AXIS));
 
         // Crear y configurar scroll
@@ -177,6 +198,8 @@ public class VistaMatrix extends JPanel{
 
         // Cambiar color de fondo
         panelTituloAbajoI.setBackground(colorAmarillo);
+        panelTituloAbajoIIzq.setBackground(colorAmarillo);
+        panelTituloAbajoIDer.setBackground(colorAmarillo);
         panelTareasAbajoI.setBackground(colorAmarillo);
 
         // Añadir borde
@@ -187,12 +210,17 @@ public class VistaMatrix extends JPanel{
         panelAbajoD = new JPanel();
         panelTituloAbajoD = new JPanel();
         panelTareasAbajoD = new JPanel();
+        panelTituloAbajoDIzq = new JPanel();
+        panelTituloAbajoDDer = new JPanel();
+
         labelAbajoD = new JLabel("Importante / Urgente");
         labelAbajoD.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
         panelAbajoD.setLayout(new BorderLayout());
-        panelTituloAbajoD.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        panelTituloAbajoD.setLayout(new GridLayout(1,2));
+        panelTituloAbajoDIzq.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTituloAbajoDDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasAbajoD.setLayout(new BoxLayout(panelTareasAbajoD, BoxLayout.Y_AXIS));
 
         // Crear y configurar scroll
@@ -209,6 +237,8 @@ public class VistaMatrix extends JPanel{
 
         // Cambiar color de fondo
         panelTituloAbajoD.setBackground(colorRojo);
+        panelTituloAbajoDIzq.setBackground(colorRojo);
+        panelTituloAbajoDDer.setBackground(colorRojo);
         panelTareasAbajoD.setBackground(colorRojo);
 
         // Añadir borde
@@ -223,29 +253,37 @@ public class VistaMatrix extends JPanel{
         }*/
 
         // Añadir elementos arriba izquierda
-        panelTituloArribaI.add(labelArribaI);
-        panelTituloArribaI.add(botonAddArribaI, BorderLayout.EAST);
+        panelTituloArribaI.add(panelTituloArribaIIzq, BorderLayout.EAST);
+        panelTituloArribaI.add(panelTituloArribaIDer, BorderLayout.WEST);
+        panelTituloArribaIIzq.add(labelArribaI, BorderLayout.EAST);
+        panelTituloArribaIDer.add(botonAddArribaI, BorderLayout.WEST);
         panelArribaI.add(panelTituloArribaI, BorderLayout.NORTH);
         panelArribaI.add(scrollArribaI, BorderLayout.CENTER);
         add(panelArribaI);
 
         // Añadir elementos arriba derecha
-        panelTituloArribaD.add(botonAddArribaD, BorderLayout.WEST);
-        panelTituloArribaD.add(labelArribaD);
+        panelTituloArribaD.add(panelTituloArribaDIzq, BorderLayout.EAST);
+        panelTituloArribaD.add(panelTituloArribaDDer, BorderLayout.WEST);
+        panelTituloArribaDDer.add(labelArribaD, BorderLayout.WEST);
+        panelTituloArribaDIzq.add(botonAddArribaD, BorderLayout.EAST);
         panelArribaD.add(panelTituloArribaD, BorderLayout.NORTH);
         panelArribaD.add(scrollArribaD, BorderLayout.CENTER);
         add(panelArribaD);
 
         // Añadir elementos abajo izquierda
-        panelTituloAbajoI.add(labelAbajoI);
-        panelTituloAbajoI.add(botonAddAbajoI, BorderLayout.EAST);
+        panelTituloAbajoI.add(panelTituloAbajoIIzq, BorderLayout.EAST);
+        panelTituloAbajoI.add(panelTituloAbajoIDer, BorderLayout.WEST);
+        panelTituloAbajoIIzq.add(labelAbajoI, BorderLayout.EAST);
+        panelTituloAbajoIDer.add(botonAddAbajoI, BorderLayout.WEST);
         panelAbajoI.add(panelTituloAbajoI, BorderLayout.SOUTH);
         panelAbajoI.add(scrollAbajoI, BorderLayout.CENTER);
         add(panelAbajoI);
 
         // Añadir elementos abajo derecha
-        panelTituloAbajoD.add(botonAddAbajoD, BorderLayout.WEST);
-        panelTituloAbajoD.add(labelAbajoD);
+        panelTituloAbajoD.add(panelTituloAbajoDIzq, BorderLayout.EAST);
+        panelTituloAbajoD.add(panelTituloAbajoDDer, BorderLayout.WEST);
+        panelTituloAbajoDDer.add(labelAbajoD, BorderLayout.WEST);
+        panelTituloAbajoDIzq.add(botonAddAbajoD, BorderLayout.EAST);
         panelAbajoD.add(panelTituloAbajoD, BorderLayout.SOUTH);
         panelAbajoD.add(scrollAbajoD, BorderLayout.CENTER);
         add(panelAbajoD);
