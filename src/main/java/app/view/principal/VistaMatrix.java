@@ -66,7 +66,7 @@ public class VistaMatrix extends JPanel{
 
         // Borde
         Border bordeVisible = new MatteBorder(3,3,3,3, colorGrisPrincipal);
-        Border bordeMargen = new MatteBorder(15,20,0,20, color);
+        Border bordeMargen = new MatteBorder(10,20,0,20, color);
         Border compound = BorderFactory.createCompoundBorder(bordeMargen,bordeVisible);
         panel.setBorder(compound);
 
@@ -184,12 +184,12 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
 /* AÑADIR ELEMENTOS */
-        for (int i=0; i<2; i++){
+        /*for (int i=0; i<14; i++){
             crearTareas(colorVerde, panelTareasArribaI);
             crearTareas(colorAzul, panelTareasArribaD);
             crearTareas(colorAmarillo, panelTareasAbajoI);
             crearTareas(colorRojo, panelTareasAbajoD);
-        }
+        }*/
 
         // Añadir elementos arriba izquierda
         panelTituloArribaI.add(labelArribaI);
