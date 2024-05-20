@@ -19,7 +19,6 @@ public class InterfazPrincipal extends JFrame {
     private final Recursos sRecursos;
 
     private final GestorTareas gestorTareas;
-//    private final Usuario usuario;
 
     private int xRelativoFrame, yRelativoFrame, xRelativoPantalla, yRelativoPantalla;
 
@@ -39,19 +38,14 @@ public class InterfazPrincipal extends JFrame {
 
     public InterfazPrincipal(GestorTareas gestorTareas) {
         this.sRecursos = Recursos.getService();
-
         this.gestorTareas = gestorTareas;
-//        this.usuario = gestorTareas.getUsuario();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
         dimensionPantallaNormal = new Dimension(1100, 650);
 
         this.setLayout(new BorderLayout());
-
-        this.setSize(dimensionPantallaCompleta);
-        this.setLocation(0,0);
-
+        this.setSize(dimensionPantallaNormal);              // Debe empezar en dimension pequeña para evitar errores y posteriormente redimensionar a completa
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
@@ -67,6 +61,8 @@ public class InterfazPrincipal extends JFrame {
         moverVentana();
 
         this.setVisible(true);
+
+        setSize(dimensionPantallaCompleta);     // Línea necesaria para redimensionar sin errores
     }
 
     /**
