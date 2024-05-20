@@ -41,10 +41,12 @@ public class VistaMatrix extends JPanel{
     /**
      * Método para crear las tareas de los paneles.
      * @param color Color de fondo de los paneles.
+     * @param lugar Posición en la que se añade el panel.
+     * @param texto Texto que aparece (nombre de la tarea)
      */
-    private void crearTareas(Color color, JPanel lugar){
+    private void crearTareas(Color color, JPanel lugar, String texto){
         JPanel panel = new JPanel();
-        JLabel label = new JLabel("Tarea");
+        JLabel label = new JLabel(texto);
 
         // Layout
         panel.setLayout(new GridBagLayout());
