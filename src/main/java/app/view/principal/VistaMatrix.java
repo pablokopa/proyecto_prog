@@ -113,7 +113,7 @@ public class VistaMatrix extends JPanel{
         scrollArribaI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Personalizar botón
-        botonAddArribaI.setFont(sRecursos.getMonserratBold(12));
+        botonAddArribaI.setFont(sRecursos.getMonserratBold(14));
         botonAddArribaI.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
         botonAddArribaI.setBackground(colorGrisPrincipal);
         botonAddArribaI.setForeground(colorVerde);
@@ -152,7 +152,7 @@ public class VistaMatrix extends JPanel{
         scrollArribaD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Personalizar botón
-        botonAddArribaD.setFont(sRecursos.getMonserratBold(12));
+        botonAddArribaD.setFont(sRecursos.getMonserratBold(14));
         botonAddArribaD.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
         botonAddArribaD.setBackground(colorGrisPrincipal);
         botonAddArribaD.setForeground(colorAzul);
@@ -191,7 +191,7 @@ public class VistaMatrix extends JPanel{
         scrollAbajoI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Personalizar botón
-        botonAddAbajoI.setFont(sRecursos.getMonserratBold(12));
+        botonAddAbajoI.setFont(sRecursos.getMonserratBold(14));
         botonAddAbajoI.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
         botonAddAbajoI.setBackground(colorGrisPrincipal);
         botonAddAbajoI.setForeground(colorAmarillo);
@@ -230,7 +230,7 @@ public class VistaMatrix extends JPanel{
         scrollAbajoD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
 
         // Personalizar botón
-        botonAddAbajoD.setFont(sRecursos.getMonserratBold(12));
+        botonAddAbajoD.setFont(sRecursos.getMonserratBold(14));
         botonAddAbajoD.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
         botonAddAbajoD.setBackground(colorGrisPrincipal);
         botonAddAbajoD.setForeground(colorRojo);
