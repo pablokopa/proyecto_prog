@@ -42,8 +42,24 @@ public class VistaMatrix extends JPanel{
 
         this.setLayout(new GridLayout(2,2));
 
-        crearPaneles();
+        crearMatrix();
     }
+
+    /**
+     * Método para crear los paneles.
+     * @param lugarPanelPrincipal Lugar en el que se añade el panel principal.
+     * @param lugarPanelTitulo Lugar en el que se añade el panel del titulo.
+     * @param lugarPanelTareas Lugar en el que se añade el panel de tareas.
+     * @param lugarPanelTituloIzq Panel del titulo en el lado izquierdo.
+     * @param lugarPanelTituloDer Panel del titulo en el lado derecho.
+     */
+    /*private void crearPaneles(JPanel lugarPanelPrincipal, JPanel lugarPanelTitulo, JPanel lugarPanelTareas, JPanel lugarPanelTituloIzq, JPanel lugarPanelTituloDer){
+        lugarPanelPrincipal = new JPanel();
+        lugarPanelTitulo = new JPanel();
+        lugarPanelTareas = new JPanel();
+        lugarPanelTituloIzq = new JPanel();
+        lugarPanelTituloDer = new JPanel();
+    }*/
 
     /**
      * Método para crear las tareas de los paneles.
@@ -87,14 +103,52 @@ public class VistaMatrix extends JPanel{
         lugar.add(panel);
     }
 
-    private void crearPaneles() {
+    /**
+     * Método para modificar el scrollbar.
+     * @param zonaScroll Scroll que se modifica.
+     */
+    private void modificarScroll(JScrollPane zonaScroll){
+        zonaScroll.setBorder(null);
+        zonaScroll.getVerticalScrollBar().setUI(new ScrollBarBlanco());
+        zonaScroll.getHorizontalScrollBar().setUI(new ScrollBarBlanco());
+    }
+
+    /**
+     * Método para modificar el boton.
+     * @param colorPanel Color del panel seleccionado.
+     * @param boton Botón seleccionado para ser modificado.
+     */
+    private void modificarBoton(Color colorPanel, JButton boton){
+        boton.setFont(sRecursos.getMonserratBold(14));
+        boton.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
+        boton.setBackground(colorGrisPrincipal);
+        boton.setForeground(colorPanel);
+    }
+
+    /**
+     * Método para modificar el color del fondo de los paneles.
+     * @param colorPanel Color del panel seleccionado.
+     * @param panelTitulo Panel del titulo a modificar.
+     * @param panelTituloIzq Lado izquierdo del panel del titulo a modificar.
+     * @param panelTituloDer Lado derecho del panel del titulo a modificar.
+     * @param panelTareas Panel de tareas a modificar.
+     */
+    private void modificarBackground(Color colorPanel, JPanel panelTitulo, JPanel panelTituloIzq, JPanel panelTituloDer , JPanel panelTareas){
+        panelTitulo.setBackground(colorPanel);
+        panelTituloIzq.setBackground(colorPanel);
+        panelTituloDer.setBackground(colorPanel);
+        panelTareas.setBackground(colorPanel);
+    }
+
+    private void crearMatrix() {
 /* Panel Arriba Izquierda */
-        // Crear nuevos paneles
+        // Definir elementos
         panelArribaI = new JPanel();
         panelTituloArribaI = new JPanel();
         panelTareasArribaI = new JPanel();
         panelTituloArribaIIzq = new JPanel();
         panelTituloArribaIDer = new JPanel();
+        scrollArribaI = new JScrollPane(panelTareasArribaI);
 
         labelArribaI = new JLabel("No importante / No urgente");
         labelArribaI.setFont(sRecursos.getMonserratBold(20));
@@ -106,34 +160,19 @@ public class VistaMatrix extends JPanel{
         panelTituloArribaIDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasArribaI.setLayout(new BoxLayout(panelTareasArribaI, BoxLayout.Y_AXIS));
 
-        // Crear y configurar scroll
-        scrollArribaI = new JScrollPane(panelTareasArribaI);
-        scrollArribaI.setBorder(null);
-        scrollArribaI.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
-        scrollArribaI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
-
-        // Personalizar botón
-        botonAddArribaI.setFont(sRecursos.getMonserratBold(14));
-        botonAddArribaI.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
-        botonAddArribaI.setBackground(colorGrisPrincipal);
-        botonAddArribaI.setForeground(colorVerde);
-
-        // Cambiar color de fondo
-        panelTituloArribaI.setBackground(colorVerde);
-        panelTituloArribaIIzq.setBackground(colorVerde);
-        panelTituloArribaIDer.setBackground(colorVerde);
-        panelTareasArribaI.setBackground(colorVerde);
-
-        // Añadir borde
+        modificarScroll(scrollArribaI);
+        modificarBoton(colorVerde, botonAddArribaI);
+        modificarBackground(colorVerde, panelTituloArribaI, panelTituloArribaIIzq, panelTituloArribaIDer ,panelTareasArribaI);
         panelArribaI.setBorder(new MatteBorder(1, 10, 5, 5, sRecursos.getBLANCO()));
 
 /* Panel Arriba Derecha */
-        // Crear nuevos paneles
+        // Definir elementos
         panelArribaD = new JPanel();
         panelTituloArribaD = new JPanel();
         panelTareasArribaD = new JPanel();
         panelTituloArribaDIzq = new JPanel();
         panelTituloArribaDDer = new JPanel();
+        scrollArribaD = new JScrollPane(panelTareasArribaD);
 
         labelArribaD = new JLabel("No importante / Urgente");
         labelArribaD.setFont(sRecursos.getMonserratBold(20));
@@ -145,34 +184,19 @@ public class VistaMatrix extends JPanel{
         panelTituloArribaDDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasArribaD.setLayout(new BoxLayout(panelTareasArribaD, BoxLayout.Y_AXIS));
 
-        // Crear y configurar scroll
-        scrollArribaD = new JScrollPane(panelTareasArribaD);
-        scrollArribaD.setBorder(null);
-        scrollArribaD.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
-        scrollArribaD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
-
-        // Personalizar botón
-        botonAddArribaD.setFont(sRecursos.getMonserratBold(14));
-        botonAddArribaD.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
-        botonAddArribaD.setBackground(colorGrisPrincipal);
-        botonAddArribaD.setForeground(colorAzul);
-
-        // Cambiar color de fondo
-        panelTituloArribaD.setBackground(colorAzul);
-        panelTituloArribaDIzq.setBackground(colorAzul);
-        panelTituloArribaDDer.setBackground(colorAzul);
-        panelTareasArribaD.setBackground(colorAzul);
-
-        // Añadir borde
+        modificarScroll(scrollArribaD);
+        modificarBoton(colorAzul, botonAddArribaD);
+        modificarBackground(colorAzul, panelTituloArribaD, panelTituloArribaDIzq, panelTituloArribaDDer, panelTareasArribaD);
         panelArribaD.setBorder(new MatteBorder(1, 5, 5, 10, sRecursos.getBLANCO()));
 
 /* Panel Abajo Izquierda */
-        // Crear nuevos paneles
+        // Definir elementos
         panelAbajoI = new JPanel();
         panelTituloAbajoI = new JPanel();
         panelTareasAbajoI = new JPanel();
         panelTituloAbajoIIzq = new JPanel();
         panelTituloAbajoIDer = new JPanel();
+        scrollAbajoI = new JScrollPane(panelTareasAbajoI);
 
         labelAbajoI = new JLabel("Importante / No urgente");
         labelAbajoI.setFont(sRecursos.getMonserratBold(20));
@@ -184,34 +208,19 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoIDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasAbajoI.setLayout(new BoxLayout(panelTareasAbajoI, BoxLayout.Y_AXIS));
 
-        // Crear y configurar scroll
-        scrollAbajoI = new JScrollPane(panelTareasAbajoI);
-        scrollAbajoI.setBorder(null);
-        scrollAbajoI.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
-        scrollAbajoI.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
-
-        // Personalizar botón
-        botonAddAbajoI.setFont(sRecursos.getMonserratBold(14));
-        botonAddAbajoI.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
-        botonAddAbajoI.setBackground(colorGrisPrincipal);
-        botonAddAbajoI.setForeground(colorAmarillo);
-
-        // Cambiar color de fondo
-        panelTituloAbajoI.setBackground(colorAmarillo);
-        panelTituloAbajoIIzq.setBackground(colorAmarillo);
-        panelTituloAbajoIDer.setBackground(colorAmarillo);
-        panelTareasAbajoI.setBackground(colorAmarillo);
-
-        // Añadir borde
+        modificarScroll(scrollAbajoI);
+        modificarBoton(colorAmarillo, botonAddAbajoI);
+        modificarBackground(colorAmarillo, panelTituloAbajoI, panelTituloAbajoIIzq, panelTituloAbajoIDer, panelTareasAbajoI);
         panelAbajoI.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
 
 /* Panel Abajo Derecha */
-        // Crear nuevos paneles
+        // Definir elementos
         panelAbajoD = new JPanel();
         panelTituloAbajoD = new JPanel();
         panelTareasAbajoD = new JPanel();
         panelTituloAbajoDIzq = new JPanel();
         panelTituloAbajoDDer = new JPanel();
+        scrollAbajoD = new JScrollPane(panelTareasAbajoD);
 
         labelAbajoD = new JLabel("Importante / Urgente");
         labelAbajoD.setFont(sRecursos.getMonserratBold(20));
@@ -223,35 +232,12 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoDDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasAbajoD.setLayout(new BoxLayout(panelTareasAbajoD, BoxLayout.Y_AXIS));
 
-        // Crear y configurar scroll
-        scrollAbajoD = new JScrollPane(panelTareasAbajoD);
-        scrollAbajoD.setBorder(null);
-        scrollAbajoD.getVerticalScrollBar().setUI(new WhiteScrollBarUI());
-        scrollAbajoD.getHorizontalScrollBar().setUI(new WhiteScrollBarUI());
-
-        // Personalizar botón
-        botonAddAbajoD.setFont(sRecursos.getMonserratBold(14));
-        botonAddAbajoD.setBorder(new MatteBorder(5,5,5,5,colorGrisPrincipal));
-        botonAddAbajoD.setBackground(colorGrisPrincipal);
-        botonAddAbajoD.setForeground(colorRojo);
-
-        // Cambiar color de fondo
-        panelTituloAbajoD.setBackground(colorRojo);
-        panelTituloAbajoDIzq.setBackground(colorRojo);
-        panelTituloAbajoDDer.setBackground(colorRojo);
-        panelTareasAbajoD.setBackground(colorRojo);
-
-        // Añadir borde
+        modificarScroll(scrollAbajoD);
+        modificarBoton(colorRojo, botonAddAbajoD);
+        modificarBackground(colorRojo, panelTituloAbajoD, panelTituloAbajoDIzq, panelTituloAbajoDDer, panelTareasAbajoD);
         panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
 
 /* AÑADIR ELEMENTOS */
-        /*for (int i=0; i<14; i++){
-            crearTareas(colorVerde, panelTareasArribaI);
-            crearTareas(colorAzul, panelTareasArribaD);
-            crearTareas(colorAmarillo, panelTareasAbajoI);
-            crearTareas(colorRojo, panelTareasAbajoD);
-        }*/
-
         // Añadir elementos arriba izquierda
         panelTituloArribaI.add(panelTituloArribaIIzq, BorderLayout.EAST);
         panelTituloArribaI.add(panelTituloArribaIDer, BorderLayout.WEST);
@@ -298,7 +284,7 @@ public class VistaMatrix extends JPanel{
     }
 }
 
-class WhiteScrollBarUI extends BasicScrollBarUI {
+class ScrollBarBlanco extends BasicScrollBarUI {
     @Override
     protected JButton createDecreaseButton(int orientation) {
         JButton button = new JButton();
