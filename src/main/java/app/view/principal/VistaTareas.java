@@ -223,14 +223,11 @@ public class VistaTareas extends JPanel {
         eliminarTarea.addActionListener(e -> {
             int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.YES_OPTION){
+                TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada, gestorTareas, this);
                 if (tareaSeleccionada.getCompletadaT()){
-                    TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada, gestorTareas, this);
-                    TemplatePanelTareaEspecifica panelSeleccionado = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
-                    panelListaTareasCompletadas.remove(panelSeleccionado);
+                    panelListaTareasCompletadas.remove(panelTemporal);
                 } else {
-                    TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada, gestorTareas, this);
-                    TemplatePanelTareaEspecifica panelSeleccionado = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
-                    panelListaTareasToDo.remove(panelSeleccionado);
+                    panelListaTareasToDo.remove(panelTemporal);
                 }
                 gestorTareas.eliminarTarea(tareaSeleccionada);
                 actualizarVistaTareas();
