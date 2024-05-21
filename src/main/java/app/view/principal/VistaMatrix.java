@@ -6,12 +6,10 @@ import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
-import services.ObjGraficos;
 import services.Recursos;
 
 
 public class VistaMatrix extends JPanel{
-    private ObjGraficos sObjGraficos;
     private Recursos sRecursos;
 
     private Color colorGrisPrincipal = new Color(59,59,59);
@@ -28,7 +26,7 @@ public class VistaMatrix extends JPanel{
     private JPanel panelTituloAbajoIIzq, panelTituloAbajoIDer, panelTituloAbajoDIzq, panelTituloAbajoDDer;
 
     private JLabel labelArribaI, labelArribaD, labelAbajoI, labelAbajoD;
-    private JLabel labelAddArribaI, labelAddArribaD, labelAddAbajoI, labelAddAbajoD;
+
     private JScrollPane scrollArribaI, scrollArribaD, scrollAbajoI, scrollAbajoD;
 
     private JButton botonAddArribaD = new JButton("Añadir tarea");
@@ -37,29 +35,12 @@ public class VistaMatrix extends JPanel{
     private JButton botonAddAbajoI = new JButton("Añadir tarea");
 
     public VistaMatrix(){
-        sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
 
         this.setLayout(new GridLayout(2,2));
 
         crearMatrix();
     }
-
-    /**
-     * Método para crear los paneles.
-     * @param lugarPanelPrincipal Lugar en el que se añade el panel principal.
-     * @param lugarPanelTitulo Lugar en el que se añade el panel del titulo.
-     * @param lugarPanelTareas Lugar en el que se añade el panel de tareas.
-     * @param lugarPanelTituloIzq Panel del titulo en el lado izquierdo.
-     * @param lugarPanelTituloDer Panel del titulo en el lado derecho.
-     */
-    /*private void crearPaneles(JPanel lugarPanelPrincipal, JPanel lugarPanelTitulo, JPanel lugarPanelTareas, JPanel lugarPanelTituloIzq, JPanel lugarPanelTituloDer){
-        lugarPanelPrincipal = new JPanel();
-        lugarPanelTitulo = new JPanel();
-        lugarPanelTareas = new JPanel();
-        lugarPanelTituloIzq = new JPanel();
-        lugarPanelTituloDer = new JPanel();
-    }*/
 
     /**
      * Método para crear las tareas de los paneles.
@@ -149,9 +130,7 @@ public class VistaMatrix extends JPanel{
         panelTituloArribaIIzq = new JPanel();
         panelTituloArribaIDer = new JPanel();
         scrollArribaI = new JScrollPane(panelTareasArribaI);
-
         labelArribaI = new JLabel("No importante / No urgente");
-        labelArribaI.setFont(sRecursos.getMonserratBold(20));
 
         // Configurar layout
         panelArribaI.setLayout(new BorderLayout());
@@ -160,6 +139,8 @@ public class VistaMatrix extends JPanel{
         panelTituloArribaIDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasArribaI.setLayout(new BoxLayout(panelTareasArribaI, BoxLayout.Y_AXIS));
 
+        // Personalizar paneles
+        labelArribaI.setFont(sRecursos.getMonserratBold(20));
         modificarScroll(scrollArribaI);
         modificarBoton(colorVerde, botonAddArribaI);
         modificarBackground(colorVerde, panelTituloArribaI, panelTituloArribaIIzq, panelTituloArribaIDer ,panelTareasArribaI);
@@ -173,9 +154,7 @@ public class VistaMatrix extends JPanel{
         panelTituloArribaDIzq = new JPanel();
         panelTituloArribaDDer = new JPanel();
         scrollArribaD = new JScrollPane(panelTareasArribaD);
-
         labelArribaD = new JLabel("No importante / Urgente");
-        labelArribaD.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
         panelArribaD.setLayout(new BorderLayout());
@@ -184,6 +163,8 @@ public class VistaMatrix extends JPanel{
         panelTituloArribaDDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasArribaD.setLayout(new BoxLayout(panelTareasArribaD, BoxLayout.Y_AXIS));
 
+        // Personalizar paneles
+        labelArribaD.setFont(sRecursos.getMonserratBold(20));
         modificarScroll(scrollArribaD);
         modificarBoton(colorAzul, botonAddArribaD);
         modificarBackground(colorAzul, panelTituloArribaD, panelTituloArribaDIzq, panelTituloArribaDDer, panelTareasArribaD);
@@ -197,9 +178,7 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoIIzq = new JPanel();
         panelTituloAbajoIDer = new JPanel();
         scrollAbajoI = new JScrollPane(panelTareasAbajoI);
-
         labelAbajoI = new JLabel("Importante / No urgente");
-        labelAbajoI.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
         panelAbajoI.setLayout(new BorderLayout());
@@ -208,6 +187,8 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoIDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasAbajoI.setLayout(new BoxLayout(panelTareasAbajoI, BoxLayout.Y_AXIS));
 
+        // Personalizar paneles
+        labelAbajoI.setFont(sRecursos.getMonserratBold(20));
         modificarScroll(scrollAbajoI);
         modificarBoton(colorAmarillo, botonAddAbajoI);
         modificarBackground(colorAmarillo, panelTituloAbajoI, panelTituloAbajoIIzq, panelTituloAbajoIDer, panelTareasAbajoI);
@@ -221,9 +202,7 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoDIzq = new JPanel();
         panelTituloAbajoDDer = new JPanel();
         scrollAbajoD = new JScrollPane(panelTareasAbajoD);
-
         labelAbajoD = new JLabel("Importante / Urgente");
-        labelAbajoD.setFont(sRecursos.getMonserratBold(20));
 
         // Indicar layout
         panelAbajoD.setLayout(new BorderLayout());
@@ -232,6 +211,8 @@ public class VistaMatrix extends JPanel{
         panelTituloAbajoDDer.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelTareasAbajoD.setLayout(new BoxLayout(panelTareasAbajoD, BoxLayout.Y_AXIS));
 
+        // Personalizar paneles
+        labelAbajoD.setFont(sRecursos.getMonserratBold(20));
         modificarScroll(scrollAbajoD);
         modificarBoton(colorRojo, botonAddAbajoD);
         modificarBackground(colorRojo, panelTituloAbajoD, panelTituloAbajoDIzq, panelTituloAbajoDDer, panelTareasAbajoD);
@@ -273,14 +254,6 @@ public class VistaMatrix extends JPanel{
         panelAbajoD.add(panelTituloAbajoD, BorderLayout.SOUTH);
         panelAbajoD.add(scrollAbajoD, BorderLayout.CENTER);
         add(panelAbajoD);
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 800);
-        frame.add(new VistaMatrix());
-        frame.setVisible(true);
     }
 }
 
