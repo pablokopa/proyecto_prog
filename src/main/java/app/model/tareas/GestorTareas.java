@@ -50,6 +50,35 @@ public class GestorTareas {
         }
     }
 
+    public Tarea getUltimaTarea(){
+        String sql = "SELECT * FROM tarea ORDER BY idT DESC LIMIT 1;";
+
+        try (Connection conexion = ConectarBD.conectar()){
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+
+            prepare.executeQuery();
+            ResultSet resultado = prepare.getResultSet();
+
+            /* Obtiene los resultados y añade las tareas a la lista */
+            if (resultado.next()){
+                int idT = resultado.getInt("idt");
+                String nombreT = resultado.getString("nombret");
+                String descripcionT = resultado.getString("descripciont");
+                Timestamp fechaCreacionT = resultado.getTimestamp("fechacreaciont");
+                Timestamp fechaFinalizacionT = resultado.getTimestamp("fechafinalizaciont");
+                Boolean completadaT = resultado.getBoolean("completadat");
+
+                Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU());
+                this.listaTareas.add(tarea);
+                return tarea;
+            }
+        } catch (SQLException e) {
+            System.out.println("CATCH EN GestorTareas.getTareasDeBase()");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Añade una tarea a la base de datos y a la lista de tareas.
      * @param tarea tarea a añadir
@@ -90,6 +119,7 @@ public class GestorTareas {
             prepare.setInt(3, tarea.getIdT());
 
             prepare.executeUpdate();
+            System.out.println("LANZADOO");
         } catch (SQLException e) {
             System.out.println("CATCH EN completarTarea()");
             e.printStackTrace();

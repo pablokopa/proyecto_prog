@@ -116,6 +116,11 @@ public class GestorUsuarios {
             return false;
         }
 
+        if (nombreUsuario.length()>40) {
+            textoComprobacion.setText("El nombre de usuario no puede tener más de 40 carácteres");
+            return false;
+        }
+
         /* Si no se encontró un usuario y el nombre de usuario tiene al menos 3 caracteres, devuelve true */
         return true;
     }
@@ -132,6 +137,11 @@ public class GestorUsuarios {
         /* Comprueba si la contraseña tiene al menos 4 carácteres */
         if (passwordUsuario.length()<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
+            return false;
+        }
+
+        if (passwordUsuario.length()>50){
+            textoComprobacion.setText("La contraseña debe tener menos de 50 carácteres");
             return false;
         }
 

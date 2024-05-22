@@ -1,8 +1,6 @@
 package app.view.templates;
 
-import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
-import app.view.principal.VistaTareas;
 import services.Recursos;
 
 import javax.swing.*;
@@ -19,17 +17,15 @@ public class TemplatePanelTareaEspecifica extends JPanel {
     private JLabel labelImagen;
     private JPanel panelTarea;
 
-    private int idT;
+    private final int idT;
 
     /**
      * Constructor de la clase.
      * Crea un panel con la información de una tarea y le añade funciones.
      * Incluye el panel creado en la columna correspondiente de la VistaTareas.
      * @param tarea tarea a mostrar
-     * @param gestorTareas gestor de tareas
-     * @param vistaTareas vista de tareas
      */
-    public TemplatePanelTareaEspecifica(Tarea tarea, GestorTareas gestorTareas, VistaTareas vistaTareas) {
+    public TemplatePanelTareaEspecifica(Tarea tarea) {
         this.tarea = tarea;
 
         this.idT = tarea.getIdT();
