@@ -44,6 +44,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
      */
     private void crearLabelImagen() {
         this.labelImagen = new JLabel();
+        labelImagen.setCursor(sRecursos.getCursorMano());
         add(labelImagen, BorderLayout.WEST);
     }
 
