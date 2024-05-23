@@ -42,7 +42,7 @@ public class InterfazPrincipal extends JFrame {
 
         Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
-        dimensionPantallaNormal = new Dimension(1100, 650);
+        dimensionPantallaNormal = new Dimension(1400, 750);
 
         this.setLayout(new BorderLayout());
         this.setSize(dimensionPantallaNormal);              // Debe empezar en dimension pequeña para evitar errores y posteriormente redimensionar a completa

@@ -70,6 +70,10 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         return panelTarea;
     }
 
+    public Tarea getTarea() {
+        return tarea;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this)    return true;
