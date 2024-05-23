@@ -24,7 +24,7 @@ public class VistaTareas extends JPanel {
     private JPanel columnaInformacion;
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
     private JLabel labelNombreTarea, labelDescripcionTarea, labelEtiquetasTarea;
-    private JButton botonCrearTarea, botonEliminarTarea;
+    private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelEliminarTarea, labelEliminarTodas;
     private JTextField textFieldNombreTarea;
     private JTextArea textAreaDescripcionTarea;
 
@@ -52,7 +52,7 @@ public class VistaTareas extends JPanel {
         construirColumnaInformacionExtra();
 
         addTareas();
-        addListenersBotones();
+        addListenersLabels();
 
         setCardGeneral();
     }
@@ -79,15 +79,8 @@ public class VistaTareas extends JPanel {
         columnaTareasToDo.add(scroolPanelListaTareasToDo, BorderLayout.CENTER);
 
         /* Label para crear nueva tarea */
-        JLabel labelCrearNuevaTarea = crearLabelBoton("Crear nueva tarea");
+        this.labelCrearNuevaTarea = crearLabelBoton("Crear nueva tarea");
         columnaTareasToDo.add(labelCrearNuevaTarea, BorderLayout.SOUTH);
-
-        labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(columnaInformacion, "cardNuevaTarea");
-            }
-        });
     }
 
     /**
@@ -112,21 +105,8 @@ public class VistaTareas extends JPanel {
         columnaTareasCompletadas.add(scroolPanelListaTareasCompletadas, BorderLayout.CENTER);
 
         /* Label para eliminar todas las tareas */
-        JLabel labelEliminarTareas = crearLabelBoton("Eliminar todas");
-        columnaTareasCompletadas.add(labelEliminarTareas, BorderLayout.SOUTH);
-
-        labelEliminarTareas.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                for (TemplatePanelTareaEspecifica panel : listaPanelesTareasCompletadas){
-                    if(gestorTareas.eliminarTarea(panel.getTarea())){
-                        panelListaTareasCompletadas.remove(panel);
-                        actualizarVistaTareas();
-                    }
-                }
-                listaPanelesTareasCompletadas = new ArrayList<>();
-            }
-        });
+        this.labelEliminarTodas = crearLabelBoton("Eliminar todas");
+        columnaTareasCompletadas.add(labelEliminarTodas, BorderLayout.SOUTH);
     }
 
     /**
@@ -179,6 +159,9 @@ public class VistaTareas extends JPanel {
         panelInformacionTarea.setLayout(new GridBagLayout());
         cardTareaSeleccionada.add(panelInformacionTarea, BorderLayout.CENTER);
 
+        this.labelEliminarTarea = crearLabelBoton("Eliminar");
+        cardTareaSeleccionada.add(labelEliminarTarea, BorderLayout.SOUTH);
+
         this.labelNombreTarea = new JLabel("Nombre de la tarea");
         labelNombreTarea.setFont(sRecursos.getMonserratBold(20));
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
@@ -193,11 +176,6 @@ public class VistaTareas extends JPanel {
         labelEtiquetasTarea.setFont(sRecursos.getMonserratBold(20));
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(labelEtiquetasTarea, gbc);
-
-        this.botonEliminarTarea = new JButton("Eliminar tarea");
-        botonEliminarTarea.setFont(sRecursos.getMonserratBold(20));
-        gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionTarea.add(botonEliminarTarea, gbc);
     }
 
     /**
@@ -213,6 +191,9 @@ public class VistaTareas extends JPanel {
         /* Título de la columna Información Extra en el card Nueva Tarea */
         JLabel labelTituloInformacionNuevaTarea = crearLabelTituloDeColumna("Nueva Tarea");
         cardNuevaTarea.add(labelTituloInformacionNuevaTarea, BorderLayout.NORTH);
+
+        this.labelConfirmarTarea = crearLabelBoton("Confirmar");
+        cardNuevaTarea.add(labelConfirmarTarea, BorderLayout.SOUTH);
 
         /* Panel donde se introduce la información de la nueva tarea */
         JPanel panelInformacionCrearNuevaTarea = new JPanel();
@@ -237,54 +218,81 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelSelectorEtiquetas, gbc);
 
-        this.botonCrearTarea = new JButton("Crear tarea");
-        botonCrearTarea.setPreferredSize(new Dimension(0, 50));
-        botonCrearTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
-        gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionCrearNuevaTarea.add(botonCrearTarea, gbc);
-
         cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
 
-    private void addListenersBotones(){
+    private void addListenersLabels(){
 
-        botonCrearTarea.addActionListener(e -> {
-            String nombreT = textFieldNombreTarea.getText();
-            if (nombreT.isBlank() || nombreT.length()>50){
-                return;
+        labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardLayout.show(columnaInformacion, "cardNuevaTarea");
             }
-            String descripcionT = textAreaDescripcionTarea.getText();
-
-            Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
-            gestorTareas.crearTarea(tarea);
-            Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
-            TemplatePanelTareaEspecifica panel = new TemplatePanelTareaEspecifica(tareaReal);
-
-            addListenerATareas(tareaReal, panel);
-            actualizarVistaTareas();
-
-            textFieldNombreTarea.setText("");
-            textAreaDescripcionTarea.setText("");
         });
 
-        botonEliminarTarea.addActionListener(e -> {
-            int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
-            if (opcion == JOptionPane.YES_OPTION){
-                TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada);
-
-                if (tareaSeleccionada.getCompletadaT()){
-                    TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
-                    panelListaTareasCompletadas.remove(panelReal);
-                    listaPanelesTareasCompletadas.remove(panelReal);
-                } else {
-                    TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
-                    panelListaTareasToDo.remove(panelReal);
-                    listaPanelesTareasToDo.remove(panelReal);
+        labelConfirmarTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String nombreT = textFieldNombreTarea.getText();
+                if (nombreT.isBlank() || nombreT.length()>50){
+                    return;
                 }
-                gestorTareas.eliminarTarea(tareaSeleccionada);
+                String descripcionT = textAreaDescripcionTarea.getText();
+
+                Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
+                gestorTareas.crearTarea(tarea);
+                Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
+                TemplatePanelTareaEspecifica panel = new TemplatePanelTareaEspecifica(tareaReal);
+
+                addListenerATareas(tareaReal, panel);
                 actualizarVistaTareas();
 
-                cardLayout.show(columnaInformacion, "cardGeneral");
+                textFieldNombreTarea.setText("");
+                textAreaDescripcionTarea.setText("");
+            }
+        });
+
+        labelEliminarTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.YES_OPTION){
+                    TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada);
+
+                    if (tareaSeleccionada.getCompletadaT()){
+                        TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
+                        panelListaTareasCompletadas.remove(panelReal);
+                        listaPanelesTareasCompletadas.remove(panelReal);
+                    } else {
+                        TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
+                        panelListaTareasToDo.remove(panelReal);
+                        listaPanelesTareasToDo.remove(panelReal);
+                    }
+                    gestorTareas.eliminarTarea(tareaSeleccionada);
+                    actualizarVistaTareas();
+
+                    cardLayout.show(columnaInformacion, "cardGeneral");
+                }
+            }
+        });
+
+        labelEliminarTodas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (panelListaTareasCompletadas.getComponentCount()==0){
+                    System.out.println("No hay tareas completadas");
+                    return;
+                }
+                int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
+                if (opcion==JOptionPane.YES_OPTION){
+                    for (TemplatePanelTareaEspecifica panel : listaPanelesTareasCompletadas){
+                        if(gestorTareas.eliminarTarea(panel.getTarea())){
+                            panelListaTareasCompletadas.remove(panel);
+                            actualizarVistaTareas();
+                        }
+                    }
+                    listaPanelesTareasCompletadas = new ArrayList<>();
+                }
             }
         });
     }
