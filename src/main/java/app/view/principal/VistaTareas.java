@@ -7,7 +7,6 @@ import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -236,15 +235,31 @@ public class VistaTareas extends JPanel {
         textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
         textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
         textPaneDescripcionTarea.setText("Descripción de la tarea");
-        gbc = setGbc(0, 1, 1, 0.97, GridBagConstraints.BOTH);
+        gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(textPaneDescripcionTarea, gbc);
 
-        JPanel panelSelectorEtiquetas = new JPanel();
-        panelSelectorEtiquetas.setPreferredSize(new Dimension(0, 50));
-        panelSelectorEtiquetas.setLayout(new FlowLayout());
-        panelSelectorEtiquetas.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
+        JPanel panelOpciones = new JPanel();
+        panelOpciones.setPreferredSize(new Dimension(0, 50));
+        panelOpciones.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionCrearNuevaTarea.add(panelSelectorEtiquetas, gbc);
+        panelInformacionCrearNuevaTarea.add(panelOpciones, gbc);
+
+        JPanel panelEtiquetas = new JPanel();
+        panelEtiquetas.setPreferredSize(new Dimension(0, 50));
+        panelEtiquetas.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
+        panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
+
+        JLabel labelMensajesError = new JLabel();
+        labelMensajesError.setPreferredSize(new Dimension(0, 50));
+        labelMensajesError.setLayout(new FlowLayout());
+        labelMensajesError.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
+        labelMensajesError.setText("Mensaje de error!");
+        labelMensajesError.setFont(sRecursos.getMonserratBold(18));
+        labelMensajesError.setForeground(sRecursos.getGRANATE());
+        labelMensajesError.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
+        panelInformacionCrearNuevaTarea.add(labelMensajesError, gbc);
 
         cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
@@ -269,6 +284,16 @@ public class VistaTareas extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 cardLayout.show(columnaInformacion, "cardNuevaTarea");
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                labelCrearNuevaTarea.setBackground(sRecursos.getGRIS_CLARO());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                labelCrearNuevaTarea.setBackground(sRecursos.getBLANCO());
+            }
         });
 
         labelConfirmarTarea.addMouseListener(new MouseAdapter() {
@@ -290,6 +315,16 @@ public class VistaTareas extends JPanel {
 
                 textFieldNombreTarea.setText("");
                 textAreaDescripcionTarea.setText("");
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                labelConfirmarTarea.setBackground(sRecursos.getGRIS_CLARO());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                labelConfirmarTarea.setBackground(sRecursos.getBLANCO());
             }
         });
 
@@ -315,6 +350,16 @@ public class VistaTareas extends JPanel {
                     cardLayout.show(columnaInformacion, "cardGeneral");
                 }
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                labelEliminarTarea.setBackground(sRecursos.getGRIS_CLARO());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                labelEliminarTarea.setBackground(sRecursos.getBLANCO());
+            }
         });
 
         labelEliminarTodas.addMouseListener(new MouseAdapter() {
@@ -334,6 +379,16 @@ public class VistaTareas extends JPanel {
                     }
                     listaPanelesTareasCompletadas = new ArrayList<>();
                 }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                labelEliminarTodas.setBackground(sRecursos.getGRIS_CLARO());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                labelEliminarTodas.setBackground(sRecursos.getBLANCO());
             }
         });
     }
