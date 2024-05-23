@@ -7,10 +7,17 @@ import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VistaTareas extends JPanel {
@@ -201,15 +208,36 @@ public class VistaTareas extends JPanel {
 
         this.textFieldNombreTarea = new JTextField();
         textFieldNombreTarea.setPreferredSize(new Dimension(0, 50));
-        textFieldNombreTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getGRIS_CLARO()));
+        textFieldNombreTarea.setText("Nombre de la tarea");
+        textFieldNombreTarea.setFont(sRecursos.getMonserratItalic(20));
+        textFieldNombreTarea.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldNombreTarea.setForeground(sRecursos.getGRANATE());
+        textFieldNombreTarea.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
 
-        this.textAreaDescripcionTarea = new JTextArea();
-        textAreaDescripcionTarea.setPreferredSize(new Dimension(0, 50));
-        textAreaDescripcionTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getGRANATE()));
+        JTextPane textPaneDescripcionTarea = new JTextPane();
+        textPaneDescripcionTarea.setEditorKit(new StyledEditorKit());
+        textPaneDescripcionTarea.getDocument().putProperty("filterNewlines", Boolean.TRUE);
+        StyledDocument doc = textPaneDescripcionTarea.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        StyleConstants.setSpaceAbove(center, 10);
+        try{
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Italic.ttf"));
+            StyleConstants.setFontFamily(center, customFont.getFamily());
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        // Aplicar la alineación centrada
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+        textPaneDescripcionTarea.setPreferredSize(new Dimension(0, 50));
+        textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
+        textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
+        textPaneDescripcionTarea.setText("Descripción de la tarea");
         gbc = setGbc(0, 1, 1, 0.97, GridBagConstraints.BOTH);
-        panelInformacionCrearNuevaTarea.add(textAreaDescripcionTarea, gbc);
+        panelInformacionCrearNuevaTarea.add(textPaneDescripcionTarea, gbc);
 
         JPanel panelSelectorEtiquetas = new JPanel();
         panelSelectorEtiquetas.setPreferredSize(new Dimension(0, 50));
@@ -219,6 +247,19 @@ public class VistaTareas extends JPanel {
         panelInformacionCrearNuevaTarea.add(panelSelectorEtiquetas, gbc);
 
         cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
+    }
+
+    /**
+     * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
+     */
+    private void addTareas() {
+        gestorTareas.getTareasDeBase();     // Llama al método que obtiene las tareas del usuario de la base de datos y las guarda en una lista
+
+        /* Utiliza el template PanelTareaEspecífica para mostrarlas y aplicarle los Listener convenientes */
+        for (Tarea tarea : gestorTareas.getListaTareas()) {
+            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
+            addListenerATareas(tarea, panelTarea);
+        }
     }
 
     private void addListenersLabels(){
@@ -335,19 +376,6 @@ public class VistaTareas extends JPanel {
     }
 
     /**
-     * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
-     */
-    private void addTareas() {
-        gestorTareas.getTareasDeBase();     // Llama al método que obtiene las tareas del usuario de la base de datos y las guarda en una lista
-
-        /* Utiliza el template PanelTareaEspecífica para mostrarlas y aplicarle los Listener convenientes */
-        for (Tarea tarea : gestorTareas.getListaTareas()) {
-            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
-            addListenerATareas(tarea, panelTarea);
-        }
-    }
-
-    /**
      * Crea un JLabel con el texto que se le pasa y lo devuelve con el diseño requerido para el título de la columna.
      * @param texto Texto que se le quiere poner al JLabel
      * @return JLabel con el texto que se le ha pasado
@@ -366,7 +394,7 @@ public class VistaTareas extends JPanel {
 
     private JLabel crearLabelBoton(String texto){
         JLabel labelBoton = new JLabel(texto);
-        labelBoton.setFont(sRecursos.getMonserratItalic(23));
+        labelBoton.setFont(sRecursos.getMonserratItalic(20));
         labelBoton.setHorizontalAlignment(SwingConstants.CENTER);
         labelBoton.setBackground(sRecursos.getBLANCO());
         labelBoton.setForeground(sRecursos.getGRANATE());
