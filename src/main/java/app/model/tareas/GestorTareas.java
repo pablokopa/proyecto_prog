@@ -119,7 +119,6 @@ public class GestorTareas {
             prepare.setInt(3, tarea.getIdT());
 
             prepare.executeUpdate();
-            System.out.println("LANZADOO");
         } catch (SQLException e) {
             System.out.println("CATCH EN completarTarea()");
             e.printStackTrace();

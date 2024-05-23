@@ -18,7 +18,7 @@ public class VistaTareas extends JPanel {
     private final ControladorTareas controladorTareas;
 
     private final Recursos sRecursos = Recursos.getService();
-    private final GridBagConstraints gbc;
+    private GridBagConstraints gbc;
     private final GestorTareas gestorTareas;
 
     private JPanel columnaInformacion;
@@ -32,23 +32,20 @@ public class VistaTareas extends JPanel {
 
     private final CardLayout cardLayout;
 
-    private ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasToDo;
-    private ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
+    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasToDo;
+    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
 
     public VistaTareas(GestorTareas gestorTareas) {
-
         this.controladorTareas = new ControladorTareas(gestorTareas, this);
-
         this.gestorTareas = gestorTareas;
-        cardLayout = new CardLayout();
-
-        this.setLayout(new GridBagLayout());
-        gbc = new GridBagConstraints();
-
-        this.tareaSeleccionada = null;
 
         this.listaPanelesTareasToDo = new ArrayList<>();
         this.listaPanelesTareasCompletadas = new ArrayList<>();
+
+        this.tareaSeleccionada = null;
+
+        this.setLayout(new GridBagLayout());
+        cardLayout = new CardLayout();
 
         construirColumnaTareasToDo();
         construirColumnaTareasCompletadas();
@@ -69,12 +66,8 @@ public class VistaTareas extends JPanel {
         columnaTareasToDo.setLayout(new BorderLayout());
         columnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
         columnaTareasToDo.setBackground(Color.GREEN);
-        columnaTareasToDo.setPreferredSize(new Dimension(200, 0));   // Tiene que ser igual en todas las columnas para que 'gbc.weightx' funcione correctamente
-        gbc.gridx = 0;                          // Columna 1
-        gbc.gridy = 0;                          // Fila 0
-        gbc.weightx = 0.28;                     // Ocupa x% del espacio horizontal
-        gbc.weighty = 1;                        // Ocupa y% del espacio vertical
-        gbc.fill = GridBagConstraints.BOTH;     // Se expande en ambas direcciones
+        columnaTareasToDo.setPreferredSize(new Dimension(200, 0));                // Tiene que ser igual en todas las columnas para que 'gbc.weightx' funcione correctamente
+        gbc = setGbc(0, 0, 0.28, 1, GridBagConstraints.BOTH);       // Posición y tamaño de la columna
         add(columnaTareasToDo, gbc);
 
         /* Título de la columna to do */
@@ -112,11 +105,7 @@ public class VistaTareas extends JPanel {
         columnaTareasCompletadas.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
         columnaTareasCompletadas.setBackground(Color.RED);
         columnaTareasCompletadas.setPreferredSize(new Dimension(200, 0));
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 0.28;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(1, 0, 0.28, 1, GridBagConstraints.BOTH);
         add(columnaTareasCompletadas, gbc);
 
         /* Título de la columna completadas */
@@ -139,11 +128,7 @@ public class VistaTareas extends JPanel {
         columnaInformacion.setBackground(Color.BLUE);
         columnaInformacion.setBorder(new MatteBorder(0, 5, 10, 10, sRecursos.getBLANCO()));
         columnaInformacion.setPreferredSize(new Dimension(200, 0));
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.weightx = 0.44;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(2, 0, 0.44, 1, GridBagConstraints.BOTH);
         add(columnaInformacion, gbc);
 
         crearCardGeneral();
@@ -189,38 +174,22 @@ public class VistaTareas extends JPanel {
 
         this.labelNombreTarea = new JLabel("Nombre de la tarea");
         labelNombreTarea.setFont(sRecursos.getMonserratBold(20));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 0.01;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(labelNombreTarea, gbc);
 
         this.labelDescripcionTarea = new JLabel("Descripción de la tarea");
         labelDescripcionTarea.setFont(sRecursos.getMonserratBold(20));
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 1;
-        gbc.weighty = 0.97;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 1, 1, 0.97, GridBagConstraints.BOTH);
         panelInformacionTarea.add(labelDescripcionTarea, gbc);
 
         this.labelEtiquetasTarea = new JLabel("Etiquetas de la tarea");
         labelEtiquetasTarea.setFont(sRecursos.getMonserratBold(20));
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 1;
-        gbc.weighty = 0.01;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(labelEtiquetasTarea, gbc);
 
         this.botonEliminarTarea = new JButton("Eliminar tarea");
         botonEliminarTarea.setFont(sRecursos.getMonserratBold(20));
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weightx = 1;
-        gbc.weighty = 0.01;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(botonEliminarTarea, gbc);
     }
 
@@ -246,42 +215,26 @@ public class VistaTareas extends JPanel {
         this.textFieldNombreTarea = new JTextField();
         textFieldNombreTarea.setPreferredSize(new Dimension(0, 50));
         textFieldNombreTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getGRIS_CLARO()));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 0.01;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
 
         this.textAreaDescripcionTarea = new JTextArea();
         textAreaDescripcionTarea.setPreferredSize(new Dimension(0, 50));
         textAreaDescripcionTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getGRANATE()));
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 1;
-        gbc.weighty = 0.97;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 1, 1, 0.97, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(textAreaDescripcionTarea, gbc);
 
         JPanel panelSelectorEtiquetas = new JPanel();
         panelSelectorEtiquetas.setPreferredSize(new Dimension(0, 50));
         panelSelectorEtiquetas.setLayout(new FlowLayout());
         panelSelectorEtiquetas.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 1;
-        gbc.weighty = 0.01;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelSelectorEtiquetas, gbc);
 
         this.botonCrearTarea = new JButton("Crear tarea");
         botonCrearTarea.setPreferredSize(new Dimension(0, 50));
         botonCrearTarea.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weightx = 1;
-        gbc.weighty = 0.01;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(botonCrearTarea, gbc);
 
         cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
@@ -295,11 +248,12 @@ public class VistaTareas extends JPanel {
                 return;
             }
             String descripcionT = textAreaDescripcionTarea.getText();
+
             Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
             gestorTareas.crearTarea(tarea);
-
-            Tarea tareaReal = gestorTareas.getUltimaTarea();
+            Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
             TemplatePanelTareaEspecifica panel = new TemplatePanelTareaEspecifica(tareaReal);
+
             addListenerATareas(tareaReal, panel);
             actualizarVistaTareas();
 
@@ -311,17 +265,15 @@ public class VistaTareas extends JPanel {
             int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.YES_OPTION){
                 TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada);
-                System.out.println(tareaSeleccionada.getIdT());
+
                 if (tareaSeleccionada.getCompletadaT()){
                     TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
                     panelListaTareasCompletadas.remove(panelReal);
                     listaPanelesTareasCompletadas.remove(panelReal);
-                    actualizarVistaTareas();
                 } else {
                     TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
                     panelListaTareasToDo.remove(panelReal);
                     listaPanelesTareasToDo.remove(panelReal);
-                    actualizarVistaTareas();
                 }
                 gestorTareas.eliminarTarea(tareaSeleccionada);
                 actualizarVistaTareas();
@@ -364,11 +316,9 @@ public class VistaTareas extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 setCardTareaSeleccionada(tarea);
-                actualizarVistaTareas();
             }
         });
     }
-
 
     /**
      * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
@@ -420,19 +370,18 @@ public class VistaTareas extends JPanel {
         cardLayout.show(columnaInformacion, "cardGeneral");
     }
 
-    public void setCardTareaSeleccionada(Tarea tarea){
+    private void setCardTareaSeleccionada(Tarea tarea){
         this.tareaSeleccionada = tarea;
         labelNombreTarea.setText(tareaSeleccionada.getNombreT());
         labelDescripcionTarea.setText(tareaSeleccionada.getDescripcionT());
         cardLayout.show(columnaInformacion, "cardTareaSeleccionada");
-        actualizarVistaTareas();
     }
 
     /**
      * Añade una tarea al panel de tareas por hacer
      * @param panelTarea Panel de la tarea que se quiere añadir
      */
-    public void addAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+    private void addAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.add(panelTarea);
         listaPanelesTareasToDo.add(panelTarea);
     }
@@ -441,7 +390,7 @@ public class VistaTareas extends JPanel {
      * Añade una tarea al panel de tareas completadas
      * @param panelTarea Panel de la tarea que se quiere añadir
      */
-    public void addAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+    private void addAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.add(panelTarea);
         listaPanelesTareasCompletadas.add(panelTarea);
     }
@@ -450,7 +399,7 @@ public class VistaTareas extends JPanel {
      * Cambia una tarea de columna de tareas por hacer a tareas completadas
      * @param panelTarea Panel de la tarea que se quiere cambiar de columna
      */
-    public void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+    private void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.add(panelTarea);
         listaPanelesTareasToDo.add(panelTarea);
         panelListaTareasCompletadas.remove(panelTarea);
@@ -461,7 +410,7 @@ public class VistaTareas extends JPanel {
      * Cambia una tarea de columna de tareas completadas a tareas por hacer
      * @param panelTarea Panel de la tarea que se quiere cambiar de columna
      */
-    public void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+    private void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.add(panelTarea);
         listaPanelesTareasCompletadas.add(panelTarea);
         panelListaTareasToDo.remove(panelTarea);
@@ -469,9 +418,28 @@ public class VistaTareas extends JPanel {
     }
 
     /**
+     * Devuelve un objeto GridBagConstraints con los valores que se le pasan
+     * @param gridx Posición en el eje x
+     * @param gridy Posición en el eje y
+     * @param weightx Peso en el eje x
+     * @param weighty Peso en el eje y
+     * @param fill Dirección en la que se expande
+     * @return Objeto GridBagConstraints con los valores que se le han pasado
+     */
+    private GridBagConstraints setGbc(int gridx, int gridy, double weightx, double weighty, int fill) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        gbc.weightx = weightx;
+        gbc.weighty = weighty;
+        gbc.fill = fill;
+        return gbc;
+    }
+
+    /**
      * Actualiza la vista de las tareas
      */
-    public void actualizarVistaTareas(){
+    private void actualizarVistaTareas(){
         repaint();
         revalidate();
     }
