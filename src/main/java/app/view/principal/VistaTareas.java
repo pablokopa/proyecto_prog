@@ -264,6 +264,10 @@ public class VistaTareas extends JPanel {
         cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
     }
 
+    public ArrayList<TemplatePanelTareaEspecifica> getListaPanelesTareasToDo() {
+        return listaPanelesTareasToDo;
+    }
+
     /**
      * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
      */

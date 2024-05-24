@@ -2,15 +2,20 @@ package app.view.principal;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import app.model.tareas.GestorTareas;
+import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 
 public class VistaMatrix extends JPanel{
     private Recursos sRecursos;
+    GestorTareas gestorTareas = new GestorTareas();
+    VistaTareas tareas = new VistaTareas(gestorTareas);
 
     private Color colorGrisPrincipal = new Color(59,59,59);
     private Color colorGrisSecundario = new Color(220,220,220);
@@ -36,6 +41,7 @@ public class VistaMatrix extends JPanel{
 
     public VistaMatrix(){
         sRecursos = Recursos.getService();
+        gestorTareas.getTareasDeBase();
 
         this.setLayout(new GridLayout(2,2));
 
@@ -145,6 +151,21 @@ public class VistaMatrix extends JPanel{
         modificarBoton(colorVerde, botonAddArribaI);
         modificarBackground(colorVerde, panelTituloArribaI, panelTituloArribaIIzq, panelTituloArribaIDer ,panelTareasArribaI);
         panelArribaI.setBorder(new MatteBorder(1, 10, 5, 5, sRecursos.getBLANCO()));
+
+        // Action listener botón
+        botonAddArribaI.addActionListener(e -> {
+            // Obtener los paneles de tareas por hacer
+            ArrayList<TemplatePanelTareaEspecifica> panelesTareasToDo = tareas.getListaPanelesTareasToDo();
+
+            // Añadir cada panel de tarea al panel
+            for (TemplatePanelTareaEspecifica panelTarea : panelesTareasToDo) {
+                panelTareasArribaI.add(panelTarea);
+            }
+
+            // Actualizar el panel
+            panelTareasArribaI.revalidate();
+            panelTareasArribaI.repaint();
+        });
 
 /* Panel Arriba Derecha */
         // Definir elementos
