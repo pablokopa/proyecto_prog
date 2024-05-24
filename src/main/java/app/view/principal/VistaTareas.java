@@ -13,6 +13,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -31,8 +33,9 @@ public class VistaTareas extends JPanel {
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
     private JLabel labelNombreTarea, labelDescripcionTarea, labelEtiquetasTarea;
     private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelEliminarTarea, labelEliminarTodas;
+    private JLabel labelMensajesError;
     private JTextField textFieldNombreTarea;
-    private JTextArea textAreaDescripcionTarea;
+    private JTextPane textPaneDescripcionTarea;
 
     private Tarea  tareaSeleccionada;
 
@@ -213,9 +216,26 @@ public class VistaTareas extends JPanel {
         textFieldNombreTarea.setForeground(sRecursos.getGRANATE());
         textFieldNombreTarea.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
+
+        textFieldNombreTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textFieldNombreTarea.getText().equals("Nombre de la tarea")){
+                    textFieldNombreTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textFieldNombreTarea.getText().isBlank()){
+                    textFieldNombreTarea.setText("Nombre de la tarea");
+                }
+            }
+        });
+
         panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
 
-        JTextPane textPaneDescripcionTarea = new JTextPane();
+        this.textPaneDescripcionTarea = new JTextPane();
         textPaneDescripcionTarea.setEditorKit(new StyledEditorKit());
         textPaneDescripcionTarea.getDocument().putProperty("filterNewlines", Boolean.TRUE);
         StyledDocument doc = textPaneDescripcionTarea.getStyledDocument();
@@ -236,6 +256,23 @@ public class VistaTareas extends JPanel {
         textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
         textPaneDescripcionTarea.setText("Descripción de la tarea");
         gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
+
+        textPaneDescripcionTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().equals("Descripción de la tarea")){
+                    textPaneDescripcionTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().isBlank()){
+                    textPaneDescripcionTarea.setText("Descripción de la tarea");
+                }
+            }
+        });
+
         panelInformacionCrearNuevaTarea.add(textPaneDescripcionTarea, gbc);
 
         JPanel panelOpciones = new JPanel();
@@ -250,7 +287,7 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
 
-        JLabel labelMensajesError = new JLabel();
+        this.labelMensajesError = new JLabel();
         labelMensajesError.setPreferredSize(new Dimension(0, 50));
         labelMensajesError.setLayout(new FlowLayout());
         labelMensajesError.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
@@ -300,10 +337,21 @@ public class VistaTareas extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String nombreT = textFieldNombreTarea.getText();
-                if (nombreT.isBlank() || nombreT.length()>50){
+                if (nombreT.equals("Nombre de la tarea")){
+                    nombreT = "";
+                }
+                if (nombreT.isBlank()){
+                    labelMensajesError.setText("El nombre de la tarea no puede estar vacío");
                     return;
                 }
-                String descripcionT = textAreaDescripcionTarea.getText();
+                if (nombreT.length()>50) {
+                    labelMensajesError.setText("El nombre de la tarea no puede tener más de 50 carácteres");
+                    return;
+                }
+                String descripcionT = textPaneDescripcionTarea.getText();
+                if (descripcionT.equals("Descripción de la tarea")){
+                    descripcionT = "";
+                }
 
                 Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
                 gestorTareas.crearTarea(tarea);
@@ -314,7 +362,7 @@ public class VistaTareas extends JPanel {
                 actualizarVistaTareas();
 
                 textFieldNombreTarea.setText("");
-                textAreaDescripcionTarea.setText("");
+                textPaneDescripcionTarea.setText("");
             }
 
             @Override
