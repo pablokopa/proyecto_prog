@@ -4,6 +4,8 @@ import app.controller.ControladorTareas;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import app.view.templates.TemplatePanelTareaEspecifica;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
 import services.Recursos;
 
 import javax.swing.*;
@@ -13,10 +15,13 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class VistaTareas extends JPanel {
@@ -31,8 +36,9 @@ public class VistaTareas extends JPanel {
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
     private JLabel labelNombreTarea, labelDescripcionTarea, labelEtiquetasTarea;
     private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelEliminarTarea, labelEliminarTodas;
+    private JLabel labelMensajesError;
     private JTextField textFieldNombreTarea;
-    private JTextArea textAreaDescripcionTarea;
+    private JTextPane textPaneDescripcionTarea;
 
     private Tarea  tareaSeleccionada;
 
@@ -58,7 +64,7 @@ public class VistaTareas extends JPanel {
         construirColumnaInformacionExtra();
 
         addTareas();
-        addListenersLabels();
+        addListenersGenerales();
 
         setCardGeneral();
     }
@@ -215,7 +221,7 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
 
-        JTextPane textPaneDescripcionTarea = new JTextPane();
+        this.textPaneDescripcionTarea = new JTextPane();
         textPaneDescripcionTarea.setEditorKit(new StyledEditorKit());
         textPaneDescripcionTarea.getDocument().putProperty("filterNewlines", Boolean.TRUE);
         StyledDocument doc = textPaneDescripcionTarea.getStyledDocument();
@@ -233,16 +239,56 @@ public class VistaTareas extends JPanel {
 
         textPaneDescripcionTarea.setPreferredSize(new Dimension(0, 50));
         textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
+        textPaneDescripcionTarea.setForeground(sRecursos.getGRANATE());
         textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
         textPaneDescripcionTarea.setText("Descripción de la tarea");
         gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
+
         panelInformacionCrearNuevaTarea.add(textPaneDescripcionTarea, gbc);
 
         JPanel panelOpciones = new JPanel();
         panelOpciones.setPreferredSize(new Dimension(0, 50));
         panelOpciones.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        panelOpciones.setLayout(new GridLayout(1, 2));
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelOpciones, gbc);
+
+        String[] opciones = {"No repetir", "Lunes a viernes", "Todos los días"};
+        JComboBox<String> comboRepetible = new JComboBox<>(opciones);
+        comboRepetible.setFont(sRecursos.getMontserratPlain(16));
+        comboRepetible.setForeground(sRecursos.getGRANATE());
+        comboRepetible.setBackground(sRecursos.getBLANCO());
+        panelOpciones.add(comboRepetible);
+
+        DatePickerSettings datePickerSettings = new DatePickerSettings();
+
+        datePickerSettings.setAllowKeyboardEditing(false);
+
+        datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
+        datePickerSettings.setFontInvalidDate(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontCalendarDateLabels(sRecursos.getMontserratPlain(16));
+        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMonserratItalic(15));
+
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundTodayLabel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundClearLabel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarTextWeekdays, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBorderSelectedDate, sRecursos.getGRANATE());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundSelectedDate, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundOverallCalendarPanel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearMenuLabels, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundVetoedDates, sRecursos.getGRIS_CLARO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundCalendarPanelLabelsOnHover, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearNavigationButtons, sRecursos.getBLANCO());
+
+        DatePicker datePicker = new DatePicker(datePickerSettings);
+
+        LocalDate localDateHoy = LocalDate.now();
+        LocalDate localDateFin = LocalDate.MAX;
+        datePickerSettings.setDateRangeLimits(localDateHoy, localDateFin);
+
+        datePicker.setText("Fecha límite");
+        panelOpciones.add(datePicker);
 
         JPanel panelEtiquetas = new JPanel();
         panelEtiquetas.setPreferredSize(new Dimension(0, 50));
@@ -250,7 +296,7 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
 
-        JLabel labelMensajesError = new JLabel();
+        this.labelMensajesError = new JLabel();
         labelMensajesError.setPreferredSize(new Dimension(0, 50));
         labelMensajesError.setLayout(new FlowLayout());
         labelMensajesError.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
@@ -281,7 +327,7 @@ public class VistaTareas extends JPanel {
         }
     }
 
-    private void addListenersLabels(){
+    private void addListenersGenerales(){
 
         labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
             @Override
@@ -304,10 +350,21 @@ public class VistaTareas extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String nombreT = textFieldNombreTarea.getText();
-                if (nombreT.isBlank() || nombreT.length()>50){
+                if (nombreT.equals("Nombre de la tarea")){
+                    nombreT = "";
+                }
+                if (nombreT.isBlank()){
+                    labelMensajesError.setText("El nombre de la tarea no puede estar vacío");
                     return;
                 }
-                String descripcionT = textAreaDescripcionTarea.getText();
+                if (nombreT.length()>50) {
+                    labelMensajesError.setText("El nombre de la tarea no puede tener más de 50 carácteres");
+                    return;
+                }
+                String descripcionT = textPaneDescripcionTarea.getText();
+                if (descripcionT.equals("Descripción de la tarea")){
+                    descripcionT = "";
+                }
 
                 Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
                 gestorTareas.crearTarea(tarea);
@@ -318,7 +375,7 @@ public class VistaTareas extends JPanel {
                 actualizarVistaTareas();
 
                 textFieldNombreTarea.setText("");
-                textAreaDescripcionTarea.setText("");
+                textPaneDescripcionTarea.setText("");
             }
 
             @Override
@@ -393,6 +450,39 @@ public class VistaTareas extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 labelEliminarTodas.setBackground(sRecursos.getBLANCO());
+            }
+        });
+
+        textFieldNombreTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textFieldNombreTarea.getText().equals("Nombre de la tarea")){
+                    textFieldNombreTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textFieldNombreTarea.getText().isBlank()){
+                    textFieldNombreTarea.setText("Nombre de la tarea");
+                }
+            }
+        });
+
+
+        textPaneDescripcionTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().equals("Descripción de la tarea")){
+                    textPaneDescripcionTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().isBlank()){
+                    textPaneDescripcionTarea.setText("Descripción de la tarea");
+                }
             }
         });
     }
