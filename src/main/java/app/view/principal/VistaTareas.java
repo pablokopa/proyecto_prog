@@ -4,6 +4,8 @@ import app.controller.ControladorTareas;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
 import app.view.templates.TemplatePanelTareaEspecifica;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
 import services.Recursos;
 
 import javax.swing.*;
@@ -19,7 +21,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class VistaTareas extends JPanel {
 
@@ -278,8 +282,46 @@ public class VistaTareas extends JPanel {
         JPanel panelOpciones = new JPanel();
         panelOpciones.setPreferredSize(new Dimension(0, 50));
         panelOpciones.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        panelOpciones.setLayout(new GridLayout(1, 2));
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelOpciones, gbc);
+
+        String[] opciones = {"No repetir", "Lunes a viernes", "Todos los días"};
+        JComboBox<String> comboRepetible = new JComboBox<>(opciones);
+        comboRepetible.setFont(sRecursos.getMontserratPlain(16));
+        comboRepetible.setForeground(sRecursos.getGRANATE());
+        comboRepetible.setBackground(sRecursos.getBLANCO());
+        panelOpciones.add(comboRepetible);
+
+        DatePickerSettings datePickerSettings = new DatePickerSettings();
+
+        datePickerSettings.setAllowKeyboardEditing(false);
+
+        datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
+        datePickerSettings.setFontInvalidDate(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontCalendarDateLabels(sRecursos.getMontserratPlain(16));
+        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMonserratItalic(15));
+
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundTodayLabel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundClearLabel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarTextWeekdays, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBorderSelectedDate, sRecursos.getGRANATE());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundSelectedDate, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundOverallCalendarPanel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearMenuLabels, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundVetoedDates, sRecursos.getGRIS_CLARO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundCalendarPanelLabelsOnHover, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearNavigationButtons, sRecursos.getBLANCO());
+
+        DatePicker datePicker = new DatePicker(datePickerSettings);
+
+        LocalDate localDateHoy = LocalDate.now();
+        LocalDate localDateFin = LocalDate.MAX;
+        datePickerSettings.setDateRangeLimits(localDateHoy, localDateFin);
+
+        datePicker.setText("Fecha límite");
+        panelOpciones.add(datePicker);
 
         JPanel panelEtiquetas = new JPanel();
         panelEtiquetas.setPreferredSize(new Dimension(0, 50));
