@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class VistaTareas extends JPanel {
 
@@ -65,7 +64,7 @@ public class VistaTareas extends JPanel {
         construirColumnaInformacionExtra();
 
         addTareas();
-        addListenersLabels();
+        addListenersGenerales();
 
         setCardGeneral();
     }
@@ -220,23 +219,6 @@ public class VistaTareas extends JPanel {
         textFieldNombreTarea.setForeground(sRecursos.getGRANATE());
         textFieldNombreTarea.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
-
-        textFieldNombreTarea.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textFieldNombreTarea.getText().equals("Nombre de la tarea")){
-                    textFieldNombreTarea.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textFieldNombreTarea.getText().isBlank()){
-                    textFieldNombreTarea.setText("Nombre de la tarea");
-                }
-            }
-        });
-
         panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
 
         this.textPaneDescripcionTarea = new JTextPane();
@@ -257,25 +239,10 @@ public class VistaTareas extends JPanel {
 
         textPaneDescripcionTarea.setPreferredSize(new Dimension(0, 50));
         textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
+        textPaneDescripcionTarea.setForeground(sRecursos.getGRANATE());
         textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
         textPaneDescripcionTarea.setText("Descripción de la tarea");
         gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
-
-        textPaneDescripcionTarea.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textPaneDescripcionTarea.getText().equals("Descripción de la tarea")){
-                    textPaneDescripcionTarea.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textPaneDescripcionTarea.getText().isBlank()){
-                    textPaneDescripcionTarea.setText("Descripción de la tarea");
-                }
-            }
-        });
 
         panelInformacionCrearNuevaTarea.add(textPaneDescripcionTarea, gbc);
 
@@ -356,7 +323,7 @@ public class VistaTareas extends JPanel {
         }
     }
 
-    private void addListenersLabels(){
+    private void addListenersGenerales(){
 
         labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
             @Override
@@ -479,6 +446,39 @@ public class VistaTareas extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 labelEliminarTodas.setBackground(sRecursos.getBLANCO());
+            }
+        });
+
+        textFieldNombreTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textFieldNombreTarea.getText().equals("Nombre de la tarea")){
+                    textFieldNombreTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textFieldNombreTarea.getText().isBlank()){
+                    textFieldNombreTarea.setText("Nombre de la tarea");
+                }
+            }
+        });
+
+
+        textPaneDescripcionTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().equals("Descripción de la tarea")){
+                    textPaneDescripcionTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().isBlank()){
+                    textPaneDescripcionTarea.setText("Descripción de la tarea");
+                }
             }
         });
     }
