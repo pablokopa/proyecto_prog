@@ -14,7 +14,7 @@ import services.Recursos;
 public class VistaMatrix extends JPanel {
     private Recursos sRecursos;
     GestorTareas gestorTareas = new GestorTareas();
-//    VistaTareas tareas = new VistaTareas(gestorTareas);
+    VistaTareas tareas = new VistaTareas(gestorTareas);
 
     private Color colorGrisPrincipal = new Color(59, 59, 59);
 //    private Color colorGrisSecundario = new Color(220, 220, 220);
@@ -50,29 +50,22 @@ public class VistaMatrix extends JPanel {
         JPanel panelTareas = new JPanel();
         panelTareas.setLayout(new BoxLayout(panelTareas, BoxLayout.Y_AXIS));
         panelTareas.setBackground(color);
+        panel.add(panelTareas, BorderLayout.CENTER);
 
         JScrollPane scrollTareas = new JScrollPane(panelTareas);
         modificarScroll(scrollTareas);
         panel.add(scrollTareas);
 
         JPanel panelTitulo = new JPanel();
-        panelTitulo.setLayout(new GridLayout(1, 2));
+        panelTitulo.setLayout(new BoxLayout(panelTitulo, BoxLayout.X_AXIS));
         panelTitulo.setBackground(color);
+        panelTitulo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         panel.add(panelTitulo, BorderLayout.NORTH);
-
-        JPanel panelTituloNombre = new JPanel();
-        panelTituloNombre.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panelTituloNombre.setBackground(color);
-        panelTitulo.add(panelTituloNombre);
 
         JLabel labelTitulo = new JLabel(titulo);
         labelTitulo.setFont(sRecursos.getMonserratBold(20));
-        panelTituloNombre.add(labelTitulo);
-
-        JPanel panelTituloBoton = new JPanel();
-        panelTituloBoton.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        panelTituloBoton.setBackground(color);
-        panelTitulo.add(panelTituloBoton);
+        panelTitulo.add(labelTitulo);
+        panelTitulo.add(Box.createHorizontalGlue());
 
         JButton botonAddTareas = new JButton("Añadir tarea");
         botonAddTareas.setFont(sRecursos.getMonserratBold(14));
@@ -81,21 +74,21 @@ public class VistaMatrix extends JPanel {
         botonAddTareas.setForeground(color);
         botonAddTareas.setCursor(sRecursos.getCursorMano());
 
-//        botonAddTareas.addActionListener(e -> {
-//            // Obtener los paneles de tareas por hacer
-//            ArrayList<TemplatePanelTareaEspecifica> panelesTareasToDo = tareas.getListaPanelesTareasToDo();
-//
-//            // Añadir cada panel de tarea al panel
-//            for (TemplatePanelTareaEspecifica panelTarea : panelesTareasToDo) {
-//                panelTareas.add(panelTarea);
-//            }
-//
-//            // Actualizar el panel
-//            panelTareas.revalidate();
-//            panelTareas.repaint();
-//        });
+        botonAddTareas.addActionListener(e -> {
+            // Obtener los paneles de tareas por hacer
+            ArrayList<TemplatePanelTareaEspecifica> panelesTareasToDo = tareas.getListaPanelesTareasToDo();
 
-        panelTituloBoton.add(botonAddTareas);
+            // Añadir cada panel de tarea al panel
+            for (TemplatePanelTareaEspecifica panelTarea : panelesTareasToDo) {
+                panelTareas.add(panelTarea);
+            }
+
+            // Actualizar el panel
+            panelTareas.revalidate();
+            panelTareas.repaint();
+        });
+
+        panelTitulo.add(botonAddTareas);
 
         return panel;
     }
@@ -118,7 +111,7 @@ public class VistaMatrix extends JPanel {
         add(panelAbajoD);
     }
 
-    class ScrollBarBlanco extends BasicScrollBarUI {
+    static class ScrollBarBlanco extends BasicScrollBarUI {
         @Override
         protected JButton createDecreaseButton(int orientation) {
             JButton button = new JButton();
