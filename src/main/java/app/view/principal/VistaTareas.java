@@ -35,11 +35,11 @@ public class VistaTareas extends JPanel {
 
     private JPanel columnaInformacion;
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
-    private JLabel labelNombreTarea, labelDescripcionTarea, labelEtiquetasTarea;
+    private JLabel labelEtiquetasTarea;
     private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelEliminarTarea, labelEliminarTodas;
     private JLabel labelMensajesError;
-    private JTextField textFieldNombreTarea;
-    private JTextPane textPaneDescripcionTarea;
+    private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
+    private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
 
     private Tarea  tareaSeleccionada;
 
@@ -154,18 +154,45 @@ public class VistaTareas extends JPanel {
         panelInformacionTarea.setLayout(new GridBagLayout());
         cardTareaSeleccionada.add(panelInformacionTarea, BorderLayout.CENTER);
 
+        JPanel panelOpciones = new JPanel();
+        panelOpciones.setLayout(new BorderLayout(0, 1));
+
+        JLabel labelModificarTarea = crearLabelBoton("Modificar");
+        panelOpciones.add(labelModificarTarea, BorderLayout.NORTH);
         this.labelEliminarTarea = crearLabelBoton("Eliminar");
-        cardTareaSeleccionada.add(labelEliminarTarea, BorderLayout.SOUTH);
+        panelOpciones.add(labelEliminarTarea, BorderLayout.SOUTH);
+        cardTareaSeleccionada.add(panelOpciones, BorderLayout.SOUTH);
 
-        this.labelNombreTarea = new JLabel("Nombre de la tarea");
-        labelNombreTarea.setFont(sRecursos.getMonserratBold(20));
+        this.textFieldNombreTareaSelecionada = new JTextField();
+        textFieldNombreTareaSelecionada.setPreferredSize(new Dimension(0, 50));
+        textFieldNombreTareaSelecionada.setFont(sRecursos.getMonserratItalic(20));
+        textFieldNombreTareaSelecionada.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldNombreTareaSelecionada.setForeground(sRecursos.getGRANATE());
+        textFieldNombreTareaSelecionada.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionTarea.add(labelNombreTarea, gbc);
+        panelInformacionTarea.add(textFieldNombreTareaSelecionada, gbc);
 
-        this.labelDescripcionTarea = new JLabel("Descripción de la tarea");
-        labelDescripcionTarea.setFont(sRecursos.getMonserratBold(20));
-        gbc = setGbc(0, 1, 1, 0.97, GridBagConstraints.BOTH);
-        panelInformacionTarea.add(labelDescripcionTarea, gbc);
+        this.textPaneDescripcionTareaSeleccionada = new JTextPane();
+        textPaneDescripcionTareaSeleccionada.setEditorKit(new StyledEditorKit());
+        textPaneDescripcionTareaSeleccionada.getDocument().putProperty("filterNewlines", Boolean.TRUE);
+        textPaneDescripcionTareaSeleccionada.setPreferredSize(new Dimension(0, 50));
+        textPaneDescripcionTareaSeleccionada.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
+        textPaneDescripcionTareaSeleccionada.setForeground(sRecursos.getGRANATE());
+        textPaneDescripcionTareaSeleccionada.setFont(sRecursos.getMonserratItalic(20));
+        StyledDocument doc = textPaneDescripcionTareaSeleccionada.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        StyleConstants.setSpaceAbove(center, 10);
+        try{
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Italic.ttf"));
+            StyleConstants.setFontFamily(center, customFont.getFamily());
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        // Aplicar la alineación centrada
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+        gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
+        panelInformacionTarea.add(textPaneDescripcionTareaSeleccionada, gbc);
 
         this.labelEtiquetasTarea = new JLabel("Etiquetas de la tarea");
         labelEtiquetasTarea.setFont(sRecursos.getMonserratBold(20));
@@ -207,6 +234,11 @@ public class VistaTareas extends JPanel {
         this.textPaneDescripcionTarea = new JTextPane();
         textPaneDescripcionTarea.setEditorKit(new StyledEditorKit());
         textPaneDescripcionTarea.getDocument().putProperty("filterNewlines", Boolean.TRUE);
+        textPaneDescripcionTarea.setPreferredSize(new Dimension(0, 50));
+        textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
+        textPaneDescripcionTarea.setForeground(sRecursos.getGRANATE());
+        textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
+        textPaneDescripcionTarea.setText("Descripción de la tarea");
         StyledDocument doc = textPaneDescripcionTarea.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -219,14 +251,7 @@ public class VistaTareas extends JPanel {
         }
         // Aplicar la alineación centrada
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
-
-        textPaneDescripcionTarea.setPreferredSize(new Dimension(0, 50));
-        textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
-        textPaneDescripcionTarea.setForeground(sRecursos.getGRANATE());
-        textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
-        textPaneDescripcionTarea.setText("Descripción de la tarea");
         gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
-
         panelInformacionCrearNuevaTarea.add(textPaneDescripcionTarea, gbc);
 
         JPanel panelOpciones = new JPanel();
@@ -576,8 +601,8 @@ public class VistaTareas extends JPanel {
 
     private void setCardTareaSeleccionada(Tarea tarea){
         this.tareaSeleccionada = tarea;
-        labelNombreTarea.setText(tareaSeleccionada.getNombreT());
-        labelDescripcionTarea.setText(tareaSeleccionada.getDescripcionT());
+        textFieldNombreTareaSelecionada.setText(tareaSeleccionada.getNombreT());
+        textPaneDescripcionTareaSeleccionada.setText(tareaSeleccionada.getDescripcionT());
         cardLayout.show(columnaInformacion, "cardTareaSeleccionada");
     }
 
