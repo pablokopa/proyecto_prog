@@ -75,16 +75,7 @@ public class VistaTareas extends JPanel {
      */
     private void construirColumnaTareasToDo() {
         /* Crea la columna Tareas To Do */
-        JPanel columnaTareasToDo = new JPanel();
-        columnaTareasToDo.setLayout(new BorderLayout());
-        columnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
-        columnaTareasToDo.setPreferredSize(new Dimension(200, 0));                // Tiene que ser igual en todas las columnas para que 'gbc.weightx' funcione correctamente
-        gbc = setGbc(0, 0, 0.28, 1, GridBagConstraints.BOTH);       // Posición y tamaño de la columna
-        add(columnaTareasToDo, gbc);
-
-        /* Título de la columna to do */
-        JLabel labelTituloTareasToDo = crearLabelTituloDeColumna("Por hacer");
-        columnaTareasToDo.add(labelTituloTareasToDo, BorderLayout.NORTH);
+        JPanel columnaTareasToDo = construirColumnasTareas("Por hacer", 0);
 
         /* Panel donde están las tareas to do y convertido a JScrollPane */
         this.panelListaTareasToDo = new JPanel();
@@ -101,16 +92,7 @@ public class VistaTareas extends JPanel {
      */
     private void construirColumnaTareasCompletadas() {
         /* Columna Tareas Completadas */
-        JPanel columnaTareasCompletadas = new JPanel();
-        columnaTareasCompletadas.setLayout(new BorderLayout());
-        columnaTareasCompletadas.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
-        columnaTareasCompletadas.setPreferredSize(new Dimension(200, 0));
-        gbc = setGbc(1, 0, 0.28, 1, GridBagConstraints.BOTH);
-        add(columnaTareasCompletadas, gbc);
-
-        /* Título de la columna completadas */
-        JLabel labelTituloTareasCompletadas = crearLabelTituloDeColumna("Completadas");
-        columnaTareasCompletadas.add(labelTituloTareasCompletadas, BorderLayout.NORTH);
+        JPanel columnaTareasCompletadas = construirColumnasTareas("Completadas", 1);
 
         /* Panel donde están las tareas completadas y convertido a JScrollPane */
         this.panelListaTareasCompletadas = new JPanel();
@@ -399,12 +381,10 @@ public class VistaTareas extends JPanel {
 
                     if (tareaSeleccionada.getCompletadaT()){
                         TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
-                        panelListaTareasCompletadas.remove(panelReal);
-                        listaPanelesTareasCompletadas.remove(panelReal);
+                        removeDeColumnaCompletada(panelReal);
                     } else {
                         TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
-                        panelListaTareasToDo.remove(panelReal);
-                        listaPanelesTareasToDo.remove(panelReal);
+                        removeDeColumnaToDo(panelReal);
                     }
                     gestorTareas.eliminarTarea(tareaSeleccionada);
                     actualizarVistaTareas();
@@ -433,13 +413,12 @@ public class VistaTareas extends JPanel {
                 }
                 int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
                 if (opcion==JOptionPane.YES_OPTION){
-                    for (TemplatePanelTareaEspecifica panel : listaPanelesTareasCompletadas){
-                        if(gestorTareas.eliminarTarea(panel.getTarea())){
-                            panelListaTareasCompletadas.remove(panel);
+                    for (int i=listaPanelesTareasCompletadas.size()-1; i>=0; i--){
+                        if (gestorTareas.eliminarTarea(listaPanelesTareasCompletadas.get(i).getTarea())){
+                            removeDeColumnaCompletada(listaPanelesTareasCompletadas.get(i));
                             actualizarVistaTareas();
                         }
                     }
-                    listaPanelesTareasCompletadas = new ArrayList<>();
                 }
             }
 
@@ -525,6 +504,23 @@ public class VistaTareas extends JPanel {
         });
     }
 
+
+    private JPanel construirColumnasTareas(String titulo, int columna) {
+        /* Columna Tareas Completadas */
+        JPanel panelColumna = new JPanel();
+        panelColumna.setLayout(new BorderLayout());
+        panelColumna.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
+        panelColumna.setPreferredSize(new Dimension(200, 0));
+        gbc = setGbc(columna, 0, 0.28, 1, GridBagConstraints.BOTH);
+        add(panelColumna, gbc);
+
+        /* Título de la columna completadas */
+        JLabel labelTituloColuma = crearLabelTituloDeColumna(titulo);
+        panelColumna.add(labelTituloColuma, BorderLayout.NORTH);
+
+        return panelColumna;
+    }
+
     /**
      * Crea un JLabel con el texto que se le pasa y lo devuelve con el diseño requerido para el título de la columna.
      * @param texto Texto que se le quiere poner al JLabel
@@ -603,15 +599,24 @@ public class VistaTareas extends JPanel {
         listaPanelesTareasCompletadas.add(panelTarea);
     }
 
+    private void removeDeColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+        panelListaTareasToDo.remove(panelTarea);
+        listaPanelesTareasToDo.remove(panelTarea);
+    }
+
+
+    private void removeDeColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+        panelListaTareasCompletadas.remove(panelTarea);
+        listaPanelesTareasCompletadas.remove(panelTarea);
+    }
+
     /**
      * Cambia una tarea de columna de tareas por hacer a tareas completadas
      * @param panelTarea Panel de la tarea que se quiere cambiar de columna
      */
     private void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
-        panelListaTareasToDo.add(panelTarea);
-        listaPanelesTareasToDo.add(panelTarea);
-        panelListaTareasCompletadas.remove(panelTarea);
-        listaPanelesTareasCompletadas.remove(panelTarea);
+        addAColumnaToDo(panelTarea);
+        removeDeColumnaCompletada(panelTarea);
     }
 
     /**
@@ -619,10 +624,8 @@ public class VistaTareas extends JPanel {
      * @param panelTarea Panel de la tarea que se quiere cambiar de columna
      */
     private void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
-        panelListaTareasCompletadas.add(panelTarea);
-        listaPanelesTareasCompletadas.add(panelTarea);
-        panelListaTareasToDo.remove(panelTarea);
-        listaPanelesTareasToDo.remove(panelTarea);
+        addAColumnaCompletada(panelTarea);
+        removeDeColumnaToDo(panelTarea);
     }
 
     /**

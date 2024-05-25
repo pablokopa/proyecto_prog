@@ -37,19 +37,15 @@ public class VistaMatrix extends JPanel {
      */
     private void crearMatrix() {
         JPanel panelArribaI = crearPanelesMatrix(colorVerde, "No importante / No urgente");
-        panelArribaI.setBorder(new MatteBorder(0, 10, 5, 5, sRecursos.getBLANCO()));
         add(panelArribaI);
 
         JPanel panelArribaD = crearPanelesMatrix(colorAzul, "No importante / Urgente");
-        panelArribaD.setBorder(new MatteBorder(0, 5, 5, 10, sRecursos.getBLANCO()));
         add(panelArribaD);
 
         JPanel panelAbajoI = crearPanelesMatrix(colorAmarillo, "Importante / No urgente");
-        panelAbajoI.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
         add(panelAbajoI);
 
         JPanel panelAbajoD = crearPanelesMatrix(colorRojo, "Importante / Urgente");
-        panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
         add(panelAbajoD);
     }
 
@@ -114,24 +110,32 @@ public class VistaMatrix extends JPanel {
                 panelTitulo.add(labelTitulo);
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(botonAddTareas);
+
+                panel.setBorder(new MatteBorder(0, 10, 5, 5, sRecursos.getBLANCO()));
             }
             case "No importante / Urgente" -> {
                 panel.add(panelTitulo, BorderLayout.NORTH);
                 panelTitulo.add(botonAddTareas);
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(labelTitulo);
+
+                panel.setBorder(new MatteBorder(0, 5, 5, 10, sRecursos.getBLANCO()));
             }
             case "Importante / No urgente" -> {
                 panel.add(panelTitulo, BorderLayout.SOUTH);
                 panelTitulo.add(labelTitulo);
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(botonAddTareas);
+
+                panel.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
             }
             case "Importante / Urgente" -> {
                 panel.add(panelTitulo, BorderLayout.SOUTH);
                 panelTitulo.add(botonAddTareas);
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(labelTitulo);
+
+                panel.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
             }
         }
 
@@ -139,7 +143,7 @@ public class VistaMatrix extends JPanel {
     }
 
     /**
-     * Método para modificar el scrollbar que utiliza la clase interna ScrollBarBlanco.
+     * Método para modificar el scrollbar. Utiliza la clase interna ScrollBarBlanco.
      * @param zonaScroll Scroll que se modifica.
      */
     private void modificarScroll(JScrollPane zonaScroll) {
@@ -150,7 +154,7 @@ public class VistaMatrix extends JPanel {
     }
 
     /**
-     * Clase para modificar el scrollbar.
+     * Clase para sobreescribir el diseño del scrollbar.
      */
     static class ScrollBarBlanco extends BasicScrollBarUI {
         @Override
