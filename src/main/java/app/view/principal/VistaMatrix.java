@@ -32,14 +32,22 @@ public class VistaMatrix extends JPanel {
         crearMatrix();
     }
 
-    /**
-     * Método para modificar el scrollbar.
-     * @param zonaScroll Scroll que se modifica.
-     */
-    private void modificarScroll(JScrollPane zonaScroll) {
-        zonaScroll.setBorder(null);
-        zonaScroll.getVerticalScrollBar().setUI(new ScrollBarBlanco());
-        zonaScroll.getHorizontalScrollBar().setUI(new ScrollBarBlanco());
+    private void crearMatrix() {
+        JPanel panelArribaI = crearPanelesMatrix(colorVerde, "No importante / No urgente");
+        panelArribaI.setBorder(new MatteBorder(1, 10, 5, 5, sRecursos.getBLANCO()));
+        add(panelArribaI);
+
+        JPanel panelArribaD = crearPanelesMatrix(colorAzul, "No importante / Urgente");
+        panelArribaD.setBorder(new MatteBorder(1, 5, 5, 10, sRecursos.getBLANCO()));
+        add(panelArribaD);
+
+        JPanel panelAbajoI = crearPanelesMatrix(colorAmarillo, "Importante / No urgente");
+        panelAbajoI.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
+        add(panelAbajoI);
+
+        JPanel panelAbajoD = crearPanelesMatrix(colorRojo, "Importante / Urgente");
+        panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
+        add(panelAbajoD);
     }
 
     private JPanel crearPanelesMatrix(Color color, String titulo) {
@@ -87,28 +95,20 @@ public class VistaMatrix extends JPanel {
             panelTareas.revalidate();
             panelTareas.repaint();
         });
-
         panelTitulo.add(botonAddTareas);
 
         return panel;
     }
 
-    private void crearMatrix() {
-        JPanel panelArribaI = crearPanelesMatrix(colorVerde, "No importante / No urgente");
-        panelArribaI.setBorder(new MatteBorder(1, 10, 5, 5, sRecursos.getBLANCO()));
-        add(panelArribaI);
-
-        JPanel panelArribaD = crearPanelesMatrix(colorAzul, "No importante / Urgente");
-        panelArribaD.setBorder(new MatteBorder(1, 5, 5, 10, sRecursos.getBLANCO()));
-        add(panelArribaD);
-
-        JPanel panelAbajoI = crearPanelesMatrix(colorAmarillo, "Importante / No urgente");
-        panelAbajoI.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
-        add(panelAbajoI);
-
-        JPanel panelAbajoD = crearPanelesMatrix(colorRojo, "Importante / Urgente");
-        panelAbajoD.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
-        add(panelAbajoD);
+    /**
+     * Método para modificar el scrollbar.
+     * @param zonaScroll Scroll que se modifica.
+     */
+    private void modificarScroll(JScrollPane zonaScroll) {
+        zonaScroll.setBorder(null);
+        zonaScroll.getVerticalScrollBar().setUI(new ScrollBarBlanco());
+        zonaScroll.getVerticalScrollBar().setUnitIncrement(16);
+        zonaScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     static class ScrollBarBlanco extends BasicScrollBarUI {
