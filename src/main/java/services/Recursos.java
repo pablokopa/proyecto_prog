@@ -3,6 +3,8 @@ package services;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,6 +36,21 @@ public class Recursos {
         this.crearCursores();
         this.crearBordes();
         this.crearImagenes();
+    }
+
+    /**
+     * Crea un timer para hacer desaparecer el mensaje de error pasados 3.5 segundos.
+     * @param label label con el mensaje de error
+     */
+    public void crearTimer(JLabel label){
+        Timer timer = new Timer(3500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setText("");
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
     /**

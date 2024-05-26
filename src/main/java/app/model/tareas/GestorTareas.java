@@ -2,6 +2,7 @@ package app.model.tareas;
 
 import app.model.basedatos.ConectarBD;
 import app.model.usuarios.Usuario;
+import services.Recursos;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 public class GestorTareas {
     private final ArrayList<Tarea> listaTareas;
     private final Usuario usuario;
+    private final Recursos sRecursos = Recursos.getService();
 
     public GestorTareas() {
         this.usuario = Usuario.getUsuarioConectado();
@@ -189,20 +191,20 @@ public class GestorTareas {
         return true;
     }
 
-    /**
-     * Crea un timer para hacer desaparecer el mensaje de error pasados 3.5 segundos.
-     * @param label label con el mensaje de error
-     */
-    private void crearTimer(JLabel label){
-        Timer timer = new Timer(3500, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                label.setText("");
-            }
-        });
-        timer.setRepeats(false);
-        timer.start();
-    }
+//    /**
+//     * Crea un timer para hacer desaparecer el mensaje de error pasados 3.5 segundos.
+//     * @param label label con el mensaje de error
+//     */
+//    private void crearTimer(JLabel label){
+//        Timer timer = new Timer(3500, new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                label.setText("");
+//            }
+//        });
+//        timer.setRepeats(false);
+//        timer.start();
+//    }
 
     /**
      * Comprueba si el nombre de la tarea está vacío o tiene más de 45 caracteres o si no ha habido cambios.
@@ -214,21 +216,19 @@ public class GestorTareas {
     public boolean comprobarNombreEditarTarea(Tarea tareaOriginal, Tarea tareaEditada, JLabel label){
         if (tareaEditada.getNombreT().isBlank()){
             label.setText("El nombre no puede estar vacío");
-            crearTimer(label);
             return false;
         }
         if (tareaEditada.getNombreT().length() > 45){
             label.setText("El nombre no puede tener más de 45 caracteres");
-            crearTimer(label);
             return false;
         }
         if (tareaEditada.getNombreT().equals(tareaOriginal.getNombreT())
                 && tareaEditada.getDescripcionT().equals(tareaOriginal.getDescripcionT())
                 && tareaEditada.getNombreE().equals(tareaOriginal.getNombreE())){
             label.setText("No se ha modificado ningún campo");
-            crearTimer(label);
             return false;
         }
+        sRecursos.crearTimer(label);
         return true;
     }
 
@@ -251,7 +251,7 @@ public class GestorTareas {
             label.setText("El nombre no puede tener más de 45 caracteres");
             return false;
         }
-        crearTimer(label);
+        sRecursos.crearTimer(label);
         return true;
     }
 
