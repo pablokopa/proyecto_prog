@@ -66,22 +66,43 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         add(panelTarea, BorderLayout.CENTER);
     }
 
+    /**
+     * Establece el texto del label con el nombre de la tarea.
+     * @param titulo nombre de la tarea
+     */
     public void setLabelTituloText(String titulo) {
         labelTitulo.setText(titulo);
     }
 
+    /**
+     * Obtiene el label con la imagen de la tarea.
+     * @return label con la imagen de la tarea
+     */
     public JLabel getLabelImagen() {
         return labelImagen;
     }
 
+    /**
+     * Obtiene el panel con la información de la tarea.
+     * @return panel con la información de la tarea
+     */
     public JPanel getPanelTarea() {
         return panelTarea;
     }
 
+    /**
+     * Obtiene la tarea del panel
+     * @return tarea del panel
+     */
     public Tarea getTarea() {
         return tarea;
     }
 
+    /**
+     * Sobreesribe el método equals para comparar dos objetos de la clase por su id.
+     * @param obj objeto a comparar
+     * @return true si son iguales
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this)    return true;

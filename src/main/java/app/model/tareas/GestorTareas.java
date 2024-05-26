@@ -18,6 +18,10 @@ public class GestorTareas {
         this.listaTareas = new ArrayList<>();
     }
 
+    /**
+     * Obtiene el usuario conectado.
+     * @return usuario conectado
+     */
     public Usuario getUsuario() {
         return usuario;
     }
@@ -54,6 +58,10 @@ public class GestorTareas {
         }
     }
 
+    /**
+     * Obtiene la última tarea añadida a la base de datos.
+     * @return la última tarea añadida
+     */
     public Tarea getUltimaTarea(){
         String sql = "SELECT * FROM tarea ORDER BY idT DESC LIMIT 1;";
 
@@ -107,6 +115,11 @@ public class GestorTareas {
         }
     }
 
+    /**
+     * Completa o descompleta una tarea.
+     * @param tarea tarea a completar
+     * @return true si se ha completado correctamente
+     */
     public boolean completarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET completadaT = ?, fechaFinalizacionT = ? WHERE idT = ?";
 
@@ -134,6 +147,11 @@ public class GestorTareas {
         return true;
     }
 
+    /**
+     * Elimina una tarea de la base de datos y de la lista de tareas.
+     * @param tarea tarea a eliminar
+     * @return true si se ha eliminado correctamente
+     */
     public boolean eliminarTarea(Tarea tarea){
         String sql = "delete from tarea where idt = ? and nombreu = ?";
 
@@ -149,6 +167,11 @@ public class GestorTareas {
         return true;
     }
 
+    /**
+     * Modifica una tarea en la base de datos y en la lista de tareas.
+     * @param tarea tarea a modificar
+     * @return true si se ha modificado correctamente
+     */
     public boolean modificarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET nombret = ?, descripciont = ?, nombree = ? WHERE idt = ?";
 
@@ -166,6 +189,10 @@ public class GestorTareas {
         return true;
     }
 
+    /**
+     * Crea un timer para hacer desaparecer el mensaje de error pasados 3.5 segundos.
+     * @param label label con el mensaje de error
+     */
     private void crearTimer(JLabel label){
         Timer timer = new Timer(3500, new ActionListener() {
             @Override
@@ -177,6 +204,13 @@ public class GestorTareas {
         timer.start();
     }
 
+    /**
+     * Comprueba si el nombre de la tarea está vacío o tiene más de 45 caracteres o si no ha habido cambios.
+     * @param tareaOriginal tarea original
+     * @param tareaEditada tarea editada
+     * @param label label para mostrar mensajes de error
+     * @return true si es correcto
+     */
     public boolean comprobarNombreEditarTarea(Tarea tareaOriginal, Tarea tareaEditada, JLabel label){
         if (tareaEditada.getNombreT().isBlank()){
             label.setText("El nombre no puede estar vacío");
@@ -188,7 +222,9 @@ public class GestorTareas {
             crearTimer(label);
             return false;
         }
-        if (tareaEditada.getNombreT().equals(tareaOriginal.getNombreT()) && tareaEditada.getDescripcionT().equals(tareaOriginal.getDescripcionT()) && tareaEditada.getNombreE().equals(tareaOriginal.getNombreE())){
+        if (tareaEditada.getNombreT().equals(tareaOriginal.getNombreT())
+                && tareaEditada.getDescripcionT().equals(tareaOriginal.getDescripcionT())
+                && tareaEditada.getNombreE().equals(tareaOriginal.getNombreE())){
             label.setText("No se ha modificado ningún campo");
             crearTimer(label);
             return false;
@@ -196,6 +232,12 @@ public class GestorTareas {
         return true;
     }
 
+    /**
+     * Comprueba si el nombre de la tarea está vacío o tiene más de 45 caracteres.
+     * @param nombreTarea nombre de la tarea
+     * @param label label para mostrar mensajes de error
+     * @return true si es correcto
+     */
     public boolean comprobarNombreCrearTarea(String nombreTarea, JLabel label){
         if (nombreTarea.equals("Nombre de la tarea")){
             label.setText("Introduce un nombre");
@@ -213,7 +255,10 @@ public class GestorTareas {
         return true;
     }
 
-
+    /**
+     * Devuelve la lista de tareas.
+     * @return lista de tareas
+     */
     public ArrayList<Tarea> getListaTareas(){
         return this.listaTareas;
     }
