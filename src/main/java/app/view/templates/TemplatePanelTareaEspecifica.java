@@ -40,6 +40,10 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         crearPanelTarea();
     }
 
+    public void setBorderColor(Color color) {
+        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, color));
+    }
+
     /**
      * Crea un label con una imagen de un check y lo añade al panel.
      */

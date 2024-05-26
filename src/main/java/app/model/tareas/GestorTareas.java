@@ -5,8 +5,6 @@ import app.model.usuarios.Usuario;
 import services.Recursos;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
 

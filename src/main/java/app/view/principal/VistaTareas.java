@@ -15,6 +15,7 @@ import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -202,21 +203,22 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelOpciones, gbc);
 
-        this.comboRepetibleSeleccionada = contruirJComboBox(opcionesRepeticion);
-        panelOpciones.add(comboRepetibleSeleccionada);
+        this.comboEtiquetasSeleccionada = contruirJComboBox(opcionesEtiquetas);
+        comboEtiquetasSeleccionada.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        gbc = setGbc(1, 0, 0.5, 1, GridBagConstraints.BOTH);
+        panelOpciones.add(comboEtiquetasSeleccionada, gbc);
+
+        JPanel panelContenedor = new JPanel();
+        panelContenedor.setLayout(new BorderLayout());
+        gbc = setGbc(0, 0, 0.3, 1, GridBagConstraints.BOTH);
 
         DatePicker datePicker = construirDatePicker();
-        panelOpciones.add(datePicker);
+        panelContenedor.add(datePicker, BorderLayout.CENTER);
 
-        JPanel panelEtiquetas = construirPanelEtiquetasTarea();
-        gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionTarea.add(panelEtiquetas, gbc);
-
-        this.comboEtiquetasSeleccionada = contruirJComboBox(opcionesEtiquetas);
-        panelEtiquetas.add(comboEtiquetasSeleccionada);
+        panelOpciones.add(panelContenedor, gbc);
 
         JPanel panelMensajesError = construirPanelMensajesError();
-        gbc = setGbc(0, 5, 1, 0.01, GridBagConstraints.BOTH);
+        gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelMensajesError, gbc);
 
         this.labelMensajesErrorSeleccionada = construirLabelMensajeError();
@@ -257,21 +259,22 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelOpciones, gbc);
 
-        this.comboRepetibleNueva = contruirJComboBox(opcionesRepeticion);
-        panelOpciones.add(comboRepetibleNueva);
+        this.comboEtiquetasNueva = contruirJComboBox(opcionesEtiquetas);
+        comboEtiquetasNueva.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        gbc = setGbc(1, 0, 0.5, 1, GridBagConstraints.BOTH);
+        panelOpciones.add(comboEtiquetasNueva, gbc);
+
+        JPanel panelContenedor = new JPanel();
+        panelContenedor.setLayout(new BorderLayout());
+        gbc = setGbc(0, 0, 0.3, 1, GridBagConstraints.BOTH);
 
         DatePicker datePicker = construirDatePicker();
-        panelOpciones.add(datePicker);
+        panelContenedor.add(datePicker, BorderLayout.CENTER);
 
-        JPanel panelEtiquetas = construirPanelEtiquetasTarea();
-        gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
-
-        this.comboEtiquetasNueva = contruirJComboBox(opcionesEtiquetas);
-        panelEtiquetas.add(comboEtiquetasNueva);
+        panelOpciones.add(panelContenedor, gbc);
 
         JPanel panelMensajesError = construirPanelMensajesError();
-        gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
+        gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelMensajesError, gbc);
 
         this.labelMensajesError = construirLabelMensajeError();
@@ -513,7 +516,7 @@ public class VistaTareas extends JPanel {
      */
     private JPanel contruirPanelOpciones(){
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(1, 2));
+        panel.setLayout(new GridBagLayout());
         panel.setPreferredSize(new Dimension(0, 50));
         panel.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
         return panel;
@@ -608,6 +611,7 @@ public class VistaTareas extends JPanel {
         DatePickerSettings datePickerSettings = new DatePickerSettings();
 
         datePickerSettings.setAllowKeyboardEditing(false);
+        datePickerSettings.setFormatForDatesCommonEra("dd/MM/yyyy");
 
         datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
         datePickerSettings.setFontInvalidDate(sRecursos.getMontserratItalic(15));
@@ -627,12 +631,19 @@ public class VistaTareas extends JPanel {
         datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearNavigationButtons, sRecursos.getBLANCO());
 
         DatePicker datePicker = new DatePicker(datePickerSettings);
-
-        LocalDate localDateHoy = LocalDate.now();
-        LocalDate localDateFin = LocalDate.MAX;
-        datePickerSettings.setDateRangeLimits(localDateHoy, localDateFin);
+        datePickerSettings.setDateRangeLimits(LocalDate.now(), LocalDate.MAX);
 
         datePicker.setText("Fecha límite");
+
+        datePicker.getComponentToggleCalendarButton().setText(null);
+        datePicker.getComponentToggleCalendarButton().setIcon(sRecursos.getImagenCalendario());
+        datePicker.getComponentToggleCalendarButton().setBorder(BorderFactory.createMatteBorder(1, 0, 1, 1, sRecursos.getGRANATE()));
+        datePicker.getComponentToggleCalendarButton().setBackground(sRecursos.getBLANCO());
+        datePicker.getComponentToggleCalendarButton().setForeground(sRecursos.getGRANATE());
+        datePicker.getComponentToggleCalendarButton().setMargin(new Insets(0, 0, 0, 0)); // Ajustar los márgenes internos a cero
+
+        datePicker.getComponentDateTextField().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 0, sRecursos.getGRANATE()));
+        datePicker.getComponentDateTextField().setMargin(new Insets(0, 0, 0, 0)); // Ajustar los márgenes internos a cero
 
         return datePicker;
     }
@@ -644,7 +655,7 @@ public class VistaTareas extends JPanel {
      */
     private JComboBox<String> contruirJComboBox(String[] opciones){
         JComboBox<String> comboBox = new JComboBox<>(opciones);
-        comboBox.setFont(sRecursos.getMontserratPlain(16));
+        comboBox.setFont(sRecursos.getMontserratPlain(15));
         comboBox.setForeground(sRecursos.getGRANATE());
         comboBox.setBackground(sRecursos.getBLANCO());
         return comboBox;
