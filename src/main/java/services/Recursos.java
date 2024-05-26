@@ -2,6 +2,7 @@ package services;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,9 +16,9 @@ import java.io.InputStream;
  */
 public class Recursos {
     // Declaración de recursos gráficos
-    private Color GRANATE, BLANCO, GRIS_CLARO, GRANATE_MID_LIGHT;
+    private Color GRANATE, BLANCO, GRIS_CLARO, GRIS_DEFAULT, GRANATE_MID_LIGHT;
     private Font MontserratRegular, MontserratMedium, MontserratBold, MontserratItalic;
-    private Cursor cursorMano, cursorNormal, cursorEscribir, cursorRedimensionar;
+    private Cursor cursorMano, cursorNormal;
     private Border bordeGranate, borderBlanco;
     private ImageIcon imagenLogo, imagenLogo2;
     private ImageIcon imagenUsuario, imagenPassword;
@@ -54,6 +55,51 @@ public class Recursos {
     }
 
     /**
+     * Método para modificar el scrollbar. Utiliza la clase interna ScrollBarBlanco.
+     * @param zonaScroll Scroll que se modifica.
+     */
+    public void crearScrollModificado (JScrollPane zonaScroll, Color colorBarraInterior, Color colorBarraExterior) {
+        zonaScroll.setBorder(null);
+        zonaScroll.getVerticalScrollBar().setUI(new BasicScrollBarUI(){
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0));
+                return button;
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0));
+                return button;
+            }
+
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = colorBarraInterior;
+                this.trackColor = colorBarraExterior;
+                this.thumbDarkShadowColor = new Color(0, 0, 0, 0);
+                this.thumbHighlightColor = new Color(0, 0, 0, 0);
+                this.thumbLightShadowColor = new Color(0, 0, 0, 0);
+            }
+
+            @Override
+            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+                if (thumbBounds.isEmpty() || !scrollbar.isEnabled()) {
+                    return;
+                }
+
+                g.setColor(thumbColor);
+                g.fillRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height);
+            }
+        });
+        zonaScroll.getVerticalScrollBar().setUnitIncrement(16);
+        zonaScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    }
+
+    /**
      * Método privado para inicializar los colores.
      * Este método se llama en el constructor de la clase Recursos.
      */
@@ -61,6 +107,7 @@ public class Recursos {
         GRANATE = new Color(82,0,0);
         BLANCO = new Color(255, 255, 255);
         GRIS_CLARO = new Color(245, 245, 245);
+        GRIS_DEFAULT = new Color(238, 238, 238);
         GRANATE_MID_LIGHT = new Color(100, 0, 0);
     }
 
@@ -171,6 +218,12 @@ public class Recursos {
      * @return El color GRIS_CLARO.
      */
     public Color getGRIS_CLARO() { return GRIS_CLARO; }
+
+    /**
+     * Método para obtener el color GRIS_DEFAULT.
+     * @return El color GRIS_DEFAULT.
+     */
+    public Color getGRIS_DEFAULT() { return GRIS_DEFAULT; }
 
     /**
      * Método para obtener la fuente MontserratBold.

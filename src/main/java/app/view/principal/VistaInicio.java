@@ -11,6 +11,7 @@ public class VistaInicio extends JPanel {
     public VistaInicio() {
         this.setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
         this.setBackground(sRecursos.getBLANCO());
+        this.setBorder(BorderFactory.createMatteBorder(1, 0,0,0, sRecursos.getGRANATE_MID_LIGHT().brighter()));
 
         crearLabelCreditos();
     }

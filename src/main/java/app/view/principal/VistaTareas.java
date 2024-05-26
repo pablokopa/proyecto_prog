@@ -86,8 +86,9 @@ public class VistaTareas extends JPanel {
 
         /* Panel donde están las tareas to do y convertido a JScrollPane */
         this.panelListaTareasToDo = new JPanel();
-        JScrollPane scroolPanelListaTareasToDo = crearPanelListaTareas(panelListaTareasToDo);
-        columnaTareasToDo.add(scroolPanelListaTareasToDo, BorderLayout.CENTER);
+        panelListaTareasToDo.setBackground(sRecursos.getGRIS_DEFAULT());
+        JScrollPane scrollPanelListaTareasToDo = crearPanelListaTareas(panelListaTareasToDo);
+        columnaTareasToDo.add(scrollPanelListaTareasToDo, BorderLayout.CENTER);
 
         /* Label para crear nueva tarea */
         this.labelCrearNuevaTarea = crearLabelBoton("Crear nueva tarea");
@@ -104,8 +105,8 @@ public class VistaTareas extends JPanel {
 
         /* Panel donde están las tareas completadas y convertido a JScrollPane */
         this.panelListaTareasCompletadas = new JPanel();
-        JScrollPane scroolPanelListaTareasCompletadas = crearPanelListaTareas(panelListaTareasCompletadas);
-        columnaTareasCompletadas.add(scroolPanelListaTareasCompletadas, BorderLayout.CENTER);
+        JScrollPane scrollPanelListaTareasCompletadas = crearPanelListaTareas(panelListaTareasCompletadas);
+        columnaTareasCompletadas.add(scrollPanelListaTareasCompletadas, BorderLayout.CENTER);
 
         /* Label para eliminar todas las tareas */
         this.labelEliminarTodas = crearLabelBoton("Eliminar todas");
@@ -348,10 +349,6 @@ public class VistaTareas extends JPanel {
         labelModificarTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String nombreTOriginal = tareaSeleccionada.getNombreT();
-                String descripcionTOriginal = tareaSeleccionada.getDescripcionT();
-                String nombreEOriginal = tareaSeleccionada.getNombreE();
-
                 String nombreT = textFieldNombreTareaSelecionada.getText();
                 String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
                 String nombreE = comboEtiquetasSeleccionada.getSelectedItem().toString();
@@ -372,19 +369,16 @@ public class VistaTareas extends JPanel {
                 }
 
                 TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tarea);
+                TemplatePanelTareaEspecifica panelReal;
                 if (tareaSeleccionada.getCompletadaT()){
-                    TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
-                    panelReal.getTarea().setNombreT(nombreT);
-                    panelReal.getTarea().setDescripcionT(descripcionT);
-                    panelReal.getTarea().setNombreE(nombreE);
-                    panelReal.setLabelTituloText(nombreT);
+                    panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
                 } else {
-                    TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
-                    panelReal.getTarea().setNombreT(nombreT);
-                    panelReal.getTarea().setDescripcionT(descripcionT);
-                    panelReal.getTarea().setNombreE(nombreE);
-                    panelReal.setLabelTituloText(nombreT);
+                    panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
                 }
+                panelReal.getTarea().setNombreT(nombreT);
+                panelReal.getTarea().setDescripcionT(descripcionT);
+                panelReal.getTarea().setNombreE(nombreE);
+                panelReal.setLabelTituloText(nombreT);
 
                 gestorTareas.modificarTarea(tarea);
 
@@ -734,11 +728,8 @@ public class VistaTareas extends JPanel {
      */
     private JScrollPane crearPanelListaTareas(JPanel panel){
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
         JScrollPane scrollPanel = new JScrollPane(panel);
-        scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPanel.setBorder(null);
-        scrollPanel.getVerticalScrollBar().setUnitIncrement(16);
+        sRecursos.crearScrollModificado(scrollPanel, sRecursos.getGRANATE_MID_LIGHT(), sRecursos.getBLANCO());
         return scrollPanel;
     }
 
