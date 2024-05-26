@@ -9,11 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.BCrypt;
+import services.Recursos;
 
 /**
  * Clase que gestiona los usuarios. Hace las operaciones relacionadas con la base de datos. (Registro, conexión, comprobación de datos, etc)
  */
 public class GestorUsuarios {
+
+    private final Recursos sRecursos = Recursos.getService();
 
     /**
      * Método para registrar un nuevo usuario en la base de datos
@@ -43,6 +46,7 @@ public class GestorUsuarios {
             return true;
         } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
+            sRecursos.crearTimer(textoComprobacion);
             return false;
         }
     }
@@ -69,14 +73,17 @@ public class GestorUsuarios {
                 /* Comprueba si la contraseña del usuario es correcta */
                 if (!BCrypt.checkpw(passwordUsuario, passwordUsuarioHashed)){
                     textoComprobacion.setText("Contraseña incorrecta");
+                    sRecursos.crearTimer(textoComprobacion);
                     return false;
                 }
             } else {
                 textoComprobacion.setText("Usuario no registrado");
+                sRecursos.crearTimer(textoComprobacion);
                 return false;
             }
         } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
+            sRecursos.crearTimer(textoComprobacion);
             return false;
         }
 
@@ -103,16 +110,25 @@ public class GestorUsuarios {
             ResultSet resultadoQuery = prepare.executeQuery();
             if (resultadoQuery.next()) {
                 textoComprobacion.setText("El nombre de usuario ya existe");
+                sRecursos.crearTimer(textoComprobacion);
                 return false;
             }
         } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
+            sRecursos.crearTimer(textoComprobacion);
             return false;
         }
 
         /* Comprueba si el nombre de usuario tiene al menos 3 carácteres */
         if (nombreUsuario.length()<3){
             textoComprobacion.setText("El nombre de usuario debe tener al menos 3 carácteres");
+            sRecursos.crearTimer(textoComprobacion);
+            return false;
+        }
+
+        if (nombreUsuario.length()>40) {
+            textoComprobacion.setText("El nombre de usuario no puede tener más de 40 carácteres");
+            sRecursos.crearTimer(textoComprobacion);
             return false;
         }
 
@@ -132,6 +148,13 @@ public class GestorUsuarios {
         /* Comprueba si la contraseña tiene al menos 4 carácteres */
         if (passwordUsuario.length()<4){
             textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
+            sRecursos.crearTimer(textoComprobacion);
+            return false;
+        }
+
+        if (passwordUsuario.length()>50){
+            textoComprobacion.setText("La contraseña debe tener menos de 50 carácteres");
+            sRecursos.crearTimer(textoComprobacion);
             return false;
         }
 
@@ -139,9 +162,11 @@ public class GestorUsuarios {
             /* Comprueba si la contraseña tiene espacios en blanco o carácteres no permitidos */
             if (passwordUsuario.charAt(i) == ' ') {
                 textoComprobacion.setText("La contraseña no puede tener espacios en blanco");
+                sRecursos.crearTimer(textoComprobacion);
                 return false;
             } else if (caracteresNoPermitidos.indexOf(passwordUsuario.charAt(i)) != -1) {
                 textoComprobacion.setText("La contraseña no puede tener carácteres extraños");
+                sRecursos.crearTimer(textoComprobacion);
                 return false;
             }
         }

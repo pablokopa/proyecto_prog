@@ -8,38 +8,73 @@ import java.awt.*;
 public class VistaPomodoro extends JPanel{
     private final Recursos sRecursos;
 
-    private JPanel panelTiempos, panelBotones, panelTiempoConcentracion, panelTiempoDescanso;
-    private JLabel labelTiempoConcentracion, labelTiempoDescanso;
-    private JButton botonPlay, botonPause, botonStop, botonCambiarTiempo, botonConfirmarCambios;
-    private JTextField textMinutosConcentracion, textMinutosDescanso;
+    private JPanel panelTiempos, panelBotones, conjuntoBotones;
+    private JLabel labelTiempo;
+    private JButton btnIniciar, btnPausar, btnReiniciar;
 
     public VistaPomodoro(){
         this.sRecursos = Recursos.getService();
-        setLayout(new BorderLayout());
+        setLayout(new GridLayout(2, 1));
 
         crearPaneles();
     }
 
+    public void personalizarBotones(JButton boton){
+        boton.setPreferredSize(new Dimension(300,80));
+        boton.setFont(sRecursos.getMontserratBold(20));
+        boton.setBackground(sRecursos.getGRANATE());
+        boton.setForeground(Color.WHITE);
+    }
+
     private void crearPaneles() {
+/* PANEL TIEMPO */
         panelTiempos = new JPanel();
-        panelTiempos.setBackground(Color.BLUE);
-        panelTiempos.setLayout(new GridLayout(2, 1));
+        labelTiempo = new JLabel("25:00");
 
-        panelTiempoConcentracion = new JPanel();
-        panelTiempoConcentracion.setBackground(Color.GREEN);
-        panelTiempos.add(panelTiempoConcentracion);
+        // Layouts
+        panelTiempos.setLayout(new BorderLayout());
 
-        panelTiempoDescanso = new JPanel();
-        panelTiempoDescanso.setBackground(Color.YELLOW);
-        panelTiempos.add(panelTiempoDescanso);
+        // Personalización panel
+        panelTiempos.setBackground(Color.WHITE);
 
-        panelTiempos.add(panelTiempoConcentracion);
-        panelTiempos.add(panelTiempoDescanso);
+        // Personalización label
+        labelTiempo.setFont(sRecursos.getMontserratBold(300));
+        labelTiempo.setHorizontalAlignment(SwingConstants.CENTER);
+        labelTiempo.setForeground(sRecursos.getGRANATE());
+
+        // Añadir elementos
+        panelTiempos.add(labelTiempo, BorderLayout.SOUTH);
         add(panelTiempos, BorderLayout.CENTER);
 
+/* PANEL BOTONES */
+        panelBotones = new JPanel(new BorderLayout());
+        conjuntoBotones = new JPanel();
+        btnIniciar = new JButton("Iniciar");
+        btnPausar = new JButton("Pausar");
+        btnReiniciar = new JButton("Reiniciar");
 
-        panelBotones = new JPanel();
-        panelBotones.setBackground(Color.RED);
+        // Layouts
+        conjuntoBotones.setLayout(new BoxLayout(conjuntoBotones, BoxLayout.X_AXIS));
+
+        // Personalización paneles
+        panelBotones.setBackground(Color.LIGHT_GRAY);
+        conjuntoBotones.setBackground(Color.WHITE);
+
+        // Personalización botones
+        personalizarBotones(btnIniciar);
+        personalizarBotones(btnPausar);
+        personalizarBotones(btnReiniciar);
+
+        // Añadir elementos
+        conjuntoBotones.add(Box.createHorizontalGlue());
+        conjuntoBotones.add(btnIniciar);
+        conjuntoBotones.add(Box.createHorizontalStrut(40)); // Espacio entre botones
+        conjuntoBotones.add(btnPausar);
+        conjuntoBotones.add(Box.createHorizontalStrut(40));
+        conjuntoBotones.add(btnReiniciar);
+        conjuntoBotones.add(Box.createHorizontalGlue());
+
+        panelBotones.add(conjuntoBotones, BorderLayout.NORTH);
         add(panelBotones, BorderLayout.SOUTH);
     }
 }

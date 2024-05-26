@@ -1,8 +1,6 @@
 package app.view.templates;
 
-import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
-import app.view.principal.VistaTareas;
 import services.Recursos;
 
 import javax.swing.*;
@@ -18,29 +16,32 @@ public class TemplatePanelTareaEspecifica extends JPanel {
 
     private JLabel labelImagen;
     private JPanel panelTarea;
+    private JLabel labelTitulo;
 
-    private int idT;
+    private final int idT;
 
     /**
      * Constructor de la clase.
      * Crea un panel con la información de una tarea y le añade funciones.
      * Incluye el panel creado en la columna correspondiente de la VistaTareas.
      * @param tarea tarea a mostrar
-     * @param gestorTareas gestor de tareas
-     * @param vistaTareas vista de tareas
      */
-    public TemplatePanelTareaEspecifica(Tarea tarea, GestorTareas gestorTareas, VistaTareas vistaTareas) {
+    public TemplatePanelTareaEspecifica(Tarea tarea) {
         this.tarea = tarea;
 
         this.idT = tarea.getIdT();
 
         this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(Short.MAX_VALUE, 75));
-        this.setMaximumSize(new Dimension(Short.MAX_VALUE, 75));
-        this.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+        this.setPreferredSize(new Dimension(Short.MAX_VALUE, 65));
+        this.setMaximumSize(new Dimension(Short.MAX_VALUE, 65));
+        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, sRecursos.getBLANCO()));
 
         crearLabelImagen();
         crearPanelTarea();
+    }
+
+    public void setBorderColor(Color color) {
+        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, color));
     }
 
     /**
@@ -48,6 +49,8 @@ public class TemplatePanelTareaEspecifica extends JPanel {
      */
     private void crearLabelImagen() {
         this.labelImagen = new JLabel();
+        labelImagen.setCursor(sRecursos.getCursorMano());
+        labelImagen.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         add(labelImagen, BorderLayout.WEST);
     }
 
@@ -58,22 +61,52 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         this.panelTarea = new JPanel();
         panelTarea.setLayout(new BorderLayout());
 
-        JLabel labelTitulo = new JLabel();
-        labelTitulo.setFont(sRecursos.getMonserratBold(16));
+        this.labelTitulo = new JLabel();
+        labelTitulo.setFont(sRecursos.getMontserratMedium(16));
+        labelTitulo.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         labelTitulo.setText(tarea.getNombreT());
 
         panelTarea.add(labelTitulo, BorderLayout.CENTER);
         add(panelTarea, BorderLayout.CENTER);
     }
 
+    /**
+     * Establece el texto del label con el nombre de la tarea.
+     * @param titulo nombre de la tarea
+     */
+    public void setLabelTituloText(String titulo) {
+        labelTitulo.setText(titulo);
+    }
+
+    /**
+     * Obtiene el label con la imagen de la tarea.
+     * @return label con la imagen de la tarea
+     */
     public JLabel getLabelImagen() {
         return labelImagen;
     }
 
+    /**
+     * Obtiene el panel con la información de la tarea.
+     * @return panel con la información de la tarea
+     */
     public JPanel getPanelTarea() {
         return panelTarea;
     }
 
+    /**
+     * Obtiene la tarea del panel
+     * @return tarea del panel
+     */
+    public Tarea getTarea() {
+        return tarea;
+    }
+
+    /**
+     * Sobreesribe el método equals para comparar dos objetos de la clase por su id.
+     * @param obj objeto a comparar
+     * @return true si son iguales
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this)    return true;

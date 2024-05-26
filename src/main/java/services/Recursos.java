@@ -2,7 +2,10 @@ package services;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,14 +16,15 @@ import java.io.InputStream;
  */
 public class Recursos {
     // Declaración de recursos gráficos
-    private Color GRANATE, BLANCO, GRIS_CLARO, GRANATE_MID_LIGHT;
-    private Font MontserratPlain, MontserratBold, MontserratItalic;
-    private Cursor cursorMano, cursorNormal, cursorEscribir, cursorRedimensionar;
+    private Color GRANATE, BLANCO, GRIS_CLARO, GRIS_DEFAULT, GRANATE_MID_LIGHT;
+    private Font MontserratRegular, MontserratMedium, MontserratBold, MontserratItalic;
+    private Cursor cursorMano, cursorNormal;
     private Border bordeGranate, borderBlanco;
     private ImageIcon imagenLogo, imagenLogo2;
     private ImageIcon imagenUsuario, imagenPassword;
     private ImageIcon imagenPlay, imagenPause, imagenStop;
     private ImageIcon imagenCheck, imagenCheckSinCheck;
+    private ImageIcon imagenCalendario;
 
     /**
      * Constante de tamaño de letra estándar para los botones.
@@ -37,6 +41,66 @@ public class Recursos {
     }
 
     /**
+     * Crea un timer para hacer desaparecer el mensaje de error pasados 3.5 segundos.
+     * @param label label con el mensaje de error
+     */
+    public void crearTimer(JLabel label){
+        Timer timer = new Timer(3500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setText("");
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    /**
+     * Método para modificar el scrollbar. Utiliza la clase interna ScrollBarBlanco.
+     * @param zonaScroll Scroll que se modifica.
+     */
+    public void crearScrollModificado (JScrollPane zonaScroll, Color colorBarraInterior, Color colorBarraExterior) {
+        zonaScroll.setBorder(null);
+        zonaScroll.getVerticalScrollBar().setUI(new BasicScrollBarUI(){
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0));
+                return button;
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0));
+                return button;
+            }
+
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = colorBarraInterior;
+                this.trackColor = colorBarraExterior;
+                this.thumbDarkShadowColor = new Color(0, 0, 0, 0);
+                this.thumbHighlightColor = new Color(0, 0, 0, 0);
+                this.thumbLightShadowColor = new Color(0, 0, 0, 0);
+            }
+
+            @Override
+            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+                if (thumbBounds.isEmpty() || !scrollbar.isEnabled()) {
+                    return;
+                }
+
+                g.setColor(thumbColor);
+                g.fillRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height);
+            }
+        });
+        zonaScroll.getVerticalScrollBar().setUnitIncrement(16);
+        zonaScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    }
+
+    /**
      * Método privado para inicializar los colores.
      * Este método se llama en el constructor de la clase Recursos.
      */
@@ -44,20 +108,31 @@ public class Recursos {
         GRANATE = new Color(82,0,0);
         BLANCO = new Color(255, 255, 255);
         GRIS_CLARO = new Color(245, 245, 245);
+        GRIS_DEFAULT = new Color(238, 238, 238);
         GRANATE_MID_LIGHT = new Color(100, 0, 0);
     }
 
     // Cambiar fuente por otra Montserrat-Light/Plain
     private void crearFuentesMontserrat(float sizeLetra) {
 
-        /* Crea la fuente MontserratPlain. Si no existe crea la fuente ArialPlain */
+        /* Crea la fuente MontserratRegular. Si no existe crea la fuente ArialPlain */
         try {
-            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Light.ttf");
-            MontserratPlain = Font.createFont(Font.TRUETYPE_FONT, is);
-            MontserratPlain = MontserratPlain.deriveFont(sizeLetra);
+            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Medium.ttf");
+            MontserratMedium = Font.createFont(Font.TRUETYPE_FONT, is);
+            MontserratMedium = MontserratMedium.deriveFont(sizeLetra);
         } catch (FontFormatException | IOException e) {
-            System.out.println("Error al cargar la fuente Montserrat-Light.ttf. Se cargará la fuente Arial.");
-            MontserratPlain = new Font("Arial", Font.PLAIN, (int) sizeLetra);
+            System.out.println("Error al cargar la fuente Montserrat-Medium.ttf. Se cargará la fuente Arial.");
+            MontserratMedium = new Font("Arial", Font.PLAIN, (int) sizeLetra);
+        }
+
+        /* Crea la fuente MontserratRegular. Si no existe crea la fuente ArialPlain */
+        try {
+            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Regular.ttf");
+            MontserratRegular = Font.createFont(Font.TRUETYPE_FONT, is);
+            MontserratRegular = MontserratRegular.deriveFont(sizeLetra);
+        } catch (FontFormatException | IOException e) {
+            System.out.println("Error al cargar la fuente Montserrat-Regular.ttf. Se cargará la fuente Arial.");
+            MontserratRegular = new Font("Arial", Font.PLAIN, (int) sizeLetra);
         }
 
         /* Crea la fuente MontserratBold. Si no existe crea la fuente ArialBold */
@@ -111,12 +186,13 @@ public class Recursos {
         imagenPlay = new ImageIcon("src/main/resources/images/playbuttton.png");
         imagenPause = new ImageIcon("src/main/resources/images/pausebutton.png");
         imagenStop = new ImageIcon("src/main/resources/images/stopbutton.png");
+        imagenCalendario = new ImageIcon("src/main/resources/images/calendar.png");
 
-        Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(48,48, Image.SCALE_SMOOTH);
+        Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(40,40, Image.SCALE_SMOOTH);
         imagenCheck = new ImageIcon(imageC);
 //        imagenCheck = new ImageIcon("src/main/resources/images/checkResized.png");      // 64 x 64
 
-        Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+        Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         imagenCheckSinCheck = new ImageIcon(imageCsC);
 //        imagenCheckSinCheck = new ImageIcon("src/main/resources/images/checkSinCheckResized.png");      // 64 x 64
     }
@@ -146,11 +222,17 @@ public class Recursos {
     public Color getGRIS_CLARO() { return GRIS_CLARO; }
 
     /**
+     * Método para obtener el color GRIS_DEFAULT.
+     * @return El color GRIS_DEFAULT.
+     */
+    public Color getGRIS_DEFAULT() { return GRIS_DEFAULT; }
+
+    /**
      * Método para obtener la fuente MontserratBold.
      * @param sizeLetra tamaño de la fuente
      * @return La fuente MontserratBold.
      */
-    public Font getMonserratBold(float sizeLetra) {
+    public Font getMontserratBold(float sizeLetra) {
         crearFuentesMontserrat(sizeLetra);
         return MontserratBold;
     }
@@ -160,19 +242,29 @@ public class Recursos {
      * @param sizeLetra tamaño de la fuente
      * @return La fuente MontserratBold Italic.
      */
-    public Font getMonserratItalic(float sizeLetra) {
+    public Font getMontserratItalic(float sizeLetra) {
         crearFuentesMontserrat(sizeLetra);
         return MontserratItalic;
     }
 
     /**
-     * Método para obtener la fuente MontserratPlain.
+     * Método para obtener la fuente MontserratRegular.
      * @param sizeLetra tamaño de la fuente
-     * @return La fuente MontserratPlain.
+     * @return La fuente MontserratRegular.
      */
     public Font getMontserratPlain(float sizeLetra) {
         crearFuentesMontserrat(sizeLetra);
-        return MontserratPlain;
+        return MontserratRegular;
+    }
+
+    /**
+     * Método para obtener la fuente MontserratMedium.
+     * @param sizeLetra tamaño de la fuente
+     * @return La fuente MontserratMedium.
+     */
+    public Font getMontserratMedium(float sizeLetra) {
+        crearFuentesMontserrat(sizeLetra);
+        return MontserratMedium;
     }
 
     /**
@@ -255,6 +347,12 @@ public class Recursos {
      * @return La imagen del check sin check.
      */
     public ImageIcon getImagenCheckSinCheck() { return imagenCheckSinCheck; }
+
+    /**
+     * Método para obtener la imagen del calendario.
+     * @return La imagen del calendario.
+     */
+    public ImageIcon getImagenCalendario() { return imagenCalendario; }
 
     /**
      * Método para obtener la instancia única de la clase.

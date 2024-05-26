@@ -101,7 +101,7 @@ public class InterfazLogin extends JFrame{
      * Crea y configura el campo de texto para el nombre de usuario.
      */
     public void crearJTextFields(){
-        cuadroUsuario = sObjGraficos.construirJTextField(null, (panelDerecha.getWidth() - 260) / 2, 150, 260, 40, sRecursos.getMonserratBold(13), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
+        cuadroUsuario = sObjGraficos.construirJTextField(null, (panelDerecha.getWidth() - 260) / 2, 150, 260, 40, sRecursos.getMontserratBold(13), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
         panelDerecha.add(cuadroUsuario);
     }
 
@@ -125,7 +125,7 @@ public class InterfazLogin extends JFrame{
         panelDerecha.add(botonCerrar);
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
+        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMontserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonRegistrar);
 
         botonRegistrar.addActionListener(e -> {
@@ -142,7 +142,7 @@ public class InterfazLogin extends JFrame{
         });
 
         /* Botón de entrar */
-        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMonserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
+        botonEntrar = sObjGraficos.construirJButton("Entrar", (panelDerecha.getWidth() - 250) / 2, 300, 250, 45, sRecursos.getCursorMano(), null, sRecursos.getMontserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonEntrar);
 
         botonEntrar.addActionListener(e -> {
@@ -176,11 +176,11 @@ public class InterfazLogin extends JFrame{
         panelDerecha.add(labelUsuario);
 
         /* Texto login */
-        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getMonserratBold(22), null, sRecursos.getGRANATE(), null, "c");
+        textoLogin = sObjGraficos.construirJLabel("Iniciar Sesión", 0, 25, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratBold(22), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoLogin);
 
         /* Label informativo; nombre y contraseña correctos */
-        textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getMonserratItalic(13), null, sRecursos.getGRANATE(), null, "c");
+        textoComprobacion = sObjGraficos.construirJLabel("", 0, 95, 400, 32, null, null, sRecursos.getMontserratItalic(13), null, sRecursos.getGRANATE(), null, "c");
         panelDerecha.add(textoComprobacion);
 
         /* Contador usuarios */

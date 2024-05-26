@@ -25,6 +25,7 @@ public class InterfazPrincipal extends JFrame {
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
+    private VistaInicio panelInicio;
     private VistaTareas panelTareas;
     private VistaMatrix panelMatrix;
     private VistaPomodoro panelPomodoro;
@@ -42,7 +43,7 @@ public class InterfazPrincipal extends JFrame {
 
         Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
-        dimensionPantallaNormal = new Dimension(1100, 650);
+        dimensionPantallaNormal = new Dimension(1400, 750);
 
         this.setLayout(new BorderLayout());
         this.setSize(dimensionPantallaNormal);              // Debe empezar en dimension pequeña para evitar errores y posteriormente redimensionar a completa
@@ -73,6 +74,7 @@ public class InterfazPrincipal extends JFrame {
         panelCentral = templatePanelesPrincipales("central");
         panelSuperior = templatePanelesPrincipales("superior");
         panelPrincipal = templatePanelesPrincipales("principal");
+        this.panelInicio = new VistaInicio();
         this.panelTareas = new VistaTareas(gestorTareas);
         this.panelMatrix = new VistaMatrix();
         this.panelPomodoro = new VistaPomodoro();
@@ -84,6 +86,7 @@ public class InterfazPrincipal extends JFrame {
         this.add(panelCentral, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
+        panelPrincipal.add(panelInicio, "Inicio");    // Se añade la vista de inicio al panel principal (por defecto
         panelPrincipal.add(panelTareas, "Tareas");
         panelPrincipal.add(panelPomodoro, "Pomodoro");
         panelPrincipal.add(panelMatrix, "Matrix");
@@ -297,7 +300,7 @@ public class InterfazPrincipal extends JFrame {
         boton.setMaximumSize(new Dimension(getWidth(), 50));
         boton.setFocusable(false);
         boton.setCursor(sRecursos.getCursorMano());
-        boton.setFont(sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON));
+        boton.setFont(sRecursos.getMontserratBold(Recursos.SIZE_LETRA_BOTON));
         if (texto.equals("Inicio")){
             boton.setBackground(sRecursos.getBLANCO());
             boton.setForeground(sRecursos.getGRANATE());
