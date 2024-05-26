@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE, BLANCO, GRIS_CLARO, GRANATE_MID_LIGHT;
-    private Font MontserratPlain, MontserratBold, MontserratItalic;
+    private Font MontserratRegular, MontserratMedium, MontserratBold, MontserratItalic;
     private Cursor cursorMano, cursorNormal, cursorEscribir, cursorRedimensionar;
     private Border bordeGranate, borderBlanco;
     private ImageIcon imagenLogo, imagenLogo2;
@@ -50,14 +50,24 @@ public class Recursos {
     // Cambiar fuente por otra Montserrat-Light/Plain
     private void crearFuentesMontserrat(float sizeLetra) {
 
-        /* Crea la fuente MontserratPlain. Si no existe crea la fuente ArialPlain */
+        /* Crea la fuente MontserratRegular. Si no existe crea la fuente ArialPlain */
         try {
-            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Light.ttf");
-            MontserratPlain = Font.createFont(Font.TRUETYPE_FONT, is);
-            MontserratPlain = MontserratPlain.deriveFont(sizeLetra);
+            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Medium.ttf");
+            MontserratMedium = Font.createFont(Font.TRUETYPE_FONT, is);
+            MontserratMedium = MontserratMedium.deriveFont(sizeLetra);
         } catch (FontFormatException | IOException e) {
-            System.out.println("Error al cargar la fuente Montserrat-Light.ttf. Se cargará la fuente Arial.");
-            MontserratPlain = new Font("Arial", Font.PLAIN, (int) sizeLetra);
+            System.out.println("Error al cargar la fuente Montserrat-Medium.ttf. Se cargará la fuente Arial.");
+            MontserratMedium = new Font("Arial", Font.PLAIN, (int) sizeLetra);
+        }
+
+        /* Crea la fuente MontserratRegular. Si no existe crea la fuente ArialPlain */
+        try {
+            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Regular.ttf");
+            MontserratRegular = Font.createFont(Font.TRUETYPE_FONT, is);
+            MontserratRegular = MontserratRegular.deriveFont(sizeLetra);
+        } catch (FontFormatException | IOException e) {
+            System.out.println("Error al cargar la fuente Montserrat-Regular.ttf. Se cargará la fuente Arial.");
+            MontserratRegular = new Font("Arial", Font.PLAIN, (int) sizeLetra);
         }
 
         /* Crea la fuente MontserratBold. Si no existe crea la fuente ArialBold */
@@ -166,13 +176,23 @@ public class Recursos {
     }
 
     /**
-     * Método para obtener la fuente MontserratPlain.
+     * Método para obtener la fuente MontserratRegular.
      * @param sizeLetra tamaño de la fuente
-     * @return La fuente MontserratPlain.
+     * @return La fuente MontserratRegular.
      */
     public Font getMontserratPlain(float sizeLetra) {
         crearFuentesMontserrat(sizeLetra);
-        return MontserratPlain;
+        return MontserratRegular;
+    }
+
+    /**
+     * Método para obtener la fuente MontserratMedium.
+     * @param sizeLetra tamaño de la fuente
+     * @return La fuente MontserratMedium.
+     */
+    public Font getMontserratMedium(float sizeLetra) {
+        crearFuentesMontserrat(sizeLetra);
+        return MontserratMedium;
     }
 
     /**
