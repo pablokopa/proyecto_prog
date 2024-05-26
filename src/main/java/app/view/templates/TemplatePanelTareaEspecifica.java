@@ -56,7 +56,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         panelTarea.setLayout(new BorderLayout());
 
         JLabel labelTitulo = new JLabel();
-        labelTitulo.setFont(sRecursos.getMonserratBold(16));
+        labelTitulo.setFont(sRecursos.getMontserratBold(16));
         labelTitulo.setText(tarea.getNombreT());
 
         panelTarea.add(labelTitulo, BorderLayout.CENTER);

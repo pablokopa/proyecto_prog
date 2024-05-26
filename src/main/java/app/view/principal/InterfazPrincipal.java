@@ -297,7 +297,7 @@ public class InterfazPrincipal extends JFrame {
         boton.setMaximumSize(new Dimension(getWidth(), 50));
         boton.setFocusable(false);
         boton.setCursor(sRecursos.getCursorMano());
-        boton.setFont(sRecursos.getMonserratBold(Recursos.SIZE_LETRA_BOTON));
+        boton.setFont(sRecursos.getMontserratBold(Recursos.SIZE_LETRA_BOTON));
         if (texto.equals("Inicio")){
             boton.setBackground(sRecursos.getBLANCO());
             boton.setForeground(sRecursos.getGRANATE());

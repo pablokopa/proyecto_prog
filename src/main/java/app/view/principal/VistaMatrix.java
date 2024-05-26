@@ -79,11 +79,11 @@ public class VistaMatrix extends JPanel {
 
         /* Crea el label del título */
         JLabel labelTitulo = new JLabel(titulo);
-        labelTitulo.setFont(sRecursos.getMonserratBold(20));
+        labelTitulo.setFont(sRecursos.getMontserratBold(20));
 
         /* Crea el botón de añadir tareas */
         JButton botonAddTareas = new JButton("Añadir tarea");
-        botonAddTareas.setFont(sRecursos.getMonserratBold(14));
+        botonAddTareas.setFont(sRecursos.getMontserratBold(14));
         botonAddTareas.setBorder(new MatteBorder(5, 5, 5, 5, colorGrisPrincipal));
         botonAddTareas.setBackground(colorGrisPrincipal);
         botonAddTareas.setForeground(color);

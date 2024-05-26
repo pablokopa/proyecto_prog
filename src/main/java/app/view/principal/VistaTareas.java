@@ -7,6 +7,7 @@ import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -37,7 +38,7 @@ public class VistaTareas extends JPanel {
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
     private JLabel labelEtiquetasTarea;
     private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelEliminarTarea, labelEliminarTodas;
-    private JLabel labelMensajesError;
+    private JLabel labelMensajesError, labelMensajesErrorSeleccionada;
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
     private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
 
@@ -165,7 +166,7 @@ public class VistaTareas extends JPanel {
 
         this.textFieldNombreTareaSelecionada = new JTextField();
         textFieldNombreTareaSelecionada.setPreferredSize(new Dimension(0, 50));
-        textFieldNombreTareaSelecionada.setFont(sRecursos.getMonserratItalic(20));
+        textFieldNombreTareaSelecionada.setFont(sRecursos.getMontserratMedium(20));
         textFieldNombreTareaSelecionada.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldNombreTareaSelecionada.setForeground(sRecursos.getGRANATE());
         textFieldNombreTareaSelecionada.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
@@ -178,13 +179,13 @@ public class VistaTareas extends JPanel {
         textPaneDescripcionTareaSeleccionada.setPreferredSize(new Dimension(0, 50));
         textPaneDescripcionTareaSeleccionada.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
         textPaneDescripcionTareaSeleccionada.setForeground(sRecursos.getGRANATE());
-        textPaneDescripcionTareaSeleccionada.setFont(sRecursos.getMonserratItalic(20));
+        textPaneDescripcionTareaSeleccionada.setFont(sRecursos.getMontserratMedium(20));
         StyledDocument doc = textPaneDescripcionTareaSeleccionada.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         StyleConstants.setSpaceAbove(center, 10);
         try{
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Italic.ttf"));
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Medium.ttf"));
             StyleConstants.setFontFamily(center, customFont.getFamily());
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
@@ -220,10 +221,10 @@ public class VistaTareas extends JPanel {
         datePickerSettings.setAllowKeyboardEditing(false);
 
         datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
-        datePickerSettings.setFontInvalidDate(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontInvalidDate(sRecursos.getMontserratItalic(15));
         datePickerSettings.setFontCalendarDateLabels(sRecursos.getMontserratPlain(16));
-        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMonserratItalic(15));
-        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMontserratItalic(15));
+        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMontserratItalic(15));
 
         datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundTodayLabel, sRecursos.getBLANCO());
         datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundClearLabel, sRecursos.getBLANCO());
@@ -252,16 +253,19 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelEtiquetas, gbc);
 
-        this.labelMensajesError = new JLabel();
-        labelMensajesError.setPreferredSize(new Dimension(0, 50));
-        labelMensajesError.setLayout(new FlowLayout());
-        labelMensajesError.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
-        labelMensajesError.setText("Mensajes de error");
-        labelMensajesError.setFont(sRecursos.getMonserratBold(18));
-        labelMensajesError.setForeground(sRecursos.getGRANATE());
-        labelMensajesError.setHorizontalAlignment(SwingConstants.CENTER);
+        JPanel panelMensajesError = new JPanel();
+        panelMensajesError.setLayout(new BorderLayout());
+        panelMensajesError.setBackground(sRecursos.getBLANCO());
+        panelMensajesError.setPreferredSize(new Dimension(0, 50));
+        panelMensajesError.setBorder(new EmptyBorder(5,5,5,5));
         gbc = setGbc(0, 5, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionTarea.add(labelMensajesError, gbc);
+        panelInformacionTarea.add(panelMensajesError, gbc);
+
+        this.labelMensajesErrorSeleccionada = new JLabel();
+        labelMensajesErrorSeleccionada.setFont(sRecursos.getMontserratItalic(15));
+        labelMensajesErrorSeleccionada.setForeground(sRecursos.getGRANATE());
+        labelMensajesErrorSeleccionada.setHorizontalAlignment(SwingConstants.CENTER);
+        panelMensajesError.add(labelMensajesErrorSeleccionada, BorderLayout.CENTER);
     }
 
     /**
@@ -284,11 +288,12 @@ public class VistaTareas extends JPanel {
         /* Panel donde se introduce la información de la nueva tarea */
         JPanel panelInformacionCrearNuevaTarea = new JPanel();
         panelInformacionCrearNuevaTarea.setLayout(new GridBagLayout());
+        cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
 
         this.textFieldNombreTarea = new JTextField();
         textFieldNombreTarea.setPreferredSize(new Dimension(0, 50));
         textFieldNombreTarea.setText("Nombre de la tarea");
-        textFieldNombreTarea.setFont(sRecursos.getMonserratItalic(20));
+        textFieldNombreTarea.setFont(sRecursos.getMontserratMedium(20));
         textFieldNombreTarea.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldNombreTarea.setForeground(sRecursos.getGRANATE());
         textFieldNombreTarea.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
@@ -301,14 +306,14 @@ public class VistaTareas extends JPanel {
         textPaneDescripcionTarea.setPreferredSize(new Dimension(0, 50));
         textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
         textPaneDescripcionTarea.setForeground(sRecursos.getGRANATE());
-        textPaneDescripcionTarea.setFont(sRecursos.getMonserratItalic(20));
+        textPaneDescripcionTarea.setFont(sRecursos.getMontserratMedium(20));
         textPaneDescripcionTarea.setText("Descripción de la tarea");
         StyledDocument doc = textPaneDescripcionTarea.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         StyleConstants.setSpaceAbove(center, 10);
         try{
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Italic.ttf"));
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Medium.ttf"));
             StyleConstants.setFontFamily(center, customFont.getFamily());
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
@@ -337,10 +342,10 @@ public class VistaTareas extends JPanel {
         datePickerSettings.setAllowKeyboardEditing(false);
 
         datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
-        datePickerSettings.setFontInvalidDate(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontInvalidDate(sRecursos.getMontserratItalic(15));
         datePickerSettings.setFontCalendarDateLabels(sRecursos.getMontserratPlain(16));
-        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMonserratItalic(15));
-        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMonserratItalic(15));
+        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMontserratItalic(15));
+        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMontserratItalic(15));
 
         datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundTodayLabel, sRecursos.getBLANCO());
         datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundClearLabel, sRecursos.getBLANCO());
@@ -365,21 +370,23 @@ public class VistaTareas extends JPanel {
         JPanel panelEtiquetas = new JPanel();
         panelEtiquetas.setPreferredSize(new Dimension(0, 50));
         panelEtiquetas.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        panelEtiquetas.setBackground(Color.blue);
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
 
+        JPanel panelMensajesError = new JPanel();
+        panelMensajesError.setLayout(new BorderLayout());
+        panelMensajesError.setBackground(sRecursos.getBLANCO());
+        panelMensajesError.setPreferredSize(new Dimension(0, 50));
+        panelMensajesError.setBorder(new EmptyBorder(5,5,5,5));
+        gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
+        panelInformacionCrearNuevaTarea.add(panelMensajesError, gbc);
+
         this.labelMensajesError = new JLabel();
-        labelMensajesError.setPreferredSize(new Dimension(0, 50));
-        labelMensajesError.setLayout(new FlowLayout());
-        labelMensajesError.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getBLANCO()));
-        labelMensajesError.setText("Mensaje de error!");
-        labelMensajesError.setFont(sRecursos.getMonserratBold(18));
+        labelMensajesError.setFont(sRecursos.getMontserratItalic(15));
         labelMensajesError.setForeground(sRecursos.getGRANATE());
         labelMensajesError.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionCrearNuevaTarea.add(labelMensajesError, gbc);
-
-        cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
+        panelMensajesError.add(labelMensajesError, BorderLayout.CENTER);
     }
 
     public ArrayList<TemplatePanelTareaEspecifica> getListaPanelesTareasToDo() {
@@ -629,7 +636,7 @@ public class VistaTareas extends JPanel {
 
     private JLabel crearLabelBoton(String texto){
         JLabel labelBoton = new JLabel(texto);
-        labelBoton.setFont(sRecursos.getMonserratItalic(20));
+        labelBoton.setFont(sRecursos.getMontserratPlain(18));
         labelBoton.setHorizontalAlignment(SwingConstants.CENTER);
         labelBoton.setBackground(sRecursos.getBLANCO());
         labelBoton.setForeground(sRecursos.getGRANATE());

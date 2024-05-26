@@ -157,7 +157,7 @@ public class ObjGraficos {
         boton.setMaximumSize(new Dimension(ancho, alto));
         boton.setFocusable(false);
         boton.setCursor(Recursos.getService().getCursorMano());
-        boton.setFont(Recursos.getService().getMonserratBold(Recursos.SIZE_LETRA_BOTON));
+        boton.setFont(Recursos.getService().getMontserratBold(Recursos.SIZE_LETRA_BOTON));
         boton.setBackground(colorFondo);
         boton.setForeground(colorFuente);
         boton.setBorder(null);

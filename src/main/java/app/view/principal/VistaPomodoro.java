@@ -21,7 +21,7 @@ public class VistaPomodoro extends JPanel{
 
     public void personalizarBotones(JButton boton){
         boton.setPreferredSize(new Dimension(300,80));
-        boton.setFont(sRecursos.getMonserratBold(20));
+        boton.setFont(sRecursos.getMontserratBold(20));
         boton.setBackground(sRecursos.getGRANATE());
         boton.setForeground(Color.WHITE);
     }
@@ -38,7 +38,7 @@ public class VistaPomodoro extends JPanel{
         panelTiempos.setBackground(Color.WHITE);
 
         // Personalización label
-        labelTiempo.setFont(sRecursos.getMonserratBold(300));
+        labelTiempo.setFont(sRecursos.getMontserratBold(300));
         labelTiempo.setHorizontalAlignment(SwingConstants.CENTER);
         labelTiempo.setForeground(sRecursos.getGRANATE());
 

@@ -160,7 +160,7 @@ public class Recursos {
      * @param sizeLetra tamaño de la fuente
      * @return La fuente MontserratBold.
      */
-    public Font getMonserratBold(float sizeLetra) {
+    public Font getMontserratBold(float sizeLetra) {
         crearFuentesMontserrat(sizeLetra);
         return MontserratBold;
     }
@@ -170,7 +170,7 @@ public class Recursos {
      * @param sizeLetra tamaño de la fuente
      * @return La fuente MontserratBold Italic.
      */
-    public Font getMonserratItalic(float sizeLetra) {
+    public Font getMontserratItalic(float sizeLetra) {
         crearFuentesMontserrat(sizeLetra);
         return MontserratItalic;
     }
