@@ -43,6 +43,7 @@ public class GestorUsuarios {
             return true;
         } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
+            e.printStackTrace();
             return false;
         }
     }
@@ -77,6 +78,7 @@ public class GestorUsuarios {
             }
         } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
+            e.printStackTrace();
             return false;
         }
 
@@ -107,6 +109,7 @@ public class GestorUsuarios {
             }
         } catch (SQLException e) {
             textoComprobacion.setText("No hay conexión");
+            e.printStackTrace();
             return false;
         }
 

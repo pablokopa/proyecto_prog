@@ -14,13 +14,15 @@ public class Tarea {
     private Timestamp fechaFinalizacionT;
     private boolean completadaT;
     private final String nombreU;
+    private String nombreE;
 
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    public Tarea(String nombreT, String descripcionT, String nombreU){
+    public Tarea(String nombreT, String descripcionT, String nombreU, String nombreE){
         this.nombreT = nombreT;
         this.descripcionT = descripcionT;
         this.nombreU = nombreU;
+        this.nombreE = nombreE;
 
         this.fechaCreacionT = new Timestamp(System.currentTimeMillis());
 
@@ -28,7 +30,7 @@ public class Tarea {
         this.completadaT = false;
     }
 
-    public Tarea(int idT, String nombreT, String descripcionT, Timestamp fechaCreacionT, Timestamp fechaFinalizacionT, Boolean completadaT, String nombreU){
+    public Tarea(int idT, String nombreT, String descripcionT, Timestamp fechaCreacionT, Timestamp fechaFinalizacionT, Boolean completadaT, String nombreU, String nombreE){
         this.idT = idT;
         this.nombreT = nombreT;
         this.descripcionT = descripcionT;
@@ -36,6 +38,7 @@ public class Tarea {
         this.fechaFinalizacionT = fechaFinalizacionT;
         this.completadaT = completadaT;
         this.nombreU = nombreU;
+        this.nombreE = nombreE;
     }
 
     public int getIdT() {
@@ -76,6 +79,10 @@ public class Tarea {
 
     public String getNombreU() {
         return nombreU;
+    }
+
+    public String getNombreE() {
+        return nombreE;
     }
 
     public void setCompletadaT(boolean completadaT) {

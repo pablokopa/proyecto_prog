@@ -42,6 +42,7 @@ public class VistaTareas extends JPanel {
     private JLabel labelFechaCreacion, labelFechaFinalizacion;
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
     private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
+    private JComboBox<String> comboEtiquetasNueva, comboEtiquetasSeleccionada;
 
     private Tarea  tareaSeleccionada;
 
@@ -265,12 +266,12 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelEtiquetas, gbc);
 
-        String[] opciones2 = {"Sin etiqueta Matrix", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
-        JComboBox<String> comboEtiquetas = new JComboBox<>(opciones2);
-        comboEtiquetas.setFont(sRecursos.getMontserratPlain(16));
-        comboEtiquetas.setForeground(sRecursos.getGRANATE());
-        comboEtiquetas.setBackground(sRecursos.getBLANCO());
-        panelEtiquetas.add(comboEtiquetas);
+        String[] opciones2 = {"Sin etiqueta", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
+        this.comboEtiquetasSeleccionada = new JComboBox<>(opciones2);
+        comboEtiquetasSeleccionada.setFont(sRecursos.getMontserratPlain(16));
+        comboEtiquetasSeleccionada.setForeground(sRecursos.getGRANATE());
+        comboEtiquetasSeleccionada.setBackground(sRecursos.getBLANCO());
+        panelEtiquetas.add(comboEtiquetasSeleccionada);
 
 
         JPanel panelMensajesError = new JPanel();
@@ -394,12 +395,12 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
 
-        String[] opciones2 = {"Sin etiqueta Matrix", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
-        JComboBox<String> comboEtiquetas = new JComboBox<>(opciones2);
-        comboEtiquetas.setFont(sRecursos.getMontserratPlain(16));
-        comboEtiquetas.setForeground(sRecursos.getGRANATE());
-        comboEtiquetas.setBackground(sRecursos.getBLANCO());
-        panelEtiquetas.add(comboEtiquetas);
+        String[] opciones2 = {"Sin etiqueta", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
+        this.comboEtiquetasNueva = new JComboBox<>(opciones2);
+        comboEtiquetasNueva.setFont(sRecursos.getMontserratPlain(16));
+        comboEtiquetasNueva.setForeground(sRecursos.getGRANATE());
+        comboEtiquetasNueva.setBackground(sRecursos.getBLANCO());
+        panelEtiquetas.add(comboEtiquetasNueva);
 
         JPanel panelMensajesError = new JPanel();
         panelMensajesError.setLayout(new BorderLayout());
@@ -467,12 +468,15 @@ public class VistaTareas extends JPanel {
                     labelMensajesError.setText("El nombre de la tarea no puede tener más de 50 carácteres");
                     return;
                 }
+
                 String descripcionT = textPaneDescripcionTarea.getText();
                 if (descripcionT.equals("Descripción de la tarea")){
                     descripcionT = "";
                 }
 
-                Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
+                String nombreE = comboEtiquetasNueva.getSelectedItem().toString();
+
+                Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU(), nombreE);
                 gestorTareas.crearTarea(tarea);
                 Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
                 TemplatePanelTareaEspecifica panel = new TemplatePanelTareaEspecifica(tareaReal);
@@ -709,6 +713,7 @@ public class VistaTareas extends JPanel {
             labelFechaFinalizacion.setText("Finalización: "+tareaSeleccionada.getFechaFinalizacionFormat());
         }
 
+        comboEtiquetasSeleccionada.setSelectedItem(tareaSeleccionada.getNombreE());
 
         cardLayout.show(columnaInformacion, "cardTareaSeleccionada");
     }

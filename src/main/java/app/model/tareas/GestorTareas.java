@@ -40,8 +40,9 @@ public class GestorTareas {
                 Timestamp fechaCreacionT = resultado.getTimestamp("fechacreaciont");
                 Timestamp fechaFinalizacionT = resultado.getTimestamp("fechafinalizaciont");
                 Boolean completadaT = resultado.getBoolean("completadat");
+                String nombreE = resultado.getString("nombree");
 
-                Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU());
+                Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
                 this.listaTareas.add(tarea);
             }
         } catch (SQLException e) {
@@ -67,8 +68,9 @@ public class GestorTareas {
                 Timestamp fechaCreacionT = resultado.getTimestamp("fechacreaciont");
                 Timestamp fechaFinalizacionT = resultado.getTimestamp("fechafinalizaciont");
                 Boolean completadaT = resultado.getBoolean("completadat");
+                String nombreE = resultado.getString("nombree");
 
-                Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU());
+                Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
                 this.listaTareas.add(tarea);
                 return tarea;
             }
@@ -84,7 +86,7 @@ public class GestorTareas {
      * @param tarea tarea a añadir
      */
     public void crearTarea(Tarea tarea) {
-        String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU, nombreE) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conexion = ConectarBD.conectar()) {
             PreparedStatement prepare = conexion.prepareStatement(sql);
@@ -92,11 +94,13 @@ public class GestorTareas {
             prepare.setString(2, tarea.getDescripcionT());
             prepare.setTimestamp(3, tarea.getFechaCreacionT());
             prepare.setString(4, usuario.getNombreU());
+            prepare.setString(5, tarea.getNombreE());
 
             prepare.executeUpdate();
             this.listaTareas.add(tarea);
         } catch (SQLException e) {
-            System.out.println("CATCH EN agregarTarea()");
+            System.out.println("CATCH EN crearTarea()");
+            e.printStackTrace();
         }
     }
 
