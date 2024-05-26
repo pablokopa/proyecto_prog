@@ -61,3 +61,24 @@ Cambios detallados de esta semana:
 10. La interfaz login lanza **avisos cuando no se pudo conectar** a la base de datos.
 11. Ahora la **aplicación se abre rápidamente cuando se inicia sin conexión**.
 12. Creado e implementado en el menú método para **desconectar al usuario**.
+
+## Seguimiento_04_23
+Esta semana se han refinado muchas cosas, terminado otras.
+Cambios detallados:
+1. Arreglado diversos bugs:
+   1. Bugs relacionados con las tareas recién creadas en VistaTareas; ahora se actualizan automáticamente en la vista.
+   2. Bug del título de VistaMatrix; ahora todos se ven completos.
+   3. Arreglados conflictos
+2. Se han límites en los nombres de las tareas.
+3. Se han añadido mensajes de error.
+4. Se han añadido timer a todos los mensajes de error de la aplicación.
+5. Creado botón y funcionalidad para eliminar todas las tareas completadas.
+6. Creado botón y funcionalidad para modificar la tarea seleccionada.
+7. Se ha cambiado el diseño y la funcionalidad de diversos card de la columna de información.
+   1. Acabada cardCrearTarea y cambios en su diseño.
+   2. Cambiada cardTareaSeleccionada, y añadida funcionalidad para eliminar o modificar la tarea, y cambios en su diseño.
+8. Se ha añadido un calendario e implementado en los cards de la columna de información.
+9. Refactorizado muchas partes del código.
+10. Terminada la vista inicio
+11. Eliminadas clases y paquetes no utilizados.
+12. Otros cambios de diseño y funcionalidad.
