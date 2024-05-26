@@ -32,9 +32,9 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         this.idT = tarea.getIdT();
 
         this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(Short.MAX_VALUE, 75));
-        this.setMaximumSize(new Dimension(Short.MAX_VALUE, 75));
-        this.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+        this.setPreferredSize(new Dimension(Short.MAX_VALUE, 65));
+        this.setMaximumSize(new Dimension(Short.MAX_VALUE, 65));
+        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, sRecursos.getGRANATE()));
 
         crearLabelImagen();
         crearPanelTarea();
