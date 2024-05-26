@@ -1,6 +1,7 @@
 package app.model.tareas;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  * Clase que representa una tarea
@@ -13,6 +14,8 @@ public class Tarea {
     private Timestamp fechaFinalizacionT;
     private boolean completadaT;
     private final String nombreU;
+
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public Tarea(String nombreT, String descripcionT, String nombreU){
         this.nombreT = nombreT;
@@ -53,6 +56,18 @@ public class Tarea {
 
     public Timestamp getFechaFinalizacionT() {
         return fechaFinalizacionT;
+    }
+
+    public String getFechaCreacionFormat() {
+        return simpleDateFormat.format(fechaCreacionT);
+    }
+
+    public String getFechaFinalizacionFormat() {
+        if (fechaFinalizacionT != null) {
+            return simpleDateFormat.format(fechaFinalizacionT);
+        } else {
+            return null;
+        }
     }
 
     public boolean getCompletadaT() {

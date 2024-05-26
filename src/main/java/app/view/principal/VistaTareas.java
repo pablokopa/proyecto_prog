@@ -39,6 +39,7 @@ public class VistaTareas extends JPanel {
     private JLabel labelEtiquetasTarea;
     private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelEliminarTarea, labelEliminarTodas;
     private JLabel labelMensajesError, labelMensajesErrorSeleccionada;
+    private JLabel labelFechaCreacion, labelFechaFinalizacion;
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
     private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
 
@@ -196,11 +197,22 @@ public class VistaTareas extends JPanel {
         panelInformacionTarea.add(textPaneDescripcionTareaSeleccionada, gbc);
 
         JPanel panelInformacionDatas = new JPanel();
-        panelInformacionDatas.setToolTipText("Panel donde se encontrará información de la data de creación y finalización");
+        panelInformacionDatas.setLayout(new GridLayout(1, 2));
+        panelInformacionDatas.setBackground(sRecursos.getBLANCO());
         panelInformacionDatas.setPreferredSize(new Dimension(0, 50));
-        panelInformacionDatas.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        panelInformacionDatas.setBorder(new EmptyBorder(5,10,5,10));
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelInformacionDatas, gbc);
+
+        this.labelFechaCreacion = new JLabel("Fecha de creación: ");
+        labelFechaCreacion.setFont(sRecursos.getMontserratMedium(14));
+        labelFechaCreacion.setForeground(sRecursos.getGRANATE());
+        panelInformacionDatas.add(labelFechaCreacion);
+
+        this.labelFechaFinalizacion = new JLabel("Fecha de finalización: ");
+        labelFechaFinalizacion.setFont(sRecursos.getMontserratMedium(14));
+        labelFechaFinalizacion.setForeground(sRecursos.getGRANATE());
+        panelInformacionDatas.add(labelFechaFinalizacion);
 
         JPanel panelOpciones = new JPanel();
         panelOpciones.setPreferredSize(new Dimension(0, 50));
@@ -252,6 +264,14 @@ public class VistaTareas extends JPanel {
         panelEtiquetas.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
         gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelEtiquetas, gbc);
+
+        String[] opciones2 = {"Sin etiqueta Matrix", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
+        JComboBox<String> comboEtiquetas = new JComboBox<>(opciones2);
+        comboEtiquetas.setFont(sRecursos.getMontserratPlain(16));
+        comboEtiquetas.setForeground(sRecursos.getGRANATE());
+        comboEtiquetas.setBackground(sRecursos.getBLANCO());
+        panelEtiquetas.add(comboEtiquetas);
+
 
         JPanel panelMensajesError = new JPanel();
         panelMensajesError.setLayout(new BorderLayout());
@@ -373,6 +393,13 @@ public class VistaTareas extends JPanel {
         panelEtiquetas.setBackground(Color.blue);
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
+
+        String[] opciones2 = {"Sin etiqueta Matrix", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
+        JComboBox<String> comboEtiquetas = new JComboBox<>(opciones2);
+        comboEtiquetas.setFont(sRecursos.getMontserratPlain(16));
+        comboEtiquetas.setForeground(sRecursos.getGRANATE());
+        comboEtiquetas.setBackground(sRecursos.getBLANCO());
+        panelEtiquetas.add(comboEtiquetas);
 
         JPanel panelMensajesError = new JPanel();
         panelMensajesError.setLayout(new BorderLayout());
@@ -674,6 +701,15 @@ public class VistaTareas extends JPanel {
         this.tareaSeleccionada = tarea;
         textFieldNombreTareaSelecionada.setText(tareaSeleccionada.getNombreT());
         textPaneDescripcionTareaSeleccionada.setText(tareaSeleccionada.getDescripcionT());
+
+        labelFechaCreacion.setText("Creación: "+tareaSeleccionada.getFechaCreacionFormat());
+        if (tareaSeleccionada.getFechaFinalizacionT()==null){
+            labelFechaFinalizacion.setText("Finalización: No finalizada");
+        } else {
+            labelFechaFinalizacion.setText("Finalización: "+tareaSeleccionada.getFechaFinalizacionFormat());
+        }
+
+
         cardLayout.show(columnaInformacion, "cardTareaSeleccionada");
     }
 
