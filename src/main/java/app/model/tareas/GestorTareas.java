@@ -3,6 +3,9 @@ package app.model.tareas;
 import app.model.basedatos.ConectarBD;
 import app.model.usuarios.Usuario;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -160,6 +163,53 @@ public class GestorTareas {
             e.printStackTrace();
             return false;
         }
+        return true;
+    }
+
+    private void crearTimer(JLabel label){
+        Timer timer = new Timer(3500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setText("");
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    public boolean comprobarNombreEditarTarea(Tarea tareaOriginal, Tarea tareaEditada, JLabel label){
+        if (tareaEditada.getNombreT().isBlank()){
+            label.setText("El nombre no puede estar vacío");
+            crearTimer(label);
+            return false;
+        }
+        if (tareaEditada.getNombreT().length() > 45){
+            label.setText("El nombre no puede tener más de 45 caracteres");
+            crearTimer(label);
+            return false;
+        }
+        if (tareaEditada.getNombreT().equals(tareaOriginal.getNombreT()) && tareaEditada.getDescripcionT().equals(tareaOriginal.getDescripcionT()) && tareaEditada.getNombreE().equals(tareaOriginal.getNombreE())){
+            label.setText("No se ha modificado ningún campo");
+            crearTimer(label);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean comprobarNombreCrearTarea(String nombreTarea, JLabel label){
+        if (nombreTarea.equals("Nombre de la tarea")){
+            label.setText("Introduce un nombre");
+            return false;
+        }
+        if (nombreTarea.isBlank()){
+            label.setText("El nombre no puede estar vacío");
+            return false;
+        }
+        if (nombreTarea.length() > 45){
+            label.setText("El nombre no puede tener más de 45 caracteres");
+            return false;
+        }
+        crearTimer(label);
         return true;
     }
 

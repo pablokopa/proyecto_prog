@@ -34,7 +34,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(Short.MAX_VALUE, 65));
         this.setMaximumSize(new Dimension(Short.MAX_VALUE, 65));
-        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, sRecursos.getGRANATE()));
+        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, sRecursos.getBLANCO()));
 
         crearLabelImagen();
         crearPanelTarea();

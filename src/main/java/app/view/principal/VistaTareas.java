@@ -14,10 +14,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -319,15 +316,7 @@ public class VistaTareas extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String nombreT = textFieldNombreTarea.getText();
-                if (nombreT.equals("Nombre de la tarea")){
-                    nombreT = "";
-                }
-                if (nombreT.isBlank()){
-                    labelMensajesError.setText("El nombre de la tarea no puede estar vacío");
-                    return;
-                }
-                if (nombreT.length()>45) {
-                    labelMensajesError.setText("El nombre de la tarea no puede tener más de 45 carácteres");
+                if (!gestorTareas.comprobarNombreCrearTarea(nombreT, labelMensajesError)){
                     return;
                 }
 
@@ -346,8 +335,8 @@ public class VistaTareas extends JPanel {
                 addListenerATareas(tareaReal, panel);
                 actualizarVistaTareas();
 
-                textFieldNombreTarea.setText("");
-                textPaneDescripcionTarea.setText("");
+                tareaSeleccionada = tareaReal;
+                setCardTareaSeleccionada(tareaReal);
             }
         });
 
@@ -360,21 +349,9 @@ public class VistaTareas extends JPanel {
                 String nombreEOriginal = tareaSeleccionada.getNombreE();
 
                 String nombreT = textFieldNombreTareaSelecionada.getText();
-                if (nombreT.isBlank()){
-                    labelMensajesErrorSeleccionada.setText("El nombre de la tarea no puede estar vacío");
-                    return;
-                }
-                if (nombreT.length()>45) {
-                    labelMensajesErrorSeleccionada.setText("El nombre de la tarea no puede tener más de 45 carácteres");
-                    return;
-                }
                 String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
                 String nombreE = comboEtiquetasSeleccionada.getSelectedItem().toString();
 
-                if (nombreT.equals(nombreTOriginal) && descripcionT.equals(descripcionTOriginal) && nombreE.equals(nombreEOriginal)){
-                    labelMensajesErrorSeleccionada.setText("No se ha modificado ningún campo");
-                    return;
-                }
 
                 Tarea tarea = new Tarea(
                         tareaSeleccionada.getIdT(),
@@ -386,6 +363,10 @@ public class VistaTareas extends JPanel {
                         gestorTareas.getUsuario().getNombreU(),
                         nombreE
                 );
+
+                if (!gestorTareas.comprobarNombreEditarTarea(tareaSeleccionada, tarea, labelMensajesErrorSeleccionada)){
+                    return;
+                }
 
                 TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tarea);
                 if (tareaSeleccionada.getCompletadaT()){
