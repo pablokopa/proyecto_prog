@@ -204,8 +204,8 @@ public class GestorTareas {
             sRecursos.crearTimer(label);
             return false;
         }
-        if (tareaEditada.getNombreT().length() > 45){
-            label.setText("El nombre no puede tener más de 45 caracteres");
+        if (tareaEditada.getNombreT().length() > 35){
+            label.setText("El nombre no puede tener más de 35 caracteres");
             sRecursos.crearTimer(label);
             return false;
         }
@@ -236,8 +236,8 @@ public class GestorTareas {
             sRecursos.crearTimer(label);
             return false;
         }
-        if (nombreTarea.length() > 45){
-            label.setText("El nombre no puede tener más de 45 caracteres");
+        if (nombreTarea.length() > 35){
+            label.setText("El nombre no puede tener más de 35 caracteres");
             sRecursos.crearTimer(label);
             return false;
         }

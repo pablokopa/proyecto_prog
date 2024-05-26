@@ -122,7 +122,7 @@ public class VistaTareas extends JPanel {
         columnaInformacion.setLayout(cardLayout);
         columnaInformacion.setBorder(new MatteBorder(0, 5, 10, 10, sRecursos.getBLANCO()));
         columnaInformacion.setPreferredSize(new Dimension(200, 0));
-        gbc = setGbc(2, 0, 0.44, 1, GridBagConstraints.BOTH);
+        gbc = setGbc(2, 0, 0.4, 1, GridBagConstraints.BOTH);
         add(columnaInformacion, gbc);
 
         crearCardGeneral();
@@ -661,7 +661,7 @@ public class VistaTareas extends JPanel {
         JPanel panelColumna = new JPanel();
         panelColumna.setLayout(new BorderLayout());
         panelColumna.setPreferredSize(new Dimension(200, 0));
-        gbc = setGbc(columna, 0, 0.28, 1, GridBagConstraints.BOTH);
+        gbc = setGbc(columna, 0, 0.3, 1, GridBagConstraints.BOTH);
         add(panelColumna, gbc);
 
         /* Título de la columna completadas */
