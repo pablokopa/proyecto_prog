@@ -16,6 +16,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
 
     private JLabel labelImagen;
     private JPanel panelTarea;
+    private JLabel labelTitulo;
 
     private final int idT;
 
@@ -55,12 +56,16 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         this.panelTarea = new JPanel();
         panelTarea.setLayout(new BorderLayout());
 
-        JLabel labelTitulo = new JLabel();
+        this.labelTitulo = new JLabel();
         labelTitulo.setFont(sRecursos.getMontserratBold(16));
         labelTitulo.setText(tarea.getNombreT());
 
         panelTarea.add(labelTitulo, BorderLayout.CENTER);
         add(panelTarea, BorderLayout.CENTER);
+    }
+
+    public void setLabelTituloText(String titulo) {
+        labelTitulo.setText(titulo);
     }
 
     public JLabel getLabelImagen() {

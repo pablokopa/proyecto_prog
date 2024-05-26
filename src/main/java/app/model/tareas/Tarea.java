@@ -41,6 +41,18 @@ public class Tarea {
         this.nombreE = nombreE;
     }
 
+    public void setNombreT(String nombreT) {
+        this.nombreT = nombreT;
+    }
+
+    public void setDescripcionT(String descripcionT) {
+        this.descripcionT = descripcionT;
+    }
+
+    public void setNombreE(String nombreE) {
+        this.nombreE = nombreE;
+    }
+
     public int getIdT() {
         return idT;
     }

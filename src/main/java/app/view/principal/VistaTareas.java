@@ -441,16 +441,6 @@ public class VistaTareas extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 cardLayout.show(columnaInformacion, "cardNuevaTarea");
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                labelCrearNuevaTarea.setBackground(sRecursos.getGRIS_CLARO());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                labelCrearNuevaTarea.setBackground(sRecursos.getBLANCO());
-            }
         });
 
         labelConfirmarTarea.addMouseListener(new MouseAdapter() {
@@ -486,16 +476,6 @@ public class VistaTareas extends JPanel {
 
                 textFieldNombreTarea.setText("");
                 textPaneDescripcionTarea.setText("");
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                labelConfirmarTarea.setBackground(sRecursos.getGRIS_CLARO());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                labelConfirmarTarea.setBackground(sRecursos.getBLANCO());
             }
         });
 
@@ -533,7 +513,32 @@ public class VistaTareas extends JPanel {
                         gestorTareas.getUsuario().getNombreU(),
                         nombreE
                 );
+
+                TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tarea);
+                if (tareaSeleccionada.getCompletadaT()){
+                    TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
+//                    listaPanelesTareasCompletadas.remove(panelReal);
+//                    listaPanelesTareasCompletadas.add(panelTemporal);
+                    panelReal.getTarea().setNombreT(nombreT);
+                    panelReal.getTarea().setDescripcionT(descripcionT);
+                    panelReal.getTarea().setNombreE(nombreE);
+                    panelReal.setLabelTituloText(nombreT);
+//                    panelReal = panelTemporal;
+                } else {
+                    TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
+//                    listaPanelesTareasToDo.remove(panelReal);
+//                    listaPanelesTareasToDo.add(panelTemporal);
+                    panelReal.getTarea().setNombreT(nombreT);
+                    panelReal.getTarea().setDescripcionT(descripcionT);
+                    panelReal.getTarea().setNombreE(nombreE);
+                    panelReal.setLabelTituloText(nombreT);
+//                    panelReal = panelTemporal;
+                }
+
+
                 gestorTareas.modificarTarea(tarea);
+
+                actualizarVistaTareas();
             }
         });
 
@@ -557,16 +562,6 @@ public class VistaTareas extends JPanel {
                     cardLayout.show(columnaInformacion, "cardGeneral");
                 }
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                labelEliminarTarea.setBackground(sRecursos.getGRIS_CLARO());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                labelEliminarTarea.setBackground(sRecursos.getBLANCO());
-            }
         });
 
         labelEliminarTodas.addMouseListener(new MouseAdapter() {
@@ -585,16 +580,6 @@ public class VistaTareas extends JPanel {
                         }
                     }
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                labelEliminarTodas.setBackground(sRecursos.getGRIS_CLARO());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                labelEliminarTodas.setBackground(sRecursos.getBLANCO());
             }
         });
 
@@ -714,6 +699,21 @@ public class VistaTareas extends JPanel {
         labelBoton.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
         labelBoton.setCursor(sRecursos.getCursorMano());
         labelBoton.setOpaque(true);
+
+        labelBoton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                labelBoton.setBackground(sRecursos.getGRIS_CLARO());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                labelBoton.setBackground(sRecursos.getBLANCO());
+            }
+        });
+
+
         return labelBoton;
     }
 
