@@ -332,6 +332,10 @@ public class VistaTareas extends JPanel {
                 Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
                 TemplatePanelTareaEspecifica panel = new TemplatePanelTareaEspecifica(tareaReal);
 
+                textFieldNombreTarea.setText("Nombre de la tarea");
+                textPaneDescripcionTarea.setText("Descripción de la tarea");
+                comboEtiquetasNueva.setSelectedIndex(0);
+
                 addListenerATareas(tareaReal, panel);
                 actualizarVistaTareas();
 
@@ -351,7 +355,6 @@ public class VistaTareas extends JPanel {
                 String nombreT = textFieldNombreTareaSelecionada.getText();
                 String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
                 String nombreE = comboEtiquetasSeleccionada.getSelectedItem().toString();
-
 
                 Tarea tarea = new Tarea(
                         tareaSeleccionada.getIdT(),
