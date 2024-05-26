@@ -54,6 +54,10 @@ public class VistaTareas extends JPanel {
     private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasToDo;
     private ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
 
+    /**
+     * Constructor de la vista de tareas
+     * @param gestorTareas Gestor de tareas
+     */
     public VistaTareas(GestorTareas gestorTareas) {
         this.controladorTareas = new ControladorTareas(gestorTareas, this);
         this.gestorTareas = gestorTareas;
@@ -226,7 +230,6 @@ public class VistaTareas extends JPanel {
      */
     private void crearCardNuevaTarea() {
         /* Card donde se muestra la información de la tarea seleccionada */
-//        JPanel cardNuevaTarea = construirCardTareaNuevaYSeleccionada("Nueva Tarea");
         JPanel cardNuevaTarea = new JPanel();
         cardNuevaTarea.setLayout(new BorderLayout());
         columnaInformacion.add(cardNuevaTarea, "cardNuevaTarea");
@@ -276,6 +279,10 @@ public class VistaTareas extends JPanel {
         panelMensajesError.add(labelMensajesError, BorderLayout.CENTER);
     }
 
+    /**
+     * Devuelve la lista de paneles de tareas por hacer
+     * @return ArrayList con los paneles de tareas por hacer
+     */
     public ArrayList<TemplatePanelTareaEspecifica> getListaPanelesTareasToDo() {
         return listaPanelesTareasToDo;
     }
@@ -293,8 +300,12 @@ public class VistaTareas extends JPanel {
         }
     }
 
+    /**
+     * Añade los listeners generales a los botones de la vista
+     */
     private void addListenersGenerales(){
 
+        /* Listener del boton crear tarea para crear una nueva tarea */
         labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -302,6 +313,7 @@ public class VistaTareas extends JPanel {
             }
         });
 
+        /* Listener del boton confirmar tarea para confirmar la creación de una nueva tarea */
         labelConfirmarTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -338,6 +350,7 @@ public class VistaTareas extends JPanel {
             }
         });
 
+        /* Listener del boton modificar tarea para modificar la tarea seleccionada */
         labelModificarTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -376,24 +389,17 @@ public class VistaTareas extends JPanel {
                 TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tarea);
                 if (tareaSeleccionada.getCompletadaT()){
                     TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
-//                    listaPanelesTareasCompletadas.remove(panelReal);
-//                    listaPanelesTareasCompletadas.add(panelTemporal);
                     panelReal.getTarea().setNombreT(nombreT);
                     panelReal.getTarea().setDescripcionT(descripcionT);
                     panelReal.getTarea().setNombreE(nombreE);
                     panelReal.setLabelTituloText(nombreT);
-//                    panelReal = panelTemporal;
                 } else {
                     TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
-//                    listaPanelesTareasToDo.remove(panelReal);
-//                    listaPanelesTareasToDo.add(panelTemporal);
                     panelReal.getTarea().setNombreT(nombreT);
                     panelReal.getTarea().setDescripcionT(descripcionT);
                     panelReal.getTarea().setNombreE(nombreE);
                     panelReal.setLabelTituloText(nombreT);
-//                    panelReal = panelTemporal;
                 }
-
 
                 gestorTareas.modificarTarea(tarea);
 
@@ -401,6 +407,7 @@ public class VistaTareas extends JPanel {
             }
         });
 
+        /* Listener del boton eliminar tarea para eliminar la tarea seleccionada */
         labelEliminarTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -423,6 +430,7 @@ public class VistaTareas extends JPanel {
             }
         });
 
+        /* Listener del boton eliminar todas las tareas para eliminar todas las tareas completadas */
         labelEliminarTodas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -442,6 +450,7 @@ public class VistaTareas extends JPanel {
             }
         });
 
+        /* Listener del textField de la nueva tarea para que al hacer click se borre el texto */
         textFieldNombreTarea.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -458,7 +467,7 @@ public class VistaTareas extends JPanel {
             }
         });
 
-
+        /* Listener del textPane de la nueva tarea para que al hacer click se borre el texto */
         textPaneDescripcionTarea.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -476,6 +485,11 @@ public class VistaTareas extends JPanel {
         });
     }
 
+    /**
+     * Añade los listeners a las tareas (Botones de completar y click en la tarea)
+     * @param tarea Tarea a la que se le añaden los listeners
+     * @param panelTarea Panel template de la tarea
+     */
     private void addListenerATareas(Tarea tarea, TemplatePanelTareaEspecifica panelTarea){
 
         /* Pone el check correspondiente cuando se abre la aplicación */
@@ -505,6 +519,7 @@ public class VistaTareas extends JPanel {
             }
         });
 
+        /* Al hacer click en la tarea, se muestra la información de la tarea */
         panelTarea.getPanelTarea().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -513,7 +528,10 @@ public class VistaTareas extends JPanel {
         });
     }
 
-
+    /**
+     * Construye el panel de opciones de la tarea
+     * @return JPanel con las opciones de la tarea
+     */
     private JPanel contruirPanelOpciones(){
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 2));
@@ -522,6 +540,10 @@ public class VistaTareas extends JPanel {
         return panel;
     }
 
+    /**
+     * Construye el panel de etiquetas de la tarea
+     * @return JPanel con las etiquetas de la tarea
+     */
     private JPanel construirPanelEtiquetasTarea(){
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(0, 50));
@@ -529,6 +551,10 @@ public class VistaTareas extends JPanel {
         return panel;
     }
 
+    /**
+     * Construye el label donde se muestran los mensajes de error
+     * @return JLabel con los mensajes de error
+     */
     private JLabel construirLabelMensajeError(){
         JLabel label = new JLabel();
         label.setFont(sRecursos.getMontserratItalic(15));
@@ -537,6 +563,10 @@ public class VistaTareas extends JPanel {
         return label;
     }
 
+    /**
+     * Construye un label con el título de la tarea
+     * @return JLabel con el título de la tarea
+     */
     private JTextField construirTextFieldNombreTarea(){
         JTextField textField = new JTextField();
         textField.setPreferredSize(new Dimension(0, 50));
@@ -548,6 +578,10 @@ public class VistaTareas extends JPanel {
         return textField;
     }
 
+    /**
+     * Construye un JTextPane para la descripción con los ajustes necesarios
+     * @return JTextPane con los ajustes necesarios
+     */
     private JTextPane construirTextPaneDescripcion(){
         JTextPane textPane = new JTextPane();
         textPane.setEditorKit(new StyledEditorKit());
@@ -574,6 +608,10 @@ public class VistaTareas extends JPanel {
         return textPane;
     }
 
+    /**
+     * Construye el panel de los mensajes de error
+     * @return JPanel con los mensajes de error
+     */
     private JPanel construirPanelMensajesError(){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -583,6 +621,10 @@ public class VistaTareas extends JPanel {
         return panel;
     }
 
+    /**
+     * Construye un DatePicker con los ajustes necesarios
+     * @return DatePicker con los ajustes necesarios
+     */
     private DatePicker construirDatePicker(){
         DatePickerSettings datePickerSettings = new DatePickerSettings();
 
@@ -616,6 +658,11 @@ public class VistaTareas extends JPanel {
         return datePicker;
     }
 
+    /**
+     * Construye un JComboBox con las opciones que se le pasan
+     * @param opciones lista de opciones para el JComboBox
+     * @return JComboBox con las opciones pasadas
+     */
     private JComboBox<String> contruirJComboBox(String[] opciones){
         JComboBox<String> comboBox = new JComboBox<>(opciones);
         comboBox.setFont(sRecursos.getMontserratPlain(16));
@@ -624,7 +671,12 @@ public class VistaTareas extends JPanel {
         return comboBox;
     }
 
-
+    /**
+     * Construye las columnas de tareas por hacer y completadas
+     * @param titulo Título de la columna
+     * @param columna Número de columna
+     * @return JPanel con la columna de tareas
+     */
     private JPanel construirColumnasTareas(String titulo, int columna) {
         /* Columna Tareas Completadas */
         JPanel panelColumna = new JPanel();
@@ -658,6 +710,11 @@ public class VistaTareas extends JPanel {
         return labelTitulo;
     }
 
+    /**
+     * Crea un JLabel con el texto que se le pasa y lo devuelve con el diseño requerido para los botones de la columna de información extra.
+     * @param texto Texto que se le quiere poner al JLabel
+     * @return JLabel con el texto que se le ha pasado
+     */
     private JLabel crearLabelBoton(String texto){
         JLabel labelBoton = new JLabel(texto);
         labelBoton.setFont(sRecursos.getMontserratPlain(18));
@@ -682,7 +739,6 @@ public class VistaTareas extends JPanel {
                 labelBoton.setBackground(sRecursos.getBLANCO());
             }
         });
-
 
         return labelBoton;
     }
@@ -709,6 +765,10 @@ public class VistaTareas extends JPanel {
         cardLayout.show(columnaInformacion, "cardGeneral");
     }
 
+    /**
+     * Cambia el cardLayout de la columna de información extra al card Tarea Seleccionada
+     * @param tarea Tarea que se ha seleccionado
+     */
     private void setCardTareaSeleccionada(Tarea tarea){
         this.tareaSeleccionada = tarea;
         textFieldNombreTareaSelecionada.setText(tareaSeleccionada.getNombreT());
@@ -744,12 +804,19 @@ public class VistaTareas extends JPanel {
         listaPanelesTareasCompletadas.add(panelTarea);
     }
 
+    /**
+     * Elimina una tarea del panel de tareas por hacer
+     * @param panelTarea Panel de la tarea que se quiere eliminar
+     */
     private void removeDeColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.remove(panelTarea);
         listaPanelesTareasToDo.remove(panelTarea);
     }
 
-
+    /**
+     * Elimina una tarea del panel de tareas completadas
+     * @param panelTarea Panel de la tarea que se quiere eliminar
+     */
     private void removeDeColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.remove(panelTarea);
         listaPanelesTareasCompletadas.remove(panelTarea);
