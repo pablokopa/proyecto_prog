@@ -24,6 +24,7 @@ public class Recursos {
     private ImageIcon imagenUsuario, imagenPassword;
     private ImageIcon imagenPlay, imagenPause, imagenStop;
     private ImageIcon imagenCheck, imagenCheckSinCheck;
+    private ImageIcon imagenCalendario;
 
     /**
      * Constante de tamaño de letra estándar para los botones.
@@ -185,6 +186,7 @@ public class Recursos {
         imagenPlay = new ImageIcon("src/main/resources/images/playbuttton.png");
         imagenPause = new ImageIcon("src/main/resources/images/pausebutton.png");
         imagenStop = new ImageIcon("src/main/resources/images/stopbutton.png");
+        imagenCalendario = new ImageIcon("src/main/resources/images/calendar.png");
 
         Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(40,40, Image.SCALE_SMOOTH);
         imagenCheck = new ImageIcon(imageC);
@@ -345,6 +347,12 @@ public class Recursos {
      * @return La imagen del check sin check.
      */
     public ImageIcon getImagenCheckSinCheck() { return imagenCheckSinCheck; }
+
+    /**
+     * Método para obtener la imagen del calendario.
+     * @return La imagen del calendario.
+     */
+    public ImageIcon getImagenCalendario() { return imagenCalendario; }
 
     /**
      * Método para obtener la instancia única de la clase.
