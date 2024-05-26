@@ -37,7 +37,7 @@ public class VistaTareas extends JPanel {
     private JPanel columnaInformacion;
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
     private JLabel labelEtiquetasTarea;
-    private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelEliminarTarea, labelEliminarTodas;
+    private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelModificarTarea, labelEliminarTarea, labelEliminarTodas;
     private JLabel labelMensajesError, labelMensajesErrorSeleccionada;
     private JLabel labelFechaCreacion, labelFechaFinalizacion;
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
@@ -160,7 +160,7 @@ public class VistaTareas extends JPanel {
         JPanel panelBotones = new JPanel();
         panelBotones.setLayout(new BorderLayout(0, 1));
 
-        JLabel labelModificarTarea = crearLabelBoton("Modificar");
+        this.labelModificarTarea = crearLabelBoton("Modificar");
         panelBotones.add(labelModificarTarea, BorderLayout.NORTH);
         this.labelEliminarTarea = crearLabelBoton("Eliminar");
         panelBotones.add(labelEliminarTarea, BorderLayout.SOUTH);
@@ -496,6 +496,44 @@ public class VistaTareas extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 labelConfirmarTarea.setBackground(sRecursos.getBLANCO());
+            }
+        });
+
+        labelModificarTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String nombreTOriginal = tareaSeleccionada.getNombreT();
+                String descripcionTOriginal = tareaSeleccionada.getDescripcionT();
+                String nombreEOriginal = tareaSeleccionada.getNombreE();
+
+                String nombreT = textFieldNombreTareaSelecionada.getText();
+                if (nombreT.isBlank()){
+                    labelMensajesErrorSeleccionada.setText("El nombre de la tarea no puede estar vacío");
+                    return;
+                }
+                if (nombreT.length()>50) {
+                    labelMensajesErrorSeleccionada.setText("El nombre de la tarea no puede tener más de 50 carácteres");
+                    return;
+                }
+                String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
+                String nombreE = comboEtiquetasSeleccionada.getSelectedItem().toString();
+
+                if (nombreT.equals(nombreTOriginal) && descripcionT.equals(descripcionTOriginal) && nombreE.equals(nombreEOriginal)){
+                    labelMensajesErrorSeleccionada.setText("No se ha modificado ningún campo");
+                    return;
+                }
+
+                Tarea tarea = new Tarea(
+                        tareaSeleccionada.getIdT(),
+                        nombreT,
+                        descripcionT,
+                        tareaSeleccionada.getFechaCreacionT(),
+                        tareaSeleccionada.getFechaFinalizacionT(),
+                        tareaSeleccionada.getCompletadaT(),
+                        gestorTareas.getUsuario().getNombreU(),
+                        nombreE
+                );
+                gestorTareas.modificarTarea(tarea);
             }
         });
 

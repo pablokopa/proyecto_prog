@@ -146,6 +146,23 @@ public class GestorTareas {
         return true;
     }
 
+    public boolean modificarTarea(Tarea tarea){
+        String sql = "UPDATE tarea SET nombret = ?, descripciont = ?, nombree = ? WHERE idt = ?";
+
+        try(Connection conexion = ConectarBD.conectar()){
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+            prepare.setString(1, tarea.getNombreT());
+            prepare.setString(2, tarea.getDescripcionT());
+            prepare.setString(3, tarea.getNombreE());
+            prepare.setInt(4, tarea.getIdT());
+            prepare.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 
     public ArrayList<Tarea> getListaTareas(){
         return this.listaTareas;
