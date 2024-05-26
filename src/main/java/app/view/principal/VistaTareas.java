@@ -42,7 +42,10 @@ public class VistaTareas extends JPanel {
     private JLabel labelFechaCreacion, labelFechaFinalizacion;
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
     private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
-    private JComboBox<String> comboEtiquetasNueva, comboEtiquetasSeleccionada;
+    private JComboBox<String> comboEtiquetasNueva, comboEtiquetasSeleccionada, comboRepetibleNueva, comboRepetibleSeleccionada;
+
+    private final String[] opcionesEtiquetas = {"Sin etiqueta", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
+    private final String[] opcionesRepeticion = {"No repetir", "Lunes a viernes", "Todos los días"};
 
     private Tarea  tareaSeleccionada;
 
@@ -166,34 +169,11 @@ public class VistaTareas extends JPanel {
         panelBotones.add(labelEliminarTarea, BorderLayout.SOUTH);
         cardTareaSeleccionada.add(panelBotones, BorderLayout.SOUTH);
 
-        this.textFieldNombreTareaSelecionada = new JTextField();
-        textFieldNombreTareaSelecionada.setPreferredSize(new Dimension(0, 50));
-        textFieldNombreTareaSelecionada.setFont(sRecursos.getMontserratMedium(20));
-        textFieldNombreTareaSelecionada.setHorizontalAlignment(SwingConstants.CENTER);
-        textFieldNombreTareaSelecionada.setForeground(sRecursos.getGRANATE());
-        textFieldNombreTareaSelecionada.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
+        this.textFieldNombreTareaSelecionada = construirTextFieldNombreTarea();
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(textFieldNombreTareaSelecionada, gbc);
 
-        this.textPaneDescripcionTareaSeleccionada = new JTextPane();
-        textPaneDescripcionTareaSeleccionada.setEditorKit(new StyledEditorKit());
-        textPaneDescripcionTareaSeleccionada.getDocument().putProperty("filterNewlines", Boolean.TRUE);
-        textPaneDescripcionTareaSeleccionada.setPreferredSize(new Dimension(0, 50));
-        textPaneDescripcionTareaSeleccionada.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
-        textPaneDescripcionTareaSeleccionada.setForeground(sRecursos.getGRANATE());
-        textPaneDescripcionTareaSeleccionada.setFont(sRecursos.getMontserratMedium(20));
-        StyledDocument doc = textPaneDescripcionTareaSeleccionada.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        StyleConstants.setSpaceAbove(center, 10);
-        try{
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Medium.ttf"));
-            StyleConstants.setFontFamily(center, customFont.getFamily());
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-        // Aplicar la alineación centrada
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+        this.textPaneDescripcionTareaSeleccionada = construirTextPaneDescripcion();
         gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
         panelInformacionTarea.add(textPaneDescripcionTareaSeleccionada, gbc);
 
@@ -215,77 +195,28 @@ public class VistaTareas extends JPanel {
         labelFechaFinalizacion.setForeground(sRecursos.getGRANATE());
         panelInformacionDatas.add(labelFechaFinalizacion);
 
-        JPanel panelOpciones = new JPanel();
-        panelOpciones.setPreferredSize(new Dimension(0, 50));
-        panelOpciones.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
-        panelOpciones.setLayout(new GridLayout(1, 2));
+        JPanel panelOpciones = contruirPanelOpciones();
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelOpciones, gbc);
 
-        String[] opciones = {"No repetir", "Lunes a viernes", "Todos los días"};
-        JComboBox<String> comboRepetible = new JComboBox<>(opciones);
-        comboRepetible.setFont(sRecursos.getMontserratPlain(16));
-        comboRepetible.setForeground(sRecursos.getGRANATE());
-        comboRepetible.setBackground(sRecursos.getBLANCO());
-        panelOpciones.add(comboRepetible);
+        this.comboRepetibleSeleccionada = contruirJComboBox(opcionesRepeticion);
+        panelOpciones.add(comboRepetibleSeleccionada);
 
-        DatePickerSettings datePickerSettings = new DatePickerSettings();
-
-        datePickerSettings.setAllowKeyboardEditing(false);
-
-        datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
-        datePickerSettings.setFontInvalidDate(sRecursos.getMontserratItalic(15));
-        datePickerSettings.setFontCalendarDateLabels(sRecursos.getMontserratPlain(16));
-        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMontserratItalic(15));
-        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMontserratItalic(15));
-
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundTodayLabel, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundClearLabel, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarTextWeekdays, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBorderSelectedDate, sRecursos.getGRANATE());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundSelectedDate, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundOverallCalendarPanel, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearMenuLabels, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundVetoedDates, sRecursos.getGRIS_CLARO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundCalendarPanelLabelsOnHover, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearNavigationButtons, sRecursos.getBLANCO());
-
-        DatePicker datePicker = new DatePicker(datePickerSettings);
-
-        LocalDate localDateHoy = LocalDate.now();
-        LocalDate localDateFin = LocalDate.MAX;
-        datePickerSettings.setDateRangeLimits(localDateHoy, localDateFin);
-
-        datePicker.setText("Fecha límite");
+        DatePicker datePicker = construirDatePicker();
         panelOpciones.add(datePicker);
 
-        JPanel panelEtiquetas = new JPanel();
-        panelEtiquetas.setToolTipText("Panel donde se encontrará información de las etiquetas");
-        panelEtiquetas.setPreferredSize(new Dimension(0, 50));
-        panelEtiquetas.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        JPanel panelEtiquetas = construirPanelEtiquetasTarea();
         gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelEtiquetas, gbc);
 
-        String[] opciones2 = {"Sin etiqueta", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
-        this.comboEtiquetasSeleccionada = new JComboBox<>(opciones2);
-        comboEtiquetasSeleccionada.setFont(sRecursos.getMontserratPlain(16));
-        comboEtiquetasSeleccionada.setForeground(sRecursos.getGRANATE());
-        comboEtiquetasSeleccionada.setBackground(sRecursos.getBLANCO());
+        this.comboEtiquetasSeleccionada = contruirJComboBox(opcionesEtiquetas);
         panelEtiquetas.add(comboEtiquetasSeleccionada);
 
-
-        JPanel panelMensajesError = new JPanel();
-        panelMensajesError.setLayout(new BorderLayout());
-        panelMensajesError.setBackground(sRecursos.getBLANCO());
-        panelMensajesError.setPreferredSize(new Dimension(0, 50));
-        panelMensajesError.setBorder(new EmptyBorder(5,5,5,5));
+        JPanel panelMensajesError = construirPanelMensajesError();
         gbc = setGbc(0, 5, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelMensajesError, gbc);
 
-        this.labelMensajesErrorSeleccionada = new JLabel();
-        labelMensajesErrorSeleccionada.setFont(sRecursos.getMontserratItalic(15));
-        labelMensajesErrorSeleccionada.setForeground(sRecursos.getGRANATE());
-        labelMensajesErrorSeleccionada.setHorizontalAlignment(SwingConstants.CENTER);
+        this.labelMensajesErrorSeleccionada = construirLabelMensajeError();
         panelMensajesError.add(labelMensajesErrorSeleccionada, BorderLayout.CENTER);
     }
 
@@ -295,6 +226,7 @@ public class VistaTareas extends JPanel {
      */
     private void crearCardNuevaTarea() {
         /* Card donde se muestra la información de la tarea seleccionada */
+//        JPanel cardNuevaTarea = construirCardTareaNuevaYSeleccionada("Nueva Tarea");
         JPanel cardNuevaTarea = new JPanel();
         cardNuevaTarea.setLayout(new BorderLayout());
         columnaInformacion.add(cardNuevaTarea, "cardNuevaTarea");
@@ -311,109 +243,36 @@ public class VistaTareas extends JPanel {
         panelInformacionCrearNuevaTarea.setLayout(new GridBagLayout());
         cardNuevaTarea.add(panelInformacionCrearNuevaTarea, BorderLayout.CENTER);
 
-        this.textFieldNombreTarea = new JTextField();
-        textFieldNombreTarea.setPreferredSize(new Dimension(0, 50));
-        textFieldNombreTarea.setText("Nombre de la tarea");
-        textFieldNombreTarea.setFont(sRecursos.getMontserratMedium(20));
-        textFieldNombreTarea.setHorizontalAlignment(SwingConstants.CENTER);
-        textFieldNombreTarea.setForeground(sRecursos.getGRANATE());
-        textFieldNombreTarea.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
+        this.textFieldNombreTarea = construirTextFieldNombreTarea();
         gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(textFieldNombreTarea, gbc);
 
-        this.textPaneDescripcionTarea = new JTextPane();
-        textPaneDescripcionTarea.setEditorKit(new StyledEditorKit());
-        textPaneDescripcionTarea.getDocument().putProperty("filterNewlines", Boolean.TRUE);
-        textPaneDescripcionTarea.setPreferredSize(new Dimension(0, 50));
-        textPaneDescripcionTarea.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
-        textPaneDescripcionTarea.setForeground(sRecursos.getGRANATE());
-        textPaneDescripcionTarea.setFont(sRecursos.getMontserratMedium(20));
-        textPaneDescripcionTarea.setText("Descripción de la tarea");
-        StyledDocument doc = textPaneDescripcionTarea.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        StyleConstants.setSpaceAbove(center, 10);
-        try{
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Medium.ttf"));
-            StyleConstants.setFontFamily(center, customFont.getFamily());
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-        // Aplicar la alineación centrada
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+        this.textPaneDescripcionTarea = construirTextPaneDescripcion();
         gbc = setGbc(0, 1, 1, 0.95, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(textPaneDescripcionTarea, gbc);
 
-        JPanel panelOpciones = new JPanel();
-        panelOpciones.setPreferredSize(new Dimension(0, 50));
-        panelOpciones.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
-        panelOpciones.setLayout(new GridLayout(1, 2));
+        JPanel panelOpciones = contruirPanelOpciones();
         gbc = setGbc(0, 2, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelOpciones, gbc);
 
-        String[] opciones = {"No repetir", "Lunes a viernes", "Todos los días"};
-        JComboBox<String> comboRepetible = new JComboBox<>(opciones);
-        comboRepetible.setFont(sRecursos.getMontserratPlain(16));
-        comboRepetible.setForeground(sRecursos.getGRANATE());
-        comboRepetible.setBackground(sRecursos.getBLANCO());
-        panelOpciones.add(comboRepetible);
+        this.comboRepetibleNueva = contruirJComboBox(opcionesRepeticion);
+        panelOpciones.add(comboRepetibleNueva);
 
-        DatePickerSettings datePickerSettings = new DatePickerSettings();
-
-        datePickerSettings.setAllowKeyboardEditing(false);
-
-        datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
-        datePickerSettings.setFontInvalidDate(sRecursos.getMontserratItalic(15));
-        datePickerSettings.setFontCalendarDateLabels(sRecursos.getMontserratPlain(16));
-        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMontserratItalic(15));
-        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMontserratItalic(15));
-
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundTodayLabel, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundClearLabel, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarTextWeekdays, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBorderSelectedDate, sRecursos.getGRANATE());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundSelectedDate, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundOverallCalendarPanel, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearMenuLabels, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundVetoedDates, sRecursos.getGRIS_CLARO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundCalendarPanelLabelsOnHover, sRecursos.getBLANCO());
-        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearNavigationButtons, sRecursos.getBLANCO());
-
-        DatePicker datePicker = new DatePicker(datePickerSettings);
-
-        LocalDate localDateHoy = LocalDate.now();
-        LocalDate localDateFin = LocalDate.MAX;
-        datePickerSettings.setDateRangeLimits(localDateHoy, localDateFin);
-
-        datePicker.setText("Fecha límite");
+        DatePicker datePicker = construirDatePicker();
         panelOpciones.add(datePicker);
 
-        JPanel panelEtiquetas = new JPanel();
-        panelEtiquetas.setPreferredSize(new Dimension(0, 50));
-        panelEtiquetas.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
-        panelEtiquetas.setBackground(Color.blue);
+        JPanel panelEtiquetas = construirPanelEtiquetasTarea();
         gbc = setGbc(0, 3, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelEtiquetas, gbc);
 
-        String[] opciones2 = {"Sin etiqueta", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
-        this.comboEtiquetasNueva = new JComboBox<>(opciones2);
-        comboEtiquetasNueva.setFont(sRecursos.getMontserratPlain(16));
-        comboEtiquetasNueva.setForeground(sRecursos.getGRANATE());
-        comboEtiquetasNueva.setBackground(sRecursos.getBLANCO());
+        this.comboEtiquetasNueva = contruirJComboBox(opcionesEtiquetas);
         panelEtiquetas.add(comboEtiquetasNueva);
 
-        JPanel panelMensajesError = new JPanel();
-        panelMensajesError.setLayout(new BorderLayout());
-        panelMensajesError.setBackground(sRecursos.getBLANCO());
-        panelMensajesError.setPreferredSize(new Dimension(0, 50));
-        panelMensajesError.setBorder(new EmptyBorder(5,5,5,5));
+        JPanel panelMensajesError = construirPanelMensajesError();
         gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionCrearNuevaTarea.add(panelMensajesError, gbc);
 
-        this.labelMensajesError = new JLabel();
-        labelMensajesError.setFont(sRecursos.getMontserratItalic(15));
-        labelMensajesError.setForeground(sRecursos.getGRANATE());
-        labelMensajesError.setHorizontalAlignment(SwingConstants.CENTER);
+        this.labelMensajesError = construirLabelMensajeError();
         panelMensajesError.add(labelMensajesError, BorderLayout.CENTER);
     }
 
@@ -652,6 +511,117 @@ public class VistaTareas extends JPanel {
                 setCardTareaSeleccionada(tarea);
             }
         });
+    }
+
+
+    private JPanel contruirPanelOpciones(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 2));
+        panel.setPreferredSize(new Dimension(0, 50));
+        panel.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        return panel;
+    }
+
+    private JPanel construirPanelEtiquetasTarea(){
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(0, 50));
+        panel.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
+        return panel;
+    }
+
+    private JLabel construirLabelMensajeError(){
+        JLabel label = new JLabel();
+        label.setFont(sRecursos.getMontserratItalic(15));
+        label.setForeground(sRecursos.getGRANATE());
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        return label;
+    }
+
+    private JTextField construirTextFieldNombreTarea(){
+        JTextField textField = new JTextField();
+        textField.setPreferredSize(new Dimension(0, 50));
+        textField.setText("Nombre de la tarea");
+        textField.setFont(sRecursos.getMontserratMedium(20));
+        textField.setHorizontalAlignment(SwingConstants.CENTER);
+        textField.setForeground(sRecursos.getGRANATE());
+        textField.setBorder(BorderFactory.createMatteBorder(0,1,0,1, sRecursos.getGRANATE()));
+        return textField;
+    }
+
+    private JTextPane construirTextPaneDescripcion(){
+        JTextPane textPane = new JTextPane();
+        textPane.setEditorKit(new StyledEditorKit());
+        textPane.getDocument().putProperty("filterNewlines", Boolean.TRUE);
+        textPane.setPreferredSize(new Dimension(0, 50));
+        textPane.setBorder(new MatteBorder(1, 1, 1, 1, sRecursos.getGRANATE()));
+        textPane.setForeground(sRecursos.getGRANATE());
+        textPane.setFont(sRecursos.getMontserratMedium(20));
+        textPane.setText("Descripción de la tarea");
+
+        StyledDocument doc = textPane.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        StyleConstants.setSpaceAbove(center, 10);
+        try{
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Medium.ttf"));
+            StyleConstants.setFontFamily(center, customFont.getFamily());
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        // Aplicar la alineación centrada
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+        return textPane;
+    }
+
+    private JPanel construirPanelMensajesError(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(sRecursos.getBLANCO());
+        panel.setPreferredSize(new Dimension(0, 50));
+        panel.setBorder(new EmptyBorder(5,5,5,5));
+        return panel;
+    }
+
+    private DatePicker construirDatePicker(){
+        DatePickerSettings datePickerSettings = new DatePickerSettings();
+
+        datePickerSettings.setAllowKeyboardEditing(false);
+
+        datePickerSettings.setFontValidDate(sRecursos.getMontserratPlain(15));
+        datePickerSettings.setFontInvalidDate(sRecursos.getMontserratItalic(15));
+        datePickerSettings.setFontCalendarDateLabels(sRecursos.getMontserratPlain(16));
+        datePickerSettings.setFontCalendarWeekdayLabels(sRecursos.getMontserratItalic(15));
+        datePickerSettings.setFontCalendarWeekNumberLabels(sRecursos.getMontserratItalic(15));
+
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundTodayLabel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundClearLabel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarTextWeekdays, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBorderSelectedDate, sRecursos.getGRANATE());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundSelectedDate, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundOverallCalendarPanel, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearMenuLabels, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.CalendarBackgroundVetoedDates, sRecursos.getGRIS_CLARO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundCalendarPanelLabelsOnHover, sRecursos.getBLANCO());
+        datePickerSettings.setColor(DatePickerSettings.DateArea.BackgroundMonthAndYearNavigationButtons, sRecursos.getBLANCO());
+
+        DatePicker datePicker = new DatePicker(datePickerSettings);
+
+        LocalDate localDateHoy = LocalDate.now();
+        LocalDate localDateFin = LocalDate.MAX;
+        datePickerSettings.setDateRangeLimits(localDateHoy, localDateFin);
+
+        datePicker.setText("Fecha límite");
+
+        return datePicker;
+    }
+
+    private JComboBox<String> contruirJComboBox(String[] opciones){
+        JComboBox<String> comboBox = new JComboBox<>(opciones);
+        comboBox.setFont(sRecursos.getMontserratPlain(16));
+        comboBox.setForeground(sRecursos.getGRANATE());
+        comboBox.setBackground(sRecursos.getBLANCO());
+        return comboBox;
     }
 
 
