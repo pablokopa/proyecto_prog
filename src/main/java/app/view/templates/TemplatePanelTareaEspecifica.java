@@ -46,6 +46,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
     private void crearLabelImagen() {
         this.labelImagen = new JLabel();
         labelImagen.setCursor(sRecursos.getCursorMano());
+        labelImagen.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         add(labelImagen, BorderLayout.WEST);
     }
 
@@ -57,7 +58,8 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         panelTarea.setLayout(new BorderLayout());
 
         this.labelTitulo = new JLabel();
-        labelTitulo.setFont(sRecursos.getMontserratBold(16));
+        labelTitulo.setFont(sRecursos.getMontserratMedium(16));
+        labelTitulo.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         labelTitulo.setText(tarea.getNombreT());
 
         panelTarea.add(labelTitulo, BorderLayout.CENTER);

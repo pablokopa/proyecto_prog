@@ -36,7 +36,6 @@ public class VistaTareas extends JPanel {
 
     private JPanel columnaInformacion;
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
-    private JLabel labelEtiquetasTarea;
     private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelModificarTarea, labelEliminarTarea, labelEliminarTodas;
     private JLabel labelMensajesError, labelMensajesErrorSeleccionada;
     private JLabel labelFechaCreacion, labelFechaFinalizacion;
@@ -327,8 +326,8 @@ public class VistaTareas extends JPanel {
                     labelMensajesError.setText("El nombre de la tarea no puede estar vacío");
                     return;
                 }
-                if (nombreT.length()>50) {
-                    labelMensajesError.setText("El nombre de la tarea no puede tener más de 50 carácteres");
+                if (nombreT.length()>45) {
+                    labelMensajesError.setText("El nombre de la tarea no puede tener más de 45 carácteres");
                     return;
                 }
 
@@ -365,8 +364,8 @@ public class VistaTareas extends JPanel {
                     labelMensajesErrorSeleccionada.setText("El nombre de la tarea no puede estar vacío");
                     return;
                 }
-                if (nombreT.length()>50) {
-                    labelMensajesErrorSeleccionada.setText("El nombre de la tarea no puede tener más de 50 carácteres");
+                if (nombreT.length()>45) {
+                    labelMensajesErrorSeleccionada.setText("El nombre de la tarea no puede tener más de 45 carácteres");
                     return;
                 }
                 String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
