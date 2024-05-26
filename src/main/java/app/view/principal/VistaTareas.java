@@ -52,7 +52,7 @@ public class VistaTareas extends JPanel {
     private final CardLayout cardLayout;
 
     private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasToDo;
-    private ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
+    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
 
     /**
      * Constructor de la vista de tareas

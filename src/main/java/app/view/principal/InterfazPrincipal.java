@@ -25,6 +25,7 @@ public class InterfazPrincipal extends JFrame {
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
+    private VistaInicio panelInicio;
     private VistaTareas panelTareas;
     private VistaMatrix panelMatrix;
     private VistaPomodoro panelPomodoro;
@@ -73,6 +74,7 @@ public class InterfazPrincipal extends JFrame {
         panelCentral = templatePanelesPrincipales("central");
         panelSuperior = templatePanelesPrincipales("superior");
         panelPrincipal = templatePanelesPrincipales("principal");
+        this.panelInicio = new VistaInicio();
         this.panelTareas = new VistaTareas(gestorTareas);
         this.panelMatrix = new VistaMatrix();
         this.panelPomodoro = new VistaPomodoro();
@@ -84,6 +86,7 @@ public class InterfazPrincipal extends JFrame {
         this.add(panelCentral, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
+        panelPrincipal.add(panelInicio, "Inicio");    // Se añade la vista de inicio al panel principal (por defecto
         panelPrincipal.add(panelTareas, "Tareas");
         panelPrincipal.add(panelPomodoro, "Pomodoro");
         panelPrincipal.add(panelMatrix, "Matrix");
