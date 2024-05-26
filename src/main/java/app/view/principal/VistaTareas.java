@@ -86,6 +86,7 @@ public class VistaTareas extends JPanel {
     private void construirColumnaTareasToDo() {
         /* Crea la columna Tareas To Do */
         JPanel columnaTareasToDo = construirColumnasTareas("Por hacer", 0);
+        columnaTareasToDo.setBorder(new MatteBorder(0, 10, 10, 5, sRecursos.getBLANCO()));
 
         /* Panel donde están las tareas to do y convertido a JScrollPane */
         this.panelListaTareasToDo = new JPanel();
@@ -103,6 +104,7 @@ public class VistaTareas extends JPanel {
     private void construirColumnaTareasCompletadas() {
         /* Columna Tareas Completadas */
         JPanel columnaTareasCompletadas = construirColumnasTareas("Completadas", 1);
+        columnaTareasCompletadas.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
 
         /* Panel donde están las tareas completadas y convertido a JScrollPane */
         this.panelListaTareasCompletadas = new JPanel();
@@ -681,7 +683,6 @@ public class VistaTareas extends JPanel {
         /* Columna Tareas Completadas */
         JPanel panelColumna = new JPanel();
         panelColumna.setLayout(new BorderLayout());
-        panelColumna.setBorder(new MatteBorder(0, 5, 10, 5, sRecursos.getBLANCO()));
         panelColumna.setPreferredSize(new Dimension(200, 0));
         gbc = setGbc(columna, 0, 0.28, 1, GridBagConstraints.BOTH);
         add(panelColumna, gbc);
