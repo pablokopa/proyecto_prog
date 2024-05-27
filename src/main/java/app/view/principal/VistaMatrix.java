@@ -152,7 +152,6 @@ public class VistaMatrix extends JPanel {
     /**
      * Método para crear los paneles de la matriz.
      * @param color Color del panel.
-     * @param titulo Título del panel.
      * @return Panel creado.
      */
     private JPanel crearPanelesMatrix(Color color) {
