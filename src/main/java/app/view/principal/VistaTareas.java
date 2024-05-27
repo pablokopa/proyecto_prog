@@ -526,13 +526,13 @@ public class VistaTareas extends JPanel {
      */
     private void addListenerATareas(TemplatePanelTareaEspecifica panelTarea){
 
-        /* Pone el check correspondiente cuando se abre la aplicación */
+
         /* Al iniciar la aplicación; si la tarea está completada la añade al panel de tareas completadas, si no, la añade al panel de tareas por hacer */
         if (panelTarea.getTarea().getCompletadaT()){
-            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
+//            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
             addAColumnaCompletada(panelTarea);
         } else {
-            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
+//            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
             addAColumnaToDo(panelTarea);
         }
 

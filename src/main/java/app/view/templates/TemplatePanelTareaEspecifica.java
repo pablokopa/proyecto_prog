@@ -44,6 +44,15 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, color));
     }
 
+    /* Pone el check correspondiente cuando se abre la aplicación */
+    private void setImagenDelLabel(){
+        if (tarea.getCompletadaT()) {
+            labelImagen.setIcon(sRecursos.getImagenCheck());
+        } else {
+            labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
+        }
+    }
+
     /**
      * Crea un label con una imagen de un check y lo añade al panel.
      */
@@ -51,6 +60,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
         this.labelImagen = new JLabel();
         labelImagen.setCursor(sRecursos.getCursorMano());
         labelImagen.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        setImagenDelLabel();
         add(labelImagen, BorderLayout.WEST);
     }
 
