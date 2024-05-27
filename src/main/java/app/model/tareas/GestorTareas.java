@@ -2,6 +2,7 @@ package app.model.tareas;
 
 import app.model.basedatos.ConectarBD;
 import app.model.usuarios.Usuario;
+import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 import javax.swing.*;
@@ -13,9 +14,21 @@ public class GestorTareas {
     private final Usuario usuario;
     private final Recursos sRecursos = Recursos.getService();
 
+    private ArrayList<TemplatePanelTareaEspecifica> listaTareasToDo, listaTareasCompletadas;
+    private ArrayList<TemplatePanelTareaEspecifica> listaTareasArribaI, listaTareasArribaD, listaTareasAbajoI, listaTareasAbajoD;
+
     public GestorTareas() {
         this.usuario = Usuario.getUsuarioConectado();
         this.listaTareas = new ArrayList<>();
+
+        this.listaTareasToDo = new ArrayList<>();
+        this.listaTareasCompletadas = new ArrayList<>();
+        this.listaTareasArribaI = new ArrayList<>();
+        this.listaTareasArribaD = new ArrayList<>();
+        this.listaTareasAbajoI = new ArrayList<>();
+        this.listaTareasAbajoD = new ArrayList<>();
+
+        getTareasDeBase();
     }
 
     /**
@@ -51,6 +64,18 @@ public class GestorTareas {
 
                 Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
                 this.listaTareas.add(tarea);
+
+                if (completadaT){
+                    listaTareasCompletadas.add(new TemplatePanelTareaEspecifica(tarea));
+                } else {
+                    listaTareasToDo.add(new TemplatePanelTareaEspecifica(tarea));
+                    switch (nombreE) {
+                        case "No importante / No urgente" -> listaTareasArribaI.add(new TemplatePanelTareaEspecifica(tarea));
+                        case "No importante / Urgente" -> listaTareasArribaD.add(new TemplatePanelTareaEspecifica(tarea));
+                        case "Importante / No urgente" -> listaTareasAbajoI.add(new TemplatePanelTareaEspecifica(tarea));
+                        case "Importante / Urgente" -> listaTareasAbajoD.add(new TemplatePanelTareaEspecifica(tarea));
+                    }
+                }
             }
         } catch (SQLException e) {
             System.out.println("CATCH EN GestorTareas.getTareasDeBase()");
@@ -83,6 +108,19 @@ public class GestorTareas {
 
                 Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
                 this.listaTareas.add(tarea);
+
+                if (completadaT){
+                    listaTareasCompletadas.add(new TemplatePanelTareaEspecifica(tarea));
+                } else {
+                    listaTareasToDo.add(new TemplatePanelTareaEspecifica(tarea));
+                    switch (nombreE) {
+                        case "No importante / No urgente" -> listaTareasArribaI.add(new TemplatePanelTareaEspecifica(tarea));
+                        case "No importante / Urgente" -> listaTareasArribaD.add(new TemplatePanelTareaEspecifica(tarea));
+                        case "Importante / No urgente" -> listaTareasAbajoI.add(new TemplatePanelTareaEspecifica(tarea));
+                        case "Importante / Urgente" -> listaTareasAbajoD.add(new TemplatePanelTareaEspecifica(tarea));
+                    }
+                }
+
                 return tarea;
             }
         } catch (SQLException e) {
@@ -248,5 +286,29 @@ public class GestorTareas {
      */
     public ArrayList<Tarea> getListaTareas(){
         return this.listaTareas;
+    }
+
+    public ArrayList<TemplatePanelTareaEspecifica> getListaTareasToDo() {
+        return listaTareasToDo;
+    }
+
+    public ArrayList<TemplatePanelTareaEspecifica> getListaTareasCompletadas() {
+        return listaTareasCompletadas;
+    }
+
+    public ArrayList<TemplatePanelTareaEspecifica> getListaTareasArribaI() {
+        return listaTareasArribaI;
+    }
+
+    public ArrayList<TemplatePanelTareaEspecifica> getListaTareasArribaD() {
+        return listaTareasArribaD;
+    }
+
+    public ArrayList<TemplatePanelTareaEspecifica> getListaTareasAbajoI() {
+        return listaTareasAbajoI;
+    }
+
+    public ArrayList<TemplatePanelTareaEspecifica> getListaTareasAbajoD() {
+        return listaTareasAbajoD;
     }
 }
