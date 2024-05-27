@@ -39,6 +39,7 @@ public class VistaTareas extends JPanel {
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
     private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
     private JComboBox<String> comboEtiquetasNueva, comboEtiquetasSeleccionada, comboRepetibleNueva, comboRepetibleSeleccionada;
+    private JLabel labelContadorTareasToDo, labelContadorTareasCompletadas;
 
     private final String[] opcionesEtiquetas = {"Sin etiqueta", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
     private final String[] opcionesRepeticion = {"No repetir", "Lunes a viernes", "Todos los días"};
@@ -143,6 +144,32 @@ public class VistaTareas extends JPanel {
         /* Título de la columna Información Extra en el card Info General */
         JLabel labelTituloInformacionGeneral = crearLabelTituloDeColumna("Información");
         cardGeneral.add(labelTituloInformacionGeneral, BorderLayout.NORTH);
+
+        JPanel panelInformacionGeneral = new JPanel();
+        panelInformacionGeneral.setLayout(new GridBagLayout());
+        cardGeneral.add(panelInformacionGeneral, BorderLayout.CENTER);
+
+        /* Panel donde iran los labels del numero de tareas to do y tareas completadas */
+        JPanel panelNumeroTareas = new JPanel();
+        panelNumeroTareas.setLayout(new GridLayout(1, 2));
+        panelNumeroTareas.setBackground(sRecursos.getBLANCO());
+        panelNumeroTareas.setPreferredSize(new Dimension(0, 100));
+        panelNumeroTareas.setBorder(new EmptyBorder(5,10,5,10));
+        gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
+        panelInformacionGeneral.add(panelNumeroTareas, gbc);
+
+        this.labelContadorTareasToDo = new JLabel("Tareas por hacer: "+listaPanelesTareasToDo.size());
+        labelContadorTareasToDo.setFont(sRecursos.getMontserratMedium(14));
+        labelContadorTareasToDo.setForeground(sRecursos.getGRANATE());
+        panelNumeroTareas.add(labelContadorTareasToDo);
+
+        this.labelContadorTareasCompletadas = new JLabel("Tareas completadas: "+listaPanelesTareasCompletadas.size());
+        labelContadorTareasCompletadas.setFont(sRecursos.getMontserratMedium(14));
+        labelContadorTareasCompletadas.setForeground(sRecursos.getGRANATE());
+        panelNumeroTareas.add(labelContadorTareasCompletadas);
+
+
+
     }
 
     /**
@@ -406,7 +433,7 @@ public class VistaTareas extends JPanel {
                     gestorTareas.eliminarTarea(tareaSeleccionada);
                     actualizarVistaTareas();
 
-                    cardLayout.show(columnaInformacion, "cardGeneral");
+                    setCardGeneral();
                 }
             }
         });
@@ -428,6 +455,8 @@ public class VistaTareas extends JPanel {
                         }
                     }
                 }
+
+                setCardGeneral();
             }
         });
 
@@ -497,6 +526,7 @@ public class VistaTareas extends JPanel {
                     }
                 }
                 actualizarVistaTareas();
+                setCardGeneral();
             }
         });
 
@@ -747,6 +777,8 @@ public class VistaTareas extends JPanel {
      * Cambia el cardLayout de la columna de información extra al card General Info
      */
     public void setCardGeneral(){
+        labelContadorTareasToDo.setText("Tareas por hacer: "+listaPanelesTareasToDo.size());
+        labelContadorTareasCompletadas.setText("Tareas completadas: "+listaPanelesTareasCompletadas.size());
         cardLayout.show(columnaInformacion, "cardGeneral");
     }
 
