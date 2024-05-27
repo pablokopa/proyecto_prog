@@ -21,6 +21,8 @@ public class VistaMatrix extends JPanel {
     private final Color colorRojo = new Color(255, 168, 168);
     private final Color colorAzul = new Color(168, 235, 255);
 
+    private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
+
     public VistaMatrix() {
         sRecursos = Recursos.getService();
         gestorTareas.getTareasDeBase();
@@ -28,37 +30,57 @@ public class VistaMatrix extends JPanel {
         this.setLayout(new GridLayout(2, 2));
 
         crearMatrix();
+        addTareasAMatrix();
     }
 
     /**
      * Método para crear la matriz de Eisenhower.
      */
     private void crearMatrix() {
-        JPanel panelArribaI = crearPanelesMatrix(colorVerde, "No importante / No urgente");
+        JPanel panelArribaI = crearPanelesMatrix(colorVerde);
+        this.panelTareasArribaI = crearPanelesTareas(panelArribaI, colorVerde, "No importante / No urgente");
         add(panelArribaI);
 
-        JPanel panelArribaD = crearPanelesMatrix(colorAzul, "No importante / Urgente");
+        JPanel panelArribaD = crearPanelesMatrix(colorAzul);
+        this.panelTareasArribaD = crearPanelesTareas(panelArribaD, colorAzul, "No importante / Urgente");
         add(panelArribaD);
 
-        JPanel panelAbajoI = crearPanelesMatrix(colorAmarillo, "Importante / No urgente");
+        JPanel panelAbajoI = crearPanelesMatrix(colorAmarillo);
+        this.panelTareasAbajoI = crearPanelesTareas(panelAbajoI, colorAmarillo, "Importante / No urgente");
         add(panelAbajoI);
 
-        JPanel panelAbajoD = crearPanelesMatrix(colorRojo, "Importante / Urgente");
+        JPanel panelAbajoD = crearPanelesMatrix(colorRojo);
+        this.panelTareasAbajoD = crearPanelesTareas(panelAbajoD, colorRojo, "Importante / Urgente");
         add(panelAbajoD);
     }
 
-    /**
-     * Método para crear los paneles de la matriz.
-     * @param color Color del panel.
-     * @param titulo Título del panel.
-     * @return Panel creado.
-     */
-    private JPanel crearPanelesMatrix(Color color, String titulo) {
-        /* Crea el panel principal */
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setBackground(color);
+    private void addTareasAMatrix(){
 
+        ArrayList<TemplatePanelTareaEspecifica> panelesDeTareas = tareas.getListaPanelesTareasToDo();
+
+        for (TemplatePanelTareaEspecifica panelTarea : panelesDeTareas) {
+
+            switch (panelTarea.getTarea().getNombreE()) {
+                case "No importante / No urgente" -> {
+                    panelTareasArribaI.add(panelTarea);
+                }
+                case "No importante / Urgente" -> {
+                    panelTareasArribaD.add(panelTarea);
+                }
+                case "Importante / No urgente" -> {
+                    panelTareasAbajoI.add(panelTarea);
+                }
+                case "Importante / Urgente" -> {
+                    panelTareasAbajoD.add(panelTarea);
+                }
+            }
+        }
+
+        revalidate();
+        repaint();
+    }
+
+    private JPanel crearPanelesTareas(JPanel panel, Color color , String titulo){
         /* Crea el panel de tareas */
         JPanel panelTareas = new JPanel();
         panelTareas.setLayout(new BoxLayout(panelTareas, BoxLayout.Y_AXIS));
@@ -86,20 +108,6 @@ public class VistaMatrix extends JPanel {
         botonAddTareas.setBackground(colorGrisPrincipal);
         botonAddTareas.setForeground(color);
         botonAddTareas.setCursor(sRecursos.getCursorMano());
-
-        botonAddTareas.addActionListener(e -> {
-            // Obtener los paneles de tareas por hacer
-            ArrayList<TemplatePanelTareaEspecifica> panelesTareasToDo = tareas.getListaPanelesTareasToDo();
-
-            // Añadir cada panel de tarea al panel
-            for (TemplatePanelTareaEspecifica panelTarea : panelesTareasToDo) {
-                panelTareas.add(panelTarea);
-            }
-
-            // Actualizar el panel
-            panelTareas.revalidate();
-            panelTareas.repaint();
-        });
 
         /* Añade el panel del título en una disposición especifica según el panel de matrix */
         switch (titulo) {
@@ -138,6 +146,20 @@ public class VistaMatrix extends JPanel {
         }
         panel.add(scrollTareas, BorderLayout.CENTER);
 
+        return panelTareas;
+    }
+
+    /**
+     * Método para crear los paneles de la matriz.
+     * @param color Color del panel.
+     * @param titulo Título del panel.
+     * @return Panel creado.
+     */
+    private JPanel crearPanelesMatrix(Color color) {
+        /* Crea el panel principal */
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(color);
         return panel;
     }
 }
