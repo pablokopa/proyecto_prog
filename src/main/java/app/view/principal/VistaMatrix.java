@@ -2,6 +2,8 @@ package app.view.principal;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.border.MatteBorder;
 
@@ -20,10 +22,14 @@ public class VistaMatrix extends JPanel {
     private final Color colorRojo = new Color(255, 168, 168);
     private final Color colorAzul = new Color(168, 235, 255);
 
+    private InterfazPrincipal interfazPrincipal;
+
     private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
 
-    public VistaMatrix() {
+    public VistaMatrix(InterfazPrincipal interfazPrincipal) {
         sRecursos = Recursos.getService();
+
+        this.interfazPrincipal = interfazPrincipal;
 
         this.setLayout(new GridLayout(2, 2));
 
@@ -32,13 +38,31 @@ public class VistaMatrix extends JPanel {
     }
 
 
-    public void addTareaArribaI(){
+    public void addTareaArribaI(TemplatePanelTareaEspecifica panelTarea){
 
     }
 
     private void addTareasAMatrix(){
 
         for (TemplatePanelTareaEspecifica panelTarea : gestorTareas.getListaTareasToDo()) {
+
+            panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (gestorTareas.completarTarea(panelTarea.getTarea())){
+                        if (panelTarea.getTarea().getCompletadaT()){
+                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
+                            interfazPrincipal.cambiarAColumnaCompletada(panelTarea);
+                            interfazPrincipal.actualizarVistaTareas();
+                        } else {
+                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
+                            interfazPrincipal.cambiarAColumnaToDo(panelTarea);
+                            interfazPrincipal.actualizarVistaTareas();
+                        }
+                    }
+
+                }
+            });
 
             switch (panelTarea.getTarea().getNombreE()) {
                 case "No importante / No urgente" -> {
