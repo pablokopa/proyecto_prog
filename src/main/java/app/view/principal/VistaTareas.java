@@ -48,8 +48,8 @@ public class VistaTareas extends JPanel {
 
     private final CardLayout cardLayout;
 
-    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasToDo;
-    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
+//    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasToDo;
+//    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
 
     /**
      * Constructor de la vista de tareas
@@ -59,13 +59,18 @@ public class VistaTareas extends JPanel {
         this.controladorTareas = new ControladorTareas(gestorTareas, this);
         this.gestorTareas = gestorTareas;
 
-        this.listaPanelesTareasToDo = new ArrayList<>();
-        this.listaPanelesTareasCompletadas = new ArrayList<>();
+//        this.listaPanelesTareasToDo = new ArrayList<>();
+//        this.listaPanelesTareasCompletadas = new ArrayList<>();
 
         this.tareaSeleccionada = null;
 
         this.setLayout(new GridBagLayout());
         cardLayout = new CardLayout();
+
+
+        System.out.println("t1 -"+gestorTareas.getListaTareasToDo().size());
+
+
 
         construirColumnaTareasToDo();
         construirColumnaTareasCompletadas();
@@ -75,6 +80,8 @@ public class VistaTareas extends JPanel {
         addListenersGenerales();
 
         setCardGeneral();
+
+        System.out.println("t2 -"+gestorTareas.getListaTareasToDo().size());
     }
 
     /**
@@ -155,13 +162,13 @@ public class VistaTareas extends JPanel {
         panelNumeroTareas.setBorder(new EmptyBorder(5,10,5,10));
         panelInformacionGeneral.add(panelNumeroTareas, BorderLayout.SOUTH);
 
-        this.labelContadorTareasToDo = new JLabel("Tareas por hacer: "+listaPanelesTareasToDo.size());
+        this.labelContadorTareasToDo = new JLabel("Tareas por hacer: "+gestorTareas.getListaTareasToDo().size());
         labelContadorTareasToDo.setFont(sRecursos.getMontserratMedium(18));
         labelContadorTareasToDo.setForeground(sRecursos.getGRANATE());
         labelContadorTareasToDo.setHorizontalAlignment(SwingConstants.CENTER);
         panelNumeroTareas.add(labelContadorTareasToDo);
 
-        this.labelContadorTareasCompletadas = new JLabel("Tareas completadas: "+listaPanelesTareasCompletadas.size());
+        this.labelContadorTareasCompletadas = new JLabel("Tareas completadas: "+gestorTareas.getListaTareasCompletadas().size());
         labelContadorTareasCompletadas.setFont(sRecursos.getMontserratMedium(18));
         labelContadorTareasCompletadas.setHorizontalAlignment(SwingConstants.CENTER);
         labelContadorTareasCompletadas.setForeground(sRecursos.getGRANATE());
@@ -322,20 +329,26 @@ public class VistaTareas extends JPanel {
      * Devuelve la lista de paneles de tareas por hacer
      * @return ArrayList con los paneles de tareas por hacer
      */
-    public ArrayList<TemplatePanelTareaEspecifica> getListaPanelesTareasToDo() {
-        return listaPanelesTareasToDo;
-    }
+//    public ArrayList<TemplatePanelTareaEspecifica> getListaPanelesTareasToDo() {
+//        return listaPanelesTareasToDo;
+//    }
 
     /**
      * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
      */
     private void addTareas() {
-        gestorTareas.getTareasDeBase();     // Llama al método que obtiene las tareas del usuario de la base de datos y las guarda en una lista
+//        gestorTareas.getTareasDeBase();     // Llama al método que obtiene las tareas del usuario de la base de datos y las guarda en una lista
+
 
         /* Utiliza el template PanelTareaEspecífica para mostrarlas y aplicarle los Listener convenientes */
-        for (Tarea tarea : gestorTareas.getListaTareas()) {
-            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
-            addListenerATareas(tarea, panelTarea);
+        for (TemplatePanelTareaEspecifica panelTarea : gestorTareas.getListaTareasToDo()) {
+//            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
+            addListenerATareas(panelTarea);
+        }
+
+        for (TemplatePanelTareaEspecifica panelTarea : gestorTareas.getListaTareasCompletadas()) {
+//            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
+            addListenerATareas(panelTarea);
         }
     }
 
@@ -377,7 +390,8 @@ public class VistaTareas extends JPanel {
                 textPaneDescripcionTarea.setText("Descripción de la tarea");
                 comboEtiquetasNueva.setSelectedIndex(0);
 
-                addListenerATareas(tareaReal, panel);
+
+                addListenerATareas(panel);
                 actualizarVistaTareas();
 
                 tareaSeleccionada = tareaReal;
@@ -411,9 +425,9 @@ public class VistaTareas extends JPanel {
                 TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tarea);
                 TemplatePanelTareaEspecifica panelReal;
                 if (tareaSeleccionada.getCompletadaT()){
-                    panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
+                    panelReal = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporal));
                 } else {
-                    panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
+                    panelReal = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(panelTemporal));
                 }
                 panelReal.getTarea().setNombreT(nombreT);
                 panelReal.getTarea().setDescripcionT(descripcionT);
@@ -435,10 +449,10 @@ public class VistaTareas extends JPanel {
                     TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada);
 
                     if (tareaSeleccionada.getCompletadaT()){
-                        TemplatePanelTareaEspecifica panelReal = listaPanelesTareasCompletadas.get(listaPanelesTareasCompletadas.indexOf(panelTemporal));
+                        TemplatePanelTareaEspecifica panelReal = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporal));
                         removeDeColumnaCompletada(panelReal);
                     } else {
-                        TemplatePanelTareaEspecifica panelReal = listaPanelesTareasToDo.get(listaPanelesTareasToDo.indexOf(panelTemporal));
+                        TemplatePanelTareaEspecifica panelReal = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(panelTemporal));
                         removeDeColumnaToDo(panelReal);
                     }
                     gestorTareas.eliminarTarea(tareaSeleccionada);
@@ -459,9 +473,9 @@ public class VistaTareas extends JPanel {
                 }
                 int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
                 if (opcion==JOptionPane.YES_OPTION){
-                    for (int i=listaPanelesTareasCompletadas.size()-1; i>=0; i--){
-                        if (gestorTareas.eliminarTarea(listaPanelesTareasCompletadas.get(i).getTarea())){
-                            removeDeColumnaCompletada(listaPanelesTareasCompletadas.get(i));
+                    for (int i=gestorTareas.getListaTareasCompletadas().size()-1; i>=0; i--){
+                        if (gestorTareas.eliminarTarea(gestorTareas.getListaTareasCompletadas().get(i).getTarea())){
+                            removeDeColumnaCompletada(gestorTareas.getListaTareasCompletadas().get(i));
                             actualizarVistaTareas();
                         }
                     }
@@ -508,14 +522,13 @@ public class VistaTareas extends JPanel {
 
     /**
      * Añade los listeners a las tareas (Botones de completar y click en la tarea)
-     * @param tarea Tarea a la que se le añaden los listeners
      * @param panelTarea Panel template de la tarea
      */
-    private void addListenerATareas(Tarea tarea, TemplatePanelTareaEspecifica panelTarea){
+    private void addListenerATareas(TemplatePanelTareaEspecifica panelTarea){
 
         /* Pone el check correspondiente cuando se abre la aplicación */
         /* Al iniciar la aplicación; si la tarea está completada la añade al panel de tareas completadas, si no, la añade al panel de tareas por hacer */
-        if (tarea.getCompletadaT()){
+        if (panelTarea.getTarea().getCompletadaT()){
             panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
             addAColumnaCompletada(panelTarea);
         } else {
@@ -527,8 +540,8 @@ public class VistaTareas extends JPanel {
         panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (gestorTareas.completarTarea(tarea)){
-                    if (tarea.getCompletadaT()){
+                if (gestorTareas.completarTarea(panelTarea.getTarea())){
+                    if (panelTarea.getTarea().getCompletadaT()){
                         panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
                         cambiarAColumnaCompletada(panelTarea);
                     } else {
@@ -545,7 +558,7 @@ public class VistaTareas extends JPanel {
         panelTarea.getPanelTarea().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setCardTareaSeleccionada(tarea);
+                setCardTareaSeleccionada(panelTarea.getTarea());
             }
         });
     }
@@ -788,8 +801,8 @@ public class VistaTareas extends JPanel {
      * Cambia el cardLayout de la columna de información extra al card General Info
      */
     public void setCardGeneral(){
-        labelContadorTareasToDo.setText("Tareas por hacer: "+listaPanelesTareasToDo.size());
-        labelContadorTareasCompletadas.setText("Tareas completadas: "+listaPanelesTareasCompletadas.size());
+        labelContadorTareasToDo.setText("Tareas por hacer: "+gestorTareas.getListaTareasToDo().size());
+        labelContadorTareasCompletadas.setText("Tareas completadas: "+gestorTareas.getListaTareasCompletadas().size());
         cardLayout.show(columnaInformacion, "cardGeneral");
     }
 
@@ -820,7 +833,7 @@ public class VistaTareas extends JPanel {
      */
     private void addAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.add(panelTarea);
-        listaPanelesTareasToDo.add(panelTarea);
+//        gestorTareas.getListaTareasToDo().add(panelTarea);
     }
 
     /**
@@ -829,7 +842,7 @@ public class VistaTareas extends JPanel {
      */
     private void addAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.add(panelTarea);
-        listaPanelesTareasCompletadas.add(panelTarea);
+//        gestorTareas.getListaTareasCompletadas().add(panelTarea);
     }
 
     /**
@@ -838,7 +851,7 @@ public class VistaTareas extends JPanel {
      */
     private void removeDeColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasToDo.remove(panelTarea);
-        listaPanelesTareasToDo.remove(panelTarea);
+//        gestorTareas.getListaTareasToDo().remove(panelTarea);
     }
 
     /**
@@ -847,7 +860,7 @@ public class VistaTareas extends JPanel {
      */
     private void removeDeColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
         panelListaTareasCompletadas.remove(panelTarea);
-        listaPanelesTareasCompletadas.remove(panelTarea);
+//        gestorTareas.getListaTareasCompletadas().remove(panelTarea);
     }
 
     /**

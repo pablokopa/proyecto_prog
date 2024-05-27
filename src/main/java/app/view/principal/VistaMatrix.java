@@ -13,7 +13,6 @@ import services.Recursos;
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
     GestorTareas gestorTareas = new GestorTareas();
-    VistaTareas tareas = new VistaTareas(gestorTareas);
 
     private final Color colorGrisPrincipal = new Color(59, 59, 59);
     private final Color colorVerde = new Color(175, 255, 168);
@@ -25,12 +24,40 @@ public class VistaMatrix extends JPanel {
 
     public VistaMatrix() {
         sRecursos = Recursos.getService();
-        gestorTareas.getTareasDeBase();
 
         this.setLayout(new GridLayout(2, 2));
 
         crearMatrix();
         addTareasAMatrix();
+    }
+
+
+    public void addTareaArribaI(){
+
+    }
+
+    private void addTareasAMatrix(){
+
+        for (TemplatePanelTareaEspecifica panelTarea : gestorTareas.getListaTareasToDo()) {
+
+            switch (panelTarea.getTarea().getNombreE()) {
+                case "No importante / No urgente" -> {
+                    panelTareasArribaI.add(panelTarea);
+                }
+                case "No importante / Urgente" -> {
+                    panelTareasArribaD.add(panelTarea);
+                }
+                case "Importante / No urgente" -> {
+                    panelTareasAbajoI.add(panelTarea);
+                }
+                case "Importante / Urgente" -> {
+                    panelTareasAbajoD.add(panelTarea);
+                }
+            }
+        }
+
+        revalidate();
+        repaint();
     }
 
     /**
@@ -52,32 +79,6 @@ public class VistaMatrix extends JPanel {
         JPanel panelAbajoD = crearPanelesMatrix(colorRojo);
         this.panelTareasAbajoD = crearPanelesTareas(panelAbajoD, colorRojo, "Importante / Urgente");
         add(panelAbajoD);
-    }
-
-    private void addTareasAMatrix(){
-
-        ArrayList<TemplatePanelTareaEspecifica> panelesDeTareas = tareas.getListaPanelesTareasToDo();
-
-        for (TemplatePanelTareaEspecifica panelTarea : panelesDeTareas) {
-
-            switch (panelTarea.getTarea().getNombreE()) {
-                case "No importante / No urgente" -> {
-                    panelTareasArribaI.add(panelTarea);
-                }
-                case "No importante / Urgente" -> {
-                    panelTareasArribaD.add(panelTarea);
-                }
-                case "Importante / No urgente" -> {
-                    panelTareasAbajoI.add(panelTarea);
-                }
-                case "Importante / Urgente" -> {
-                    panelTareasAbajoD.add(panelTarea);
-                }
-            }
-        }
-
-        revalidate();
-        repaint();
     }
 
     private JPanel crearPanelesTareas(JPanel panel, Color color , String titulo){
