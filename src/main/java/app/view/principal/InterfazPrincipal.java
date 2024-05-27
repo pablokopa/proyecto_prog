@@ -4,6 +4,7 @@ import app.model.tareas.GestorTareas;
 import app.model.usuarios.GestorUsuarios;
 import app.model.usuarios.Usuario;
 import app.view.login.InterfazLogin;
+import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 import javax.swing.*;
@@ -66,6 +67,40 @@ public class InterfazPrincipal extends JFrame {
         setSize(dimensionPantallaCompleta);     // Línea necesaria para redimensionar sin errores
     }
 
+    public void actualizarVistaTareas(){
+        panelTareas.actualizarVistaTareas();
+    }
+
+    public void addAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+        panelTareas.getPanelListaTareasToDo().add(panelTarea);
+        gestorTareas.getListaTareasToDo().add(panelTarea);
+    }
+
+    public void addAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+        panelTareas.getPanelListaTareasCompletadas().add(panelTarea);
+        gestorTareas.getListaTareasCompletadas().add(panelTarea);
+    }
+
+    public void removeDeColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+        panelTareas.getPanelListaTareasToDo().remove(panelTarea);
+        gestorTareas.getListaTareasToDo().remove(panelTarea);
+    }
+
+    public void removeDeColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+        panelTareas.getPanelListaTareasCompletadas().remove(panelTarea);
+        gestorTareas.getListaTareasCompletadas().remove(panelTarea);
+    }
+
+    public void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
+        removeDeColumnaCompletada(panelTarea);
+        addAColumnaToDo(panelTarea);
+    }
+
+    public void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
+        removeDeColumnaToDo(panelTarea);
+        addAColumnaCompletada(panelTarea);
+    }
+
     /**
      * Crea los paneles principales de la interfaz.
      */
@@ -75,8 +110,8 @@ public class InterfazPrincipal extends JFrame {
         panelSuperior = templatePanelesPrincipales("superior");
         panelPrincipal = templatePanelesPrincipales("principal");
         this.panelInicio = new VistaInicio();
-        this.panelTareas = new VistaTareas(gestorTareas);
-        this.panelMatrix = new VistaMatrix();
+        this.panelTareas = new VistaTareas(gestorTareas, this);
+        this.panelMatrix = new VistaMatrix(this);
         this.panelPomodoro = new VistaPomodoro();
 
         cardLayout = new CardLayout();
