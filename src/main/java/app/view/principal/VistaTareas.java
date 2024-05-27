@@ -136,41 +136,52 @@ public class VistaTareas extends JPanel {
      * Se incluye en la columna de información extra.
      */
     private void crearCardGeneral() {
-        /* Card donde se muestra la información de la tarea seleccionada */
         JPanel cardGeneral = new JPanel();
+        cardGeneral.setBackground(sRecursos.getGRIS_DEFAULT());
         cardGeneral.setLayout(new BorderLayout());
         columnaInformacion.add(cardGeneral, "cardGeneral");
 
-        /* Título de la columna Información Extra en el card Info General */
         JLabel labelTituloInformacionGeneral = crearLabelTituloDeColumna("Información");
         cardGeneral.add(labelTituloInformacionGeneral, BorderLayout.NORTH);
 
         JPanel panelInformacionGeneral = new JPanel();
-        panelInformacionGeneral.setLayout(new GridBagLayout());
+        panelInformacionGeneral.setBackground(sRecursos.getGRIS_DEFAULT());
+        panelInformacionGeneral.setLayout(new BorderLayout());
         cardGeneral.add(panelInformacionGeneral, BorderLayout.CENTER);
 
-        /* Panel donde iran los labels del numero de tareas to do y tareas completadas */
         JPanel panelNumeroTareas = new JPanel();
         panelNumeroTareas.setLayout(new GridLayout(1, 2));
-        panelNumeroTareas.setBackground(sRecursos.getBLANCO());
         panelNumeroTareas.setPreferredSize(new Dimension(0, 100));
         panelNumeroTareas.setBorder(new EmptyBorder(5,10,5,10));
-        gbc = setGbc(0, 0, 1, 0.01, GridBagConstraints.BOTH);
-        panelInformacionGeneral.add(panelNumeroTareas, gbc);
+        panelInformacionGeneral.add(panelNumeroTareas, BorderLayout.SOUTH);
 
         this.labelContadorTareasToDo = new JLabel("Tareas por hacer: "+listaPanelesTareasToDo.size());
-        labelContadorTareasToDo.setFont(sRecursos.getMontserratMedium(14));
+        labelContadorTareasToDo.setFont(sRecursos.getMontserratMedium(18));
         labelContadorTareasToDo.setForeground(sRecursos.getGRANATE());
+        labelContadorTareasToDo.setHorizontalAlignment(SwingConstants.CENTER);
         panelNumeroTareas.add(labelContadorTareasToDo);
 
         this.labelContadorTareasCompletadas = new JLabel("Tareas completadas: "+listaPanelesTareasCompletadas.size());
-        labelContadorTareasCompletadas.setFont(sRecursos.getMontserratMedium(14));
+        labelContadorTareasCompletadas.setFont(sRecursos.getMontserratMedium(18));
+        labelContadorTareasCompletadas.setHorizontalAlignment(SwingConstants.CENTER);
         labelContadorTareasCompletadas.setForeground(sRecursos.getGRANATE());
         panelNumeroTareas.add(labelContadorTareasCompletadas);
 
 
+        JPanel panelSinTareaSeleccionada = new JPanel();
+        panelSinTareaSeleccionada.setLayout(new BorderLayout());
+        panelSinTareaSeleccionada.setPreferredSize(new Dimension(0, 100));
+        panelSinTareaSeleccionada.setBorder(new EmptyBorder(5,10,5,10));
+        panelInformacionGeneral.add(panelSinTareaSeleccionada, BorderLayout.CENTER);
+
+        JLabel labelSinTareaSeleccionada = new JLabel("Selecciona una tarea");
+        labelSinTareaSeleccionada.setFont(sRecursos.getMontserratItalic(26));
+        labelSinTareaSeleccionada.setForeground(sRecursos.getGRANATE());
+        labelSinTareaSeleccionada.setHorizontalAlignment(SwingConstants.CENTER);
+        panelSinTareaSeleccionada.add(labelSinTareaSeleccionada, BorderLayout.CENTER);
 
     }
+
 
     /**
      * Card donde se muestra la información de la tarea seleccionada
