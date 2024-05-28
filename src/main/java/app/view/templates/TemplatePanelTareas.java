@@ -1,16 +1,21 @@
 package app.view.templates;
 
+import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
+import app.view.principal.InterfazPrincipal;
+import app.view.principal.VistaMatrix;
 import services.Recursos;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Clase que crea un panel con la información de una tarea y le añade funciones.
  * Incluye el panel creado en la columna correspondiente de la VistaTareas.
  */
-public class TemplatePanelTareaEspecifica extends JPanel {
+public class TemplatePanelTareas extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
     private final Tarea tarea;
 
@@ -20,14 +25,20 @@ public class TemplatePanelTareaEspecifica extends JPanel {
 
     private final int idT;
 
+    private GestorTareas gestorTareas;
+    private InterfazPrincipal interfazPrincipal;
+
     /**
      * Constructor de la clase.
      * Crea un panel con la información de una tarea y le añade funciones.
      * Incluye el panel creado en la columna correspondiente de la VistaTareas.
      * @param tarea tarea a mostrar
      */
-    public TemplatePanelTareaEspecifica(Tarea tarea) {
+    public TemplatePanelTareas(Tarea tarea, GestorTareas gestorTareas, InterfazPrincipal interfazPrincipal, VistaMatrix vistaMatrix) {
         this.tarea = tarea;
+
+        this.gestorTareas = gestorTareas;
+        this.interfazPrincipal = interfazPrincipal;
 
         this.idT = tarea.getIdT();
 
@@ -38,6 +49,38 @@ public class TemplatePanelTareaEspecifica extends JPanel {
 
         crearLabelImagen();
         crearPanelTarea();
+        addActionListeners();
+    }
+
+    public void addActionListeners(){
+
+        labelImagen.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (gestorTareas.completarTarea(tarea)) {
+                    if (tarea.getCompletadaT()) {
+                        labelImagen.setIcon(sRecursos.getImagenCheck());
+                        interfazPrincipal.cambiarAColumnaCompletada(tarea);
+                    } else {
+                        labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
+                        interfazPrincipal.cambiarAColumnaToDo(tarea);
+                    }
+                    interfazPrincipal.cambiarEnMatrix(tarea);
+                }
+
+                interfazPrincipal.actualizarVistaTareas();
+                interfazPrincipal.actualizarVistaMatrix();
+            }
+        });
+
+        panelTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                interfazPrincipal.setCardTareaSeleccionada(TemplatePanelTareas.this);
+            }
+        });
+
+
     }
 
     public void setBorderColor(Color color) {
@@ -121,7 +164,7 @@ public class TemplatePanelTareaEspecifica extends JPanel {
     public boolean equals(Object obj) {
         if (obj == this)    return true;
         if (obj == null || obj.getClass() != this.getClass())   return false;
-        TemplatePanelTareaEspecifica template = (TemplatePanelTareaEspecifica) obj;
+        TemplatePanelTareas template = (TemplatePanelTareas) obj;
         return this.idT == template.idT;
     }
 }
