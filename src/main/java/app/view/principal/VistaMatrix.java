@@ -2,19 +2,16 @@ package app.view.principal;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import javax.swing.border.MatteBorder;
 
 import app.model.tareas.GestorTareas;
-import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
 
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
-    GestorTareas gestorTareas = new GestorTareas();
+//    GestorTareas gestorTareas = new GestorTareas();
+    private GestorTareas gestorTareas;
 
     private final Color colorGrisPrincipal = new Color(59, 59, 59);
     private final Color colorVerde = new Color(175, 255, 168);
@@ -26,62 +23,32 @@ public class VistaMatrix extends JPanel {
 
     private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
 
-    public VistaMatrix(InterfazPrincipal interfazPrincipal) {
+    public VistaMatrix(GestorTareas gestorTareas, InterfazPrincipal interfazPrincipal) {
         sRecursos = Recursos.getService();
 
         this.interfazPrincipal = interfazPrincipal;
+        this.gestorTareas = gestorTareas;
 
         this.setLayout(new GridLayout(2, 2));
 
         crearMatrix();
-        addTareasAMatrix();
     }
 
 
-    public void addTareaArribaI(TemplatePanelTareaEspecifica panelTarea){
-
+    public JPanel getPanelTareasArribaD() {
+        return panelTareasArribaD;
     }
 
-    private void addTareasAMatrix(){
+    public JPanel getPanelTareasArribaI() {
+        return panelTareasArribaI;
+    }
 
-        for (TemplatePanelTareaEspecifica panelTarea : gestorTareas.getListaTareasToDo()) {
+    public JPanel getPanelTareasAbajoI() {
+        return panelTareasAbajoI;
+    }
 
-            panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (gestorTareas.completarTarea(panelTarea.getTarea())){
-                        if (panelTarea.getTarea().getCompletadaT()){
-                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
-                            interfazPrincipal.cambiarAColumnaCompletada(panelTarea);
-                            interfazPrincipal.actualizarVistaTareas();
-                        } else {
-                            panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
-                            interfazPrincipal.cambiarAColumnaToDo(panelTarea);
-                            interfazPrincipal.actualizarVistaTareas();
-                        }
-                    }
-
-                }
-            });
-
-            switch (panelTarea.getTarea().getNombreE()) {
-                case "No importante / No urgente" -> {
-                    panelTareasArribaI.add(panelTarea);
-                }
-                case "No importante / Urgente" -> {
-                    panelTareasArribaD.add(panelTarea);
-                }
-                case "Importante / No urgente" -> {
-                    panelTareasAbajoI.add(panelTarea);
-                }
-                case "Importante / Urgente" -> {
-                    panelTareasAbajoD.add(panelTarea);
-                }
-            }
-        }
-
-        revalidate();
-        repaint();
+    public JPanel getPanelTareasAbajoD() {
+        return panelTareasAbajoD;
     }
 
     /**
@@ -185,5 +152,10 @@ public class VistaMatrix extends JPanel {
         panel.setLayout(new BorderLayout());
         panel.setBackground(color);
         return panel;
+    }
+
+    public void actualizarVistaMatrix(){
+        this.repaint();
+        this.revalidate();
     }
 }

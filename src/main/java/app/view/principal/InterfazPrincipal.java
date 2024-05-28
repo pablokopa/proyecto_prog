@@ -1,10 +1,12 @@
 package app.view.principal;
 
 import app.model.tareas.GestorTareas;
+import app.model.tareas.Tarea;
 import app.model.usuarios.GestorUsuarios;
 import app.model.usuarios.Usuario;
 import app.view.login.InterfazLogin;
-import app.view.templates.TemplatePanelTareaEspecifica;
+import app.view.templates.TemplatePanelMatrix;
+import app.view.templates.TemplatePanelTareas;
 import services.Recursos;
 
 import javax.swing.*;
@@ -26,10 +28,10 @@ public class InterfazPrincipal extends JFrame {
     private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private JButton botonCerrar, botonMinimizar, botonMaximizar;
-    private VistaInicio panelInicio;
-    private VistaTareas panelTareas;
-    private VistaMatrix panelMatrix;
-    private VistaPomodoro panelPomodoro;
+    private VistaInicio vistaInicio;
+    private VistaTareas vistaTareas;
+    private VistaMatrix vistaMatrix;
+    private VistaPomodoro vistaPomodoro;
 
     private CardLayout cardLayout;
     private ArrayList<JButton> listaBotonesMenu;
@@ -38,9 +40,9 @@ public class InterfazPrincipal extends JFrame {
     private String textoBotonActual = "";
 
 
-    public InterfazPrincipal(GestorTareas gestorTareas) {
+
+    public InterfazPrincipal() {
         this.sRecursos = Recursos.getService();
-        this.gestorTareas = gestorTareas;
 
         Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
@@ -52,6 +54,8 @@ public class InterfazPrincipal extends JFrame {
         this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
+        this.gestorTareas = new GestorTareas(this, vistaTareas, vistaMatrix);
+
         crearPaneles();
 
         crearBotonesVentana();
@@ -62,43 +66,178 @@ public class InterfazPrincipal extends JFrame {
         redimensionarPaneles();
         moverVentana();
 
+        addTareas();
+
         this.setVisible(true);
 
         setSize(dimensionPantallaCompleta);     // Línea necesaria para redimensionar sin errores
     }
 
-    public void actualizarVistaTareas(){
-        panelTareas.actualizarVistaTareas();
+    public void addTareas(){
+        for (TemplatePanelTareas panelTarea : gestorTareas.getListaTareasToDo()) {
+            vistaTareas.getPanelListaTareasToDo().add(panelTarea);
+        }
+
+        for (TemplatePanelTareas panelTarea : gestorTareas.getListaTareasCompletadas()) {
+            vistaTareas.getPanelListaTareasCompletadas().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : gestorTareas.getListaTareasArribaI()) {
+            vistaMatrix.getPanelTareasArribaI().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : gestorTareas.getListaTareasArribaD()) {
+            vistaMatrix.getPanelTareasArribaD().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : gestorTareas.getListaTareasAbajoI()) {
+            vistaMatrix.getPanelTareasAbajoI().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : gestorTareas.getListaTareasAbajoD()) {
+            vistaMatrix.getPanelTareasAbajoD().add(panelTarea);
+        }
     }
 
-    public void addAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
-        panelTareas.getPanelListaTareasToDo().add(panelTarea);
+    public void setCardTareaSeleccionada(TemplatePanelTareas panelTarea){
+        vistaTareas.setCardTareaSeleccionada(panelTarea.getTarea());
+    }
+
+    public void actualizarVistaMatrix(){
+        vistaMatrix.actualizarVistaMatrix();
+    }
+
+    public void cambiarEnMatrix(Tarea tarea){
+        if (tarea.getCompletadaT()){
+            switch (tarea.getNombreE()) {
+                case "No importante / No urgente" -> {
+                    System.out.println("as");
+                    removeDePanelArribaI(tarea);
+                }
+                case "No importante / Urgente" -> {
+                    System.out.println("as");
+                    removeDePanelArribaD(tarea);
+                }
+                case "Importante / No urgente" -> {
+                    System.out.println("as");
+                    removeDePanelAbajoI(tarea);
+                }
+                case "Importante / Urgente" -> {
+                    System.out.println("as");
+                    removeDePanelAbajoD(tarea);
+                }
+            }
+        } else {
+            switch (tarea.getNombreE()) {
+                case "No importante / No urgente" -> {
+                    addAPanelArribaI(tarea);
+                }
+                case "No importante / Urgente" -> {
+                    addAPanelArribaD(tarea);
+                }
+                case "Importante / No urgente" -> {
+                    addAPanelAbajoI(tarea);
+                }
+                case "Importante / Urgente" -> {
+                    addAPanelAbajoD(tarea);
+                }
+            }
+        }
+    }
+
+    public void addAPanelArribaI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas);
+        vistaMatrix.getPanelTareasArribaI().add(panelTarea);
+        gestorTareas.getListaTareasArribaI().add(panelTarea);
+    }
+
+    public void addAPanelArribaD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas);
+        vistaMatrix.getPanelTareasArribaD().add(panelTarea);
+        gestorTareas.getListaTareasArribaD().add(panelTarea);
+    }
+
+    public void addAPanelAbajoI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas);
+        vistaMatrix.getPanelTareasAbajoI().add(panelTarea);
+        gestorTareas.getListaTareasAbajoI().add(panelTarea);
+    }
+
+    public void addAPanelAbajoD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas);
+        vistaMatrix.getPanelTareasAbajoD().add(panelTarea);
+        gestorTareas.getListaTareasAbajoD().add(panelTarea);
+    }
+
+    public void removeDePanelArribaI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = gestorTareas.getListaTareasArribaI().get(gestorTareas.getListaTareasArribaI().indexOf(new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas)));
+        vistaMatrix.getPanelTareasArribaI().remove(panelTarea);
+        gestorTareas.getListaTareasArribaI().remove(panelTarea);
+    }
+
+    public void removeDePanelArribaD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = gestorTareas.getListaTareasArribaD().get(gestorTareas.getListaTareasArribaD().indexOf(new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas)));
+        vistaMatrix.getPanelTareasArribaD().remove(panelTarea);
+        gestorTareas.getListaTareasArribaD().remove(panelTarea);
+    }
+
+    public void removeDePanelAbajoI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = gestorTareas.getListaTareasAbajoI().get(gestorTareas.getListaTareasAbajoI().indexOf(new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas)));
+        vistaMatrix.getPanelTareasAbajoI().remove(panelTarea);
+        gestorTareas.getListaTareasAbajoI().remove(panelTarea);
+    }
+
+    public void removeDePanelAbajoD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = gestorTareas.getListaTareasAbajoD().get(gestorTareas.getListaTareasAbajoD().indexOf(new TemplatePanelMatrix(tarea, gestorTareas, this, vistaTareas)));
+        vistaMatrix.getPanelTareasAbajoD().remove(panelTarea);
+        gestorTareas.getListaTareasAbajoD().remove(panelTarea);
+    }
+
+
+    public void actualizarVistaTareas(){
+        vistaTareas.actualizarVistaTareas();
+    }
+
+    public void addAColumnaToDo(Tarea tarea){
+        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, gestorTareas, this, vistaMatrix);
+        vistaTareas.getPanelListaTareasToDo().add(panelTarea);
         gestorTareas.getListaTareasToDo().add(panelTarea);
     }
 
-    public void addAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
-        panelTareas.getPanelListaTareasCompletadas().add(panelTarea);
+    public void addAColumnaCompletada(Tarea tarea){
+        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, gestorTareas, this, vistaMatrix);
+        vistaTareas.getPanelListaTareasCompletadas().add(panelTarea);
         gestorTareas.getListaTareasCompletadas().add(panelTarea);
     }
 
-    public void removeDeColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
-        panelTareas.getPanelListaTareasToDo().remove(panelTarea);
+    public void removeDeColumnaToDo(Tarea tarea){
+        TemplatePanelTareas panelTarea = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(new TemplatePanelTareas(tarea, gestorTareas, this, vistaMatrix)));
+        vistaTareas.getPanelListaTareasToDo().remove(panelTarea);
         gestorTareas.getListaTareasToDo().remove(panelTarea);
     }
 
-    public void removeDeColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
-        panelTareas.getPanelListaTareasCompletadas().remove(panelTarea);
+    public void removeDeColumnaCompletada(Tarea tarea){
+        TemplatePanelTareas panelTarea = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(new TemplatePanelTareas(tarea, gestorTareas, this, vistaMatrix)));
+        vistaTareas.getPanelListaTareasCompletadas().remove(panelTarea);
         gestorTareas.getListaTareasCompletadas().remove(panelTarea);
     }
 
-    public void cambiarAColumnaToDo(TemplatePanelTareaEspecifica panelTarea){
-        removeDeColumnaCompletada(panelTarea);
-        addAColumnaToDo(panelTarea);
+    public void cambiarAColumnaToDo(Tarea tarea){
+        removeDeColumnaCompletada(tarea);
+        addAColumnaToDo(tarea);
     }
 
-    public void cambiarAColumnaCompletada(TemplatePanelTareaEspecifica panelTarea){
-        removeDeColumnaToDo(panelTarea);
-        addAColumnaCompletada(panelTarea);
+    public void cambiarAColumnaCompletada(Tarea tarea){
+        removeDeColumnaToDo(tarea);
+        addAColumnaCompletada(tarea);
+    }
+
+    public VistaMatrix getVistaMatrix() {
+        return vistaMatrix;
+    }
+
+    public VistaTareas getVistaTareas() {
+        return vistaTareas;
     }
 
     /**
@@ -109,10 +248,10 @@ public class InterfazPrincipal extends JFrame {
         panelCentral = templatePanelesPrincipales("central");
         panelSuperior = templatePanelesPrincipales("superior");
         panelPrincipal = templatePanelesPrincipales("principal");
-        this.panelInicio = new VistaInicio();
-        this.panelTareas = new VistaTareas(gestorTareas, this);
-        this.panelMatrix = new VistaMatrix(this);
-        this.panelPomodoro = new VistaPomodoro();
+        this.vistaInicio = new VistaInicio();
+        this.vistaTareas = new VistaTareas(gestorTareas, this);
+        this.vistaMatrix = new VistaMatrix(gestorTareas, this);
+        this.vistaPomodoro = new VistaPomodoro();
 
         cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
@@ -121,10 +260,10 @@ public class InterfazPrincipal extends JFrame {
         this.add(panelCentral, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
-        panelPrincipal.add(panelInicio, "Inicio");    // Se añade la vista de inicio al panel principal (por defecto
-        panelPrincipal.add(panelTareas, "Tareas");
-        panelPrincipal.add(panelPomodoro, "Pomodoro");
-        panelPrincipal.add(panelMatrix, "Matrix");
+        panelPrincipal.add(vistaInicio, "Inicio");    // Se añade la vista de inicio al panel principal (por defecto
+        panelPrincipal.add(vistaTareas, "Tareas");
+        panelPrincipal.add(vistaPomodoro, "Pomodoro");
+        panelPrincipal.add(vistaMatrix, "Matrix");
     }
 
     /**
@@ -181,7 +320,7 @@ public class InterfazPrincipal extends JFrame {
                         contraerBotones(listaBotonesMenu);
                         break;
                     case "Tareas":      // Si el botón es Tareas, se cambia el card de la columna Información Extra de la VistaTareas y continua a default
-                        panelTareas.setCardGeneral();
+                        vistaTareas.setCardGeneral();
                     default:            // Si es cualquier otro botón, expande el botón seleccionado y contrae el resto de botones
                         contraerBotones(listaBotonesMenu);
                         boton.setPreferredSize(new Dimension(getWidth(), 75));

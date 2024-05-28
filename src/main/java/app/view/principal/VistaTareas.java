@@ -3,7 +3,7 @@ package app.view.principal;
 import app.controller.ControladorTareas;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
-import app.view.templates.TemplatePanelTareaEspecifica;
+import app.view.templates.TemplatePanelTareas;
 import services.Recursos;
 
 import javax.swing.*;
@@ -18,7 +18,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
@@ -50,8 +49,8 @@ public class VistaTareas extends JPanel {
 
     private final CardLayout cardLayout;
 
-//    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasToDo;
-//    private final ArrayList<TemplatePanelTareaEspecifica> listaPanelesTareasCompletadas;
+//    private final ArrayList<TemplatePanelTareas> listaPanelesTareasToDo;
+//    private final ArrayList<TemplatePanelTareas> listaPanelesTareasCompletadas;
 
     /**
      * Constructor de la vista de tareas
@@ -72,7 +71,7 @@ public class VistaTareas extends JPanel {
         cardLayout = new CardLayout();
 
 
-        System.out.println("t1 -"+gestorTareas.getListaTareasToDo().size());
+//        System.out.println("t1 -"+gestorTareas.getListaTareasToDo().size());
 
 
 
@@ -80,7 +79,7 @@ public class VistaTareas extends JPanel {
         construirColumnaTareasCompletadas();
         construirColumnaInformacionExtra();
 
-        addTareas();
+//        addTareas();
         addListenersGenerales();
 
         setCardGeneral();
@@ -330,33 +329,6 @@ public class VistaTareas extends JPanel {
     }
 
     /**
-     * Devuelve la lista de paneles de tareas por hacer
-     * @return ArrayList con los paneles de tareas por hacer
-     */
-//    public ArrayList<TemplatePanelTareaEspecifica> getListaPanelesTareasToDo() {
-//        return listaPanelesTareasToDo;
-//    }
-
-    /**
-     * Recupera las tareas del usuario de la base de datos, les añade las funciones (Listener) necesarias y las añade a las columnas
-     */
-    private void addTareas() {
-//        gestorTareas.getTareasDeBase();     // Llama al método que obtiene las tareas del usuario de la base de datos y las guarda en una lista
-
-
-        /* Utiliza el template PanelTareaEspecífica para mostrarlas y aplicarle los Listener convenientes */
-        for (TemplatePanelTareaEspecifica panelTarea : gestorTareas.getListaTareasToDo()) {
-//            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
-            addListenerATareas(panelTarea);
-        }
-
-        for (TemplatePanelTareaEspecifica panelTarea : gestorTareas.getListaTareasCompletadas()) {
-//            TemplatePanelTareaEspecifica panelTarea = new TemplatePanelTareaEspecifica(tarea);
-            addListenerATareas(panelTarea);
-        }
-    }
-
-    /**
      * Añade los listeners generales a los botones de la vista
      */
     private void addListenersGenerales(){
@@ -388,14 +360,14 @@ public class VistaTareas extends JPanel {
                 Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU(), nombreE);
                 gestorTareas.crearTarea(tarea);
                 Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
-                TemplatePanelTareaEspecifica panel = new TemplatePanelTareaEspecifica(tareaReal);
+                TemplatePanelTareas panel = new TemplatePanelTareas(tareaReal, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
 
                 textFieldNombreTarea.setText("Nombre de la tarea");
                 textPaneDescripcionTarea.setText("Descripción de la tarea");
                 comboEtiquetasNueva.setSelectedIndex(0);
 
 
-                addListenerATareas(panel);
+//                addListenerATareas(panel);
                 actualizarVistaTareas();
 
                 tareaSeleccionada = tareaReal;
@@ -426,8 +398,8 @@ public class VistaTareas extends JPanel {
                     return;
                 }
 
-                TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tarea);
-                TemplatePanelTareaEspecifica panelReal;
+                TemplatePanelTareas panelTemporal = new TemplatePanelTareas(tarea, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
+                TemplatePanelTareas panelReal;
                 if (tareaSeleccionada.getCompletadaT()){
                     panelReal = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporal));
                 } else {
@@ -450,14 +422,14 @@ public class VistaTareas extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
                 if (opcion == JOptionPane.YES_OPTION){
-                    TemplatePanelTareaEspecifica panelTemporal = new TemplatePanelTareaEspecifica(tareaSeleccionada);
+//                    TemplatePanelTareas panelTemporal = new TemplatePanelTareas(tareaSeleccionada, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
 
                     if (tareaSeleccionada.getCompletadaT()){
-                        TemplatePanelTareaEspecifica panelReal = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporal));
-                        interfazPrincipal.removeDeColumnaCompletada(panelReal);
+//                        TemplatePanelTareas panelReal = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporal));
+                        interfazPrincipal.removeDeColumnaCompletada(tareaSeleccionada);
                     } else {
-                        TemplatePanelTareaEspecifica panelReal = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(panelTemporal));
-                        interfazPrincipal.removeDeColumnaToDo(panelReal);
+//                        TemplatePanelTareas panelReal = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(panelTemporal));
+                        interfazPrincipal.removeDeColumnaToDo(tareaSeleccionada);
                     }
                     gestorTareas.eliminarTarea(tareaSeleccionada);
                     actualizarVistaTareas();
@@ -478,8 +450,9 @@ public class VistaTareas extends JPanel {
                 int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
                 if (opcion==JOptionPane.YES_OPTION){
                     for (int i=gestorTareas.getListaTareasCompletadas().size()-1; i>=0; i--){
-                        if (gestorTareas.eliminarTarea(gestorTareas.getListaTareasCompletadas().get(i).getTarea())){
-                            interfazPrincipal.removeDeColumnaCompletada(gestorTareas.getListaTareasCompletadas().get(i));
+                        Tarea tarea = gestorTareas.getListaTareasCompletadas().get(i).getTarea();
+                        if (gestorTareas.eliminarTarea(tarea)){
+                            interfazPrincipal.removeDeColumnaCompletada(tarea);
                             actualizarVistaTareas();
                         }
                     }
@@ -528,42 +501,88 @@ public class VistaTareas extends JPanel {
      * Añade los listeners a las tareas (Botones de completar y click en la tarea)
      * @param panelTarea Panel template de la tarea
      */
-    private void addListenerATareas(TemplatePanelTareaEspecifica panelTarea){
+//    private void addListenerATareas(TemplatePanelTareas panelTarea){
 
 
         /* Al iniciar la aplicación; si la tarea está completada la añade al panel de tareas completadas, si no, la añade al panel de tareas por hacer */
-        if (panelTarea.getTarea().getCompletadaT()){
-            panelListaTareasCompletadas.add(panelTarea);
-        } else {
-            panelListaTareasToDo.add(panelTarea);
-        }
+//        if (panelTarea.getTarea().getCompletadaT()){
+//            panelListaTareasCompletadas.add(panelTarea);
+//        } else {
+//            panelListaTareasToDo.add(panelTarea);
+//        }
 
         /* Al hacer click en la tarea, se marca como completada o no y se cambia de columna */
-        panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (gestorTareas.completarTarea(panelTarea.getTarea())){
-                    if (panelTarea.getTarea().getCompletadaT()){
-                        panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
-                        interfazPrincipal.cambiarAColumnaCompletada(panelTarea);
-                    } else {
-                        panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
-                        interfazPrincipal.cambiarAColumnaToDo(panelTarea);
-                    }
-                }
-                actualizarVistaTareas();
-                setCardGeneral();
-            }
-        });
+//        panelTarea.getLabelImagen().addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                System.out.println(panelTarea.getTarea().getCompletadaT());
+//
+//                if (gestorTareas.completarTarea(panelTarea.getTarea())){
+//
+//                    System.out.println(panelTarea.getTarea().getCompletadaT());
+//
+//                    if (panelTarea.getTarea().getCompletadaT()){
+//
+//                        System.out.println("TRUE");
+//                        panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheck());
+//                        interfazPrincipal.cambiarAColumnaCompletada(panelTarea);
+//                        interfazPrincipal.cambiarEnMatrix(panelTarea);
+//
+//                        switch (panelTarea.getTarea().getNombreE()) {
+//                            case "No importante / No urgente" -> {
+//                                interfazPrincipal.removeDePanelArribaI(panelTarea);
+//                            }
+//                            case "No importante / Urgente" -> {
+//                                interfazPrincipal.removeDePanelArribaD(panelTarea);
+//                            }
+//                            case "Importante / No urgente" -> {
+//                                interfazPrincipal.removeDePanelAbajoI(panelTarea);
+//                            }
+//                            case "Importante / Urgente" -> {
+//                                interfazPrincipal.removeDePanelAbajoD(panelTarea);
+//                            }
+//                        }
+//                    } else {
+//                        System.out.println("FALSE");
+//                        panelTarea.getLabelImagen().setIcon(sRecursos.getImagenCheckSinCheck());
+//                        interfazPrincipal.cambiarAColumnaToDo(panelTarea);
+//                        interfazPrincipal.cambiarEnMatrix(panelTarea);
+//                        interfazPrincipal.removeDeColumnaCompletada(panelTarea);
+//                        interfazPrincipal.addAColumnaToDo(panelTarea);
+//
+//                        switch (panelTarea.getTarea().getNombreE()) {
+//                            case "No importante / No urgente" -> {
+//                                interfazPrincipal.addAPanelArribaI(panelTarea);
+//                            }
+//                            case "No importante / Urgente" -> {
+//                                interfazPrincipal.addAPanelArribaD(panelTarea);
+//                            }
+//                            case "Importante / No urgente" -> {
+//                                interfazPrincipal.addAPanelAbajoI(panelTarea);
+//                            }
+//                            case "Importante / Urgente" -> {
+//                                interfazPrincipal.addAPanelAbajoD(panelTarea);
+//                            }
+//                        }
+//                    }
+//                }
+//                interfazPrincipal.actualizarVistaMatrix();
+//                interfazPrincipal.actualizarVistaTareas();
+//                actualizarVistaTareas();
+//                repaint();
+//                revalidate();
+    //setCardGeneral();
+//            }
+//        });
 
         /* Al hacer click en la tarea, se muestra la información de la tarea */
-        panelTarea.getPanelTarea().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                setCardTareaSeleccionada(panelTarea.getTarea());
-            }
-        });
-    }
+//        panelTarea.getPanelTarea().addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                setCardTareaSeleccionada(panelTarea.getTarea());
+//            }
+//        });
+//    }
 
     /**
      * Construye el panel de opciones de la tarea
@@ -812,7 +831,7 @@ public class VistaTareas extends JPanel {
      * Cambia el cardLayout de la columna de información extra al card Tarea Seleccionada
      * @param tarea Tarea que se ha seleccionado
      */
-    private void setCardTareaSeleccionada(Tarea tarea){
+    public void setCardTareaSeleccionada(Tarea tarea){
         this.tareaSeleccionada = tarea;
         textFieldNombreTareaSelecionada.setText(tareaSeleccionada.getNombreT());
         textPaneDescripcionTareaSeleccionada.setText(tareaSeleccionada.getDescripcionT());
