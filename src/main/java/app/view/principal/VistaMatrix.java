@@ -10,7 +10,6 @@ import services.Recursos;
 
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
-//    GestorTareas gestorTareas = new GestorTareas();
     private GestorTareas gestorTareas;
 
     private final Color colorGrisPrincipal = new Color(59, 59, 59);

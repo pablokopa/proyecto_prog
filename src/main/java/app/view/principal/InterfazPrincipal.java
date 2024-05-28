@@ -107,23 +107,36 @@ public class InterfazPrincipal extends JFrame {
         vistaMatrix.actualizarVistaMatrix();
     }
 
-    public void cambiarEnMatrix(Tarea tarea){
+    public void eliminarEnMatrix(Tarea tarea){
+        switch (tarea.getNombreE()){
+            case "No importante / No urgente" -> {
+                removeDePanelArribaI(tarea);
+            }
+            case "No importante / Urgente" -> {
+                removeDePanelArribaD(tarea);
+            }
+            case "Importante / No urgente" -> {
+                removeDePanelAbajoI(tarea);
+            }
+            case "Importante / Urgente" -> {
+                removeDePanelAbajoD(tarea);
+            }
+        }
+    }
+
+    public void completarEnMatrix(Tarea tarea){
         if (tarea.getCompletadaT()){
             switch (tarea.getNombreE()) {
                 case "No importante / No urgente" -> {
-                    System.out.println("as");
                     removeDePanelArribaI(tarea);
                 }
                 case "No importante / Urgente" -> {
-                    System.out.println("as");
                     removeDePanelArribaD(tarea);
                 }
                 case "Importante / No urgente" -> {
-                    System.out.println("as");
                     removeDePanelAbajoI(tarea);
                 }
                 case "Importante / Urgente" -> {
-                    System.out.println("as");
                     removeDePanelAbajoD(tarea);
                 }
             }

@@ -65,7 +65,7 @@ public class TemplatePanelTareas extends JPanel {
                         labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
                         interfazPrincipal.cambiarAColumnaToDo(tarea);
                     }
-                    interfazPrincipal.cambiarEnMatrix(tarea);
+                    interfazPrincipal.completarEnMatrix(tarea);
                 }
 
                 interfazPrincipal.actualizarVistaTareas();

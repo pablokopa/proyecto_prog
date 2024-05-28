@@ -59,13 +59,11 @@ public class TemplatePanelMatrix extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if (gestorTareas.completarTarea(tarea)) {
                     if (tarea.getCompletadaT()) {
-//                        labelImagen.setIcon(sRecursos.getImagenCheck());
                         interfazPrincipal.cambiarAColumnaCompletada(tarea);
                     } else {
-//                        labelImagen.setIcon(sRecursos.getImagenCheckSinCheck());
                         interfazPrincipal.cambiarAColumnaToDo(tarea);
                     }
-                    interfazPrincipal.cambiarEnMatrix(tarea);
+                    interfazPrincipal.completarEnMatrix(tarea);
                 }
 
                 interfazPrincipal.actualizarVistaTareas();
