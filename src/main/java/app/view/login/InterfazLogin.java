@@ -151,7 +151,7 @@ public class InterfazLogin extends JFrame{
 
             if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
                 dispose();
-                new InterfazPrincipal(new GestorTareas());
+                new InterfazPrincipal();
             }else{
                 textoLogin.setText("Inicio de sesión fallido..");
             }

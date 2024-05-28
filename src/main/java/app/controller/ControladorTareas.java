@@ -1,9 +1,7 @@
 package app.controller;
 
 import app.model.tareas.GestorTareas;
-import app.model.tareas.Tarea;
 import app.view.principal.VistaTareas;
-import app.view.templates.TemplatePanelTareaEspecifica;
 
 /**
  * Controlador de tareas de prueba
@@ -26,7 +24,7 @@ public class ControladorTareas {
         }
         Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
         gestorTareas.crearTarea(tarea);
-        new TemplatePanelTareaEspecifica(tarea, gestorTareas, vistaTareas);
+        new TemplatePanelTareas(tarea, gestorTareas, vistaTareas);
         vistaTareas.actualizarVistaTareas();
     }*/
 }
