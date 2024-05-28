@@ -359,8 +359,13 @@ public class VistaTareas extends JPanel {
 
                 Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU(), nombreE);
                 gestorTareas.crearTarea(tarea);
+
+
                 Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
-                TemplatePanelTareas panel = new TemplatePanelTareas(tareaReal, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
+//                TemplatePanelTareas panel = new TemplatePanelTareas(tareaReal, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
+
+                interfazPrincipal.addAColumnaToDo(tarea);
+                interfazPrincipal.cambiarEnMatrix(tarea);
 
                 textFieldNombreTarea.setText("Nombre de la tarea");
                 textPaneDescripcionTarea.setText("Descripción de la tarea");
@@ -369,6 +374,7 @@ public class VistaTareas extends JPanel {
 
 //                addListenerATareas(panel);
                 actualizarVistaTareas();
+                interfazPrincipal.actualizarVistaMatrix();
 
                 tareaSeleccionada = tareaReal;
                 setCardTareaSeleccionada(tareaReal);

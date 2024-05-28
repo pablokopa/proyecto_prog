@@ -77,7 +77,6 @@ public class GestorTareas {
                 String nombreE = resultado.getString("nombree");
 
                 Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
-                this.listaTareas.add(tarea);
                 TemplatePanelTareas panelTareas = new TemplatePanelTareas(tarea, this, interfazPrincipal, vistaMatrix);
                 TemplatePanelMatrix panelMatrix = new TemplatePanelMatrix(tarea, this, interfazPrincipal, vistaTareas);
 
@@ -124,19 +123,21 @@ public class GestorTareas {
                 String nombreE = resultado.getString("nombree");
 
                 Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
-                this.listaTareas.add(tarea);
+                TemplatePanelTareas panelTareas = new TemplatePanelTareas(tarea, this, interfazPrincipal, vistaMatrix);
+                TemplatePanelMatrix panelMatrix = new TemplatePanelMatrix(tarea, this, interfazPrincipal, vistaTareas);
 
-//                if (completadaT){
-//                    listaTareasCompletadas.add(new TemplatePanelTareas(tarea));
-//                } else {
-//                    listaTareasToDo.add(new TemplatePanelTareas(tarea));
-//                    switch (nombreE) {
-//                        case "No importante / No urgente" -> listaTareasArribaI.add(new TemplatePanelTareas(tarea));
-//                        case "No importante / Urgente" -> listaTareasArribaD.add(new TemplatePanelTareas(tarea));
-//                        case "Importante / No urgente" -> listaTareasAbajoI.add(new TemplatePanelTareas(tarea));
-//                        case "Importante / Urgente" -> listaTareasAbajoD.add(new TemplatePanelTareas(tarea));
-//                    }
-//                }
+                if (completadaT){
+                    listaTareasCompletadas.add(panelTareas);
+                } else {
+                    listaTareasToDo.add(panelTareas);
+
+                    switch (panelTareas.getTarea().getNombreE()){
+                        case "No importante / No urgente" -> listaTareasArribaI.add(panelMatrix);
+                        case "No importante / Urgente" -> listaTareasArribaD.add(panelMatrix);
+                        case "Importante / No urgente" -> listaTareasAbajoI.add(panelMatrix);
+                        case "Importante / Urgente" -> listaTareasAbajoD.add(panelMatrix);
+                    }
+                }
 
                 return tarea;
             }
