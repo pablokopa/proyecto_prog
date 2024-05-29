@@ -151,13 +151,13 @@ public class VistaTareas extends JPanel {
         panelNumeroTareas.setBorder(new EmptyBorder(5,10,5,10));
         panelInformacionGeneral.add(panelNumeroTareas, BorderLayout.SOUTH);
 
-        this.labelContadorTareasToDo = new JLabel("Tareas por hacer: "+gestorTareas.getListaTareasToDo().size());
+        this.labelContadorTareasToDo = new JLabel("Por hacer: "+gestorTareas.getListaTareasToDo().size());
         labelContadorTareasToDo.setFont(sRecursos.getMontserratMedium(18));
         labelContadorTareasToDo.setForeground(sRecursos.getGRANATE());
         labelContadorTareasToDo.setHorizontalAlignment(SwingConstants.CENTER);
         panelNumeroTareas.add(labelContadorTareasToDo);
 
-        this.labelContadorTareasCompletadas = new JLabel("Tareas completadas: "+gestorTareas.getListaTareasCompletadas().size());
+        this.labelContadorTareasCompletadas = new JLabel("Completadas: "+gestorTareas.getListaTareasCompletadas().size());
         labelContadorTareasCompletadas.setFont(sRecursos.getMontserratMedium(18));
         labelContadorTareasCompletadas.setHorizontalAlignment(SwingConstants.CENTER);
         labelContadorTareasCompletadas.setForeground(sRecursos.getGRANATE());
@@ -748,8 +748,8 @@ public class VistaTareas extends JPanel {
      * Cambia el cardLayout de la columna de información extra al card General Info
      */
     public void setCardGeneral(){
-        labelContadorTareasToDo.setText("Tareas por hacer: "+gestorTareas.getListaTareasToDo().size());
-        labelContadorTareasCompletadas.setText("Tareas completadas: "+gestorTareas.getListaTareasCompletadas().size());
+        labelContadorTareasToDo.setText("Por hacer: "+gestorTareas.getListaTareasToDo().size());
+        labelContadorTareasCompletadas.setText("Completadas: "+gestorTareas.getListaTareasCompletadas().size());
         cardLayout.show(columnaInformacion, "cardGeneral");
     }
 
