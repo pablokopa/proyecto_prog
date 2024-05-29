@@ -252,7 +252,7 @@ public class GestorTareas {
      * @param label label para mostrar mensajes de error
      * @return true si es correcto
      */
-    public boolean comprobarNombreEditarTarea(Tarea tareaOriginal, Tarea tareaEditada, JLabel label){
+    public boolean comprobarDatosEditarTarea(Tarea tareaOriginal, Tarea tareaEditada, JLabel label){
         if (tareaEditada.getNombreT().isBlank()){
             label.setText("El nombre no puede estar vacío");
             sRecursos.crearTimer(label);

@@ -3,6 +3,7 @@ package app.view.principal;
 import app.controller.ControladorTareas;
 import app.model.tareas.GestorTareas;
 import app.model.tareas.Tarea;
+import app.view.templates.TemplatePanelMatrix;
 import app.view.templates.TemplatePanelTareas;
 import services.Recursos;
 
@@ -18,6 +19,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
@@ -379,21 +381,46 @@ public class VistaTareas extends JPanel {
                         nombreE
                 );
 
-                if (!gestorTareas.comprobarNombreEditarTarea(tareaSeleccionada, tarea, labelMensajesErrorSeleccionada)){
+                if (!gestorTareas.comprobarDatosEditarTarea(tareaSeleccionada, tarea, labelMensajesErrorSeleccionada)){
                     return;
                 }
 
-                TemplatePanelTareas panelTemporal = new TemplatePanelTareas(tarea, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
-                TemplatePanelTareas panelReal;
+                TemplatePanelTareas panelTemporalTareas = new TemplatePanelTareas(tarea, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
+                TemplatePanelTareas panelTareas;
+
+                TemplatePanelMatrix panelTemporalMatrix = new TemplatePanelMatrix(tarea, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaTareas());
+                TemplatePanelMatrix panelMatrix;
+
                 if (tareaSeleccionada.getCompletadaT()){
-                    panelReal = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporal));
+                    panelTareas = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporalTareas));
                 } else {
-                    panelReal = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(panelTemporal));
+                    panelTareas = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(panelTemporalTareas));
+
+                    if (!tareaSeleccionada.getNombreE().equals(tarea.getNombreE())){
+                        interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
+
+                        switch (tarea.getNombreE()) {
+                            case "No importante / No urgente" -> {
+                                interfazPrincipal.addAPanelArribaI(tarea);
+                            }
+                            case "No importante / Urgente" -> {
+                                interfazPrincipal.addAPanelArribaD(tarea);
+                            }
+                            case "Importante / No urgente" -> {
+                                interfazPrincipal.addAPanelAbajoI(tarea);
+                            }
+                            case "Importante / Urgente" -> {
+                                interfazPrincipal.addAPanelAbajoD(tarea);
+                            }
+
+                        }
+                    }
                 }
-                panelReal.getTarea().setNombreT(nombreT);
-                panelReal.getTarea().setDescripcionT(descripcionT);
-                panelReal.getTarea().setNombreE(nombreE);
-                panelReal.setLabelTituloText(nombreT);
+
+                panelTareas.getTarea().setNombreT(nombreT);
+                panelTareas.getTarea().setDescripcionT(descripcionT);
+                panelTareas.getTarea().setNombreE(nombreE);
+                panelTareas.setLabelTituloText(nombreT);
 
                 gestorTareas.modificarTarea(tarea);
 
