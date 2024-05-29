@@ -17,6 +17,7 @@ import java.io.InputStream;
 public class Recursos {
     // Declaración de recursos gráficos
     private Color GRANATE, BLANCO, GRIS_CLARO, GRIS_DEFAULT, GRANATE_MID_LIGHT;
+    private Color colorGrisPrincipal, colorVerde, colorAmarillo, colorRojo, colorAzul;
     private Font MontserratRegular, MontserratMedium, MontserratBold, MontserratItalic;
     private Cursor cursorMano, cursorNormal;
     private Border bordeGranate, borderBlanco;
@@ -110,6 +111,12 @@ public class Recursos {
         GRIS_CLARO = new Color(245, 245, 245);
         GRIS_DEFAULT = new Color(238, 238, 238);
         GRANATE_MID_LIGHT = new Color(100, 0, 0);
+
+        colorGrisPrincipal = new Color(59, 59, 59);
+        colorVerde = new Color(175, 255, 168);
+        colorAmarillo = new Color(255, 255, 168);
+        colorRojo = new Color(255, 168, 168);
+        colorAzul = new Color(168, 235, 255);
     }
 
     // Cambiar fuente por otra Montserrat-Light/Plain
@@ -226,6 +233,36 @@ public class Recursos {
      * @return El color GRIS_DEFAULT.
      */
     public Color getGRIS_DEFAULT() { return GRIS_DEFAULT; }
+
+    /**
+     * Método para obtener el color GRIS_PRINCIPAL.
+     * @return El color GRIS_PRINCIPAL.
+     */
+    public Color getColorGrisPrincipal() { return colorGrisPrincipal; }
+
+    /**
+     * Método para obtener el color VERDE.
+     * @return El color VERDE.
+     */
+    public Color getColorVerde() { return colorVerde; }
+
+    /**
+     * Método para obtener el color AMARILLO.
+     * @return El color AMARILLO.
+     */
+    public Color getColorAmarillo() { return colorAmarillo; }
+
+    /**
+     * Método para obtener el color ROJO.
+     * @return El color ROJO.
+     */
+    public Color getColorRojo() { return colorRojo; }
+
+    /**
+     * Método para obtener el color AZUL.
+     * @return El color AZUL.
+     */
+    public Color getColorAzul() { return colorAzul; }
 
     /**
      * Método para obtener la fuente MontserratBold.

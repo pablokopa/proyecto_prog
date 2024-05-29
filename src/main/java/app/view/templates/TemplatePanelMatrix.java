@@ -46,9 +46,11 @@ public class TemplatePanelMatrix extends JPanel {
         this.setPreferredSize(new Dimension(Short.MAX_VALUE, 65));
         this.setMaximumSize(new Dimension(Short.MAX_VALUE, 65));
         this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, sRecursos.getBLANCO()));
+        this.setBackground(sRecursos.getBLANCO());
 
         crearLabelImagen();
         crearPanelTarea();
+        setBorderColor();
         addActionListeners();
     }
 
@@ -72,8 +74,18 @@ public class TemplatePanelMatrix extends JPanel {
         });
     }
 
-    public void setBorderColor(Color color) {
-        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, color));
+    public void setBorderColor() {
+        switch (tarea.getNombreE()){
+            case "No importante / No urgente" -> {
+                this.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, sRecursos.getColorVerde()));
+            } case "No importante / Urgente" -> {
+                this.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, sRecursos.getColorAzul()));
+            } case "Importante / No urgente" -> {
+                this.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getColorAmarillo()));
+            } case "Importante / Urgente" -> {
+                this.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getColorRojo()));
+            }
+        }
     }
 
     /* Pone el check correspondiente cuando se abre la aplicación */
@@ -101,6 +113,9 @@ public class TemplatePanelMatrix extends JPanel {
      */
     private void crearPanelTarea (){
         this.panelTarea = new JPanel();
+
+        panelTarea.setBackground(sRecursos.getBLANCO());
+
         panelTarea.setLayout(new BorderLayout());
 
         this.labelTitulo = new JLabel();

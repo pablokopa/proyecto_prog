@@ -2,6 +2,7 @@ package app.view.principal;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 
 import app.model.tareas.GestorTareas;
@@ -11,12 +12,6 @@ import services.Recursos;
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
     private GestorTareas gestorTareas;
-
-    private final Color colorGrisPrincipal = new Color(59, 59, 59);
-    private final Color colorVerde = new Color(175, 255, 168);
-    private final Color colorAmarillo = new Color(255, 255, 168);
-    private final Color colorRojo = new Color(255, 168, 168);
-    private final Color colorAzul = new Color(168, 235, 255);
 
     private InterfazPrincipal interfazPrincipal;
 
@@ -54,20 +49,20 @@ public class VistaMatrix extends JPanel {
      * Método para crear la matriz de Eisenhower.
      */
     private void crearMatrix() {
-        JPanel panelArribaI = crearPanelesMatrix(colorVerde);
-        this.panelTareasArribaI = crearPanelesTareas(panelArribaI, colorVerde, "No importante / No urgente");
+        JPanel panelArribaI = crearPanelesMatrix(sRecursos.getColorVerde());
+        this.panelTareasArribaI = crearPanelesTareas(panelArribaI, sRecursos.getColorVerde(), "No importante / No urgente");
         add(panelArribaI);
 
-        JPanel panelArribaD = crearPanelesMatrix(colorAzul);
-        this.panelTareasArribaD = crearPanelesTareas(panelArribaD, colorAzul, "No importante / Urgente");
+        JPanel panelArribaD = crearPanelesMatrix(sRecursos.getColorAzul());
+        this.panelTareasArribaD = crearPanelesTareas(panelArribaD, sRecursos.getColorAzul(), "No importante / Urgente");
         add(panelArribaD);
 
-        JPanel panelAbajoI = crearPanelesMatrix(colorAmarillo);
-        this.panelTareasAbajoI = crearPanelesTareas(panelAbajoI, colorAmarillo, "Importante / No urgente");
+        JPanel panelAbajoI = crearPanelesMatrix(sRecursos.getColorAmarillo());
+        this.panelTareasAbajoI = crearPanelesTareas(panelAbajoI, sRecursos.getColorAmarillo(), "Importante / No urgente");
         add(panelAbajoI);
 
-        JPanel panelAbajoD = crearPanelesMatrix(colorRojo);
-        this.panelTareasAbajoD = crearPanelesTareas(panelAbajoD, colorRojo, "Importante / Urgente");
+        JPanel panelAbajoD = crearPanelesMatrix(sRecursos.getColorRojo());
+        this.panelTareasAbajoD = crearPanelesTareas(panelAbajoD, sRecursos.getColorRojo(), "Importante / Urgente");
         add(panelAbajoD);
     }
 
@@ -95,8 +90,8 @@ public class VistaMatrix extends JPanel {
         /* Crea el botón de añadir tareas */
         JButton botonAddTareas = new JButton("Añadir tarea");
         botonAddTareas.setFont(sRecursos.getMontserratBold(14));
-        botonAddTareas.setBorder(new MatteBorder(5, 5, 5, 5, colorGrisPrincipal));
-        botonAddTareas.setBackground(colorGrisPrincipal);
+        botonAddTareas.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getColorGrisPrincipal()));
+        botonAddTareas.setBackground(sRecursos.getColorGrisPrincipal());
         botonAddTareas.setForeground(color);
         botonAddTareas.setCursor(sRecursos.getCursorMano());
 
@@ -108,7 +103,9 @@ public class VistaMatrix extends JPanel {
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(botonAddTareas);
 
-                panel.setBorder(new MatteBorder(0, 10, 5, 5, sRecursos.getBLANCO()));
+                Border borderFuera = BorderFactory.createMatteBorder(0, 10, 5, 5, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "No importante / Urgente" -> {
                 panel.add(panelTitulo, BorderLayout.NORTH);
@@ -116,7 +113,9 @@ public class VistaMatrix extends JPanel {
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(labelTitulo);
 
-                panel.setBorder(new MatteBorder(0, 5, 5, 10, sRecursos.getBLANCO()));
+                Border borderFuera = BorderFactory.createMatteBorder(0, 5, 5, 10, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / No urgente" -> {
                 panel.add(panelTitulo, BorderLayout.SOUTH);
@@ -124,7 +123,10 @@ public class VistaMatrix extends JPanel {
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(botonAddTareas);
 
-                panel.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
+
+                Border borderFuera = BorderFactory.createMatteBorder(5, 10, 10, 5, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / Urgente" -> {
                 panel.add(panelTitulo, BorderLayout.SOUTH);
@@ -132,7 +134,9 @@ public class VistaMatrix extends JPanel {
                 panelTitulo.add(Box.createHorizontalGlue());
                 panelTitulo.add(labelTitulo);
 
-                panel.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
+                Border borderFuera = BorderFactory.createMatteBorder(5, 5, 10, 10, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
         }
         panel.add(scrollTareas, BorderLayout.CENTER);
