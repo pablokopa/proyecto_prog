@@ -3,7 +3,6 @@ package app.view.principal;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.Border;
-import javax.swing.border.MatteBorder;
 
 import app.model.tareas.GestorTareas;
 import services.Recursos;
@@ -79,61 +78,33 @@ public class VistaMatrix extends JPanel {
 
         /* Crea el panel del título y del botón añadir tareas */
         JPanel panelTitulo = new JPanel();
-        panelTitulo.setLayout(new BoxLayout(panelTitulo, BoxLayout.X_AXIS));
         panelTitulo.setBackground(color);
         panelTitulo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        panel.add(panelTitulo, BorderLayout.NORTH);
 
         /* Crea el label del título */
         JLabel labelTitulo = new JLabel(titulo);
         labelTitulo.setFont(sRecursos.getMontserratBold(20));
-
-        /* Crea el botón de añadir tareas */
-        JButton botonAddTareas = new JButton("Añadir tarea");
-        botonAddTareas.setFont(sRecursos.getMontserratBold(14));
-        botonAddTareas.setBorder(new MatteBorder(5, 5, 5, 5, sRecursos.getColorGrisPrincipal()));
-        botonAddTareas.setBackground(sRecursos.getColorGrisPrincipal());
-        botonAddTareas.setForeground(color);
-        botonAddTareas.setCursor(sRecursos.getCursorMano());
+        panelTitulo.add(labelTitulo);
 
         /* Añade el panel del título en una disposición especifica según el panel de matrix */
         switch (titulo) {
             case "No importante / No urgente" -> {
-                panel.add(panelTitulo, BorderLayout.NORTH);
-                panelTitulo.add(labelTitulo);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(botonAddTareas);
-
                 Border borderFuera = BorderFactory.createMatteBorder(0, 10, 5, 5, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "No importante / Urgente" -> {
-                panel.add(panelTitulo, BorderLayout.NORTH);
-                panelTitulo.add(botonAddTareas);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(labelTitulo);
-
                 Border borderFuera = BorderFactory.createMatteBorder(0, 5, 5, 10, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / No urgente" -> {
-                panel.add(panelTitulo, BorderLayout.SOUTH);
-                panelTitulo.add(labelTitulo);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(botonAddTareas);
-
-
                 Border borderFuera = BorderFactory.createMatteBorder(5, 10, 10, 5, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / Urgente" -> {
-                panel.add(panelTitulo, BorderLayout.SOUTH);
-                panelTitulo.add(botonAddTareas);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(labelTitulo);
-
                 Border borderFuera = BorderFactory.createMatteBorder(5, 5, 10, 10, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
