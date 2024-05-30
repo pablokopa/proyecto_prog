@@ -15,8 +15,12 @@ import services.Recursos;
  * Clase que gestiona los usuarios. Hace las operaciones relacionadas con la base de datos. (Registro, conexión, comprobación de datos, etc)
  */
 public class GestorUsuarios {
-
     private final Recursos sRecursos = Recursos.getService();
+    private final ConectarBD conectarBD = new ConectarBD();
+
+//    public GestorUsuarios(ConectarBD conectarBD) {
+//        this.conectarBD = conectarBD;
+//    }
 
     /**
      * Método para registrar un nuevo usuario en la base de datos
@@ -34,7 +38,7 @@ public class GestorUsuarios {
             return false;
         }
 
-        try (Connection conexion = ConectarBD.conectar()) {
+        try (Connection conexion = conectarBD.conectar()) {
             String passwordHashed = BCrypt.hashpw(passwordUsuario, BCrypt.gensalt());     // Encripta la contraseña del usuario para más seguridad. Siempre es un String de 60 carácteres.
 
             String sql = "INSERT INTO usuario (nombreU, passwordU) VALUES (?, ?)";        // Consulta SQL para insertar un nuevo usuario
@@ -61,7 +65,7 @@ public class GestorUsuarios {
     public boolean conectarUsuario (String nombreUsuario, String passwordUsuario, JLabel textoComprobacion){
         String passwordUsuarioHashed;
 
-        try (Connection conexion = ConectarBD.conectar()) {
+        try (Connection conexion = conectarBD.conectar()) {
             /* Consulta SQL para obtener la contraseña del usuario */
             String sql = "SELECT passwordU FROM usuario WHERE nombreU = ?";
             PreparedStatement prepare = conexion.prepareStatement(sql);
@@ -99,7 +103,7 @@ public class GestorUsuarios {
      */
     public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
 
-        try (Connection conexion = ConectarBD.conectar()) {
+        try (Connection conexion = conectarBD.conectar()) {
 
             /* Consulta SQL para comprobar si el nombre de usuario existe */
             String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";
@@ -180,7 +184,7 @@ public class GestorUsuarios {
     public int contarUsuarios() {
         /* Consulta SQL para contar el número de usuarios */
         String sql = "SELECT COUNT(*) FROM usuario";
-        try (Connection conexion = ConectarBD.conectar()) {
+        try (Connection conexion = conectarBD.conectar()) {
             PreparedStatement prepare = conexion.prepareStatement(sql);
             ResultSet resultadoQuery = prepare.executeQuery();
             if(resultadoQuery.next()){

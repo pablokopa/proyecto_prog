@@ -14,7 +14,7 @@ public class ConectarBD {
      * @return Connection conexión con la base de datos
      * @throws SQLException si no se puede establecer la conexión
      */
-    public static Connection conectar() throws SQLException {
+    public Connection conectar() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);       // Establece la conexión y la devuelve
     }
 }

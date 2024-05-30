@@ -14,9 +14,12 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class GestorTareas {
+    private final Recursos sRecursos = Recursos.getService();
+    private final ConectarBD conectarBD = new ConectarBD();
+
     private final ArrayList<Tarea> listaTareas;
     private final Usuario usuario;
-    private final Recursos sRecursos = Recursos.getService();
+
 
     private ArrayList<TemplatePanelTareas> listaTareasToDo, listaTareasCompletadas;
     private ArrayList<TemplatePanelMatrix> listaTareasArribaI, listaTareasArribaD, listaTareasAbajoI, listaTareasAbajoD;
@@ -59,7 +62,7 @@ public class GestorTareas {
     public void getTareasDeBase(){
         String sql = "select * from tarea where nombreu = ?";
 
-        try (Connection conexion = ConectarBD.conectar()){
+        try (Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, usuario.getNombreU());
 
@@ -106,7 +109,7 @@ public class GestorTareas {
     public Tarea getUltimaTarea(){
         String sql = "SELECT * FROM tarea ORDER BY idT DESC LIMIT 1;";
 
-        try (Connection conexion = ConectarBD.conectar()){
+        try (Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
 
             prepare.executeQuery();
@@ -155,7 +158,7 @@ public class GestorTareas {
     public void crearTarea(Tarea tarea) {
         String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU, nombreE) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conexion = ConectarBD.conectar()) {
+        try (Connection conexion = conectarBD.conectar()) {
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, tarea.getNombreT());
             prepare.setString(2, tarea.getDescripcionT());
@@ -179,7 +182,7 @@ public class GestorTareas {
     public boolean completarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET completadaT = ?, fechaFinalizacionT = ? WHERE idT = ?";
 
-        try (Connection conexion = ConectarBD.conectar()){
+        try (Connection conexion = conectarBD.conectar()){
 
             if (tarea.getCompletadaT()){
                 tarea.setCompletadaT(false);
@@ -211,7 +214,7 @@ public class GestorTareas {
     public boolean eliminarTarea(Tarea tarea){
         String sql = "delete from tarea where idt = ? and nombreu = ?";
 
-        try(Connection conexion = ConectarBD.conectar()){
+        try(Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setInt(1, tarea.getIdT());
             prepare.setString(2, tarea.getNombreU());
@@ -231,7 +234,7 @@ public class GestorTareas {
     public boolean modificarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET nombret = ?, descripciont = ?, nombree = ? WHERE idt = ?";
 
-        try(Connection conexion = ConectarBD.conectar()){
+        try(Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, tarea.getNombreT());
             prepare.setString(2, tarea.getDescripcionT());
