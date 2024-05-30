@@ -63,13 +63,6 @@ class GestorTareasTest {
         }
     }
 
-//    @Test
-//    public void testGetTareasDeBase() throws SQLException {
-//        when(resultSet.next()).thenReturn(true).thenReturn(false); // Simular que hay una tarea en la base de datos
-//        gestorTareas.getTareasDeBase();
-//        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
-//    }
-
     @Test
     public void testCrearTarea() throws SQLException {
         Tarea tarea = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
