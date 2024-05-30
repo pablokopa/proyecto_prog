@@ -133,19 +133,7 @@ public class InterfazLogin extends JFrame{
             int codigoError = controladorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario);
             if (codigoError != CodigoError.SIN_ERROR) {
                 textoLogin.setText("Registro fallido..");
-                String mensajeError = "";
-
-                switch (codigoError) {
-                    case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
-                    case CodigoError.ERROR_USUARIO_YA_EXISTE -> mensajeError = "El nombre de usuario ya existe";
-                    case CodigoError.ERROR_NOMBRE_CORTO -> mensajeError = "El nombre de usuario debe tener al menos 3 carácteres";
-                    case CodigoError.ERROR_NOMBRE_LARGO -> mensajeError = "El nombre de usuario no puede tener más de 40 carácteres";
-                    case CodigoError.ERROR_PASSWORD_CORTA -> mensajeError = "La contraseña debe tener al menos 4 carácteres";
-                    case CodigoError.ERROR_PASSWORD_LARGA -> mensajeError = "La contraseña debe tener menos de 50 carácteres";
-                    case CodigoError.ERROR_PASSWORD_CON_ESPACIOS -> mensajeError = "La contraseña no puede tener espacios en blanco";
-                    case CodigoError.ERROR_PASSWORD_CARACTERES_RAROS -> mensajeError = "La contraseña no puede tener carácteres extraños";
-                }
-
+                String mensajeError = getMensajeError(codigoError);
                 textoComprobacion.setText(mensajeError);
                 sRecursos.crearTimer(textoComprobacion);
             } else {
@@ -165,15 +153,35 @@ public class InterfazLogin extends JFrame{
             String nombreUsuario = cuadroUsuario.getText();
             String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
 
-            if (gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario, textoComprobacion)) {   // Se intenta conectar al usuario; si no se conectó, se cambia el textoLogin
+            int codigoError = controladorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario);
+            if (codigoError != CodigoError.SIN_ERROR) {
+                textoLogin.setText("Inicio de sesión fallido..");
+                String mensajeError = getMensajeError(codigoError);
+                textoComprobacion.setText(mensajeError);
+                sRecursos.crearTimer(textoComprobacion);
+            } else {
                 dispose();
                 new InterfazPrincipal();
-            }else{
-                textoLogin.setText("Inicio de sesión fallido..");
             }
         });
+    }
 
+    private static String getMensajeError(int codigoError) {
+        String mensajeError = "";
 
+        switch (codigoError) {
+            case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
+            case CodigoError.ERROR_USUARIO_YA_EXISTE -> mensajeError = "El nombre de usuario ya existe";
+            case CodigoError.ERROR_NOMBRE_CORTO -> mensajeError = "El nombre de usuario debe tener al menos 3 carácteres";
+            case CodigoError.ERROR_NOMBRE_LARGO -> mensajeError = "El nombre de usuario no puede tener más de 40 carácteres";
+            case CodigoError.ERROR_PASSWORD_CORTA -> mensajeError = "La contraseña debe tener al menos 4 carácteres";
+            case CodigoError.ERROR_PASSWORD_LARGA -> mensajeError = "La contraseña debe tener menos de 50 carácteres";
+            case CodigoError.ERROR_PASSWORD_CON_ESPACIOS -> mensajeError = "La contraseña no puede tener espacios en blanco";
+            case CodigoError.ERROR_PASSWORD_CARACTERES_RAROS -> mensajeError = "La contraseña no puede tener carácteres extraños";
+            case CodigoError.ERROR_USUARIO_NO_REGISTRADO -> mensajeError = "El usuario no está registrado";
+            case CodigoError.ERROR_PASSWORD_INCORRECTA -> mensajeError = "La contraseña es incorrecta";
+        }
+        return mensajeError;
     }
 
     /**

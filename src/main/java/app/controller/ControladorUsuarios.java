@@ -3,13 +3,15 @@ package app.controller;
 import app.model.CodigoError;
 import app.model.usuarios.GestorUsuarios;
 
-import javax.swing.*;
-
 public class ControladorUsuarios {
     private final GestorUsuarios gestorUsuarios;
 
     public ControladorUsuarios(GestorUsuarios gestorUsuarios) {
         this.gestorUsuarios = gestorUsuarios;
+    }
+
+    public int conectarUsuario (String nombreUsuario, String passwordUsuario){
+        return gestorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario);
     }
 
     public int registrarUsuario(String nombreUsuario, String passwordUsuario) {

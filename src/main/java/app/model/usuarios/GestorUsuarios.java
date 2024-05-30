@@ -3,21 +3,52 @@ package app.model.usuarios;
 import app.model.CodigoError;
 import app.model.basedatos.ConectarBD;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.BCrypt;
-import services.Recursos;
 
 /**
  * Clase que gestiona los usuarios. Hace las operaciones relacionadas con la base de datos. (Registro, conexión, comprobación de datos, etc)
  */
 public class GestorUsuarios {
-    private final Recursos sRecursos = Recursos.getService();
     private final ConectarBD conectarBD = new ConectarBD();
+
+    /**
+     * Comprueba las credenciales y conecta al usuario si son correctas.
+     * @param nombreUsuario obtenido desde la interfaz de usuario
+     * @param passwordUsuario obtenido desde la interfaz de usuario
+     * @param textoComprobacion para mostrar mensajes de error
+     * @return true si el usuario fue conectado correctamente
+     */
+    public int conectarUsuario (String nombreUsuario, String passwordUsuario){
+        String passwordUsuarioHashed;
+
+        try (Connection conexion = conectarBD.conectar()) {
+            /* Consulta SQL para obtener la contraseña del usuario */
+            String sql = "SELECT passwordU FROM usuario WHERE nombreU = ?";
+            PreparedStatement prepare = conexion.prepareStatement(sql);
+            prepare.setString(1, nombreUsuario);
+
+            ResultSet resultado = prepare.executeQuery();
+            if (resultado.next()){
+                passwordUsuarioHashed = resultado.getString("passwordu");
+                /* Comprueba si la contraseña del usuario es correcta */
+                if (!BCrypt.checkpw(passwordUsuario, passwordUsuarioHashed)){
+                    return CodigoError.ERROR_PASSWORD_INCORRECTA;
+                }
+            } else {
+                return CodigoError.ERROR_USUARIO_NO_REGISTRADO;
+            }
+        } catch (SQLException e) {
+            return CodigoError.ERROR_SIN_CONEXION;
+        }
+
+        Usuario.setUsuarioConectado(nombreUsuario, passwordUsuarioHashed);
+        return CodigoError.SIN_ERROR;
+    }
 
     /**
      * Método para registrar un nuevo usuario en la base de datos
@@ -42,47 +73,6 @@ public class GestorUsuarios {
             return CodigoError.ERROR_SIN_CONEXION;
         }
     }
-
-    /**
-     * Comprueba las credenciales y conecta al usuario si son correctas.
-     * @param nombreUsuario obtenido desde la interfaz de usuario
-     * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @param textoComprobacion para mostrar mensajes de error
-     * @return true si el usuario fue conectado correctamente
-     */
-    public boolean conectarUsuario (String nombreUsuario, String passwordUsuario, JLabel textoComprobacion){
-        String passwordUsuarioHashed;
-
-        try (Connection conexion = conectarBD.conectar()) {
-            /* Consulta SQL para obtener la contraseña del usuario */
-            String sql = "SELECT passwordU FROM usuario WHERE nombreU = ?";
-            PreparedStatement prepare = conexion.prepareStatement(sql);
-            prepare.setString(1, nombreUsuario);
-
-            ResultSet resultado = prepare.executeQuery();
-            if (resultado.next()){
-                passwordUsuarioHashed = resultado.getString("passwordu");
-                /* Comprueba si la contraseña del usuario es correcta */
-                if (!BCrypt.checkpw(passwordUsuario, passwordUsuarioHashed)){
-                    textoComprobacion.setText("Contraseña incorrecta");
-                    sRecursos.crearTimer(textoComprobacion);
-                    return false;
-                }
-            } else {
-                textoComprobacion.setText("Usuario no registrado");
-                sRecursos.crearTimer(textoComprobacion);
-                return false;
-            }
-        } catch (SQLException e) {
-            textoComprobacion.setText("No hay conexión");
-            sRecursos.crearTimer(textoComprobacion);
-            return false;
-        }
-
-        Usuario.setUsuarioConectado(nombreUsuario, passwordUsuarioHashed);
-        return true;
-    }
-
 
     /**
      * Comprueba si el nombre de usuario tiene al menos 3 carácteres y no existe en la base de datos

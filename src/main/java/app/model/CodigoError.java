@@ -4,6 +4,7 @@ public interface CodigoError {
     int SIN_ERROR = 0;
     int ERROR_SIN_CONEXION = 1;
     int ERROR_USUARIO_YA_EXISTE = 2;
+    int ERROR_USUARIO_NO_REGISTRADO = 10;
     int ERROR_PASSWORD_INCORRECTA = 3;
     int ERROR_NOMBRE_CORTO = 4;
     int ERROR_NOMBRE_LARGO = 5;
