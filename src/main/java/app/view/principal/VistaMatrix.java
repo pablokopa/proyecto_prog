@@ -4,23 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.Border;
 
-import app.model.tareas.GestorTareas;
 import services.Recursos;
 
 
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
-    private GestorTareas gestorTareas;
-
-    private InterfazPrincipal interfazPrincipal;
 
     private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
 
-    public VistaMatrix(GestorTareas gestorTareas, InterfazPrincipal interfazPrincipal) {
+    public VistaMatrix() {
         sRecursos = Recursos.getService();
-
-        this.interfazPrincipal = interfazPrincipal;
-        this.gestorTareas = gestorTareas;
 
         this.setLayout(new GridLayout(2, 2));
 

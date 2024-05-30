@@ -1,10 +1,11 @@
 package app.view.login;
 
+import app.controller.ControladorTareas;
 import app.controller.ControladorUsuarios;
 import app.model.CodigoError;
+import app.model.tareas.GestorTareas;
 import app.view.principal.InterfazPrincipal;
 import services.Recursos;
-import app.model.usuarios.GestorUsuarios;
 import services.ObjGraficos;
 
 import javax.swing.*;
@@ -18,14 +19,12 @@ import java.awt.event.MouseEvent;
 public class InterfazLogin extends JFrame{
     private final ObjGraficos sObjGraficos;
     private final Recursos sRecursos;
-    private final GestorUsuarios gestorUsuarios;
     private final ControladorUsuarios controladorUsuarios;
 
     private int mouseX, x;
     private int mouseY, y;
 
-    private JButton botonCerrar, botonRegistrar, botonEntrar;
-    private JLabel labelLogo, labelUsuario, labelPassword;
+    private JButton botonEntrar;
     private JLabel textoLogin, textoComprobacion, textoNumeroUsuarios;
     private JTextField cuadroUsuario;
     private JPasswordField cuadroPassword;
@@ -34,18 +33,17 @@ public class InterfazLogin extends JFrame{
     /**
      * Constructor de la clase InterfazLogin.
      * Inicializa los componentes de la interfaz de usuario y configura la ventana.
-     * @param gestorUsuarios Gestor de usuarios para manejar la lógica de inicio de sesión y registro.
      */
-    public InterfazLogin(GestorUsuarios gestorUsuarios){
+    public InterfazLogin(ControladorUsuarios controladorUsuarios){
         sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
-        this.gestorUsuarios = gestorUsuarios;
-        this.controladorUsuarios = new ControladorUsuarios(gestorUsuarios);
+
+        this.controladorUsuarios = controladorUsuarios;
 
         this.moverVentana();
         this.crearJPanels();
         this.crearFieldsDatosUsuario();
-        this.crearJButtons(gestorUsuarios);
+        this.crearJButtons();
         this.crearJLabels();
 
         /* Configuración */
@@ -59,6 +57,7 @@ public class InterfazLogin extends JFrame{
         setIconImage(sRecursos.getImagenLogo2().getImage());
         setVisible(true);
 
+        /* Botón que se pulsará al presionar Enter */
         getRootPane().setDefaultButton(botonEntrar);
 
         this.actualizarContadorUsuarios();
@@ -116,14 +115,14 @@ public class InterfazLogin extends JFrame{
      * Método para crear los botones.
      * Crea y configura los botones para el logo, el botón de cerrar, el icono de usuario y el icono de contraseña.
      */
-    public void crearJButtons(GestorUsuarios gestorUsuarios){
+    public void crearJButtons(){
 
-        botonCerrar = construirBotonCerrar();
+        JButton botonCerrar = construirBotonCerrar();
         botonCerrar.setBounds(360,5,35,35);
         panelDerecha.add(botonCerrar);
 
         /* Botón de registrarse */
-        botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMontserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
+        JButton botonRegistrar = sObjGraficos.construirJButton("Registrarse", (panelDerecha.getWidth() - 150) / 2, 370, 150, 40, sRecursos.getCursorMano(), null, sRecursos.getMontserratBold(14), sRecursos.getGRANATE(), Color.WHITE, null, "", true);
         panelDerecha.add(botonRegistrar);
 
         botonRegistrar.addActionListener(e -> {
@@ -133,15 +132,14 @@ public class InterfazLogin extends JFrame{
             int codigoError = controladorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario);
             if (codigoError != CodigoError.SIN_ERROR) {
                 textoLogin.setText("Registro fallido..");
-                String mensajeError = getMensajeError(codigoError);
-                textoComprobacion.setText(mensajeError);
+                textoComprobacion.setText(getMensajeError(codigoError));
                 sRecursos.crearTimer(textoComprobacion);
             } else {
                 textoComprobacion.setText("Usuario registrado correctamente");
-                textoLogin.setText("Bienvenido, "+ cuadroUsuario.getText()+"!");
+                textoLogin.setText("Bienvenido, "+nombreUsuario+"!");
                 cuadroUsuario.setText("");
                 cuadroPassword.setText("");
-                textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
+                textoNumeroUsuarios.setText("Nº Usuarios: "+controladorUsuarios.contarUsuarios());
             }
         });
 
@@ -156,30 +154,31 @@ public class InterfazLogin extends JFrame{
             int codigoError = controladorUsuarios.conectarUsuario(nombreUsuario, passwordUsuario);
             if (codigoError != CodigoError.SIN_ERROR) {
                 textoLogin.setText("Inicio de sesión fallido..");
-                String mensajeError = getMensajeError(codigoError);
-                textoComprobacion.setText(mensajeError);
+                textoComprobacion.setText(getMensajeError(codigoError));
                 sRecursos.crearTimer(textoComprobacion);
             } else {
                 dispose();
-                new InterfazPrincipal();
+                GestorTareas gestorTareas = new GestorTareas();
+                ControladorTareas controladorTareas = new ControladorTareas(gestorTareas);
+                new InterfazPrincipal(controladorTareas);
             }
         });
     }
 
-    private static String getMensajeError(int codigoError) {
+    private String getMensajeError(int codigoError) {
         String mensajeError = "";
 
         switch (codigoError) {
             case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
             case CodigoError.ERROR_USUARIO_YA_EXISTE -> mensajeError = "El nombre de usuario ya existe";
-            case CodigoError.ERROR_NOMBRE_CORTO -> mensajeError = "El nombre de usuario debe tener al menos 3 carácteres";
-            case CodigoError.ERROR_NOMBRE_LARGO -> mensajeError = "El nombre de usuario no puede tener más de 40 carácteres";
-            case CodigoError.ERROR_PASSWORD_CORTA -> mensajeError = "La contraseña debe tener al menos 4 carácteres";
-            case CodigoError.ERROR_PASSWORD_LARGA -> mensajeError = "La contraseña debe tener menos de 50 carácteres";
-            case CodigoError.ERROR_PASSWORD_CON_ESPACIOS -> mensajeError = "La contraseña no puede tener espacios en blanco";
-            case CodigoError.ERROR_PASSWORD_CARACTERES_RAROS -> mensajeError = "La contraseña no puede tener carácteres extraños";
+            case CodigoError.ERROR_USUARIO_NOMBRE_CORTO -> mensajeError = "El nombre de usuario debe tener al menos 3 carácteres";
+            case CodigoError.ERROR_USUARIO_NOMBRE_LARGO -> mensajeError = "El nombre de usuario no puede tener más de 40 carácteres";
+            case CodigoError.ERROR_USUARIO_PASSWORD_CORTA -> mensajeError = "La contraseña debe tener al menos 4 carácteres";
+            case CodigoError.ERROR_USUARIO_PASSWORD_LARGA -> mensajeError = "La contraseña debe tener menos de 50 carácteres";
+            case CodigoError.ERROR_USUARIO_PASSWORD_CON_ESPACIOS -> mensajeError = "La contraseña no puede tener espacios en blanco";
+            case CodigoError.ERROR_USUARIO_PASSWORD_CARACTERES_RAROS -> mensajeError = "La contraseña no puede tener carácteres extraños";
             case CodigoError.ERROR_USUARIO_NO_REGISTRADO -> mensajeError = "El usuario no está registrado";
-            case CodigoError.ERROR_PASSWORD_INCORRECTA -> mensajeError = "La contraseña es incorrecta";
+            case CodigoError.ERROR_USUARIO_PASSWORD_INCORRECTA -> mensajeError = "La contraseña es incorrecta";
         }
         return mensajeError;
     }
@@ -190,15 +189,15 @@ public class InterfazLogin extends JFrame{
      */
     public void crearJLabels(){
         /* Imagen logo */
-        labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "");
+        JLabel labelLogo = sObjGraficos.construirJLabel(null, 50, 125, 550, 250, null, sRecursos.getImagenLogo(), null, null, null, null, "");
         panelIzquierda.add(labelLogo);
 
         /* Imagen candado password */
-        labelPassword = sObjGraficos.construirJLabel(null, 25, 230, 32, 32, null, sRecursos.getImagenPassword(), null, null, null, null, "");
+        JLabel labelPassword = sObjGraficos.construirJLabel(null, 25, 230, 32, 32, null, sRecursos.getImagenPassword(), null, null, null, null, "");
         panelDerecha.add(labelPassword);
 
         /* Imagen logo usuario */
-        labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
+        JLabel labelUsuario = sObjGraficos.construirJLabel(null, 25, 160, 32, 32, null, sRecursos.getImagenUsuario(), null, null, null, null, "");
         panelDerecha.add(labelUsuario);
 
         /* Texto login */
@@ -215,7 +214,7 @@ public class InterfazLogin extends JFrame{
     }
 
     public void actualizarContadorUsuarios(){
-        textoNumeroUsuarios.setText("Nº Usuarios: "+gestorUsuarios.contarUsuarios());
+        textoNumeroUsuarios.setText("Nº Usuarios: "+controladorUsuarios.contarUsuarios());
     }
 
     /**

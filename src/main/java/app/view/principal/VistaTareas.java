@@ -1,9 +1,8 @@
 package app.view.principal;
 
 import app.controller.ControladorTareas;
-import app.model.tareas.GestorTareas;
+import app.model.CodigoError;
 import app.model.tareas.Tarea;
-import app.view.templates.TemplatePanelMatrix;
 import app.view.templates.TemplatePanelTareas;
 import services.Recursos;
 
@@ -24,12 +23,11 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
 public class VistaTareas extends JPanel {
-
+    private final Recursos sRecursos = Recursos.getService();
+    private final InterfazPrincipal interfazPrincipal;
     private final ControladorTareas controladorTareas;
 
-    private final Recursos sRecursos = Recursos.getService();
     private GridBagConstraints gbc;
-    private final GestorTareas gestorTareas;
 
     private JPanel columnaInformacion;
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
@@ -38,25 +36,19 @@ public class VistaTareas extends JPanel {
     private JLabel labelFechaCreacion, labelFechaFinalizacion;
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
     private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
-    private JComboBox<String> comboEtiquetasNueva, comboEtiquetasSeleccionada, comboRepetibleNueva, comboRepetibleSeleccionada;
+    private JComboBox<String> comboEtiquetasNueva, comboEtiquetasSeleccionada;
     private JLabel labelContadorTareasToDo, labelContadorTareasCompletadas;
 
-    private InterfazPrincipal interfazPrincipal;
-
     private final String[] opcionesEtiquetas = {"Sin etiqueta", "Importante / Urgente", "Importante / No urgente", "No importante / Urgente", "No importante / No urgente"};
-    private final String[] opcionesRepeticion = {"No repetir", "Lunes a viernes", "Todos los días"};
 
     private Tarea  tareaSeleccionada;
-
     private final CardLayout cardLayout;
 
     /**
      * Constructor de la vista de tareas
-     * @param gestorTareas Gestor de tareas
      */
-    public VistaTareas(GestorTareas gestorTareas, InterfazPrincipal interfazPrincipal) {
-        this.controladorTareas = new ControladorTareas(gestorTareas, this);
-        this.gestorTareas = gestorTareas;
+    public VistaTareas(ControladorTareas controladorTareas, InterfazPrincipal interfazPrincipal) {
+        this.controladorTareas = controladorTareas;
         this.interfazPrincipal = interfazPrincipal;
         this.tareaSeleccionada = null;
 
@@ -150,13 +142,13 @@ public class VistaTareas extends JPanel {
         panelNumeroTareas.setBorder(new EmptyBorder(5,10,5,10));
         panelInformacionGeneral.add(panelNumeroTareas, BorderLayout.SOUTH);
 
-        this.labelContadorTareasToDo = new JLabel("Por hacer: "+gestorTareas.getListaTareasToDo().size());
+        this.labelContadorTareasToDo = new JLabel("Por hacer: "+interfazPrincipal.getListaTareasToDo().size());
         labelContadorTareasToDo.setFont(sRecursos.getMontserratMedium(18));
         labelContadorTareasToDo.setForeground(sRecursos.getGRANATE());
         labelContadorTareasToDo.setHorizontalAlignment(SwingConstants.CENTER);
         panelNumeroTareas.add(labelContadorTareasToDo);
 
-        this.labelContadorTareasCompletadas = new JLabel("Completadas: "+gestorTareas.getListaTareasCompletadas().size());
+        this.labelContadorTareasCompletadas = new JLabel("Completadas: "+interfazPrincipal.getListaTareasCompletadas().size());
         labelContadorTareasCompletadas.setFont(sRecursos.getMontserratMedium(18));
         labelContadorTareasCompletadas.setHorizontalAlignment(SwingConstants.CENTER);
         labelContadorTareasCompletadas.setForeground(sRecursos.getGRANATE());
@@ -251,7 +243,7 @@ public class VistaTareas extends JPanel {
         gbc = setGbc(0, 4, 1, 0.01, GridBagConstraints.BOTH);
         panelInformacionTarea.add(panelMensajesError, gbc);
 
-        this.labelMensajesErrorSeleccionada = construirLabelMensajeError();
+        labelMensajesErrorSeleccionada = construirLabelMensajeError();
         panelMensajesError.add(labelMensajesErrorSeleccionada, BorderLayout.CENTER);
     }
 
@@ -311,6 +303,20 @@ public class VistaTareas extends JPanel {
         panelMensajesError.add(labelMensajesError, BorderLayout.CENTER);
     }
 
+
+    private String getMensajeError(int codigoError) {
+        String mensajeError = "";
+
+        switch (codigoError) {
+            case CodigoError.ERROR_TAREA_SIN_NOMBRE -> mensajeError = "Introduce un nombre";
+            case CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO -> mensajeError = "El nombre no puede estar en blanco";
+            case CodigoError.ERROR_TAREA_NOMBRE_LARGO -> mensajeError = "El nombre no puede tener más de 35 caracteres";
+            case CodigoError.ERROR_TAREA_SIN_CAMBIOS -> mensajeError = "No se han realizado cambios";
+            case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
+        }
+        return mensajeError;
+    }
+
     /**
      * Añade los listeners generales a los botones de la vista
      */
@@ -324,30 +330,29 @@ public class VistaTareas extends JPanel {
             }
         });
 
+
         /* Listener del boton confirmar tarea para confirmar la creación de una nueva tarea */
         labelConfirmarTarea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String nombreT = textFieldNombreTarea.getText();
-                if (!gestorTareas.comprobarNombreCrearTarea(nombreT, labelMensajesError)){
-                    return;
-                }
-
                 String descripcionT = textPaneDescripcionTarea.getText();
                 if (descripcionT.equals("Descripción de la tarea")){
                     descripcionT = "";
                 }
-
                 String nombreE = comboEtiquetasNueva.getSelectedItem().toString();
 
-                Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU(), nombreE);
-                gestorTareas.crearTarea(tarea);
+                int codigoError = controladorTareas.crearTarea(nombreT, descripcionT, nombreE);
+                if (codigoError != CodigoError.SIN_ERROR){
+                    labelMensajesError.setText(getMensajeError(codigoError));
+                    sRecursos.crearTimer(labelMensajesError);
+                    return;
+                }
 
-
-                Tarea tareaReal = gestorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
+                Tarea tarea = controladorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
 
                 interfazPrincipal.addAColumnaToDo(tarea);
-                interfazPrincipal.completarEnMatrix(tarea);
+                interfazPrincipal.addEnMatrix(tarea);
 
                 textFieldNombreTarea.setText("Nombre de la tarea");
                 textPaneDescripcionTarea.setText("Descripción de la tarea");
@@ -356,8 +361,8 @@ public class VistaTareas extends JPanel {
                 actualizarVistaTareas();
                 interfazPrincipal.actualizarVistaMatrix();
 
-                tareaSeleccionada = tareaReal;
-                setCardTareaSeleccionada(tareaReal);
+                tareaSeleccionada = tarea;
+                setCardTareaSeleccionada(tarea);
             }
         });
 
@@ -369,61 +374,47 @@ public class VistaTareas extends JPanel {
                 String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
                 String nombreE = comboEtiquetasSeleccionada.getSelectedItem().toString();
 
-                Tarea tarea = new Tarea(
+                Tarea tareaModificada = new Tarea(
                         tareaSeleccionada.getIdT(),
                         nombreT,
                         descripcionT,
                         tareaSeleccionada.getFechaCreacionT(),
                         tareaSeleccionada.getFechaFinalizacionT(),
                         tareaSeleccionada.getCompletadaT(),
-                        gestorTareas.getUsuario().getNombreU(),
+                        controladorTareas.getUsuario().getNombreU(),
                         nombreE
                 );
 
-                if (!gestorTareas.comprobarDatosEditarTarea(tareaSeleccionada, tarea, labelMensajesErrorSeleccionada)){
-                    return;
-                }
+                int codigoError = controladorTareas.modificarTarea(tareaSeleccionada, tareaModificada);
+                if (codigoError == CodigoError.SIN_ERROR){
+                    TemplatePanelTareas panelTemporalTareas = new TemplatePanelTareas(tareaModificada, controladorTareas, interfazPrincipal);
+                    TemplatePanelTareas panelTareas;
 
-                TemplatePanelTareas panelTemporalTareas = new TemplatePanelTareas(tarea, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaMatrix());
-                TemplatePanelTareas panelTareas;
+                    if (tareaSeleccionada.getCompletadaT()){
+                        panelTareas = interfazPrincipal.getListaTareasCompletadas().get(interfazPrincipal.getListaTareasCompletadas().indexOf(panelTemporalTareas));
+                    } else {
+                        panelTareas = interfazPrincipal.getListaTareasToDo().get(interfazPrincipal.getListaTareasToDo().indexOf(panelTemporalTareas));
 
-                TemplatePanelMatrix panelTemporalMatrix = new TemplatePanelMatrix(tarea, gestorTareas, interfazPrincipal, interfazPrincipal.getVistaTareas());
-                TemplatePanelMatrix panelMatrix;
-
-                if (tareaSeleccionada.getCompletadaT()){
-                    panelTareas = gestorTareas.getListaTareasCompletadas().get(gestorTareas.getListaTareasCompletadas().indexOf(panelTemporalTareas));
-                } else {
-                    panelTareas = gestorTareas.getListaTareasToDo().get(gestorTareas.getListaTareasToDo().indexOf(panelTemporalTareas));
-
-                    if (!tareaSeleccionada.getNombreE().equals(tarea.getNombreE())){
-                        interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
-
-                        switch (tarea.getNombreE()) {
-                            case "No importante / No urgente" -> {
-                                interfazPrincipal.addAPanelArribaI(tarea);
-                            }
-                            case "No importante / Urgente" -> {
-                                interfazPrincipal.addAPanelArribaD(tarea);
-                            }
-                            case "Importante / No urgente" -> {
-                                interfazPrincipal.addAPanelAbajoI(tarea);
-                            }
-                            case "Importante / Urgente" -> {
-                                interfazPrincipal.addAPanelAbajoD(tarea);
-                            }
-
+                        if (!tareaSeleccionada.getNombreE().equals("Sin etiqueta")){
+                            interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
                         }
+                        interfazPrincipal.addEnMatrix(tareaModificada);
                     }
+
+                    panelTareas.getTarea().setNombreT(nombreT);
+                    panelTareas.getTarea().setDescripcionT(descripcionT);
+                    panelTareas.getTarea().setNombreE(nombreE);
+                    panelTareas.setLabelTituloText(nombreT);
+
+                    labelMensajesErrorSeleccionada.setText("Tarea modificada correctamente");
+                    sRecursos.crearTimer(labelMensajesErrorSeleccionada);
+
+                    actualizarVistaTareas();
+                    interfazPrincipal.actualizarVistaMatrix();
+                } else {
+                    labelMensajesErrorSeleccionada.setText(getMensajeError(codigoError));
+                    sRecursos.crearTimer(labelMensajesErrorSeleccionada);
                 }
-
-                panelTareas.getTarea().setNombreT(nombreT);
-                panelTareas.getTarea().setDescripcionT(descripcionT);
-                panelTareas.getTarea().setNombreE(nombreE);
-                panelTareas.setLabelTituloText(nombreT);
-
-                gestorTareas.modificarTarea(tarea);
-
-                actualizarVistaTareas();
             }
         });
 
@@ -434,19 +425,23 @@ public class VistaTareas extends JPanel {
                 int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
                 if (opcion == JOptionPane.YES_OPTION){
 
-                    gestorTareas.eliminarTarea(tareaSeleccionada);
+                    int codigoError = controladorTareas.eliminarTarea(tareaSeleccionada);
+                    if (codigoError == CodigoError.SIN_ERROR) {
+                        if (tareaSeleccionada.getCompletadaT()) {
+                            interfazPrincipal.removeDeColumnaCompletada(tareaSeleccionada);
+                        } else {
+                            interfazPrincipal.removeDeColumnaToDo(tareaSeleccionada);
+                        }
+                        interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
 
-                    if (tareaSeleccionada.getCompletadaT()){
-                        interfazPrincipal.removeDeColumnaCompletada(tareaSeleccionada);
+                        actualizarVistaTareas();
+                        interfazPrincipal.actualizarVistaMatrix();
+
+                        setCardGeneral();
                     } else {
-                        interfazPrincipal.removeDeColumnaToDo(tareaSeleccionada);
+                        labelMensajesErrorSeleccionada.setText(getMensajeError(codigoError));
+                        sRecursos.crearTimer(labelMensajesErrorSeleccionada);
                     }
-                    interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
-
-                    actualizarVistaTareas();
-                    interfazPrincipal.actualizarVistaMatrix();
-
-                    setCardGeneral();
                 }
             }
         });
@@ -461,9 +456,9 @@ public class VistaTareas extends JPanel {
                 }
                 int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
                 if (opcion==JOptionPane.YES_OPTION){
-                    for (int i=gestorTareas.getListaTareasCompletadas().size()-1; i>=0; i--){
-                        Tarea tarea = gestorTareas.getListaTareasCompletadas().get(i).getTarea();
-                        if (gestorTareas.eliminarTarea(tarea)){
+                    for (int i=interfazPrincipal.getListaTareasCompletadas().size()-1; i>=0; i--){
+                        Tarea tarea = interfazPrincipal.getListaTareasCompletadas().get(i).getTarea();
+                        if (controladorTareas.eliminarTarea(tarea) == CodigoError.SIN_ERROR){
                             interfazPrincipal.removeDeColumnaCompletada(tarea);
                             actualizarVistaTareas();
                         }
@@ -516,17 +511,6 @@ public class VistaTareas extends JPanel {
     private JPanel contruirPanelOpciones(){
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        panel.setPreferredSize(new Dimension(0, 50));
-        panel.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
-        return panel;
-    }
-
-    /**
-     * Construye el panel de etiquetas de la tarea
-     * @return JPanel con las etiquetas de la tarea
-     */
-    private JPanel construirPanelEtiquetasTarea(){
-        JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(0, 50));
         panel.setBorder(new MatteBorder(5, 5, 0, 5, sRecursos.getBLANCO()));
         return panel;
@@ -747,8 +731,8 @@ public class VistaTareas extends JPanel {
      * Cambia el cardLayout de la columna de información extra al card General Info
      */
     public void setCardGeneral(){
-        labelContadorTareasToDo.setText("Por hacer: "+gestorTareas.getListaTareasToDo().size());
-        labelContadorTareasCompletadas.setText("Completadas: "+gestorTareas.getListaTareasCompletadas().size());
+        labelContadorTareasToDo.setText("Por hacer: "+interfazPrincipal.getListaTareasToDo().size());
+        labelContadorTareasCompletadas.setText("Completadas: "+interfazPrincipal.getListaTareasCompletadas().size());
         cardLayout.show(columnaInformacion, "cardGeneral");
     }
 

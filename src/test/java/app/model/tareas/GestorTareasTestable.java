@@ -31,8 +31,8 @@ class GestorTareasTestable extends GestorTareas {
         }
     }
 
-    @Override
-    public void getTareasDeBase() {
+//     @Override
+//    public void getTareasDeBase() {
         // No hacer nada durante las pruebas
-    }
+//    }
 }
