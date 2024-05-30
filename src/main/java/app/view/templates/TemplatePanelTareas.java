@@ -1,9 +1,9 @@
 package app.view.templates;
 
-import app.model.tareas.GestorTareas;
+import app.controller.ControladorTareas;
+import app.model.CodigoError;
 import app.model.tareas.Tarea;
 import app.view.principal.InterfazPrincipal;
-import app.view.principal.VistaMatrix;
 import services.Recursos;
 
 import javax.swing.*;
@@ -25,8 +25,8 @@ public class TemplatePanelTareas extends JPanel {
 
     private final int idT;
 
-    private GestorTareas gestorTareas;
-    private InterfazPrincipal interfazPrincipal;
+    private final ControladorTareas controladorTareas;
+    private final InterfazPrincipal interfazPrincipal;
 
     /**
      * Constructor de la clase.
@@ -34,10 +34,9 @@ public class TemplatePanelTareas extends JPanel {
      * Incluye el panel creado en la columna correspondiente de la VistaTareas.
      * @param tarea tarea a mostrar
      */
-    public TemplatePanelTareas(Tarea tarea, GestorTareas gestorTareas, InterfazPrincipal interfazPrincipal, VistaMatrix vistaMatrix) {
+    public TemplatePanelTareas(Tarea tarea, ControladorTareas controladorTareas, InterfazPrincipal interfazPrincipal) {
         this.tarea = tarea;
-
-        this.gestorTareas = gestorTareas;
+        this.controladorTareas = controladorTareas;
         this.interfazPrincipal = interfazPrincipal;
 
         this.idT = tarea.getIdT();
@@ -57,7 +56,7 @@ public class TemplatePanelTareas extends JPanel {
         labelImagen.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (gestorTareas.completarTarea(tarea)) {
+                if (controladorTareas.completarTarea(tarea) == CodigoError.SIN_ERROR) {
                     if (tarea.getCompletadaT()) {
                         labelImagen.setIcon(sRecursos.getImagenCheck());
                         interfazPrincipal.cambiarAColumnaCompletada(tarea);
@@ -81,10 +80,6 @@ public class TemplatePanelTareas extends JPanel {
         });
 
 
-    }
-
-    public void setBorderColor(Color color) {
-        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, color));
     }
 
     /* Pone el check correspondiente cuando se abre la aplicación */
@@ -129,22 +124,6 @@ public class TemplatePanelTareas extends JPanel {
      */
     public void setLabelTituloText(String titulo) {
         labelTitulo.setText(titulo);
-    }
-
-    /**
-     * Obtiene el label con la imagen de la tarea.
-     * @return label con la imagen de la tarea
-     */
-    public JLabel getLabelImagen() {
-        return labelImagen;
-    }
-
-    /**
-     * Obtiene el panel con la información de la tarea.
-     * @return panel con la información de la tarea
-     */
-    public JPanel getPanelTarea() {
-        return panelTarea;
     }
 
     /**

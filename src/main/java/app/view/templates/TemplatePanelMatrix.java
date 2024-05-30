@@ -1,9 +1,9 @@
 package app.view.templates;
 
-import app.model.tareas.GestorTareas;
+import app.controller.ControladorTareas;
+import app.model.CodigoError;
 import app.model.tareas.Tarea;
 import app.view.principal.InterfazPrincipal;
-import app.view.principal.VistaTareas;
 import services.Recursos;
 
 import javax.swing.*;
@@ -20,13 +20,11 @@ public class TemplatePanelMatrix extends JPanel {
     private final Tarea tarea;
 
     private JLabel labelImagen;
-    private JPanel panelTarea;
-    private JLabel labelTitulo;
 
     private final int idT;
 
-    private GestorTareas gestorTareas;
-    private InterfazPrincipal interfazPrincipal;
+    private final ControladorTareas controladorTareas;
+    private final InterfazPrincipal interfazPrincipal;
 
     /**
      * Constructor de la clase.
@@ -34,10 +32,9 @@ public class TemplatePanelMatrix extends JPanel {
      * Incluye el panel creado en la columna correspondiente de la VistaTareas.
      * @param tarea tarea a mostrar
      */
-    public TemplatePanelMatrix(Tarea tarea, GestorTareas gestorTareas, InterfazPrincipal interfazPrincipal, VistaTareas vistaTareas) {
+    public TemplatePanelMatrix(Tarea tarea, ControladorTareas controladorTareas, InterfazPrincipal interfazPrincipal) {
         this.tarea = tarea;
-
-        this.gestorTareas = gestorTareas;
+        this.controladorTareas = controladorTareas;
         this.interfazPrincipal = interfazPrincipal;
 
         this.idT = tarea.getIdT();
@@ -59,7 +56,7 @@ public class TemplatePanelMatrix extends JPanel {
         labelImagen.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (gestorTareas.completarTarea(tarea)) {
+                if (controladorTareas.completarTarea(tarea) == CodigoError.SIN_ERROR) {
                     if (tarea.getCompletadaT()) {
                         interfazPrincipal.cambiarAColumnaCompletada(tarea);
                     } else {
@@ -76,15 +73,10 @@ public class TemplatePanelMatrix extends JPanel {
 
     public void setBorderColor() {
         switch (tarea.getNombreE()){
-            case "No importante / No urgente" -> {
-                this.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, sRecursos.getColorVerde()));
-            } case "No importante / Urgente" -> {
-                this.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, sRecursos.getColorAzul()));
-            } case "Importante / No urgente" -> {
-                this.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getColorAmarillo()));
-            } case "Importante / Urgente" -> {
-                this.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getColorRojo()));
-            }
+            case "No importante / No urgente" -> this.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, sRecursos.getColorVerde()));
+            case "No importante / Urgente" -> this.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, sRecursos.getColorAzul()));
+            case "Importante / No urgente" -> this.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getColorAmarillo()));
+            case "Importante / Urgente" -> this.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getColorRojo()));
         }
     }
 
@@ -112,43 +104,19 @@ public class TemplatePanelMatrix extends JPanel {
      * Crea un panel con el nombre de la tarea y lo añade al panel.
      */
     private void crearPanelTarea (){
-        this.panelTarea = new JPanel();
+        JPanel panelTarea = new JPanel();
 
         panelTarea.setBackground(sRecursos.getBLANCO());
 
         panelTarea.setLayout(new BorderLayout());
 
-        this.labelTitulo = new JLabel();
+        JLabel labelTitulo = new JLabel();
         labelTitulo.setFont(sRecursos.getMontserratMedium(16));
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         labelTitulo.setText(tarea.getNombreT());
 
         panelTarea.add(labelTitulo, BorderLayout.CENTER);
         add(panelTarea, BorderLayout.CENTER);
-    }
-
-    /**
-     * Establece el texto del label con el nombre de la tarea.
-     * @param titulo nombre de la tarea
-     */
-    public void setLabelTituloText(String titulo) {
-        labelTitulo.setText(titulo);
-    }
-
-    /**
-     * Obtiene el label con la imagen de la tarea.
-     * @return label con la imagen de la tarea
-     */
-    public JLabel getLabelImagen() {
-        return labelImagen;
-    }
-
-    /**
-     * Obtiene el panel con la información de la tarea.
-     * @return panel con la información de la tarea
-     */
-    public JPanel getPanelTarea() {
-        return panelTarea;
     }
 
     /**
