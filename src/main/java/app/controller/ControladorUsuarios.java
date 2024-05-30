@@ -28,9 +28,10 @@ public class ControladorUsuarios {
             return codigoError;
         }
         codigoError = gestorUsuarios.comprobarPasswordUsuario(passwordUsuario);
-        if (codigoError != CodigoError.SIN_ERROR){
-            return codigoError;
-        }
-        return CodigoError.SIN_ERROR;
+        return codigoError;
+    }
+
+    public int contarUsuarios(){
+        return gestorUsuarios.contarUsuarios();
     }
 }

@@ -20,7 +20,6 @@ public class GestorUsuarios {
      * Comprueba las credenciales y conecta al usuario si son correctas.
      * @param nombreUsuario obtenido desde la interfaz de usuario
      * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @param textoComprobacion para mostrar mensajes de error
      * @return true si el usuario fue conectado correctamente
      */
     public int conectarUsuario (String nombreUsuario, String passwordUsuario){
@@ -37,7 +36,7 @@ public class GestorUsuarios {
                 passwordUsuarioHashed = resultado.getString("passwordu");
                 /* Comprueba si la contraseña del usuario es correcta */
                 if (!BCrypt.checkpw(passwordUsuario, passwordUsuarioHashed)){
-                    return CodigoError.ERROR_PASSWORD_INCORRECTA;
+                    return CodigoError.ERROR_USUARIO_PASSWORD_INCORRECTA;
                 }
             } else {
                 return CodigoError.ERROR_USUARIO_NO_REGISTRADO;
@@ -54,8 +53,6 @@ public class GestorUsuarios {
      * Método para registrar un nuevo usuario en la base de datos
      * @param nombreUsuario obtenido desde la interfaz de usuario
      * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @param textoComprobacion para mostrar mensajes de error
-     * @param textoLogin para mostrar mensajes
      * @return true si el usuario fue registrado correctamente
      */
     public int registrarUsuario(String nombreUsuario, String passwordUsuario) {
@@ -98,11 +95,11 @@ public class GestorUsuarios {
 
         /* Comprueba si el nombre de usuario tiene al menos 3 carácteres */
         if (nombreUsuario.length()<3){
-            return CodigoError.ERROR_NOMBRE_CORTO;
+            return CodigoError.ERROR_USUARIO_NOMBRE_CORTO;
         }
 
         if (nombreUsuario.length()>40) {
-            return CodigoError.ERROR_NOMBRE_LARGO;
+            return CodigoError.ERROR_USUARIO_NOMBRE_LARGO;
         }
 
         /* Si no se encontró un usuario y el nombre de usuario tiene al menos 3 caracteres, devuelve true */
@@ -119,19 +116,19 @@ public class GestorUsuarios {
 
         /* Comprueba si la contraseña tiene al menos 4 carácteres */
         if (passwordUsuario.length()<4){
-            return CodigoError.ERROR_PASSWORD_CORTA;
+            return CodigoError.ERROR_USUARIO_PASSWORD_CORTA;
         }
 
         if (passwordUsuario.length()>50){
-            return CodigoError.ERROR_PASSWORD_LARGA;
+            return CodigoError.ERROR_USUARIO_PASSWORD_LARGA;
         }
 
         for (int i=0; i<passwordUsuario.length(); i++) {
             /* Comprueba si la contraseña tiene espacios en blanco o carácteres no permitidos */
             if (passwordUsuario.charAt(i) == ' ') {
-                return CodigoError.ERROR_PASSWORD_CON_ESPACIOS;
+                return CodigoError.ERROR_USUARIO_PASSWORD_CON_ESPACIOS;
             } else if (caracteresNoPermitidos.indexOf(passwordUsuario.charAt(i)) != -1) {
-                return CodigoError.ERROR_PASSWORD_CARACTERES_RAROS;
+                return CodigoError.ERROR_USUARIO_PASSWORD_CARACTERES_RAROS;
             }
         }
         return CodigoError.SIN_ERROR;
