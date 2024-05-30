@@ -1,84 +1,113 @@
 package app.model.usuarios;
 
+import app.model.basedatos.ConectarBD;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class GestorUsuariosTest {
-//    private GestorUsuarios gestorUsuarios;
+    private GestorUsuarios gestorUsuarios;
+    private ConectarBD conectarBD;
+    private Connection connection;
+    private PreparedStatement preparedStatement;
+    private ResultSet resultSet;
 
-    /**
-     * Inicializa el gestor de usuarios
-     */
-//    @BeforeEach
-//    public void setUp(){
-//        gestorUsuarios = new GestorUsuarios();
-//    }
+    @BeforeEach
+    public void setUp() throws SQLException {
+        /* Mockear las dependencias */
+        conectarBD = mock(ConectarBD.class);
+        connection = mock(Connection.class);
+        preparedStatement = mock(PreparedStatement.class);
+        resultSet = mock(ResultSet.class);
 
-    /**
-     * Test para verificar que se puede registrar un usuario correctamente
-     */
-//    @Test
-//    @DisplayName("Usuario registrado correctamente")
-//    public void usuarioRegistradoCorrectamente(){
-//        char[] contraUsuario = {};
-//        assertTrue(gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario)));
-//    }
+        /* Crear una instancia de GestorUsuarios */
+        gestorUsuarios = new GestorUsuarios();
 
-    /**
-     * Test para verificar que no se puede registrar un usuario con el mismo nombre
-     */
-//    @Test
-//    @DisplayName("Usuario ya registrado")
-//    public void usuarioYaRegistrado(){
-//        char[] contraUsuario = {};
-//        gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario));
-//        assertFalse(gestorUsuarios.registrarUsuario(new Usuario("nombre", contraUsuario)));
-//    }
+        /* Configurar como se comportan los mocks */
+        when(conectarBD.conectar()).thenReturn(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-    /**
-     * Test para verificar que se puede eliminar un usuario correctamente
-     */
-//    @Test
-//    @DisplayName("Usuario eliminado correctamente")
-//    public void usuarioEliminadoCorrectamente(){
-//        Usuario usuario = new Usuario("nombre", null);
-//        gestorUsuarios.registrarUsuario(usuario);
-//        assertTrue(gestorUsuarios.eliminarUsuario(usuario));
-//    }
+        /* Reemplazar la instancia ConectarBD de GestorUsuarios con el mock para que funcione correctamente */
+        try {
+            Field conectarBdField = GestorUsuarios.class.getDeclaredField("conectarBD");
+            conectarBdField.setAccessible(true);
+            conectarBdField.set(gestorUsuarios, conectarBD);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
-    /**
-     * Test para verificar que no se puede eliminar un usuario no registrado
-     */
-//    @Test
-//    @DisplayName("No se puede eliminar un usuario no registrado")
-//    public void usuarioNoSePuedeEliminar(){
-//        assertFalse(gestorUsuarios.eliminarUsuario(new Usuario("nombre", null)));
-//    }
+    @Test
+    public void comprobarNombreUsuarioCorrecto() throws SQLException {
+        when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
+        JLabel label = new JLabel();
+        assertTrue(gestorUsuarios.comprobarNombreUsuario("nombre", label));
+    }
 
-    /**
-     * Test para verificar que un nombre correcto es permitido
-     */
-//    @Test
-//    @DisplayName("Comprobar nombre de usuario correcto")
-//    public void comprobarNombreUsuarioCumpleLimitaciones(){
-//        String nombre = "nombre";
-//        assertTrue(gestorUsuarios.comprobarNombreUsuario(nombre, null));
-//    }
+    @Test
+    public void comprobarNombreUsuarioExistente() throws SQLException {
+        when(resultSet.next()).thenReturn(true); // Simular que el usuario ya existe
+        JLabel label = new JLabel();
+        assertFalse(gestorUsuarios.comprobarNombreUsuario("nombre", label));
+    }
 
-    /**
-     * Test para verificar que un nombre con menos de 4 letras no es permitido
-     */
-//    @Test
-//    @DisplayName("Comprobar nombre de usuario con menos de 3 letras")
-//    public void comprobarNombreUsuarioConMenosDe4Letras(){
-//        String nombre = "no";
-//        JLabel label = new JLabel();
-//        assertFalse(gestorUsuarios.comprobarNombreUsuario(nombre, label));
-//    }
+    @Test
+    public void comprobarNombreUsuarioCorto() throws SQLException {
+        JLabel label = new JLabel();
+        assertFalse(gestorUsuarios.comprobarNombreUsuario("no", label));
+    }
+
+    @Test
+    public void comprobarNombreUsuarioLargo() throws SQLException {
+        JLabel label = new JLabel();
+        assertFalse(gestorUsuarios.comprobarNombreUsuario("nombreDeUsuarioConMasDeCincuentaCaracteres", label));
+    }
+
+    @Test
+    public void testRegistrarUsuario_Success() throws SQLException {
+        when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
+        JLabel textoComprobacion = new JLabel();
+        JLabel textoLogin = new JLabel();
+
+        boolean result = gestorUsuarios.registrarUsuario("nuevoUsuario", "passwordSeguro", textoComprobacion, textoLogin);
+        assertTrue(result);
+        verify(preparedStatement, times(1)).executeUpdate();
+    }
+
+    @Test
+    public void testRegistrarUsuario_Fail_InvalidUsername() {
+        JLabel textoComprobacion = new JLabel();
+        JLabel textoLogin = new JLabel();
+
+        boolean result = gestorUsuarios.registrarUsuario("", "passwordSeguro", textoComprobacion, textoLogin);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testRegistrarUsuario_Fail_InvalidPassword() {
+        JLabel textoComprobacion = new JLabel();
+        JLabel textoLogin = new JLabel();
+
+        boolean result = gestorUsuarios.registrarUsuario("usuarioValido", "123", textoComprobacion, textoLogin);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testContarUsuarios() throws SQLException {
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt(1)).thenReturn(5);
+
+        int count = gestorUsuarios.contarUsuarios();
+        assertEquals(5, count);
+    }
 }
