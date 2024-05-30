@@ -53,6 +53,7 @@ class GestorUsuariosTest {
         when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
         JLabel label = new JLabel();
         assertTrue(gestorUsuarios.comprobarNombreUsuario("nombre", label));
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
@@ -60,18 +61,22 @@ class GestorUsuariosTest {
         when(resultSet.next()).thenReturn(true); // Simular que el usuario ya existe
         JLabel label = new JLabel();
         assertFalse(gestorUsuarios.comprobarNombreUsuario("nombre", label));
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
     public void comprobarNombreUsuarioCorto() throws SQLException {
         JLabel label = new JLabel();
         assertFalse(gestorUsuarios.comprobarNombreUsuario("no", label));
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
     public void comprobarNombreUsuarioLargo() throws SQLException {
         JLabel label = new JLabel();
         assertFalse(gestorUsuarios.comprobarNombreUsuario("nombreDeUsuarioConMasDeCincuentaCaracteres", label));
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
+
     }
 
     @Test
@@ -86,21 +91,23 @@ class GestorUsuariosTest {
     }
 
     @Test
-    public void registrarUsuario_nombreIncorrecto() {
+    public void registrarUsuario_nombreIncorrecto() throws SQLException {
         JLabel textoComprobacion = new JLabel();
         JLabel textoLogin = new JLabel();
 
         boolean result = gestorUsuarios.registrarUsuario("", "passwordSeguro", textoComprobacion, textoLogin);
         assertFalse(result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
-    public void registrarUsuario_passwordIncorrecta() {
+    public void registrarUsuario_passwordIncorrecta() throws SQLException {
         JLabel textoComprobacion = new JLabel();
         JLabel textoLogin = new JLabel();
 
         boolean result = gestorUsuarios.registrarUsuario("usuarioValido", "123", textoComprobacion, textoLogin);
         assertFalse(result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
@@ -110,6 +117,7 @@ class GestorUsuariosTest {
 
         int count = gestorUsuarios.contarUsuarios();
         assertEquals(5, count);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
@@ -122,6 +130,7 @@ class GestorUsuariosTest {
         boolean result = gestorUsuarios.conectarUsuario("usuario", "password", textoComprobacion);
 
         assertTrue(result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
@@ -133,6 +142,7 @@ class GestorUsuariosTest {
         boolean result = gestorUsuarios.conectarUsuario("usuario", "password", textoComprobacion);
 
         assertFalse(result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
@@ -145,5 +155,6 @@ class GestorUsuariosTest {
         boolean result = gestorUsuarios.conectarUsuario("usuario", "passwordIncorrecta", textoComprobacion);
 
         assertFalse(result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 }
