@@ -42,6 +42,10 @@ public class InterfazPrincipal extends JFrame {
 
     private final ControladorTareas controladorTareas;
 
+    /**
+     * Constructor de la clase InterfazPrincipal.
+     * @param controladorTareas Controlador de tareas
+     */
     public InterfazPrincipal(ControladorTareas controladorTareas) {
         this.sRecursos = Recursos.getService();
 
@@ -76,7 +80,7 @@ public class InterfazPrincipal extends JFrame {
         moverVentana();
 
         addTareasAListas();
-        addTareas();
+        addTareasAPaneles();
 
 
         this.setVisible(true);
@@ -84,6 +88,196 @@ public class InterfazPrincipal extends JFrame {
         setSize(dimensionPantallaCompleta);     // Línea necesaria para redimensionar sin errores
     }
 
+    /**
+     * Añade la tarea a la columna de tareas por hacer.
+     * @param tarea
+     */
+    public void addAColumnaToDo(Tarea tarea){
+        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, controladorTareas, this);
+        vistaTareas.getPanelListaTareasToDo().add(panelTarea);
+        listaTareasToDo.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea a la columna de tareas completadas.
+     * @param tarea
+     */
+    public void addAColumnaCompletada(Tarea tarea){
+        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, controladorTareas, this);
+        vistaTareas.getPanelListaTareasCompletadas().add(panelTarea);
+        listaTareasCompletadas.add(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea de la columna de tareas por hacer.
+     * @param tarea
+     */
+    public void removeDeColumnaToDo(Tarea tarea){
+        TemplatePanelTareas panelTarea = listaTareasToDo.get(listaTareasToDo.indexOf(new TemplatePanelTareas(tarea, controladorTareas, this)));
+        vistaTareas.getPanelListaTareasToDo().remove(panelTarea);
+        listaTareasToDo.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea de la columna de tareas completadas.
+     * @param tarea
+     */
+    public void removeDeColumnaCompletada(Tarea tarea){
+        TemplatePanelTareas panelTarea = listaTareasCompletadas.get(listaTareasCompletadas.indexOf(new TemplatePanelTareas(tarea, controladorTareas, this)));
+        vistaTareas.getPanelListaTareasCompletadas().remove(panelTarea);
+        listaTareasCompletadas.remove(panelTarea);
+    }
+
+    /**
+     * Cambia la tarea de columna completada a la de tareas por hacer.
+     * @param tarea
+     */
+    public void cambiarAColumnaToDo(Tarea tarea){
+        removeDeColumnaCompletada(tarea);
+        addAColumnaToDo(tarea);
+    }
+
+    /**
+     * Cambia la tarea de columna de tareas por hacer a la de tareas completadas.
+     * @param tarea
+     */
+    public void cambiarAColumnaCompletada(Tarea tarea){
+        removeDeColumnaToDo(tarea);
+        addAColumnaCompletada(tarea);
+    }
+
+    /**
+     * Añade la tarea a la matriz de Eisenhower.
+     */
+    public void addEnMatrix(Tarea tarea){
+        switch (tarea.getNombreE()){
+            case "No importante / No urgente" -> addAPanelArribaI(tarea);
+            case "No importante / Urgente" -> addAPanelArribaD(tarea);
+            case "Importante / No urgente" -> addAPanelAbajoI(tarea);
+            case "Importante / Urgente" -> addAPanelAbajoD(tarea);
+        }
+    }
+
+    /**
+     * Elimina la tarea de la matriz de Eisenhower.
+     */
+    public void eliminarEnMatrix(Tarea tarea){
+        switch (tarea.getNombreE()){
+            case "No importante / No urgente" -> removeDePanelArribaI(tarea);
+            case "No importante / Urgente" -> removeDePanelArribaD(tarea);
+            case "Importante / No urgente" -> removeDePanelAbajoI(tarea);
+            case "Importante / Urgente" -> removeDePanelAbajoD(tarea);
+        }
+    }
+
+    /**
+     * Completa o descompleta la tarea en la matriz de Eisenhower.
+     */
+    public void completarEnMatrix(Tarea tarea){
+        if (tarea.getCompletadaT()){
+            eliminarEnMatrix(tarea);
+        } else {
+            addEnMatrix(tarea);
+        }
+    }
+
+    /**
+     * Añade la tarea al panel "No importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelArribaI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasArribaI().add(panelTarea);
+        listaTareasArribaI.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea al panel "No importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelArribaD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasArribaD().add(panelTarea);
+        listaTareasArribaD.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea al panel "Importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelAbajoI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasAbajoI().add(panelTarea);
+        listaTareasAbajoI.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea al panel "Importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelAbajoD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasAbajoD().add(panelTarea);
+        listaTareasAbajoD.add(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "No importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelArribaI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasArribaI.get(listaTareasArribaI.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasArribaI().remove(panelTarea);
+        listaTareasArribaI.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "No importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelArribaD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasArribaD.get(listaTareasArribaD.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasArribaD().remove(panelTarea);
+        listaTareasArribaD.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "Importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelAbajoI(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasAbajoI.get(listaTareasAbajoI.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasAbajoI().remove(panelTarea);
+        listaTareasAbajoI.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "Importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelAbajoD(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasAbajoD.get(listaTareasAbajoD.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasAbajoD().remove(panelTarea);
+        listaTareasAbajoD.remove(panelTarea);
+    }
+
+    /**
+     * Actualiza la vista de Matrix.
+     */
+    public void actualizarVistaMatrix(){
+        vistaMatrix.actualizarVistaMatrix();
+    }
+
+    /**
+     * Actualiza la vista de Tareas.
+     */
+    public void actualizarVistaTareas(){
+        vistaTareas.actualizarVistaTareas();
+    }
+
+    /**
+     * Selecciona el card de la tarea seleccionada en la vista Tareas.
+     * @param panelTarea
+     */
+    public void setCardTareaSeleccionada(TemplatePanelTareas panelTarea){
+        vistaTareas.setCardTareaSeleccionada(panelTarea.getTarea());
+    }
+
+    /**
+     * Añade las tareas a las listas correspondientes.
+     */
     public void addTareasAListas() {
 
         for (Tarea tarea : controladorTareas.getListaTareas()) {
@@ -105,7 +299,10 @@ public class InterfazPrincipal extends JFrame {
         }
     }
 
-    public void addTareas(){
+    /**
+     * Añade las tareas a los paneles correspondientes de las vistas Tareas y Matrix.
+     */
+    public void addTareasAPaneles(){
         for (TemplatePanelTareas panelTarea : listaTareasToDo) {
             vistaTareas.getPanelListaTareasToDo().add(panelTarea);
         }
@@ -129,127 +326,6 @@ public class InterfazPrincipal extends JFrame {
         for (TemplatePanelMatrix panelTarea : listaTareasAbajoD) {
             vistaMatrix.getPanelTareasAbajoD().add(panelTarea);
         }
-    }
-
-    public void setCardTareaSeleccionada(TemplatePanelTareas panelTarea){
-        vistaTareas.setCardTareaSeleccionada(panelTarea.getTarea());
-    }
-
-    public void actualizarVistaMatrix(){
-        vistaMatrix.actualizarVistaMatrix();
-    }
-
-    public void addEnMatrix(Tarea tarea){
-        switch (tarea.getNombreE()){
-            case "No importante / No urgente" -> addAPanelArribaI(tarea);
-            case "No importante / Urgente" -> addAPanelArribaD(tarea);
-            case "Importante / No urgente" -> addAPanelAbajoI(tarea);
-            case "Importante / Urgente" -> addAPanelAbajoD(tarea);
-        }
-    }
-
-    public void eliminarEnMatrix(Tarea tarea){
-        switch (tarea.getNombreE()){
-            case "No importante / No urgente" -> removeDePanelArribaI(tarea);
-            case "No importante / Urgente" -> removeDePanelArribaD(tarea);
-            case "Importante / No urgente" -> removeDePanelAbajoI(tarea);
-            case "Importante / Urgente" -> removeDePanelAbajoD(tarea);
-        }
-    }
-
-    public void completarEnMatrix(Tarea tarea){
-        if (tarea.getCompletadaT()){
-            eliminarEnMatrix(tarea);
-        } else {
-            addEnMatrix(tarea);
-        }
-    }
-
-    public void addAPanelArribaI(Tarea tarea){
-        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasArribaI().add(panelTarea);
-        listaTareasArribaI.add(panelTarea);
-    }
-
-    public void addAPanelArribaD(Tarea tarea){
-        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasArribaD().add(panelTarea);
-        listaTareasArribaD.add(panelTarea);
-    }
-
-    public void addAPanelAbajoI(Tarea tarea){
-        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasAbajoI().add(panelTarea);
-        listaTareasAbajoI.add(panelTarea);
-    }
-
-    public void addAPanelAbajoD(Tarea tarea){
-        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasAbajoD().add(panelTarea);
-        listaTareasAbajoD.add(panelTarea);
-    }
-
-    public void removeDePanelArribaI(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasArribaI.get(listaTareasArribaI.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasArribaI().remove(panelTarea);
-        listaTareasArribaI.remove(panelTarea);
-    }
-
-    public void removeDePanelArribaD(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasArribaD.get(listaTareasArribaD.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasArribaD().remove(panelTarea);
-        listaTareasArribaD.remove(panelTarea);
-    }
-
-    public void removeDePanelAbajoI(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasAbajoI.get(listaTareasAbajoI.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasAbajoI().remove(panelTarea);
-        listaTareasAbajoI.remove(panelTarea);
-    }
-
-    public void removeDePanelAbajoD(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasAbajoD.get(listaTareasAbajoD.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasAbajoD().remove(panelTarea);
-        listaTareasAbajoD.remove(panelTarea);
-    }
-
-
-    public void actualizarVistaTareas(){
-        vistaTareas.actualizarVistaTareas();
-    }
-
-    public void addAColumnaToDo(Tarea tarea){
-        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, controladorTareas, this);
-        vistaTareas.getPanelListaTareasToDo().add(panelTarea);
-        listaTareasToDo.add(panelTarea);
-    }
-
-    public void addAColumnaCompletada(Tarea tarea){
-        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, controladorTareas, this);
-        vistaTareas.getPanelListaTareasCompletadas().add(panelTarea);
-        listaTareasCompletadas.add(panelTarea);
-    }
-
-    public void removeDeColumnaToDo(Tarea tarea){
-        TemplatePanelTareas panelTarea = listaTareasToDo.get(listaTareasToDo.indexOf(new TemplatePanelTareas(tarea, controladorTareas, this)));
-        vistaTareas.getPanelListaTareasToDo().remove(panelTarea);
-        listaTareasToDo.remove(panelTarea);
-    }
-
-    public void removeDeColumnaCompletada(Tarea tarea){
-        TemplatePanelTareas panelTarea = listaTareasCompletadas.get(listaTareasCompletadas.indexOf(new TemplatePanelTareas(tarea, controladorTareas, this)));
-        vistaTareas.getPanelListaTareasCompletadas().remove(panelTarea);
-        listaTareasCompletadas.remove(panelTarea);
-    }
-
-    public void cambiarAColumnaToDo(Tarea tarea){
-        removeDeColumnaCompletada(tarea);
-        addAColumnaToDo(tarea);
-    }
-
-    public void cambiarAColumnaCompletada(Tarea tarea){
-        removeDeColumnaToDo(tarea);
-        addAColumnaCompletada(tarea);
     }
 
     public ArrayList<TemplatePanelTareas> getListaTareasToDo() {

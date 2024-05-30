@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 
 /**
  * Clase que crea un panel con la información de una tarea y le añade funciones.
- * Incluye el panel creado en la columna correspondiente de la VistaTareas.
  */
 public class TemplatePanelMatrix extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
@@ -26,11 +25,13 @@ public class TemplatePanelMatrix extends JPanel {
     private final ControladorTareas controladorTareas;
     private final InterfazPrincipal interfazPrincipal;
 
+
     /**
-     * Constructor de la clase.
+     * Constructor de la clase
      * Crea un panel con la información de una tarea y le añade funciones.
-     * Incluye el panel creado en la columna correspondiente de la VistaTareas.
      * @param tarea tarea a mostrar
+     * @param controladorTareas controlador de tareas
+     * @param interfazPrincipal interfaz principal
      */
     public TemplatePanelMatrix(Tarea tarea, ControladorTareas controladorTareas, InterfazPrincipal interfazPrincipal) {
         this.tarea = tarea;
@@ -51,6 +52,9 @@ public class TemplatePanelMatrix extends JPanel {
         addActionListeners();
     }
 
+    /**
+     * Añade un action listener al panel para marcar la tarea como completada y cambiar a los paneles convenientes en todos las vistas
+     */
     public void addActionListeners(){
 
         labelImagen.addMouseListener(new MouseAdapter() {
@@ -71,6 +75,9 @@ public class TemplatePanelMatrix extends JPanel {
         });
     }
 
+    /**
+     * Establece el borde del panel según el panel Matrix.
+     */
     public void setBorderColor() {
         switch (tarea.getNombreE()){
             case "No importante / No urgente" -> this.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, sRecursos.getColorVerde()));

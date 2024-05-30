@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 
 /**
  * Clase que crea un panel con la información de una tarea y le añade funciones.
- * Incluye el panel creado en la columna correspondiente de la VistaTareas.
  */
 public class TemplatePanelTareas extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
@@ -29,10 +28,11 @@ public class TemplatePanelTareas extends JPanel {
     private final InterfazPrincipal interfazPrincipal;
 
     /**
-     * Constructor de la clase.
+     * Constructor de la clase
      * Crea un panel con la información de una tarea y le añade funciones.
-     * Incluye el panel creado en la columna correspondiente de la VistaTareas.
      * @param tarea tarea a mostrar
+     * @param controladorTareas controlador de tareas
+     * @param interfazPrincipal interfaz principal
      */
     public TemplatePanelTareas(Tarea tarea, ControladorTareas controladorTareas, InterfazPrincipal interfazPrincipal) {
         this.tarea = tarea;
@@ -51,6 +51,9 @@ public class TemplatePanelTareas extends JPanel {
         addActionListeners();
     }
 
+    /**
+     * Añade un action listener al panel para marcar la tarea como completada y cambiar a los paneles convenientes en todos las vistas
+     */
     public void addActionListeners(){
 
         labelImagen.addMouseListener(new MouseAdapter() {
@@ -82,7 +85,9 @@ public class TemplatePanelTareas extends JPanel {
 
     }
 
-    /* Pone el check correspondiente cuando se abre la aplicación */
+    /**
+     *  Pone el check correspondiente cuando se abre la aplicación
+     */
     private void setImagenDelLabel(){
         if (tarea.getCompletadaT()) {
             labelImagen.setIcon(sRecursos.getImagenCheck());

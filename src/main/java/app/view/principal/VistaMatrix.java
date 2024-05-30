@@ -6,12 +6,17 @@ import javax.swing.border.Border;
 
 import services.Recursos;
 
-
+/**
+ * Vista de la matriz de Eisenhower.
+ */
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
 
     private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
 
+    /**
+     * Constructor de la clase
+     */
     public VistaMatrix() {
         sRecursos = Recursos.getService();
 
@@ -20,19 +25,34 @@ public class VistaMatrix extends JPanel {
         crearMatrix();
     }
 
-
-    public JPanel getPanelTareasArribaD() {
-        return panelTareasArribaD;
-    }
-
+    /**
+     * Método para obtener el panel de las tareas de "No importante / No urgente".
+     * @return Paneles de las tareas.
+     */
     public JPanel getPanelTareasArribaI() {
         return panelTareasArribaI;
     }
 
+    /**
+     * Método para obtener el panel de las tareas de "No importante / Urgente".
+     * @return Paneles de las tareas.
+     */
+    public JPanel getPanelTareasArribaD() {
+        return panelTareasArribaD;
+    }
+
+    /**
+     * Método para obtener el panel de las tareas de "Importante / No urgente".
+     * @return Paneles de las tareas.
+     */
     public JPanel getPanelTareasAbajoI() {
         return panelTareasAbajoI;
     }
 
+    /**
+     * Método para obtener el panel de las tareas de "Importante / Urgente".
+     * @return Paneles de las tareas.
+     */
     public JPanel getPanelTareasAbajoD() {
         return panelTareasAbajoD;
     }
@@ -58,6 +78,13 @@ public class VistaMatrix extends JPanel {
         add(panelAbajoD);
     }
 
+    /**
+     * Método para crear los paneles de las tareas.
+     * @param panel Panel donde se añadirán las tareas.
+     * @param color Color del panel.
+     * @param titulo Título del panel.
+     * @return Panel creado.
+     */
     private JPanel crearPanelesTareas(JPanel panel, Color color , String titulo){
         /* Crea el panel de tareas */
         JPanel panelTareas = new JPanel();
@@ -128,6 +155,9 @@ public class VistaMatrix extends JPanel {
         return panel;
     }
 
+    /**
+     * Método para actualizar la vista de la matriz.
+     */
     public void actualizarVistaMatrix(){
         this.repaint();
         this.revalidate();

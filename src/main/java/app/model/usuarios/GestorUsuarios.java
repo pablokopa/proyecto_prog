@@ -11,16 +11,16 @@ import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
- * Clase que gestiona los usuarios. Hace las operaciones relacionadas con la base de datos. (Registro, conexión, comprobación de datos, etc)
+ * Gestor de usuarios. Se utiliza desde el ControladorUsuarios
  */
 public class GestorUsuarios {
     private final ConectarBD conectarBD = new ConectarBD();
 
     /**
      * Comprueba las credenciales y conecta al usuario si son correctas.
-     * @param nombreUsuario obtenido desde la interfaz de usuario
-     * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @return true si el usuario fue conectado correctamente
+     * @param nombreUsuario nombre
+     * @param passwordUsuario password
+     * @return CodigoError constante
      */
     public int conectarUsuario (String nombreUsuario, String passwordUsuario){
         String passwordUsuarioHashed;
@@ -51,9 +51,9 @@ public class GestorUsuarios {
 
     /**
      * Método para registrar un nuevo usuario en la base de datos
-     * @param nombreUsuario obtenido desde la interfaz de usuario
-     * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @return true si el usuario fue registrado correctamente
+     * @param nombreUsuario nombre
+     * @param passwordUsuario password
+     * @return CodigoError constante
      */
     public int registrarUsuario(String nombreUsuario, String passwordUsuario) {
         try (Connection conexion = conectarBD.conectar()) {
@@ -73,8 +73,8 @@ public class GestorUsuarios {
 
     /**
      * Comprueba si el nombre de usuario tiene al menos 3 carácteres y no existe en la base de datos
-     * @param nombreUsuario obtenido desde la interfaz de usuario
-     * @return true si es correcto
+     * @param nombreUsuario nombre
+     * @return CodigoError constante
      */
     public int comprobarNombreUsuario(String nombreUsuario){
 
@@ -108,8 +108,8 @@ public class GestorUsuarios {
 
     /**
      * Comprueba si la contraseña del usuario tiene al menos 4 carácteres y no tiene espacios en blanco
-     * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @return true si es correcta
+     * @param passwordUsuario password
+     * @return CodigoError constante
      */
     public int comprobarPasswordUsuario(String passwordUsuario){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";

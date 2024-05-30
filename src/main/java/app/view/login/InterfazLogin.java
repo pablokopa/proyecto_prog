@@ -165,6 +165,12 @@ public class InterfazLogin extends JFrame{
         });
     }
 
+    /**
+     * Método para obtener el mensaje de error.
+     * Devuelve un mensaje de error en función del código de error.
+     * @param codigoError Código de error
+     * @return Mensaje de error
+     */
     private String getMensajeError(int codigoError) {
         String mensajeError = "";
 
@@ -213,6 +219,10 @@ public class InterfazLogin extends JFrame{
         panelDerecha.add(textoNumeroUsuarios);
     }
 
+    /**
+     * Método para actualizar el contador de usuarios.
+     * Actualiza el contador de usuarios en función del número de usuarios registrados.
+     */
     public void actualizarContadorUsuarios(){
         textoNumeroUsuarios.setText("Nº Usuarios: "+controladorUsuarios.contarUsuarios());
     }

@@ -22,6 +22,9 @@ import java.time.LocalDate;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
+/**
+ * Vista de las tareas.
+ */
 public class VistaTareas extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
     private final InterfazPrincipal interfazPrincipal;
@@ -63,6 +66,212 @@ public class VistaTareas extends JPanel {
 
         setCardGeneral();
     }
+
+    /**
+     * Añade los listeners generales a los botones de la vista
+     */
+    private void addListenersGenerales(){
+
+        /* Listener del boton crear tarea para crear una nueva tarea */
+        labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardLayout.show(columnaInformacion, "cardNuevaTarea");
+            }
+        });
+
+
+        /* Listener del boton confirmar tarea para confirmar la creación de una nueva tarea */
+        labelConfirmarTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String nombreT = textFieldNombreTarea.getText();
+                String descripcionT = textPaneDescripcionTarea.getText();
+                if (descripcionT.equals("Descripción de la tarea")){
+                    descripcionT = "";
+                }
+                String nombreE = comboEtiquetasNueva.getSelectedItem().toString();
+
+                int codigoError = controladorTareas.crearTarea(nombreT, descripcionT, nombreE);
+                if (codigoError != CodigoError.SIN_ERROR){
+                    labelMensajesError.setText(getMensajeError(codigoError));
+                    sRecursos.crearTimer(labelMensajesError);
+                    return;
+                }
+
+                Tarea tarea = controladorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
+
+                interfazPrincipal.addAColumnaToDo(tarea);
+                interfazPrincipal.addEnMatrix(tarea);
+
+                textFieldNombreTarea.setText("Nombre de la tarea");
+                textPaneDescripcionTarea.setText("Descripción de la tarea");
+                comboEtiquetasNueva.setSelectedIndex(0);
+
+                actualizarVistaTareas();
+                interfazPrincipal.actualizarVistaMatrix();
+
+                tareaSeleccionada = tarea;
+                setCardTareaSeleccionada(tarea);
+            }
+        });
+
+        /* Listener del boton modificar tarea para modificar la tarea seleccionada */
+        labelModificarTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String nombreT = textFieldNombreTareaSelecionada.getText();
+                String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
+                String nombreE = comboEtiquetasSeleccionada.getSelectedItem().toString();
+
+                Tarea tareaModificada = new Tarea(
+                        tareaSeleccionada.getIdT(),
+                        nombreT,
+                        descripcionT,
+                        tareaSeleccionada.getFechaCreacionT(),
+                        tareaSeleccionada.getFechaFinalizacionT(),
+                        tareaSeleccionada.getCompletadaT(),
+                        controladorTareas.getUsuario().getNombreU(),
+                        nombreE
+                );
+
+                int codigoError = controladorTareas.modificarTarea(tareaSeleccionada, tareaModificada);
+                if (codigoError == CodigoError.SIN_ERROR){
+                    TemplatePanelTareas panelTemporalTareas = new TemplatePanelTareas(tareaModificada, controladorTareas, interfazPrincipal);
+                    TemplatePanelTareas panelTareas;
+
+                    if (tareaSeleccionada.getCompletadaT()){
+                        panelTareas = interfazPrincipal.getListaTareasCompletadas().get(interfazPrincipal.getListaTareasCompletadas().indexOf(panelTemporalTareas));
+                    } else {
+                        panelTareas = interfazPrincipal.getListaTareasToDo().get(interfazPrincipal.getListaTareasToDo().indexOf(panelTemporalTareas));
+
+                        if (!tareaSeleccionada.getNombreE().equals("Sin etiqueta")){
+                            interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
+                        }
+                        interfazPrincipal.addEnMatrix(tareaModificada);
+                    }
+
+                    panelTareas.getTarea().setNombreT(nombreT);
+                    panelTareas.getTarea().setDescripcionT(descripcionT);
+                    panelTareas.getTarea().setNombreE(nombreE);
+                    panelTareas.setLabelTituloText(nombreT);
+
+                    labelMensajesErrorSeleccionada.setText("Tarea modificada correctamente");
+                    sRecursos.crearTimer(labelMensajesErrorSeleccionada);
+
+                    actualizarVistaTareas();
+                    interfazPrincipal.actualizarVistaMatrix();
+                } else {
+                    labelMensajesErrorSeleccionada.setText(getMensajeError(codigoError));
+                    sRecursos.crearTimer(labelMensajesErrorSeleccionada);
+                }
+            }
+        });
+
+        /* Listener del boton eliminar tarea para eliminar la tarea seleccionada */
+        labelEliminarTarea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.YES_OPTION){
+
+                    int codigoError = controladorTareas.eliminarTarea(tareaSeleccionada);
+                    if (codigoError == CodigoError.SIN_ERROR) {
+                        if (tareaSeleccionada.getCompletadaT()) {
+                            interfazPrincipal.removeDeColumnaCompletada(tareaSeleccionada);
+                        } else {
+                            interfazPrincipal.removeDeColumnaToDo(tareaSeleccionada);
+                        }
+                        interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
+
+                        actualizarVistaTareas();
+                        interfazPrincipal.actualizarVistaMatrix();
+
+                        setCardGeneral();
+                    } else {
+                        labelMensajesErrorSeleccionada.setText(getMensajeError(codigoError));
+                        sRecursos.crearTimer(labelMensajesErrorSeleccionada);
+                    }
+                }
+            }
+        });
+
+        /* Listener del boton eliminar todas las tareas para eliminar todas las tareas completadas */
+        labelEliminarTodas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (panelListaTareasCompletadas.getComponentCount()==0){
+                    System.out.println("No hay tareas completadas");
+                    return;
+                }
+                int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
+                if (opcion==JOptionPane.YES_OPTION){
+                    for (int i=interfazPrincipal.getListaTareasCompletadas().size()-1; i>=0; i--){
+                        Tarea tarea = interfazPrincipal.getListaTareasCompletadas().get(i).getTarea();
+                        if (controladorTareas.eliminarTarea(tarea) == CodigoError.SIN_ERROR){
+                            interfazPrincipal.removeDeColumnaCompletada(tarea);
+                            actualizarVistaTareas();
+                        }
+                    }
+                }
+
+                setCardGeneral();
+            }
+        });
+
+        /* Listener del textField de la nueva tarea para que al hacer click se borre el texto */
+        textFieldNombreTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textFieldNombreTarea.getText().equals("Nombre de la tarea")){
+                    textFieldNombreTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textFieldNombreTarea.getText().isBlank()){
+                    textFieldNombreTarea.setText("Nombre de la tarea");
+                }
+            }
+        });
+
+        /* Listener del textPane de la nueva tarea para que al hacer click se borre el texto */
+        textPaneDescripcionTarea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().equals("Descripción de la tarea")){
+                    textPaneDescripcionTarea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textPaneDescripcionTarea.getText().isBlank()){
+                    textPaneDescripcionTarea.setText("Descripción de la tarea");
+                }
+            }
+        });
+    }
+
+    /**
+     * Método para obtener un mensaje de error según el código de error
+     * @param codigoError
+     * @return mensaje de error
+     */
+    private String getMensajeError(int codigoError) {
+        String mensajeError = "";
+
+        switch (codigoError) {
+            case CodigoError.ERROR_TAREA_SIN_NOMBRE -> mensajeError = "Introduce un nombre";
+            case CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO -> mensajeError = "El nombre no puede estar en blanco";
+            case CodigoError.ERROR_TAREA_NOMBRE_LARGO -> mensajeError = "El nombre no puede tener más de 35 caracteres";
+            case CodigoError.ERROR_TAREA_SIN_CAMBIOS -> mensajeError = "No se han realizado cambios";
+            case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
+        }
+        return mensajeError;
+    }
+
 
     /**
      * Construye la columna de tareas por hacer
@@ -301,207 +510,6 @@ public class VistaTareas extends JPanel {
 
         this.labelMensajesError = construirLabelMensajeError();
         panelMensajesError.add(labelMensajesError, BorderLayout.CENTER);
-    }
-
-
-    private String getMensajeError(int codigoError) {
-        String mensajeError = "";
-
-        switch (codigoError) {
-            case CodigoError.ERROR_TAREA_SIN_NOMBRE -> mensajeError = "Introduce un nombre";
-            case CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO -> mensajeError = "El nombre no puede estar en blanco";
-            case CodigoError.ERROR_TAREA_NOMBRE_LARGO -> mensajeError = "El nombre no puede tener más de 35 caracteres";
-            case CodigoError.ERROR_TAREA_SIN_CAMBIOS -> mensajeError = "No se han realizado cambios";
-            case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
-        }
-        return mensajeError;
-    }
-
-    /**
-     * Añade los listeners generales a los botones de la vista
-     */
-    private void addListenersGenerales(){
-
-        /* Listener del boton crear tarea para crear una nueva tarea */
-        labelCrearNuevaTarea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(columnaInformacion, "cardNuevaTarea");
-            }
-        });
-
-
-        /* Listener del boton confirmar tarea para confirmar la creación de una nueva tarea */
-        labelConfirmarTarea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String nombreT = textFieldNombreTarea.getText();
-                String descripcionT = textPaneDescripcionTarea.getText();
-                if (descripcionT.equals("Descripción de la tarea")){
-                    descripcionT = "";
-                }
-                String nombreE = comboEtiquetasNueva.getSelectedItem().toString();
-
-                int codigoError = controladorTareas.crearTarea(nombreT, descripcionT, nombreE);
-                if (codigoError != CodigoError.SIN_ERROR){
-                    labelMensajesError.setText(getMensajeError(codigoError));
-                    sRecursos.crearTimer(labelMensajesError);
-                    return;
-                }
-
-                Tarea tarea = controladorTareas.getUltimaTarea();        // Obtiene la tarea creada de la base de datos para obtener su idT y los datos automáticos
-
-                interfazPrincipal.addAColumnaToDo(tarea);
-                interfazPrincipal.addEnMatrix(tarea);
-
-                textFieldNombreTarea.setText("Nombre de la tarea");
-                textPaneDescripcionTarea.setText("Descripción de la tarea");
-                comboEtiquetasNueva.setSelectedIndex(0);
-
-                actualizarVistaTareas();
-                interfazPrincipal.actualizarVistaMatrix();
-
-                tareaSeleccionada = tarea;
-                setCardTareaSeleccionada(tarea);
-            }
-        });
-
-        /* Listener del boton modificar tarea para modificar la tarea seleccionada */
-        labelModificarTarea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String nombreT = textFieldNombreTareaSelecionada.getText();
-                String descripcionT = textPaneDescripcionTareaSeleccionada.getText();
-                String nombreE = comboEtiquetasSeleccionada.getSelectedItem().toString();
-
-                Tarea tareaModificada = new Tarea(
-                        tareaSeleccionada.getIdT(),
-                        nombreT,
-                        descripcionT,
-                        tareaSeleccionada.getFechaCreacionT(),
-                        tareaSeleccionada.getFechaFinalizacionT(),
-                        tareaSeleccionada.getCompletadaT(),
-                        controladorTareas.getUsuario().getNombreU(),
-                        nombreE
-                );
-
-                int codigoError = controladorTareas.modificarTarea(tareaSeleccionada, tareaModificada);
-                if (codigoError == CodigoError.SIN_ERROR){
-                    TemplatePanelTareas panelTemporalTareas = new TemplatePanelTareas(tareaModificada, controladorTareas, interfazPrincipal);
-                    TemplatePanelTareas panelTareas;
-
-                    if (tareaSeleccionada.getCompletadaT()){
-                        panelTareas = interfazPrincipal.getListaTareasCompletadas().get(interfazPrincipal.getListaTareasCompletadas().indexOf(panelTemporalTareas));
-                    } else {
-                        panelTareas = interfazPrincipal.getListaTareasToDo().get(interfazPrincipal.getListaTareasToDo().indexOf(panelTemporalTareas));
-
-                        if (!tareaSeleccionada.getNombreE().equals("Sin etiqueta")){
-                            interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
-                        }
-                        interfazPrincipal.addEnMatrix(tareaModificada);
-                    }
-
-                    panelTareas.getTarea().setNombreT(nombreT);
-                    panelTareas.getTarea().setDescripcionT(descripcionT);
-                    panelTareas.getTarea().setNombreE(nombreE);
-                    panelTareas.setLabelTituloText(nombreT);
-
-                    labelMensajesErrorSeleccionada.setText("Tarea modificada correctamente");
-                    sRecursos.crearTimer(labelMensajesErrorSeleccionada);
-
-                    actualizarVistaTareas();
-                    interfazPrincipal.actualizarVistaMatrix();
-                } else {
-                    labelMensajesErrorSeleccionada.setText(getMensajeError(codigoError));
-                    sRecursos.crearTimer(labelMensajesErrorSeleccionada);
-                }
-            }
-        });
-
-        /* Listener del boton eliminar tarea para eliminar la tarea seleccionada */
-        labelEliminarTarea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int opcion = JOptionPane.showConfirmDialog(null, "Estás seguro de que quieres eliminar la tarea "+tareaSeleccionada.getNombreT()+"?", "Eliminar tarea", JOptionPane.YES_NO_OPTION);
-                if (opcion == JOptionPane.YES_OPTION){
-
-                    int codigoError = controladorTareas.eliminarTarea(tareaSeleccionada);
-                    if (codigoError == CodigoError.SIN_ERROR) {
-                        if (tareaSeleccionada.getCompletadaT()) {
-                            interfazPrincipal.removeDeColumnaCompletada(tareaSeleccionada);
-                        } else {
-                            interfazPrincipal.removeDeColumnaToDo(tareaSeleccionada);
-                        }
-                        interfazPrincipal.eliminarEnMatrix(tareaSeleccionada);
-
-                        actualizarVistaTareas();
-                        interfazPrincipal.actualizarVistaMatrix();
-
-                        setCardGeneral();
-                    } else {
-                        labelMensajesErrorSeleccionada.setText(getMensajeError(codigoError));
-                        sRecursos.crearTimer(labelMensajesErrorSeleccionada);
-                    }
-                }
-            }
-        });
-
-        /* Listener del boton eliminar todas las tareas para eliminar todas las tareas completadas */
-        labelEliminarTodas.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (panelListaTareasCompletadas.getComponentCount()==0){
-                    System.out.println("No hay tareas completadas");
-                    return;
-                }
-                int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
-                if (opcion==JOptionPane.YES_OPTION){
-                    for (int i=interfazPrincipal.getListaTareasCompletadas().size()-1; i>=0; i--){
-                        Tarea tarea = interfazPrincipal.getListaTareasCompletadas().get(i).getTarea();
-                        if (controladorTareas.eliminarTarea(tarea) == CodigoError.SIN_ERROR){
-                            interfazPrincipal.removeDeColumnaCompletada(tarea);
-                            actualizarVistaTareas();
-                        }
-                    }
-                }
-
-                setCardGeneral();
-            }
-        });
-
-        /* Listener del textField de la nueva tarea para que al hacer click se borre el texto */
-        textFieldNombreTarea.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textFieldNombreTarea.getText().equals("Nombre de la tarea")){
-                    textFieldNombreTarea.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textFieldNombreTarea.getText().isBlank()){
-                    textFieldNombreTarea.setText("Nombre de la tarea");
-                }
-            }
-        });
-
-        /* Listener del textPane de la nueva tarea para que al hacer click se borre el texto */
-        textPaneDescripcionTarea.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textPaneDescripcionTarea.getText().equals("Descripción de la tarea")){
-                    textPaneDescripcionTarea.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textPaneDescripcionTarea.getText().isBlank()){
-                    textPaneDescripcionTarea.setText("Descripción de la tarea");
-                }
-            }
-        });
     }
 
     /**
@@ -776,10 +784,18 @@ public class VistaTareas extends JPanel {
         return gbc;
     }
 
+    /**
+     * Devuelve el panel de las tareas por hacer
+     * @return JPanel de las tareas por hacer
+     */
     public JPanel getPanelListaTareasToDo() {
         return panelListaTareasToDo;
     }
 
+    /**
+     * Devuelve el panel de las tareas completadas
+     * @return JPanel de las tareas completadas
+     */
     public JPanel getPanelListaTareasCompletadas() {
         return panelListaTareasCompletadas;
     }

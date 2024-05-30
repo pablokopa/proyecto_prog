@@ -7,12 +7,18 @@ import app.model.usuarios.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Gestor de tareas. Se utiliza desde el ControladorTareas
+ */
 public class GestorTareas {
     private final ConectarBD conectarBD = new ConectarBD();
     private final Usuario usuario;
 
     private final ArrayList<Tarea> listaTareas;
 
+    /**
+     * Constructor de la clase
+     */
     public GestorTareas() {
         this.usuario = Usuario.getUsuarioConectado();
         this.listaTareas = new ArrayList<>();
@@ -62,7 +68,7 @@ public class GestorTareas {
 
     /**
      * Obtiene la última tarea añadida a la base de datos.
-     * @return la última tarea añadida
+     * @return la última tarea añadida o null si no hay tareas
      */
     public Tarea getUltimaTarea(){
         String sql = "SELECT * FROM tarea ORDER BY idT DESC LIMIT 1;";
@@ -96,8 +102,9 @@ public class GestorTareas {
     }
 
     /**
-     * Añade una tarea a la base de datos y a la lista de tareas.
-     * @param tarea tarea a añadir
+     * Crea una tarea en la base de datos y en la lista de tareas.
+     * @param tarea tarea a crear
+     * @return CodigoError constante
      */
     public int crearTarea(Tarea tarea) {
         String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU, nombreE) VALUES (?, ?, ?, ?, ?)";
@@ -120,9 +127,9 @@ public class GestorTareas {
     }
 
     /**
-     * Completa o descompleta una tarea.
+     * Completa o descompleta una tarea o devuelve un código de error
      * @param tarea tarea a completar
-     * @return true si se ha completado correctamente
+     * @return CodigoError constante
      */
     public int completarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET completadaT = ?, fechaFinalizacionT = ? WHERE idT = ?";
@@ -154,7 +161,7 @@ public class GestorTareas {
     /**
      * Elimina una tarea de la base de datos y de la lista de tareas.
      * @param tarea tarea a eliminar
-     * @return true si se ha eliminado correctamente
+     * @return CodigoError constante
      */
     public int eliminarTarea(Tarea tarea){
         String sql = "delete from tarea where idt = ? and nombreu = ?";
@@ -174,7 +181,7 @@ public class GestorTareas {
     /**
      * Modifica una tarea en la base de datos y en la lista de tareas.
      * @param tarea tarea a modificar
-     * @return true si se ha modificado correctamente
+     * @return CodigoError constante
      */
     public int modificarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET nombret = ?, descripciont = ?, nombree = ? WHERE idt = ?";
@@ -194,10 +201,10 @@ public class GestorTareas {
     }
 
     /**
-     * Comprueba si el nombre de la tarea está vacío o tiene más de 45 caracteres o si no ha habido cambios.
+     * Comprueba si el nombre de la tarea está vacío o tiene más de 35 caracteres; o si no ha habido cambios.
      * @param tareaOriginal tarea original
      * @param tareaEditada tarea editada
-     * @return true si es correcto
+     * @return CodigoError constante
      */
     public int comprobarDatosEditarTarea(Tarea tareaOriginal, Tarea tareaEditada){
         if (tareaEditada.getNombreT().isBlank()){
@@ -217,7 +224,7 @@ public class GestorTareas {
     /**
      * Comprueba si el nombre de la tarea está vacío o tiene más de 45 caracteres.
      * @param nombreTarea nombre de la tarea
-     * @return true si es correcto
+     * @return CodigoError constante
      */
     public int comprobarNombreCrearTarea(String nombreTarea){
         if (nombreTarea.equals("Nombre de la tarea")){
@@ -232,6 +239,10 @@ public class GestorTareas {
         return CodigoError.SIN_ERROR;
     }
 
+    /**
+     * Obtiene la lista de tareas
+     * @return lista de tareas
+     */
     public ArrayList<Tarea> getListaTareas() {
         return listaTareas;
     }

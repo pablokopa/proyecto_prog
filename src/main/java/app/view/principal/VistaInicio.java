@@ -5,9 +5,15 @@ import services.Recursos;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Vista de inicio, utilizada para mostrar los créditos del proyecto
+ */
 public class VistaInicio extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
 
+    /**
+     * Constructor de la clase
+     */
     public VistaInicio() {
         this.setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
         this.setBackground(sRecursos.getBLANCO());
@@ -16,6 +22,9 @@ public class VistaInicio extends JPanel {
         crearLabelCreditos();
     }
 
+    /**
+     * Método para crear los labels de los créditos
+     */
     private void crearLabelCreditos(){
         JPanel panelCreditos = new JPanel();
         panelCreditos.setBackground(sRecursos.getBLANCO());
@@ -45,6 +54,13 @@ public class VistaInicio extends JPanel {
         this.add(panelCreditos, gbc);
     }
 
+    /**
+     * Método para construir un label
+     * @param texto Texto del label
+     * @param sizeLetra Tamaño de la letra
+     * @param tipoLetra Tipo de letra
+     * @return JLabel
+     */
     private JLabel construirLabel(String texto, int sizeLetra, String tipoLetra) {
         JLabel label = new JLabel(texto);
         switch (tipoLetra) {
