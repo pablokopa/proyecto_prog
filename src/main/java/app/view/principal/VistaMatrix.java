@@ -80,7 +80,6 @@ public class VistaMatrix extends JPanel {
         JPanel panelTitulo = new JPanel();
         panelTitulo.setBackground(color);
         panelTitulo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        panel.add(panelTitulo, BorderLayout.NORTH);
 
         /* Crea el label del título */
         JLabel labelTitulo = new JLabel(titulo);
@@ -90,21 +89,29 @@ public class VistaMatrix extends JPanel {
         /* Añade el panel del título en una disposición especifica según el panel de matrix */
         switch (titulo) {
             case "No importante / No urgente" -> {
+                panel.add(panelTitulo, BorderLayout.NORTH);
+
                 Border borderFuera = BorderFactory.createMatteBorder(0, 10, 5, 5, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "No importante / Urgente" -> {
+                panel.add(panelTitulo, BorderLayout.NORTH);
+
                 Border borderFuera = BorderFactory.createMatteBorder(0, 5, 5, 10, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / No urgente" -> {
+                panel.add(panelTitulo, BorderLayout.SOUTH);
+
                 Border borderFuera = BorderFactory.createMatteBorder(5, 10, 10, 5, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / Urgente" -> {
+                panel.add(panelTitulo, BorderLayout.SOUTH);
+
                 Border borderFuera = BorderFactory.createMatteBorder(5, 5, 10, 10, sRecursos.getBLANCO());
                 Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
                 panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
