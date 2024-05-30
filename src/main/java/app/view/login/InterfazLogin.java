@@ -1,6 +1,5 @@
 package app.view.login;
 
-import app.model.tareas.GestorTareas;
 import app.view.principal.InterfazPrincipal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
@@ -41,8 +40,7 @@ public class InterfazLogin extends JFrame{
 
         this.moverVentana();
         this.crearJPanels();
-        this.crearJTextFields();
-        this.crearJPasswordField();
+        this.crearFieldsDatosUsuario();
         this.crearJButtons(gestorUsuarios);
         this.crearJLabels();
 
@@ -56,6 +54,8 @@ public class InterfazLogin extends JFrame{
         setUndecorated(true);
         setIconImage(sRecursos.getImagenLogo2().getImage());
         setVisible(true);
+
+        getRootPane().setDefaultButton(botonEntrar);
 
         this.actualizarContadorUsuarios();
     }
@@ -98,18 +98,12 @@ public class InterfazLogin extends JFrame{
 
     /**
      * Método para crear los campos de texto de la interfaz.
-     * Crea y configura el campo de texto para el nombre de usuario.
+     * Crea y configura los campos de texto para el nombre de usuario y la contraseña.
      */
-    public void crearJTextFields(){
+    public void crearFieldsDatosUsuario(){
         cuadroUsuario = sObjGraficos.construirJTextField(null, (panelDerecha.getWidth() - 260) / 2, 150, 260, 40, sRecursos.getMontserratBold(13), Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
         panelDerecha.add(cuadroUsuario);
-    }
 
-    /**
-     * Método para crear el campo de contraseña de la interfaz.
-     * Crea y configura el campo de contraseña para la contraseña del usuario.
-     */
-    public void crearJPasswordField(){
         cuadroPassword = sObjGraficos.construirJPasswordField((panelDerecha.getWidth() - 260) / 2, 220, 260, 40, Color.WHITE, Color.DARK_GRAY, sRecursos.getGRANATE(), sRecursos.getBordeGranate(), "c");
         panelDerecha.add(cuadroPassword);
     }
@@ -156,6 +150,8 @@ public class InterfazLogin extends JFrame{
                 textoLogin.setText("Inicio de sesión fallido..");
             }
         });
+
+
     }
 
     /**
