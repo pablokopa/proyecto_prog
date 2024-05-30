@@ -1,5 +1,7 @@
 package app.view.login;
 
+import app.controller.ControladorUsuarios;
+import app.model.CodigoError;
 import app.view.principal.InterfazPrincipal;
 import services.Recursos;
 import app.model.usuarios.GestorUsuarios;
@@ -17,6 +19,7 @@ public class InterfazLogin extends JFrame{
     private final ObjGraficos sObjGraficos;
     private final Recursos sRecursos;
     private final GestorUsuarios gestorUsuarios;
+    private final ControladorUsuarios controladorUsuarios;
 
     private int mouseX, x;
     private int mouseY, y;
@@ -37,6 +40,7 @@ public class InterfazLogin extends JFrame{
         sObjGraficos = ObjGraficos.getService();
         sRecursos = Recursos.getService();
         this.gestorUsuarios = gestorUsuarios;
+        this.controladorUsuarios = new ControladorUsuarios(gestorUsuarios);
 
         this.moverVentana();
         this.crearJPanels();
@@ -126,7 +130,25 @@ public class InterfazLogin extends JFrame{
             String nombreUsuario = cuadroUsuario.getText();
             String passwordUsuario = String.valueOf(cuadroPassword.getPassword());
 
-            if (gestorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario, textoComprobacion, textoLogin)){  // Se intenta registrar el usuario, si fue registrado correctamente devuelve true
+            int codigoError = controladorUsuarios.registrarUsuario(nombreUsuario, passwordUsuario);
+            if (codigoError != CodigoError.SIN_ERROR) {
+                textoLogin.setText("Registro fallido..");
+                String mensajeError = "";
+
+                switch (codigoError) {
+                    case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
+                    case CodigoError.ERROR_USUARIO_YA_EXISTE -> mensajeError = "El nombre de usuario ya existe";
+                    case CodigoError.ERROR_NOMBRE_CORTO -> mensajeError = "El nombre de usuario debe tener al menos 3 carácteres";
+                    case CodigoError.ERROR_NOMBRE_LARGO -> mensajeError = "El nombre de usuario no puede tener más de 40 carácteres";
+                    case CodigoError.ERROR_PASSWORD_CORTA -> mensajeError = "La contraseña debe tener al menos 4 carácteres";
+                    case CodigoError.ERROR_PASSWORD_LARGA -> mensajeError = "La contraseña debe tener menos de 50 carácteres";
+                    case CodigoError.ERROR_PASSWORD_CON_ESPACIOS -> mensajeError = "La contraseña no puede tener espacios en blanco";
+                    case CodigoError.ERROR_PASSWORD_CARACTERES_RAROS -> mensajeError = "La contraseña no puede tener carácteres extraños";
+                }
+
+                textoComprobacion.setText(mensajeError);
+                sRecursos.crearTimer(textoComprobacion);
+            } else {
                 textoComprobacion.setText("Usuario registrado correctamente");
                 textoLogin.setText("Bienvenido, "+ cuadroUsuario.getText()+"!");
                 cuadroUsuario.setText("");

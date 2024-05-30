@@ -1,5 +1,6 @@
 package app.model.usuarios;
 
+import app.model.CodigoError;
 import app.model.basedatos.ConectarBD;
 
 import javax.swing.*;
@@ -18,10 +19,6 @@ public class GestorUsuarios {
     private final Recursos sRecursos = Recursos.getService();
     private final ConectarBD conectarBD = new ConectarBD();
 
-//    public GestorUsuarios(ConectarBD conectarBD) {
-//        this.conectarBD = conectarBD;
-//    }
-
     /**
      * Método para registrar un nuevo usuario en la base de datos
      * @param nombreUsuario obtenido desde la interfaz de usuario
@@ -30,14 +27,7 @@ public class GestorUsuarios {
      * @param textoLogin para mostrar mensajes
      * @return true si el usuario fue registrado correctamente
      */
-    public boolean registrarUsuario(String nombreUsuario, String passwordUsuario, JLabel textoComprobacion, JLabel textoLogin) {
-        /* Comprueba si el nombre de usuario y la contraseña son correctos */
-        if(!comprobarNombreUsuario(nombreUsuario, textoComprobacion)
-                || !comprobarPasswordUsuario(passwordUsuario, textoComprobacion)){
-            textoLogin.setText("Registro fallido..");
-            return false;
-        }
-
+    public int registrarUsuario(String nombreUsuario, String passwordUsuario) {
         try (Connection conexion = conectarBD.conectar()) {
             String passwordHashed = BCrypt.hashpw(passwordUsuario, BCrypt.gensalt());     // Encripta la contraseña del usuario para más seguridad. Siempre es un String de 60 carácteres.
 
@@ -47,11 +37,9 @@ public class GestorUsuarios {
             pstmt.setString(2, passwordHashed);                              // Establece el segundo valor de la consulta SQL
 
             pstmt.executeUpdate();                                                        // Ejecuta la consulta SQL
-            return true;
+            return CodigoError.SIN_ERROR;
         } catch (SQLException e) {
-            textoComprobacion.setText("No hay conexión");
-            sRecursos.crearTimer(textoComprobacion);
-            return false;
+            return CodigoError.ERROR_SIN_CONEXION;
         }
     }
 
@@ -101,10 +89,9 @@ public class GestorUsuarios {
      * @param nombreUsuario obtenido desde la interfaz de usuario
      * @return true si es correcto
      */
-    public boolean comprobarNombreUsuario(String nombreUsuario, JLabel textoComprobacion){
+    public int comprobarNombreUsuario(String nombreUsuario){
 
         try (Connection conexion = conectarBD.conectar()) {
-
             /* Consulta SQL para comprobar si el nombre de usuario existe */
             String sql = "SELECT nombreU FROM usuario WHERE nombreU = ?";
             PreparedStatement prepare = conexion.prepareStatement(sql);
@@ -113,68 +100,51 @@ public class GestorUsuarios {
             /* Comprueba si el nombre de usuario ya existe en la base de datos */
             ResultSet resultadoQuery = prepare.executeQuery();
             if (resultadoQuery.next()) {
-                textoComprobacion.setText("El nombre de usuario ya existe");
-                sRecursos.crearTimer(textoComprobacion);
-                return false;
+                return CodigoError.ERROR_USUARIO_YA_EXISTE;
             }
         } catch (SQLException e) {
-            textoComprobacion.setText("No hay conexión");
-            sRecursos.crearTimer(textoComprobacion);
-            return false;
+            return CodigoError.ERROR_SIN_CONEXION;
         }
 
         /* Comprueba si el nombre de usuario tiene al menos 3 carácteres */
         if (nombreUsuario.length()<3){
-            textoComprobacion.setText("El nombre de usuario debe tener al menos 3 carácteres");
-            sRecursos.crearTimer(textoComprobacion);
-            return false;
+            return CodigoError.ERROR_NOMBRE_CORTO;
         }
 
         if (nombreUsuario.length()>40) {
-            textoComprobacion.setText("El nombre de usuario no puede tener más de 40 carácteres");
-            sRecursos.crearTimer(textoComprobacion);
-            return false;
+            return CodigoError.ERROR_NOMBRE_LARGO;
         }
 
         /* Si no se encontró un usuario y el nombre de usuario tiene al menos 3 caracteres, devuelve true */
-        return true;
+        return CodigoError.SIN_ERROR;
     }
 
     /**
      * Comprueba si la contraseña del usuario tiene al menos 4 carácteres y no tiene espacios en blanco
      * @param passwordUsuario obtenido desde la interfaz de usuario
-     * @param textoComprobacion para mostrar mensajes de error
      * @return true si es correcta
      */
-    public boolean comprobarPasswordUsuario(String passwordUsuario, JLabel textoComprobacion){
+    public int comprobarPasswordUsuario(String passwordUsuario){
         String caracteresNoPermitidos = "^`:@´;·ªº|\"{}";
 
         /* Comprueba si la contraseña tiene al menos 4 carácteres */
         if (passwordUsuario.length()<4){
-            textoComprobacion.setText("La contraseña debe tener al menos 4 carácteres");
-            sRecursos.crearTimer(textoComprobacion);
-            return false;
+            return CodigoError.ERROR_PASSWORD_CORTA;
         }
 
         if (passwordUsuario.length()>50){
-            textoComprobacion.setText("La contraseña debe tener menos de 50 carácteres");
-            sRecursos.crearTimer(textoComprobacion);
-            return false;
+            return CodigoError.ERROR_PASSWORD_LARGA;
         }
 
         for (int i=0; i<passwordUsuario.length(); i++) {
             /* Comprueba si la contraseña tiene espacios en blanco o carácteres no permitidos */
             if (passwordUsuario.charAt(i) == ' ') {
-                textoComprobacion.setText("La contraseña no puede tener espacios en blanco");
-                sRecursos.crearTimer(textoComprobacion);
-                return false;
+                return CodigoError.ERROR_PASSWORD_CON_ESPACIOS;
             } else if (caracteresNoPermitidos.indexOf(passwordUsuario.charAt(i)) != -1) {
-                textoComprobacion.setText("La contraseña no puede tener carácteres extraños");
-                sRecursos.crearTimer(textoComprobacion);
-                return false;
+                return CodigoError.ERROR_PASSWORD_CARACTERES_RAROS;
             }
         }
-        return true;
+        return CodigoError.SIN_ERROR;
     }
 
     /**

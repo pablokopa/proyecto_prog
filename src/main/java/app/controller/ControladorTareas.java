@@ -4,7 +4,7 @@ import app.model.tareas.GestorTareas;
 import app.view.principal.VistaTareas;
 
 /**
- * Controlador de tareas de prueba
+ * Controlador de tareas
  */
 public class ControladorTareas {
     private final GestorTareas gestorTareas;
@@ -14,17 +14,7 @@ public class ControladorTareas {
         this.gestorTareas = gestorTareas;
         this.vistaTareas = vistaTareas;
 
-//        gestorTareas.addObserver(vistaTareas);
     }
-/*
-    public void crearTarea(String nombreT, String descripcionT) {
-        if (nombreT.isBlank()){
-            System.out.println("Tarea sin nombre no posible");
-            return;
-        }
-        Tarea tarea = new Tarea(nombreT, descripcionT, gestorTareas.getUsuario().getNombreU());
-        gestorTareas.crearTarea(tarea);
-        new TemplatePanelTareas(tarea, gestorTareas, vistaTareas);
-        vistaTareas.actualizarVistaTareas();
-    }*/
+
+
 }
