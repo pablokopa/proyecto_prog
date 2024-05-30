@@ -3,6 +3,7 @@ package app.model.usuarios;
 import app.model.basedatos.ConectarBD;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
 import java.lang.reflect.Field;
@@ -74,7 +75,7 @@ class GestorUsuariosTest {
     }
 
     @Test
-    public void testRegistrarUsuario_Success() throws SQLException {
+    public void registrarUsuarioCorrectamente() throws SQLException {
         when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
         JLabel textoComprobacion = new JLabel();
         JLabel textoLogin = new JLabel();
@@ -85,7 +86,7 @@ class GestorUsuariosTest {
     }
 
     @Test
-    public void testRegistrarUsuario_Fail_InvalidUsername() {
+    public void registrarUsuario_nombreIncorrecto() {
         JLabel textoComprobacion = new JLabel();
         JLabel textoLogin = new JLabel();
 
@@ -94,7 +95,7 @@ class GestorUsuariosTest {
     }
 
     @Test
-    public void testRegistrarUsuario_Fail_InvalidPassword() {
+    public void registrarUsuario_passwordIncorrecta() {
         JLabel textoComprobacion = new JLabel();
         JLabel textoLogin = new JLabel();
 
@@ -109,5 +110,40 @@ class GestorUsuariosTest {
 
         int count = gestorUsuarios.contarUsuarios();
         assertEquals(5, count);
+    }
+
+    @Test
+    public void conectarUsuarioCorrectamente() throws SQLException {
+        JLabel textoComprobacion = new JLabel();
+
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getString("passwordu")).thenReturn(BCrypt.hashpw("password", BCrypt.gensalt()));
+
+        boolean result = gestorUsuarios.conectarUsuario("usuario", "password", textoComprobacion);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void conectarUsuario_usuarioNoRegistrado() throws SQLException {
+        JLabel textoComprobacion = new JLabel();
+
+        when(resultSet.next()).thenReturn(false);
+
+        boolean result = gestorUsuarios.conectarUsuario("usuario", "password", textoComprobacion);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void conectarUsuario_passwordIncorrecta() throws SQLException {
+        JLabel textoComprobacion = new JLabel();
+
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getString("passwordu")).thenReturn(BCrypt.hashpw("password", BCrypt.gensalt()));
+
+        boolean result = gestorUsuarios.conectarUsuario("usuario", "passwordIncorrecta", textoComprobacion);
+
+        assertFalse(result);
     }
 }
