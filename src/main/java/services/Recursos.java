@@ -25,6 +25,9 @@ public class Recursos {
     private ImageIcon imagenUsuario, imagenPassword;
     private ImageIcon imagenPlay, imagenPause, imagenStop;
     private ImageIcon imagenCheck, imagenCheckSinCheck;
+
+    private Timer timer = new Timer(3500, null);
+
     private ImageIcon imagenCalendario;
 
     /**
@@ -46,7 +49,10 @@ public class Recursos {
      * @param label label con el mensaje de error
      */
     public void crearTimer(JLabel label){
-        Timer timer = new Timer(3500, new ActionListener() {
+        if (timer.isRunning()){
+            timer.stop();
+        }
+        timer = new Timer(3500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 label.setText("");
