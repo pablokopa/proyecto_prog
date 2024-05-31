@@ -139,7 +139,7 @@ public class InterfazLogin extends JFrame{
                 textoLogin.setText("Bienvenido, "+nombreUsuario+"!");
                 cuadroUsuario.setText("");
                 cuadroPassword.setText("");
-                textoNumeroUsuarios.setText("Nº Usuarios: "+controladorUsuarios.contarUsuarios());
+                textoNumeroUsuarios.setText("Usuarios registrados: "+controladorUsuarios.contarUsuarios());
             }
         });
 
@@ -215,7 +215,7 @@ public class InterfazLogin extends JFrame{
         panelDerecha.add(textoComprobacion);
 
         /* Contador usuarios */
-        textoNumeroUsuarios = sObjGraficos.construirJLabel("", -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratPlain(10), null, sRecursos.getGRANATE(), null, "r");
+        textoNumeroUsuarios = sObjGraficos.construirJLabel("", -5, 450, panelDerecha.getWidth(), 80, null, null, sRecursos.getMontserratItalic(13), null, sRecursos.getGRANATE(), null, "r");
         panelDerecha.add(textoNumeroUsuarios);
     }
 
@@ -224,7 +224,7 @@ public class InterfazLogin extends JFrame{
      * Actualiza el contador de usuarios en función del número de usuarios registrados.
      */
     public void actualizarContadorUsuarios(){
-        textoNumeroUsuarios.setText("Nº Usuarios: "+controladorUsuarios.contarUsuarios());
+        textoNumeroUsuarios.setText("Usuarios registrados: "+controladorUsuarios.contarUsuarios());
     }
 
     /**

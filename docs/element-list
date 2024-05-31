@@ -1,8 +1,10 @@
 app
+app.controller
+app.model
 app.model.basedatos
 app.model.tareas
 app.model.usuarios
 app.view.login
 app.view.principal
-app.view.pruebas
+app.view.templates
 services
