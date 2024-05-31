@@ -811,6 +811,10 @@ public class VistaTareas extends JPanel {
         return panelListaTareasCompletadas;
     }
 
+    /**
+     * Devuelve el label de los mensajes de error generales
+     * @return JLabel de los mensajes de error generales
+     */
     public JLabel getLabelMensajesDeErrorGeneral() {
         return labelMensajesDeErrorGeneral;
     }

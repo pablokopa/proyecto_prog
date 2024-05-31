@@ -328,14 +328,26 @@ public class InterfazPrincipal extends JFrame {
         }
     }
 
+    /**
+     * Obtiene y devuelve el label de mensajes de error del cardGeneral de vistaTareas.
+     * @return JLabel
+     */
     public JLabel getLabelMensajesDeErrorGeneral(){
         return vistaTareas.getLabelMensajesDeErrorGeneral();
     }
 
+    /**
+     * Devuelve la lista de tareas por hacer.
+     * @return listaTareasToDo
+     */
     public ArrayList<TemplatePanelTareas> getListaTareasToDo() {
         return listaTareasToDo;
     }
 
+    /**
+     * Devuelve la lista de tareas completadas.
+     * @return listaTareasCompletadas
+     */
     public ArrayList<TemplatePanelTareas> getListaTareasCompletadas() {
         return listaTareasCompletadas;
     }

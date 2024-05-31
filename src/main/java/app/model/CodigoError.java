@@ -76,5 +76,8 @@ public interface CodigoError {
      */
     int ERROR_TAREA_SIN_CAMBIOS = 14;
 
+    /**
+     * Error al intentar eliminar todas las tareas sin completar sin haber ninguna
+     */
     int ERROR_TAREA_ELIMINAR_TODAS_SIN_COMPLETADAS = 15;
 }

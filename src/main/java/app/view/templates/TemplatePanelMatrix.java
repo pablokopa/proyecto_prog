@@ -57,6 +57,9 @@ public class TemplatePanelMatrix extends JPanel {
      */
     public void addActionListeners(){
 
+        /**
+         * Añade un action listener al labelImagen para marcar la tarea como completada y cambiar a los paneles convenientes en todos las vistas
+         */
         labelImagen.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
