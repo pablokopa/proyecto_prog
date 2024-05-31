@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Clase que contiene los tests unitarios de la clase GestorUsuarios.
+ */
 class GestorUsuariosTest {
     private GestorUsuarios gestorUsuarios;
     private ConectarBD conectarBD;
@@ -22,6 +25,10 @@ class GestorUsuariosTest {
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
+    /**
+     * Método que se ejecuta antes de cada test.
+     * @throws SQLException
+     */
     @BeforeEach
     public void setUp() throws SQLException {
         /* Mockear las dependencias */
@@ -48,6 +55,10 @@ class GestorUsuariosTest {
         }
     }
 
+    /**
+     * Test para el método comprobarNombreUsuario() de la clase GestorUsuarios. Debe devolver SIN_ERROR si el nombre de usuario es correcto y no existe.
+     * @throws SQLException
+     */
     @Test
     public void comprobarNombreUsuarioCorrecto() throws SQLException {
         when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
@@ -57,6 +68,10 @@ class GestorUsuariosTest {
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
     }
 
+    /**
+     * Test para el método comprobarNombreUsuario() de la clase GestorUsuarios. Debe devolver ERROR_USUARIO_YA_EXISTE si el nombre de usuario ya existe.
+     * @throws SQLException
+     */
     @Test
     public void comprobarNombreUsuarioExistente() throws SQLException {
         when(resultSet.next()).thenReturn(true); // Simular que el usuario ya existe
@@ -66,6 +81,10 @@ class GestorUsuariosTest {
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
+    /**
+     * Test para el método comprobarNombreUsuario() de la clase GestorUsuarios. Debe devolver ERROR_USUARIO_NOMBRE_CORTO si el nombre de usuario es muy corto.
+     * @throws SQLException
+     */
     @Test
     public void comprobarNombreUsuarioCorto() throws SQLException {
         int result = gestorUsuarios.comprobarNombreUsuario("no");
@@ -73,6 +92,10 @@ class GestorUsuariosTest {
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
+    /**
+     * Test para el método comprobarNombreUsuario() de la clase GestorUsuarios. Debe devolver ERROR_USUARIO_NOMBRE_LARGO si el nombre de usuario es muy largo.
+     * @throws SQLException
+     */
     @Test
     public void comprobarNombreUsuarioLargo() throws SQLException {
         int result = gestorUsuarios.comprobarNombreUsuario("nombre con más de cincuenta caracteres no permitido");
@@ -81,6 +104,10 @@ class GestorUsuariosTest {
 
     }
 
+    /**
+     * Test para el método registrarUsuario() de la clase GestorUsuarios. Debe devolver SIN_ERROR si el usuario se registró correctamente.
+     * @throws SQLException
+     */
     @Test
     public void registrarUsuarioCorrectamente() throws SQLException {
         when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
@@ -90,6 +117,10 @@ class GestorUsuariosTest {
         verify(preparedStatement, times(1)).executeUpdate();
     }
 
+    /**
+     * Test para el método contarUsuarios() de la clase GestorUsuarios. Debe devolver el número de usuarios registrados.
+     * @throws SQLException
+     */
     @Test
     public void testContarUsuarios() throws SQLException {
         when(resultSet.next()).thenReturn(true);
@@ -100,6 +131,10 @@ class GestorUsuariosTest {
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
+    /**
+     * Test para el método conectarUsuario() de la clase GestorUsuarios. Debe devolver SIN_ERROR si el usuario se conectó correctamente.
+     * @throws SQLException
+     */
     @Test
     public void conectarUsuarioCorrectamente() throws SQLException {
         when(resultSet.next()).thenReturn(true);
@@ -110,6 +145,10 @@ class GestorUsuariosTest {
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
     }
 
+    /**
+     * Test para el método conectarUsuario() de la clase GestorUsuarios. Debe devolver ERROR_USUARIO_NO_REGISTRADO si el usuario no está registrado.
+     * @throws SQLException
+     */
     @Test
     public void conectarUsuario_usuarioNoRegistrado() throws SQLException {
         when(resultSet.next()).thenReturn(false); // Simular que el usuario no está registrado
@@ -119,6 +158,10 @@ class GestorUsuariosTest {
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
     }
 
+    /**
+     * Test para el método conectarUsuario() de la clase GestorUsuarios. Debe devolver ERROR_USUARIO_PASSWORD_INCORRECTA si la contraseña es incorrecta.
+     * @throws SQLException
+     */
     @Test
     public void conectarUsuario_passwordIncorrecta() throws SQLException {
         when(resultSet.next()).thenReturn(true);

@@ -17,6 +17,9 @@ import java.lang.reflect.Field;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Clase de pruebas unitarias para la clase GestorTareas
+ */
 class GestorTareasTest {
     private GestorTareas gestorTareas;
     private ConectarBD conectarBD;
@@ -25,6 +28,9 @@ class GestorTareasTest {
     private ResultSet resultSet;
     private Usuario usuario;
 
+    /**
+     * Configuración inicial de las pruebas unitarias
+     */
     @BeforeEach
     public void setUp() {
         /* Mockear las dependencias */
@@ -64,6 +70,9 @@ class GestorTareasTest {
         }
     }
 
+    /**
+     * Test para el método de GestorTareas.crearTarea(). Debe devolver CodigoError.SIN_ERROR y llamar al método executeUpdate() una vez.
+     */
     @Test
     public void testCrearTarea() throws SQLException {
         Tarea tarea = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
@@ -72,6 +81,9 @@ class GestorTareasTest {
         verify(preparedStatement, times(1)).executeUpdate(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
+    /**
+     * Test para el método de GestorTareas.crearTarea() con un nombre de tarea vacío. Debe devolver CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO.
+     */
     @Test
     public void testCompletarTarea() throws SQLException {
         Tarea tarea = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
@@ -80,6 +92,9 @@ class GestorTareasTest {
         verify(preparedStatement, times(1)).executeUpdate(); // Verify that the executeUpdate() method was called once
     }
 
+    /**
+     * Test para el método de GestorTareas.eliminarTarea(). Debe devolver CodigoError.SIN_ERROR y llamar al método executeUpdate() una vez.
+     */
     @Test
     public void testEliminarTarea() throws SQLException {
         Tarea tarea = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
@@ -88,6 +103,9 @@ class GestorTareasTest {
         verify(preparedStatement, times(1)).executeUpdate(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
+    /**
+     * Test para el método de GestorTareas.modificarTarea(). Debe devolver CodigoError.SIN_ERROR y llamar al método executeUpdate() una vez.
+     */
     @Test
     public void testModificarTarea() throws SQLException {
         Tarea tarea = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
@@ -96,12 +114,18 @@ class GestorTareasTest {
         verify(preparedStatement, times(1)).executeUpdate(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
+    /**
+     * Test para el método de GestorTareas.comprobarNombreCrearTarea() con un nombre de tarea vacío. Debe devolver CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO.
+     */
     @Test
     public void testComprobarNombreCrearTarea_NombreVacio() throws SQLException {
         int result = gestorTareas.comprobarNombreCrearTarea("");
         assertEquals(CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO, result);
     }
 
+    /**
+     * Test para el método de GestorTareas.comprobarNombreCrearTarea() con un nombre de tarea largo. Debe devolver CodigoError.ERROR_TAREA_NOMBRE_LARGO.
+     */
     @Test
     public void testComprobarNombreCrearTarea_NombreLargo() throws SQLException {
         String nombreLargo = "nombreDeTareaConMasDeTreintaYCincoCaracteres";
@@ -109,12 +133,18 @@ class GestorTareasTest {
         assertEquals(CodigoError.ERROR_TAREA_NOMBRE_LARGO, result);
     }
 
+    /**
+     * Test para el método de GestorTareas.comprobarNombreCrearTarea() con un nombre de tarea correcto. Debe devolver CodigoError.SIN_ERROR.
+     */
     @Test
     public void testComprobarNombreCrearTarea_NombreCorrecto() throws SQLException {
         int result = gestorTareas.comprobarNombreCrearTarea("nombreTarea");
         assertEquals(CodigoError.SIN_ERROR, result);
     }
 
+    /**
+     * Test para el método de GestorTareas.comprobarDatosEditarTarea() con un nombre de tarea vacío. Debe devolver CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO.
+     */
     @Test
     public void testComprobarDatosEditarTarea_NombreVacio() {
         Tarea tareaOriginal = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
@@ -123,6 +153,9 @@ class GestorTareasTest {
         assertEquals(CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO, result);
     }
 
+    /**
+     * Test para el método de GestorTareas.comprobarDatosEditarTarea() con un nombre de tarea largo. Debe devolver CodigoError.ERROR_TAREA_NOMBRE_LARGO.
+     */
     @Test
     public void testComprobarDatosEditarTarea_NombreLargo() {
         Tarea tareaOriginal = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
@@ -131,6 +164,9 @@ class GestorTareasTest {
         assertEquals(CodigoError.ERROR_TAREA_NOMBRE_LARGO, result);
     }
 
+    /**
+     * Test para el método de GestorTareas.comprobarDatosEditarTarea() con una tarea sin cambios. Debe devolver CodigoError.ERROR_TAREA_SIN_CAMBIOS.
+     */
     @Test
     public void testComprobarDatosEditarTarea_SinCambios() {
         Tarea tareaOriginal = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
@@ -139,6 +175,9 @@ class GestorTareasTest {
         assertEquals(CodigoError.ERROR_TAREA_SIN_CAMBIOS, result);
     }
 
+    /**
+     * Test para el método de GestorTareas.comprobarDatosEditarTarea() con datos correctos. Debe devolver CodigoError.SIN_ERROR.
+     */
     @Test
     public void testComprobarDatosEditarTarea_Correcto() {
         Tarea tareaOriginal = new Tarea(1, "nombreT", "descripcionT", new Timestamp(System.currentTimeMillis()), null, false, "nombreU", "nombreE");
