@@ -1,11 +1,11 @@
 package app.model.usuarios;
 
+import app.model.CodigoError;
 import app.model.basedatos.ConectarBD;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.swing.*;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,30 +51,32 @@ class GestorUsuariosTest {
     @Test
     public void comprobarNombreUsuarioCorrecto() throws SQLException {
         when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
-        JLabel label = new JLabel();
-        assertTrue(gestorUsuarios.comprobarNombreUsuario("nombre", label));
-        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
+
+        int result = gestorUsuarios.comprobarNombreUsuario("nombre");
+        assertEquals(CodigoError.SIN_ERROR, result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
     }
 
     @Test
     public void comprobarNombreUsuarioExistente() throws SQLException {
         when(resultSet.next()).thenReturn(true); // Simular que el usuario ya existe
-        JLabel label = new JLabel();
-        assertFalse(gestorUsuarios.comprobarNombreUsuario("nombre", label));
+
+        int result = gestorUsuarios.comprobarNombreUsuario("nombre");
+        assertEquals(CodigoError.ERROR_USUARIO_YA_EXISTE, result);
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
     public void comprobarNombreUsuarioCorto() throws SQLException {
-        JLabel label = new JLabel();
-        assertFalse(gestorUsuarios.comprobarNombreUsuario("no", label));
+        int result = gestorUsuarios.comprobarNombreUsuario("no");
+        assertEquals(CodigoError.ERROR_USUARIO_NOMBRE_CORTO, result);
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
     public void comprobarNombreUsuarioLargo() throws SQLException {
-        JLabel label = new JLabel();
-        assertFalse(gestorUsuarios.comprobarNombreUsuario("nombreDeUsuarioConMasDeCincuentaCaracteres", label));
+        int result = gestorUsuarios.comprobarNombreUsuario("nombre con más de cincuenta caracteres no permitido");
+        assertEquals(CodigoError.ERROR_USUARIO_NOMBRE_LARGO, result);
         verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
 
     }
@@ -82,32 +84,10 @@ class GestorUsuariosTest {
     @Test
     public void registrarUsuarioCorrectamente() throws SQLException {
         when(resultSet.next()).thenReturn(false); // Simular que el usuario no existe
-        JLabel textoComprobacion = new JLabel();
-        JLabel textoLogin = new JLabel();
 
-        boolean result = gestorUsuarios.registrarUsuario("nuevoUsuario", "passwordSeguro", textoComprobacion, textoLogin);
-        assertTrue(result);
+        int result = gestorUsuarios.registrarUsuario("nuevoUsuario", "password");
+        assertEquals(CodigoError.SIN_ERROR, result);
         verify(preparedStatement, times(1)).executeUpdate();
-    }
-
-    @Test
-    public void registrarUsuario_nombreIncorrecto() throws SQLException {
-        JLabel textoComprobacion = new JLabel();
-        JLabel textoLogin = new JLabel();
-
-        boolean result = gestorUsuarios.registrarUsuario("", "passwordSeguro", textoComprobacion, textoLogin);
-        assertFalse(result);
-        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
-    }
-
-    @Test
-    public void registrarUsuario_passwordIncorrecta() throws SQLException {
-        JLabel textoComprobacion = new JLabel();
-        JLabel textoLogin = new JLabel();
-
-        boolean result = gestorUsuarios.registrarUsuario("usuarioValido", "123", textoComprobacion, textoLogin);
-        assertFalse(result);
-        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
     }
 
     @Test
@@ -122,39 +102,30 @@ class GestorUsuariosTest {
 
     @Test
     public void conectarUsuarioCorrectamente() throws SQLException {
-        JLabel textoComprobacion = new JLabel();
-
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getString("passwordu")).thenReturn(BCrypt.hashpw("password", BCrypt.gensalt()));
 
-        boolean result = gestorUsuarios.conectarUsuario("usuario", "password", textoComprobacion);
-
-        assertTrue(result);
-        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
+        int result = gestorUsuarios.conectarUsuario("usuario", "password");
+        assertEquals(CodigoError.SIN_ERROR, result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
     }
 
     @Test
     public void conectarUsuario_usuarioNoRegistrado() throws SQLException {
-        JLabel textoComprobacion = new JLabel();
+        when(resultSet.next()).thenReturn(false); // Simular que el usuario no está registrado
 
-        when(resultSet.next()).thenReturn(false);
-
-        boolean result = gestorUsuarios.conectarUsuario("usuario", "password", textoComprobacion);
-
-        assertFalse(result);
-        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
+        int result = gestorUsuarios.conectarUsuario("usuarioNoRegistrado", "password");
+        assertEquals(CodigoError.ERROR_USUARIO_NO_REGISTRADO, result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
     }
 
     @Test
     public void conectarUsuario_passwordIncorrecta() throws SQLException {
-        JLabel textoComprobacion = new JLabel();
-
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getString("passwordu")).thenReturn(BCrypt.hashpw("password", BCrypt.gensalt()));
 
-        boolean result = gestorUsuarios.conectarUsuario("usuario", "passwordIncorrecta", textoComprobacion);
-
-        assertFalse(result);
-        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeUpdate() una vez
+        int result = gestorUsuarios.conectarUsuario("usuario", "passwordIncorrecta");
+        assertEquals(CodigoError.ERROR_USUARIO_PASSWORD_INCORRECTA, result);
+        verify(preparedStatement, times(1)).executeQuery(); // Verificar que se llamó al método executeQuery() una vez
     }
 }

@@ -8,20 +8,13 @@ import app.view.principal.VistaTareas;
 import java.lang.reflect.Field;
 
 class GestorTareasTestable extends GestorTareas {
-    private final Usuario usuario;
+    private Usuario usuario;
+    private InterfazPrincipal interfazPrincipal;
+    private VistaTareas vistaTareas;
+    private VistaMatrix vistaMatrix;
 
-    public GestorTareasTestable(Usuario usuario, InterfazPrincipal interfazPrincipal, VistaTareas vistaTareas, VistaMatrix vistaMatrix) {
-        super(interfazPrincipal, vistaTareas, vistaMatrix);
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-        setUsuario(usuario);
-    }
-
-    @Override
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    private void setUsuario(Usuario usuario) {
         try {
             Field usuarioField = GestorTareas.class.getDeclaredField("usuario");
             usuarioField.setAccessible(true);
@@ -31,8 +24,20 @@ class GestorTareasTestable extends GestorTareas {
         }
     }
 
-//     @Override
-//    public void getTareasDeBase() {
-        // No hacer nada durante las pruebas
-//    }
+    public void setInterfazPrincipal(InterfazPrincipal interfazPrincipal) {
+        this.interfazPrincipal = interfazPrincipal;
+    }
+
+    public void setVistaTareas(VistaTareas vistaTareas) {
+        this.vistaTareas = vistaTareas;
+    }
+
+    public void setVistaMatrix(VistaMatrix vistaMatrix) {
+        this.vistaMatrix = vistaMatrix;
+    }
+
+    @Override
+    public Usuario getUsuario() {
+        return usuario;
+    }
 }
