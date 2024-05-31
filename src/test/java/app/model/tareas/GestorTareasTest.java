@@ -3,9 +3,6 @@ package app.model.tareas;
 import app.model.CodigoError;
 import app.model.basedatos.ConectarBD;
 import app.model.usuarios.Usuario;
-import app.view.principal.InterfazPrincipal;
-import app.view.principal.VistaMatrix;
-import app.view.principal.VistaTareas;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -27,9 +24,6 @@ class GestorTareasTest {
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
     private Usuario usuario;
-    private InterfazPrincipal interfazPrincipal;
-    private VistaTareas vistaTareas;
-    private VistaMatrix vistaMatrix;
 
     @BeforeEach
     public void setUp() {
@@ -39,9 +33,6 @@ class GestorTareasTest {
         preparedStatement = mock(PreparedStatement.class);
         resultSet = mock(ResultSet.class);
         usuario = mock(Usuario.class);
-        interfazPrincipal = mock(InterfazPrincipal.class);
-        vistaTareas = mock(VistaTareas.class);
-        vistaMatrix = mock(VistaMatrix.class);
 
         /* Configurar como se comportan los mocks */
         when(usuario.getNombreU()).thenReturn("nombreU");
