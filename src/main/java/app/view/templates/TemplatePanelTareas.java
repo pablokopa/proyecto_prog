@@ -59,7 +59,8 @@ public class TemplatePanelTareas extends JPanel {
         labelImagen.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (controladorTareas.completarTarea(tarea) == CodigoError.SIN_ERROR) {
+                int codigoError = controladorTareas.completarTarea(tarea);
+                if (codigoError == CodigoError.SIN_ERROR) {
                     if (tarea.getCompletadaT()) {
                         labelImagen.setIcon(sRecursos.getImagenCheck());
                         interfazPrincipal.cambiarAColumnaCompletada(tarea);
@@ -68,6 +69,9 @@ public class TemplatePanelTareas extends JPanel {
                         interfazPrincipal.cambiarAColumnaToDo(tarea);
                     }
                     interfazPrincipal.completarEnMatrix(tarea);
+                } else {
+                    interfazPrincipal.getLabelMensajesDeErrorGeneral().setText("Sin conexión");
+                    sRecursos.crearTimer(interfazPrincipal.getLabelMensajesDeErrorGeneral());
                 }
 
                 interfazPrincipal.actualizarVistaTareas();

@@ -151,8 +151,6 @@ public class GestorTareas {
 
             prepare.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("CATCH EN completarTarea()");
-            e.printStackTrace();
             return CodigoError.ERROR_SIN_CONEXION;
         }
         return CodigoError.SIN_ERROR;

@@ -35,7 +35,7 @@ public class VistaTareas extends JPanel {
     private JPanel columnaInformacion;
     private JPanel panelListaTareasToDo, panelListaTareasCompletadas;
     private JLabel labelCrearNuevaTarea, labelConfirmarTarea, labelModificarTarea, labelEliminarTarea, labelEliminarTodas;
-    private JLabel labelMensajesError, labelMensajesErrorSeleccionada;
+    private JLabel labelMensajesError, labelMensajesErrorSeleccionada, labelMensajesDeErrorGeneral;
     private JLabel labelFechaCreacion, labelFechaFinalizacion;
     private JTextField textFieldNombreTarea, textFieldNombreTareaSelecionada;
     private JTextPane textPaneDescripcionTarea, textPaneDescripcionTareaSeleccionada;
@@ -200,22 +200,27 @@ public class VistaTareas extends JPanel {
         labelEliminarTodas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                setCardGeneral();
+
                 if (panelListaTareasCompletadas.getComponentCount()==0){
-                    System.out.println("No hay tareas completadas");
+                    labelMensajesDeErrorGeneral.setText(getMensajeError(CodigoError.ERROR_TAREA_ELIMINAR_TODAS_SIN_COMPLETADAS));
+                    sRecursos.crearTimer(labelMensajesDeErrorGeneral);
                     return;
                 }
                 int opcion = JOptionPane.showConfirmDialog(null, "Deseas eliminar todas las tareas?", "Eliminar todas las tareas", JOptionPane.YES_NO_OPTION);
                 if (opcion==JOptionPane.YES_OPTION){
                     for (int i=interfazPrincipal.getListaTareasCompletadas().size()-1; i>=0; i--){
                         Tarea tarea = interfazPrincipal.getListaTareasCompletadas().get(i).getTarea();
-                        if (controladorTareas.eliminarTarea(tarea) == CodigoError.SIN_ERROR){
+                        int codigoError = controladorTareas.eliminarTarea(tarea);
+                        if (codigoError == CodigoError.SIN_ERROR){
                             interfazPrincipal.removeDeColumnaCompletada(tarea);
                             actualizarVistaTareas();
+                        } else {
+                            labelMensajesDeErrorGeneral.setText(getMensajeError(codigoError));
+                            sRecursos.crearTimer(labelMensajesDeErrorGeneral);
                         }
                     }
                 }
-
-                setCardGeneral();
             }
         });
 
@@ -268,6 +273,7 @@ public class VistaTareas extends JPanel {
             case CodigoError.ERROR_TAREA_NOMBRE_LARGO -> mensajeError = "El nombre no puede tener más de 35 caracteres";
             case CodigoError.ERROR_TAREA_SIN_CAMBIOS -> mensajeError = "No se han realizado cambios";
             case CodigoError.ERROR_SIN_CONEXION -> mensajeError = "No hay conexión";
+            case CodigoError.ERROR_TAREA_ELIMINAR_TODAS_SIN_COMPLETADAS -> mensajeError = "No hay tareas completadas";
         }
         return mensajeError;
     }
@@ -349,7 +355,7 @@ public class VistaTareas extends JPanel {
         panelNumeroTareas.setLayout(new GridLayout(1, 2));
         panelNumeroTareas.setPreferredSize(new Dimension(0, 100));
         panelNumeroTareas.setBorder(new EmptyBorder(5,10,5,10));
-        panelInformacionGeneral.add(panelNumeroTareas, BorderLayout.SOUTH);
+        panelInformacionGeneral.add(panelNumeroTareas, BorderLayout.NORTH);
 
         this.labelContadorTareasToDo = new JLabel("Por hacer: "+interfazPrincipal.getListaTareasToDo().size());
         labelContadorTareasToDo.setFont(sRecursos.getMontserratMedium(18));
@@ -363,7 +369,6 @@ public class VistaTareas extends JPanel {
         labelContadorTareasCompletadas.setForeground(sRecursos.getGRANATE());
         panelNumeroTareas.add(labelContadorTareasCompletadas);
 
-
         JPanel panelSinTareaSeleccionada = new JPanel();
         panelSinTareaSeleccionada.setLayout(new BorderLayout());
         panelSinTareaSeleccionada.setPreferredSize(new Dimension(0, 100));
@@ -375,6 +380,12 @@ public class VistaTareas extends JPanel {
         labelSinTareaSeleccionada.setForeground(sRecursos.getGRANATE());
         labelSinTareaSeleccionada.setHorizontalAlignment(SwingConstants.CENTER);
         panelSinTareaSeleccionada.add(labelSinTareaSeleccionada, BorderLayout.CENTER);
+
+        JPanel panelMensajesDeError = new JPanel();
+        panelInformacionGeneral.add(panelMensajesDeError, BorderLayout.SOUTH);
+
+        this.labelMensajesDeErrorGeneral = construirLabelMensajeError();
+        panelMensajesDeError.add(labelMensajesDeErrorGeneral);
     }
 
     /**
@@ -798,6 +809,10 @@ public class VistaTareas extends JPanel {
      */
     public JPanel getPanelListaTareasCompletadas() {
         return panelListaTareasCompletadas;
+    }
+
+    public JLabel getLabelMensajesDeErrorGeneral() {
+        return labelMensajesDeErrorGeneral;
     }
 
     /**

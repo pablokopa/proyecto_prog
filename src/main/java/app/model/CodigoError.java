@@ -75,4 +75,6 @@ public interface CodigoError {
      * Error al intentar modificar una tarea sin haber hecho cambios
      */
     int ERROR_TAREA_SIN_CAMBIOS = 14;
+
+    int ERROR_TAREA_ELIMINAR_TODAS_SIN_COMPLETADAS = 15;
 }

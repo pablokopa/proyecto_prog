@@ -328,6 +328,10 @@ public class InterfazPrincipal extends JFrame {
         }
     }
 
+    public JLabel getLabelMensajesDeErrorGeneral(){
+        return vistaTareas.getLabelMensajesDeErrorGeneral();
+    }
+
     public ArrayList<TemplatePanelTareas> getListaTareasToDo() {
         return listaTareasToDo;
     }
