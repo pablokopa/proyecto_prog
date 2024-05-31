@@ -12,6 +12,7 @@ public class VistaPomodoro extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
 
     private JPanel panelBotones, panelBotonesReproductor, panelBotonesCambiarTiempos;
+    private JLabel labelTiempoConcentracion, labelTiempoDescanso;
     private JButton botonPlay, botonPause, botonStop, botonCambiarTiempo, botonConfirmarCambios;
     private JTextField fieldCambiarConcentracion, fieldCambiarDescanso, fieldCambiarDescansoLargo;
 
@@ -42,7 +43,7 @@ public class VistaPomodoro extends JPanel {
 //        panelTiempoDescanso.setPreferredSize(new Dimension(0, 0));
 //        panelTiempos.add(panelTiempoDescanso, setGbc(0, 1, 1, 0.7, GridBagConstraints.BOTH));
 
-        JLabel labelTiempoConcentracion = new JLabel("25:00");
+        this.labelTiempoConcentracion = new JLabel("25:00");
         labelTiempoConcentracion.setFont(sRecursos.getMontserratMedium(325));
         labelTiempoConcentracion.setForeground(new Color(0, 0, 0));
         labelTiempoConcentracion.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -51,7 +52,7 @@ public class VistaPomodoro extends JPanel {
         panelTiempos.add(Box.createVerticalGlue());
         panelTiempos.add(labelTiempoConcentracion);
 
-        JLabel labelTiempoDescanso = new JLabel("5:00");
+        this.labelTiempoDescanso = new JLabel("5:00");
         labelTiempoDescanso.setFont(sRecursos.getMontserratMedium(200));
         labelTiempoDescanso.setForeground(new Color(0, 0, 0));
         labelTiempoDescanso.setVerticalAlignment(SwingConstants.TOP);
@@ -163,73 +164,64 @@ public class VistaPomodoro extends JPanel {
         botonConfirmarCambios.setCursor(sRecursos.getCursorMano());
         panelBotonesCambiarTiempos.add(botonConfirmarCambios, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
-        fieldCambiarConcentracion.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (!comprobarTextoMinutos(fieldCambiarConcentracion.getText())){
-                    fieldCambiarConcentracion.setText("");
-                }
+        fieldCambiarConcentracion.addFocusListener(listenerComprobarText(fieldCambiarConcentracion));
+        fieldCambiarDescanso.addFocusListener(listenerComprobarText(fieldCambiarDescanso));
+        fieldCambiarDescansoLargo.addFocusListener(listenerComprobarText(fieldCambiarDescansoLargo));
+        botonCambiarTiempo.addActionListener(e -> cambiarVisibles());
+        botonConfirmarCambios.addActionListener(e -> {
+            String tiempoConcentracion = fieldCambiarConcentracion.getText();
+            String tiempoDescanso = fieldCambiarDescanso.getText();
+            String tiempoDescansoLargo = fieldCambiarDescansoLargo.getText();
+
+            if (comprobarTextoMinutos(tiempoConcentracion)){
+                tiempoConcentracion = "";
+            }
+            if (comprobarTextoMinutos(tiempoDescanso)){
+                tiempoDescanso = "";
+            }
+            if (!tiempoConcentracion.isBlank()){
+                labelTiempoConcentracion.setText(tiempoConcentracion+":00");
+            }
+            if (!tiempoDescanso.isBlank()){
+                labelTiempoDescanso.setText(tiempoDescanso+":00");
             }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (!comprobarTextoMinutos(fieldCambiarConcentracion.getText())){
-                    fieldCambiarConcentracion.setText(" Concentración ");
-                }
-            }
-        });
-
-        fieldCambiarDescanso.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (!comprobarTextoMinutos(fieldCambiarDescanso.getText())){
-                    fieldCambiarDescanso.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (!comprobarTextoMinutos(fieldCambiarDescanso.getText())){
-                    fieldCambiarDescanso.setText("Descanso corto");
-                }
-            }
-        });
-
-        fieldCambiarDescansoLargo.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (!comprobarTextoMinutos(fieldCambiarDescansoLargo.getText())){
-                    fieldCambiarDescansoLargo.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (!comprobarTextoMinutos(fieldCambiarDescansoLargo.getText())){
-                    fieldCambiarDescansoLargo.setText("Descanso largo");
-                }
-            }
-        });
-
-        botonCambiarTiempo.addActionListener(e -> {
+            fieldCambiarConcentracion.setText(" Concentración ");
+            fieldCambiarDescanso.setText("Descanso corto");
+            fieldCambiarDescansoLargo.setText("Descanso largo");
             cambiarVisibles();
         });
+    }
 
-        botonConfirmarCambios.addActionListener(e -> {
-           cambiarVisibles();
-        });
+    private FocusAdapter listenerComprobarText(JTextField textField) {
+        String titulo = textField.getText();
+        return new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (comprobarTextoMinutos(textField.getText())){
+                    textField.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (comprobarTextoMinutos(textField.getText())){
+                    textField.setText(titulo);
+                }
+            }
+        };
     }
 
     private boolean comprobarTextoMinutos(String text){
         if (text.isBlank()){
-            return false;
+            return true;
         }
         for (int i=0; i<text.length(); i++){
             if (!Character.isDigit(text.charAt(i))){
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private void cambiarVisibles() {
