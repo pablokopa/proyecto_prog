@@ -203,11 +203,9 @@ public class Recursos {
 
         Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(40,40, Image.SCALE_SMOOTH);
         imagenCheck = new ImageIcon(imageC);
-//        imagenCheck = new ImageIcon("src/main/resources/images/checkResized.png");      // 64 x 64
 
         Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         imagenCheckSinCheck = new ImageIcon(imageCsC);
-//        imagenCheckSinCheck = new ImageIcon("src/main/resources/images/checkSinCheckResized.png");      // 64 x 64
     }
 
     /**

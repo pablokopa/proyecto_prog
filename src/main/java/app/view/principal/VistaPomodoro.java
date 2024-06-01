@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+/**
+ * Vista del pomodoro
+ */
 public class VistaPomodoro extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
 
@@ -21,11 +24,13 @@ public class VistaPomodoro extends JPanel {
     private int tiempoConcentracion, tiempoDescanso, tiempoDescansoLargo, tiempoRestante;
 
     private JPanel panelTiempos;
-    private JPanel panelBotonesCambiarTiempos;
     private JLabel labelTiempoConcentracion, labelTiempoDescanso;
     private JButton botonPlay, botonPause, botonStop, botonCambiarTiempo, botonConfirmarCambios;
     private JTextField fieldCambiarConcentracion, fieldCambiarDescanso, fieldCambiarDescansoLargo;
 
+    /**
+     * Constructor de la vista del pomodoro
+     */
     public VistaPomodoro() {
         this.setLayout(new GridBagLayout());
 
@@ -45,11 +50,15 @@ public class VistaPomodoro extends JPanel {
         addListeners();
     }
 
+    /**
+     * Añade los listeners a los botones y campos de texto
+     */
     private void addListeners(){
         fieldCambiarConcentracion.addFocusListener(listenerComprobarText(fieldCambiarConcentracion));
         fieldCambiarDescanso.addFocusListener(listenerComprobarText(fieldCambiarDescanso));
         fieldCambiarDescansoLargo.addFocusListener(listenerComprobarText(fieldCambiarDescansoLargo));
 
+        /* Cambia la visibilidad de los botones y campos de texto del panel de botones */
         botonCambiarTiempo.addActionListener(e -> {
             if (timer != null){
                 return;
@@ -61,6 +70,10 @@ public class VistaPomodoro extends JPanel {
             fieldCambiarDescansoLargo.setText("Descanso largo");
         });
 
+        /*
+         * Recoge los valores de los campos de texto y los cambia por los valores actuales de los tiempos.
+         * Cambia la visibilidad de los botones y campos de texto del panel de botones.
+         */
         botonConfirmarCambios.addActionListener(e -> {
             String textoConcentracion = fieldCambiarConcentracion.getText();
             String textoDescanso = fieldCambiarDescanso.getText();
@@ -92,6 +105,7 @@ public class VistaPomodoro extends JPanel {
             cambiarVisibles();
         });
 
+        /* Inicia el tiempo de concentración o reanuda el tiempo actual */
         botonPlay.addActionListener(e -> {
             if (timer == null){
                 crearTimerConcentracion(tiempoConcentracion);
@@ -100,12 +114,14 @@ public class VistaPomodoro extends JPanel {
             }
         });
 
+        /* Pausa el tiempo de descanso actual */
         botonPause.addActionListener(e -> {
             if (timer != null){
                 timer.stop();
             }
         });
 
+        /* Detiene el timer y reinicia los tiempos de concentración y descanso */
         botonStop.addActionListener(e -> {
             if (timer != null){
                 timer.stop();
@@ -117,6 +133,10 @@ public class VistaPomodoro extends JPanel {
         });
     }
 
+    /**
+     * Crea un timer para el tiempo intermedio entre periodos de concentración y descanso
+     * @param nuevoTimer Nombre del nuevo timer
+     */
     private void crearTimerIntermedio(String nuevoTimer){
         lanzarAlerta(nuevoTimer);
         timer = new Timer(1000, e -> {
@@ -136,6 +156,10 @@ public class VistaPomodoro extends JPanel {
         timer.start();
     }
 
+    /**
+     * Crea un timer para el tiempo de concentración
+     * @param tiempo Tiempo en minutos
+     */
     private void crearTimerConcentracion(int tiempo){
         if (timer != null){
             return;
@@ -165,6 +189,10 @@ public class VistaPomodoro extends JPanel {
         timer.start();
     }
 
+    /**
+     * Crea un timer para el descanso corto
+     * @param tiempo Tiempo en minutos
+     */
     private void crearTimerDescanso(int tiempo){
         if (timer != null){
             return;
@@ -191,6 +219,10 @@ public class VistaPomodoro extends JPanel {
         timer.start();
     }
 
+    /**
+     * Crea un timer para el descanso largo
+     * @param tiempo Tiempo en minutos
+     */
     private void crearTimerDescansoLargo(int tiempo){
         if (timer != null){
             return;
@@ -213,6 +245,10 @@ public class VistaPomodoro extends JPanel {
         timer.start();
     }
 
+    /**
+     * Lanza una alerta de notificación
+     * @param nuevoTimer Nombre del nuevo timer
+     */
     private void lanzarAlerta(String nuevoTimer){
         Toolkit.getDefaultToolkit().beep();
         if (!SystemTray.isSupported()){
@@ -240,6 +276,12 @@ public class VistaPomodoro extends JPanel {
         }
     }
 
+    /**
+     * Devuelve un FocusAdapter que comprueba si el texto pasado como parámetro es un número o si está vacío.
+     * Al ganar el foco, se borra el texto para poder escribir. Al perderlo, si el texto no es un número o está vacío, se vuelve a poner el texto original.
+     * @param textField Campo de texto a comprobar
+     * @return FocusAdapter
+     */
     private FocusAdapter listenerComprobarText(JTextField textField) {
         String titulo = textField.getText();
         return new FocusAdapter() {
@@ -259,6 +301,11 @@ public class VistaPomodoro extends JPanel {
         };
     }
 
+    /**
+     * Comprueba si el texto pasado como parámetro es un número o si está vacío
+     * @param text Texto a comprobar
+     * @return True si el texto no es un número o está vacío
+     */
     private boolean comprobarTextoMinutos(String text){
         if (text.isBlank()){
             return true;
@@ -271,6 +318,9 @@ public class VistaPomodoro extends JPanel {
         return false;
     }
 
+    /**
+     * Crea el panel con los JLabel de los tiempos de concentración y descanso
+     */
     private void crearPanelTiempos(){
         this.panelTiempos = new JPanel();
         panelTiempos.setLayout(new BoxLayout(panelTiempos, BoxLayout.Y_AXIS));
@@ -290,6 +340,9 @@ public class VistaPomodoro extends JPanel {
         panelTiempos.add(Box.createVerticalGlue());
     }
 
+    /**
+     * Crea el panel con los botones de control del reproductor y los campos de texto para cambiar los tiempos
+     */
     private void crearPanelBotones(){
         JPanel panelBotones = new JPanel();
         panelBotones.setLayout(new GridBagLayout());
@@ -305,7 +358,7 @@ public class VistaPomodoro extends JPanel {
         panelBotonesReproductor.setBorder(BorderFactory.createEmptyBorder(6, 30, 3, 30));
         panelBotones.add(panelBotonesReproductor, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
-        this.panelBotonesCambiarTiempos = new JPanel();
+        JPanel panelBotonesCambiarTiempos = new JPanel();
         panelBotonesCambiarTiempos.setLayout(new GridBagLayout());
         panelBotonesCambiarTiempos.setBackground(sRecursos.getGRIS_DEFAULT());
         panelBotonesCambiarTiempos.setPreferredSize(new Dimension(0, 0));
@@ -353,6 +406,13 @@ public class VistaPomodoro extends JPanel {
         panelBotonesReproductor.add(fieldCambiarDescansoLargo, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
     }
 
+    /**
+     * Crea un JLabel con el texto y tamaño de letra pasado como parámetro
+     * @param texto Texto del JLabel
+     * @param sizeLetra Tamaño de letra
+     * @param posicionVertical Posición vertical del texto (BOTTOM, CENTER, TOP)
+     * @return JLabel
+     */
     private JLabel construirLabelTiempo(String texto, int sizeLetra, int posicionVertical){
         JLabel label = new JLabel(texto);
         label.setFont(sRecursos.getMontserratBold(sizeLetra));
@@ -363,6 +423,11 @@ public class VistaPomodoro extends JPanel {
         return label;
     }
 
+    /**
+     * Crea un botón con el icono pasado como parámetro
+     * @param icono Icono del botón
+     * @return Botón
+     */
     private JButton construirBotonReproductor(ImageIcon icono){
         JButton boton = new JButton();
         boton.setIcon(icono);
@@ -373,6 +438,11 @@ public class VistaPomodoro extends JPanel {
         return boton;
     }
 
+    /**
+     * Crea un botón con el texto pasado como parámetro
+     * @param texto Texto del botón
+     * @return Botón
+     */
     private JButton construirBotonParametros(String texto){
         JButton boton = new JButton();
         boton.setText(texto);
@@ -384,10 +454,16 @@ public class VistaPomodoro extends JPanel {
         return boton;
     }
 
+    /**
+     * Crea un campo de texto con el texto pasado como parámetro
+     * @param texto Texto del campo de texto
+     * @return Campo de texto
+     */
     private JTextField construirFieldParametros(String texto){
         JTextField field = new JTextField(texto);
         field.setFont(sRecursos.getMontserratBold(18));
         field.setBackground(sRecursos.getBLANCO());
+        field.setForeground(sRecursos.getGRANATE_MID_LIGHT());
         field.setHorizontalAlignment(SwingConstants.CENTER);
         field.setVisible(false);
         return field;
@@ -428,6 +504,10 @@ public class VistaPomodoro extends JPanel {
         return gbc;
     }
 
+    /**
+     * Devuelve el timer de la notificación
+     * @return java.util.Timer
+     */
     public java.util.Timer getTimerNotificacion() {
         return timerNotificacion;
     }

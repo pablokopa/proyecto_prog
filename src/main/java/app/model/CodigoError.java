@@ -1,5 +1,8 @@
 package app.model;
 
+/**
+ * Interfaz que contiene los códigos de error de la aplicación.
+ */
 public interface CodigoError {
     /**
      * Cuando no hay errores y todo ha ido bien
