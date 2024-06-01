@@ -3,6 +3,10 @@
   - [Descripción de la aplicación](#descripción-de-la-aplicación)
   - [Ventanas de la aplicación](#ventanas-de-la-aplicación)
   - [Bibliotecas utilizadas](#bibliotecas-utilizadas)
+  - [Diagramas](#diagramas)
+    - [Diagrama de clases](#diagrama-de-clases)
+    - [Diagrama de secuencia](#diagrama-de-secuencia)
+    - [Diagrama E/R](#diagrama-er)
 - [COD](#cod)
    - [Arquitectura MVC](#arquitectura-mvc)
    - [Patrones de diseño](#patrones-de-diseño)
@@ -64,12 +68,32 @@ Esta ventana es la primera que se muestra al usuario, en ella se muestran los cr
 | JBcrypt         | 0.4.1   | Encriptación de las contraseñas de los usuarios        |
 | LGoodDatePicker | 11.2.1  | Calendario para seleccionar fechas                     |
 
-
+## Diagramas
+### Diagrama de clases
+### Diagrama de secuencia
+### Diagrama E/R
 
 # COD
 ## Arquitectura MVC
+Arquitectura MVC utilizada en el proyecto, utilizando los controladores para comunicar la vista con el modelo.
+
+<img src="/img/clasesMVC.png" alt="Interfaz Principal" height="551"/>
+
 ## Patrones de diseño
+De los patrones de diseño vistos en clase hemos utilizado `Singleton` en varias ocasiones:
+- En la clase `Usuario`, para que solo haya un usuario conectado a la vez.
+- En la clase `Servicios`, que proporciona diferentes recursos utilizados en el programa (por ejemplo, fuentes y colores).
+- En la clase `ObjRecursos`, que se utilizó para crear algunos de los componentes Swing sin Layouts. 
+
 ## Tests unitarios
+Se han realizado los test unitarios utilizando `JUnit`, y `Mockito` para simular la base de datos.  
+A medida que el programa ha ido cambiando han tenido que ser rehechos varias veces debido a los cambios en el programa, primero al implementar la base de datos y posteriormente al implementar el patrón MVC.
+
+<p style="display: flex; align-items: flex-start;">
+  <img src="/img/testTareas.png" style="margin-right: 40px;" />
+  <img src="/img/testUsuarios.png" />
+</p>
+
 ## Uso de GitHub
 | <!-- -->                 | <!-- -->                                                                                                                                                                                                                                                                                                                                                                                                                                                               | <!-- -->                                 |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
@@ -88,12 +112,20 @@ en el cual se detallan los avances realizados y los
 resultados obtenidos semanalmente.
 
 ## Seguimiento resumido
-## 00_23
-## 01_23
-## 02_23
-## 03_23
-## 04_23
-## 05_23
+### 00_23
+
+### 01_23
+Durante la primera semana del proyecto hemos estado trabajando
+en la parte gráfica de la `interfaz de inicio de sesión` y en las
+`principales clases` del programa (Usuario y Tarea).
+### 02_23
+Durante la segunda semana del proyecto hemos hecho todo lo relacionado con
+la `base de datos` y hemos avanzado en la `interfaz principal`.
+### 03_23
+Esta semana hemos trabajado en las `pestañas de la interfaz principal`, `rehecho partes` del programa,
+y creadas `nuevas funciones`. Aparte, se han arreglado diversos errores.
+### 04_23
+### 05_23
 
 ## Seguimiento detallado
 ### 00_23
