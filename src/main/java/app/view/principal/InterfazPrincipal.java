@@ -400,7 +400,7 @@ public class InterfazPrincipal extends JFrame {
         botonTareas = templateBotonesMenu("Tareas");
         botonMatrix = templateBotonesMenu("Matrix");
         botonPomodoro = templateBotonesMenu("Pomodoro");
-        botonAjustes = templateBotonesMenu("Ajustes");
+//        botonAjustes = templateBotonesMenu("Ajustes");
         botonCerrarSesion = templateBotonesMenu("Cerrar Sesión");
 
         panelMenu.add(botonInicio);
@@ -408,7 +408,7 @@ public class InterfazPrincipal extends JFrame {
         panelMenu.add(botonMatrix);
         panelMenu.add(botonPomodoro);
         panelMenu.add(Box.createVerticalGlue());   //espacio entre botones
-        panelMenu.add(botonAjustes);
+//        panelMenu.add(botonAjustes);
         panelMenu.add(botonCerrarSesion);
 
         addBotonesALista();
@@ -688,7 +688,7 @@ public class InterfazPrincipal extends JFrame {
         listaBotonesMenu.add(botonTareas);
         listaBotonesMenu.add(botonMatrix);
         listaBotonesMenu.add(botonPomodoro);
-        listaBotonesMenu.add(botonAjustes);
+//        listaBotonesMenu.add(botonAjustes);
         listaBotonesMenu.add(botonCerrarSesion);
     }
 }
