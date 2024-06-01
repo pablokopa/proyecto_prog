@@ -12,7 +12,7 @@ import services.Recursos;
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
 
-    private JPanel panelTareasArribaI, panelTareasArribaD, panelTareasAbajoI, panelTareasAbajoD;
+    private JPanel panelTareasNINU, panelTareasNIU, panelTareasINU, panelTareasIU;
 
     /**
      * Constructor de la clase
@@ -29,53 +29,53 @@ public class VistaMatrix extends JPanel {
      * Método para obtener el panel de las tareas de "No importante / No urgente".
      * @return Paneles de las tareas.
      */
-    public JPanel getPanelTareasArribaI() {
-        return panelTareasArribaI;
+    public JPanel getPanelTareasNINU() {
+        return panelTareasNINU;
     }
 
     /**
      * Método para obtener el panel de las tareas de "No importante / Urgente".
      * @return Paneles de las tareas.
      */
-    public JPanel getPanelTareasArribaD() {
-        return panelTareasArribaD;
+    public JPanel getPanelTareasNIU() {
+        return panelTareasNIU;
     }
 
     /**
      * Método para obtener el panel de las tareas de "Importante / No urgente".
      * @return Paneles de las tareas.
      */
-    public JPanel getPanelTareasAbajoI() {
-        return panelTareasAbajoI;
+    public JPanel getPanelTareasINU() {
+        return panelTareasINU;
     }
 
     /**
      * Método para obtener el panel de las tareas de "Importante / Urgente".
      * @return Paneles de las tareas.
      */
-    public JPanel getPanelTareasAbajoD() {
-        return panelTareasAbajoD;
+    public JPanel getPanelTareasIU() {
+        return panelTareasIU;
     }
 
     /**
      * Método para crear la matriz de Eisenhower.
      */
     private void crearMatrix() {
-        JPanel panelArribaI = crearPanelesMatrix(sRecursos.getColorVerde());
-        this.panelTareasArribaI = crearPanelesTareas(panelArribaI, sRecursos.getColorVerde(), "No importante / No urgente");
-        add(panelArribaI);
+        JPanel panelNINU = crearPanelesMatrix(sRecursos.getColorVerde());
+        this.panelTareasNINU = crearPanelesTareas(panelNINU, sRecursos.getColorVerde(), "No importante / No urgente");
+        add(panelNINU);
 
-        JPanel panelArribaD = crearPanelesMatrix(sRecursos.getColorAzul());
-        this.panelTareasArribaD = crearPanelesTareas(panelArribaD, sRecursos.getColorAzul(), "No importante / Urgente");
-        add(panelArribaD);
+        JPanel panelNIU = crearPanelesMatrix(sRecursos.getColorAzul());
+        this.panelTareasNIU = crearPanelesTareas(panelNIU, sRecursos.getColorAzul(), "No importante / Urgente");
+        add(panelNIU);
 
-        JPanel panelAbajoI = crearPanelesMatrix(sRecursos.getColorAmarillo());
-        this.panelTareasAbajoI = crearPanelesTareas(panelAbajoI, sRecursos.getColorAmarillo(), "Importante / No urgente");
-        add(panelAbajoI);
+        JPanel panelINU = crearPanelesMatrix(sRecursos.getColorAmarillo());
+        this.panelTareasINU = crearPanelesTareas(panelINU, sRecursos.getColorAmarillo(), "Importante / No urgente");
+        add(panelINU);
 
-        JPanel panelAbajoD = crearPanelesMatrix(sRecursos.getColorRojo());
-        this.panelTareasAbajoD = crearPanelesTareas(panelAbajoD, sRecursos.getColorRojo(), "Importante / Urgente");
-        add(panelAbajoD);
+        JPanel panelIU = crearPanelesMatrix(sRecursos.getColorRojo());
+        this.panelTareasIU = crearPanelesTareas(panelIU, sRecursos.getColorRojo(), "Importante / Urgente");
+        add(panelIU);
     }
 
     /**

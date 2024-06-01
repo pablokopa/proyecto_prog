@@ -39,7 +39,7 @@ public class InterfazPrincipal extends JFrame {
     private String textoBotonActual = "";
 
     private final ArrayList<TemplatePanelTareas> listaTareasToDo, listaTareasCompletadas;
-    private final ArrayList<TemplatePanelMatrix> listaTareasArribaI, listaTareasArribaD, listaTareasAbajoI, listaTareasAbajoD;
+    private final ArrayList<TemplatePanelMatrix> listaTareasNINU, listaTareasNIU, listaTareasINU, listaTareasIU;
 
     private final ControladorTareas controladorTareas;
 
@@ -59,10 +59,10 @@ public class InterfazPrincipal extends JFrame {
 
         this.listaTareasToDo = new ArrayList<>();
         this.listaTareasCompletadas = new ArrayList<>();
-        this.listaTareasArribaI = new ArrayList<>();
-        this.listaTareasArribaD = new ArrayList<>();
-        this.listaTareasAbajoI = new ArrayList<>();
-        this.listaTareasAbajoD = new ArrayList<>();
+        this.listaTareasNINU = new ArrayList<>();
+        this.listaTareasNIU = new ArrayList<>();
+        this.listaTareasINU = new ArrayList<>();
+        this.listaTareasIU = new ArrayList<>();
 
         this.setLayout(new BorderLayout());
         this.setSize(dimensionPantallaNormal);              // Debe empezar en dimension pequeña para evitar errores y posteriormente redimensionar a completa
@@ -152,10 +152,10 @@ public class InterfazPrincipal extends JFrame {
      */
     public void addEnMatrix(Tarea tarea){
         switch (tarea.getNombreE()){
-            case "No importante / No urgente" -> addAPanelArribaI(tarea);
-            case "No importante / Urgente" -> addAPanelArribaD(tarea);
-            case "Importante / No urgente" -> addAPanelAbajoI(tarea);
-            case "Importante / Urgente" -> addAPanelAbajoD(tarea);
+            case "No importante / No urgente" -> addAPanelNINU(tarea);
+            case "No importante / Urgente" -> addAPanelNIU(tarea);
+            case "Importante / No urgente" -> addAPanelINU(tarea);
+            case "Importante / Urgente" -> addAPanelIU(tarea);
         }
     }
 
@@ -164,10 +164,10 @@ public class InterfazPrincipal extends JFrame {
      */
     public void eliminarEnMatrix(Tarea tarea){
         switch (tarea.getNombreE()){
-            case "No importante / No urgente" -> removeDePanelArribaI(tarea);
-            case "No importante / Urgente" -> removeDePanelArribaD(tarea);
-            case "Importante / No urgente" -> removeDePanelAbajoI(tarea);
-            case "Importante / Urgente" -> removeDePanelAbajoD(tarea);
+            case "No importante / No urgente" -> removeDePanelNINU(tarea);
+            case "No importante / Urgente" -> removeDePanelNIU(tarea);
+            case "Importante / No urgente" -> removeDePanelINU(tarea);
+            case "Importante / Urgente" -> removeDePanelIU(tarea);
         }
     }
 
@@ -185,73 +185,73 @@ public class InterfazPrincipal extends JFrame {
     /**
      * Añade la tarea al panel "No importante / No urgente" de la matriz de Eisenhower.
      */
-    public void addAPanelArribaI(Tarea tarea){
+    public void addAPanelNINU(Tarea tarea){
         TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasArribaI().add(panelTarea);
-        listaTareasArribaI.add(panelTarea);
+        vistaMatrix.getPanelTareasNINU().add(panelTarea);
+        listaTareasNINU.add(panelTarea);
     }
 
     /**
      * Añade la tarea al panel "No importante / Urgente" de la matriz de Eisenhower.
      */
-    public void addAPanelArribaD(Tarea tarea){
+    public void addAPanelNIU(Tarea tarea){
         TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasArribaD().add(panelTarea);
-        listaTareasArribaD.add(panelTarea);
+        vistaMatrix.getPanelTareasNIU().add(panelTarea);
+        listaTareasNIU.add(panelTarea);
     }
 
     /**
      * Añade la tarea al panel "Importante / No urgente" de la matriz de Eisenhower.
      */
-    public void addAPanelAbajoI(Tarea tarea){
+    public void addAPanelINU(Tarea tarea){
         TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasAbajoI().add(panelTarea);
-        listaTareasAbajoI.add(panelTarea);
+        vistaMatrix.getPanelTareasINU().add(panelTarea);
+        listaTareasINU.add(panelTarea);
     }
 
     /**
      * Añade la tarea al panel "Importante / Urgente" de la matriz de Eisenhower.
      */
-    public void addAPanelAbajoD(Tarea tarea){
+    public void addAPanelIU(Tarea tarea){
         TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
-        vistaMatrix.getPanelTareasAbajoD().add(panelTarea);
-        listaTareasAbajoD.add(panelTarea);
+        vistaMatrix.getPanelTareasIU().add(panelTarea);
+        listaTareasIU.add(panelTarea);
     }
 
     /**
      * Elimina la tarea del panel "No importante / No urgente" de la matriz de Eisenhower.
      */
-    public void removeDePanelArribaI(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasArribaI.get(listaTareasArribaI.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasArribaI().remove(panelTarea);
-        listaTareasArribaI.remove(panelTarea);
+    public void removeDePanelNINU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasNINU.get(listaTareasNINU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasNINU().remove(panelTarea);
+        listaTareasNINU.remove(panelTarea);
     }
 
     /**
      * Elimina la tarea del panel "No importante / Urgente" de la matriz de Eisenhower.
      */
-    public void removeDePanelArribaD(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasArribaD.get(listaTareasArribaD.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasArribaD().remove(panelTarea);
-        listaTareasArribaD.remove(panelTarea);
+    public void removeDePanelNIU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasNIU.get(listaTareasNIU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasNIU().remove(panelTarea);
+        listaTareasNIU.remove(panelTarea);
     }
 
     /**
      * Elimina la tarea del panel "Importante / No urgente" de la matriz de Eisenhower.
      */
-    public void removeDePanelAbajoI(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasAbajoI.get(listaTareasAbajoI.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasAbajoI().remove(panelTarea);
-        listaTareasAbajoI.remove(panelTarea);
+    public void removeDePanelINU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasINU.get(listaTareasINU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasINU().remove(panelTarea);
+        listaTareasINU.remove(panelTarea);
     }
 
     /**
      * Elimina la tarea del panel "Importante / Urgente" de la matriz de Eisenhower.
      */
-    public void removeDePanelAbajoD(Tarea tarea){
-        TemplatePanelMatrix panelTarea = listaTareasAbajoD.get(listaTareasAbajoD.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
-        vistaMatrix.getPanelTareasAbajoD().remove(panelTarea);
-        listaTareasAbajoD.remove(panelTarea);
+    public void removeDePanelIU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasIU.get(listaTareasIU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasIU().remove(panelTarea);
+        listaTareasIU.remove(panelTarea);
     }
 
     /**
@@ -291,10 +291,10 @@ public class InterfazPrincipal extends JFrame {
                 listaTareasToDo.add(panelTareas);
 
                 switch (panelTareas.getTarea().getNombreE()) {
-                    case "No importante / No urgente" -> listaTareasArribaI.add(panelMatrix);
-                    case "No importante / Urgente" -> listaTareasArribaD.add(panelMatrix);
-                    case "Importante / No urgente" -> listaTareasAbajoI.add(panelMatrix);
-                    case "Importante / Urgente" -> listaTareasAbajoD.add(panelMatrix);
+                    case "No importante / No urgente" -> listaTareasNINU.add(panelMatrix);
+                    case "No importante / Urgente" -> listaTareasNIU.add(panelMatrix);
+                    case "Importante / No urgente" -> listaTareasINU.add(panelMatrix);
+                    case "Importante / Urgente" -> listaTareasIU.add(panelMatrix);
                 }
             }
         }
@@ -312,20 +312,20 @@ public class InterfazPrincipal extends JFrame {
             vistaTareas.getPanelListaTareasCompletadas().add(panelTarea);
         }
 
-        for (TemplatePanelMatrix panelTarea : listaTareasArribaI) {
-            vistaMatrix.getPanelTareasArribaI().add(panelTarea);
+        for (TemplatePanelMatrix panelTarea : listaTareasNINU) {
+            vistaMatrix.getPanelTareasNINU().add(panelTarea);
         }
 
-        for (TemplatePanelMatrix panelTarea :listaTareasArribaD) {
-            vistaMatrix.getPanelTareasArribaD().add(panelTarea);
+        for (TemplatePanelMatrix panelTarea : listaTareasNIU) {
+            vistaMatrix.getPanelTareasNIU().add(panelTarea);
         }
 
-        for (TemplatePanelMatrix panelTarea : listaTareasAbajoI) {
-            vistaMatrix.getPanelTareasAbajoI().add(panelTarea);
+        for (TemplatePanelMatrix panelTarea : listaTareasINU) {
+            vistaMatrix.getPanelTareasINU().add(panelTarea);
         }
 
-        for (TemplatePanelMatrix panelTarea : listaTareasAbajoD) {
-            vistaMatrix.getPanelTareasAbajoD().add(panelTarea);
+        for (TemplatePanelMatrix panelTarea : listaTareasIU) {
+            vistaMatrix.getPanelTareasIU().add(panelTarea);
         }
     }
 
