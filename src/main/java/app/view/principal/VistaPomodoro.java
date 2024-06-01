@@ -293,21 +293,21 @@ public class VistaPomodoro extends JPanel {
     private void crearPanelBotones(){
         JPanel panelBotones = new JPanel();
         panelBotones.setLayout(new GridBagLayout());
-        panelBotones.setBackground(sRecursos.getBLANCO());
+        panelBotones.setBackground(sRecursos.getGRIS_DEFAULT());
         panelBotones.setPreferredSize(new Dimension(0, 120));
         panelBotones.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getGRANATE_MID_LIGHT()));
         this.add(panelBotones, setGbc(0, 1, 1, 0, GridBagConstraints.HORIZONTAL));
 
         JPanel panelBotonesReproductor = new JPanel();
         panelBotonesReproductor.setLayout(new GridBagLayout());
-        panelBotonesReproductor.setBackground(sRecursos.getBLANCO());
+        panelBotonesReproductor.setBackground(sRecursos.getGRIS_DEFAULT());
         panelBotonesReproductor.setPreferredSize(new Dimension(0, 0));
         panelBotonesReproductor.setBorder(BorderFactory.createEmptyBorder(6, 30, 3, 30));
         panelBotones.add(panelBotonesReproductor, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
         this.panelBotonesCambiarTiempos = new JPanel();
         panelBotonesCambiarTiempos.setLayout(new GridBagLayout());
-        panelBotonesCambiarTiempos.setBackground(sRecursos.getBLANCO());
+        panelBotonesCambiarTiempos.setBackground(sRecursos.getGRIS_DEFAULT());
         panelBotonesCambiarTiempos.setPreferredSize(new Dimension(0, 0));
         panelBotonesCambiarTiempos.setBorder(BorderFactory.createEmptyBorder(3, 30, 5, 30));
         panelBotones.add(panelBotonesCambiarTiempos, setGbc(0, 1, 1, 1, GridBagConstraints.BOTH));
@@ -316,15 +316,15 @@ public class VistaPomodoro extends JPanel {
         Border borderDentro;
 
         this.botonPlay = construirBotonReproductor(sRecursos.getImagenPlay());
-        botonPlay.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getBLANCO()));
+        botonPlay.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getGRIS_DEFAULT()));
         panelBotonesReproductor.add(botonPlay, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
         this.botonPause = construirBotonReproductor(sRecursos.getImagenPause());
-        botonPause.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, sRecursos.getBLANCO()));
+        botonPause.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, sRecursos.getGRIS_DEFAULT()));
         panelBotonesReproductor.add(botonPause, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
 
         this.botonStop = construirBotonReproductor(sRecursos.getImagenStop());
-        botonStop.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, sRecursos.getBLANCO()));
+        botonStop.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, sRecursos.getGRIS_DEFAULT()));
         panelBotonesReproductor.add(botonStop, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
 
         this.botonCambiarTiempo = construirBotonParametros("Cambiar los parámetros");
@@ -335,19 +335,19 @@ public class VistaPomodoro extends JPanel {
         panelBotonesCambiarTiempos.add(botonConfirmarCambios, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
         this.fieldCambiarConcentracion = construirFieldParametros(" Concentración ");
-        borderFuera = BorderFactory.createEmptyBorder(0, 0, 0, 5);
+        borderFuera = BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getGRIS_DEFAULT());
         borderDentro = sRecursos.getBordeGranate();
         fieldCambiarConcentracion.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
         panelBotonesReproductor.add(fieldCambiarConcentracion, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
         this.fieldCambiarDescanso = construirFieldParametros("Descanso corto");
-        borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 5);
+        borderFuera = BorderFactory.createMatteBorder(0, 5, 0, 5, sRecursos.getGRIS_DEFAULT());
         borderDentro = sRecursos.getBordeGranate();
         fieldCambiarDescanso.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
         panelBotonesReproductor.add(fieldCambiarDescanso, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
 
         this.fieldCambiarDescansoLargo = construirFieldParametros("Descanso largo");
-        borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+        borderFuera = BorderFactory.createMatteBorder(0, 5, 0, 0, sRecursos.getGRIS_DEFAULT());
         borderDentro = sRecursos.getBordeGranate();
         fieldCambiarDescansoLargo.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
         panelBotonesReproductor.add(fieldCambiarDescansoLargo, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
@@ -387,8 +387,7 @@ public class VistaPomodoro extends JPanel {
     private JTextField construirFieldParametros(String texto){
         JTextField field = new JTextField(texto);
         field.setFont(sRecursos.getMontserratBold(18));
-        field.setBackground(sRecursos.getGRIS_DEFAULT());
-        field.setBorder(BorderFactory.createEmptyBorder());
+        field.setBackground(sRecursos.getBLANCO());
         field.setHorizontalAlignment(SwingConstants.CENTER);
         field.setVisible(false);
         return field;
