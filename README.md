@@ -18,9 +18,14 @@
 
    
 # Aplicación
+
 ## Descripción de la aplicación
 Aplicación de gestión de tareas y tiempo, con la que el usuario puede organizar su día a día y mejorar su productividad.  
 Se requiere de conexión a internet para poder utilizar la aplicación, ya que los datos se guardan en una base de datos en la nube tras cada operación.
+
+Hecha por:
+- __[Enrique Fernández Costas](https://github.com/efernandezcostas)__
+- __[Pablo Iglesias Leyenda](https://github.com/pablokopa)__
 
 ## Ventanas de la aplicación
 ### Ventana de inicio de sesión
@@ -70,9 +75,13 @@ Esta ventana es la primera que se muestra al usuario, en ella se muestran los cr
 
 ## Diagramas
 ### Diagrama de clases
-<img src="/img/diagramaClases.png" />
+<img src="/img/diagramaClases.png"  alt=""/>
+
 ### Diagrama de secuencia
+
+
 ### Diagrama E/R
+<img src="/img/diagramaER.png"  alt=""/>
 
 # COD
 ## Arquitectura MVC
