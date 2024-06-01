@@ -30,6 +30,7 @@ public class InterfazPrincipal extends JFrame {
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
     private VistaTareas vistaTareas;
     private VistaMatrix vistaMatrix;
+    private VistaPomodoro vistaPomodoro;
 
     private CardLayout cardLayout;
     private ArrayList<JButton> listaBotonesMenu;
@@ -363,7 +364,7 @@ public class InterfazPrincipal extends JFrame {
         VistaInicio vistaInicio = new VistaInicio();
         this.vistaTareas = new VistaTareas(controladorTareas, this);
         this.vistaMatrix = new VistaMatrix();
-        VistaPomodoro vistaPomodoro = new VistaPomodoro();
+        this.vistaPomodoro = new VistaPomodoro();
 
         cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
@@ -669,6 +670,9 @@ public class InterfazPrincipal extends JFrame {
                     }
                     break;
                 case "cerrar":
+                    if (vistaPomodoro.getTimerNotificacion() != null){
+                        vistaPomodoro.getTimerNotificacion().cancel();
+                    }
                     dispose();
                     break;
             }

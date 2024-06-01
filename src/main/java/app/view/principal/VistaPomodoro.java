@@ -12,6 +12,7 @@ public class VistaPomodoro extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
 
     private Timer timer;
+    private java.util.Timer timerNotificacion;
 
     private int cantidadDescansosCortos = 0;
     private int limiteDescansosCortos;
@@ -19,7 +20,8 @@ public class VistaPomodoro extends JPanel {
 
     private int tiempoConcentracion, tiempoDescanso, tiempoDescansoLargo, tiempoRestante;
 
-    private JPanel panelTiempos, panelBotones, panelBotonesReproductor, panelBotonesCambiarTiempos;
+    private JPanel panelTiempos;
+    private JPanel panelBotonesCambiarTiempos;
     private JLabel labelTiempoConcentracion, labelTiempoDescanso;
     private JButton botonPlay, botonPause, botonStop, botonCambiarTiempo, botonConfirmarCambios;
     private JTextField fieldCambiarConcentracion, fieldCambiarDescanso, fieldCambiarDescansoLargo;
@@ -27,98 +29,23 @@ public class VistaPomodoro extends JPanel {
     public VistaPomodoro() {
         this.setLayout(new GridBagLayout());
 
+        /* Cantidad de descansos cortos antes de un descanso largo */
         this.limiteDescansosCortos = 3;
+
+        /* En segundos. Tiempo entre los periodos de concentración y descanso */
         this.tiempoIntermedio = 5;
 
+        /* En minutos. Tiempo de concentración, descanso y descanso largo */
         this.tiempoConcentracion = 25;
         this.tiempoDescanso = 5;
         this.tiempoDescansoLargo = 15;
 
         crearPanelTiempos();
         crearPanelBotones();
+        addListeners();
     }
 
-    private void crearPanelTiempos(){
-        this.panelTiempos = new JPanel();
-        panelTiempos.setLayout(new BoxLayout(panelTiempos, BoxLayout.Y_AXIS));
-        panelTiempos.setBackground(sRecursos.getGRIS_DEFAULT());
-        panelTiempos.setPreferredSize(new Dimension(0, 0));
-        this.add(panelTiempos, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.labelTiempoConcentracion = construirLabelTiempo(tiempoConcentracion+":00", 325, SwingConstants.BOTTOM);
-        labelTiempoConcentracion.setBorder(BorderFactory.createEmptyBorder(0, 0, -25, 0));
-
-        this.labelTiempoDescanso = construirLabelTiempo(tiempoDescanso+":00", 200, SwingConstants.TOP);
-        labelTiempoDescanso.setBorder(BorderFactory.createEmptyBorder(-50, 0, 0, 0));
-
-        panelTiempos.add(Box.createVerticalGlue());
-        panelTiempos.add(labelTiempoConcentracion);
-        panelTiempos.add(labelTiempoDescanso);
-        panelTiempos.add(Box.createVerticalGlue());
-    }
-
-    private void crearPanelBotones(){
-        this.panelBotones = new JPanel();
-        panelBotones.setLayout(new GridBagLayout());
-        panelBotones.setBackground(sRecursos.getBLANCO());
-        panelBotones.setPreferredSize(new Dimension(0, 120));
-        panelBotones.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getGRANATE_MID_LIGHT()));
-        this.add(panelBotones, setGbc(0, 1, 1, 0, GridBagConstraints.HORIZONTAL));
-
-        this.panelBotonesReproductor = new JPanel();
-        panelBotonesReproductor.setLayout(new GridBagLayout());
-        panelBotonesReproductor.setBackground(sRecursos.getBLANCO());
-        panelBotonesReproductor.setPreferredSize(new Dimension(0, 0));
-        panelBotonesReproductor.setBorder(BorderFactory.createEmptyBorder(6, 30, 3, 30));
-        panelBotones.add(panelBotonesReproductor, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.panelBotonesCambiarTiempos = new JPanel();
-        panelBotonesCambiarTiempos.setLayout(new GridBagLayout());
-        panelBotonesCambiarTiempos.setBackground(sRecursos.getBLANCO());
-        panelBotonesCambiarTiempos.setPreferredSize(new Dimension(0, 0));
-        panelBotonesCambiarTiempos.setBorder(BorderFactory.createEmptyBorder(3, 30, 5, 30));
-        panelBotones.add(panelBotonesCambiarTiempos, setGbc(0, 1, 1, 1, GridBagConstraints.BOTH));
-
-        Border borderFuera;
-        Border borderDentro;
-
-        this.botonPlay = construirBotonReproductor(sRecursos.getImagenPlay());
-        botonPlay.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getBLANCO()));
-        panelBotonesReproductor.add(botonPlay, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.botonPause = construirBotonReproductor(sRecursos.getImagenPause());
-        botonPause.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, sRecursos.getBLANCO()));
-        panelBotonesReproductor.add(botonPause, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.botonStop = construirBotonReproductor(sRecursos.getImagenStop());
-        botonStop.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, sRecursos.getBLANCO()));
-        panelBotonesReproductor.add(botonStop, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.botonCambiarTiempo = construirBotonParametros("Cambiar los parámetros");
-        panelBotonesCambiarTiempos.add(botonCambiarTiempo, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.botonConfirmarCambios = construirBotonParametros("Confirmar cambios");
-        botonConfirmarCambios.setVisible(false);
-        panelBotonesCambiarTiempos.add(botonConfirmarCambios, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.fieldCambiarConcentracion = construirFieldParametros(" Concentración ");
-        borderFuera = BorderFactory.createEmptyBorder(0, 0, 0, 5);
-        borderDentro = sRecursos.getBordeGranate();
-        fieldCambiarConcentracion.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
-        panelBotonesReproductor.add(fieldCambiarConcentracion, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.fieldCambiarDescanso = construirFieldParametros("Descanso corto");
-        borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 5);
-        borderDentro = sRecursos.getBordeGranate();
-        fieldCambiarDescanso.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
-        panelBotonesReproductor.add(fieldCambiarDescanso, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.fieldCambiarDescansoLargo = construirFieldParametros("Descanso largo");
-        borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 0);
-        borderDentro = sRecursos.getBordeGranate();
-        fieldCambiarDescansoLargo.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
-        panelBotonesReproductor.add(fieldCambiarDescansoLargo, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
-
+    private void addListeners(){
         fieldCambiarConcentracion.addFocusListener(listenerComprobarText(fieldCambiarConcentracion));
         fieldCambiarDescanso.addFocusListener(listenerComprobarText(fieldCambiarDescanso));
         fieldCambiarDescansoLargo.addFocusListener(listenerComprobarText(fieldCambiarDescansoLargo));
@@ -298,7 +225,8 @@ public class VistaPomodoro extends JPanel {
             tray.add(trayIcon);
             trayIcon.displayMessage("Alerta de pomodoro", "Ha empezado el tiempo de "+ nuevoTimer, TrayIcon.MessageType.INFO);
 
-            new java.util.Timer().schedule(
+            timerNotificacion = new java.util.Timer();
+            timerNotificacion.schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
@@ -306,7 +234,6 @@ public class VistaPomodoro extends JPanel {
                     }
                 }, 5000
             );
-
 
         } catch (AWTException e) {
             e.printStackTrace();
@@ -344,27 +271,86 @@ public class VistaPomodoro extends JPanel {
         return false;
     }
 
-    private void cambiarVisibles() {
-        botonPlay.setVisible(!botonPlay.isVisible());
-        botonPause.setVisible(!botonPause.isVisible());
-        botonStop.setVisible(!botonStop.isVisible());
+    private void crearPanelTiempos(){
+        this.panelTiempos = new JPanel();
+        panelTiempos.setLayout(new BoxLayout(panelTiempos, BoxLayout.Y_AXIS));
+        panelTiempos.setBackground(sRecursos.getGRIS_DEFAULT());
+        panelTiempos.setPreferredSize(new Dimension(0, 0));
+        this.add(panelTiempos, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
-        botonCambiarTiempo.setVisible(!botonCambiarTiempo.isVisible());
-        botonConfirmarCambios.setVisible(!botonConfirmarCambios.isVisible());
+        this.labelTiempoConcentracion = construirLabelTiempo(tiempoConcentracion+":00", 325, SwingConstants.BOTTOM);
+        labelTiempoConcentracion.setBorder(BorderFactory.createEmptyBorder(0, 0, -25, 0));
 
-        fieldCambiarConcentracion.setVisible(!fieldCambiarConcentracion.isVisible());
-        fieldCambiarDescanso.setVisible(!fieldCambiarDescanso.isVisible());
-        fieldCambiarDescansoLargo.setVisible(!fieldCambiarDescansoLargo.isVisible());
+        this.labelTiempoDescanso = construirLabelTiempo(tiempoDescanso+":00", 200, SwingConstants.TOP);
+        labelTiempoDescanso.setBorder(BorderFactory.createEmptyBorder(-50, 0, 0, 0));
+
+        panelTiempos.add(Box.createVerticalGlue());
+        panelTiempos.add(labelTiempoConcentracion);
+        panelTiempos.add(labelTiempoDescanso);
+        panelTiempos.add(Box.createVerticalGlue());
     }
 
-    private GridBagConstraints setGbc(int gridx, int gridy, double weightx, double weighty, int fill) {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = gridx;
-        gbc.gridy = gridy;
-        gbc.weightx = weightx;
-        gbc.weighty = weighty;
-        gbc.fill = fill;
-        return gbc;
+    private void crearPanelBotones(){
+        JPanel panelBotones = new JPanel();
+        panelBotones.setLayout(new GridBagLayout());
+        panelBotones.setBackground(sRecursos.getBLANCO());
+        panelBotones.setPreferredSize(new Dimension(0, 120));
+        panelBotones.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, sRecursos.getGRANATE_MID_LIGHT()));
+        this.add(panelBotones, setGbc(0, 1, 1, 0, GridBagConstraints.HORIZONTAL));
+
+        JPanel panelBotonesReproductor = new JPanel();
+        panelBotonesReproductor.setLayout(new GridBagLayout());
+        panelBotonesReproductor.setBackground(sRecursos.getBLANCO());
+        panelBotonesReproductor.setPreferredSize(new Dimension(0, 0));
+        panelBotonesReproductor.setBorder(BorderFactory.createEmptyBorder(6, 30, 3, 30));
+        panelBotones.add(panelBotonesReproductor, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.panelBotonesCambiarTiempos = new JPanel();
+        panelBotonesCambiarTiempos.setLayout(new GridBagLayout());
+        panelBotonesCambiarTiempos.setBackground(sRecursos.getBLANCO());
+        panelBotonesCambiarTiempos.setPreferredSize(new Dimension(0, 0));
+        panelBotonesCambiarTiempos.setBorder(BorderFactory.createEmptyBorder(3, 30, 5, 30));
+        panelBotones.add(panelBotonesCambiarTiempos, setGbc(0, 1, 1, 1, GridBagConstraints.BOTH));
+
+        Border borderFuera;
+        Border borderDentro;
+
+        this.botonPlay = construirBotonReproductor(sRecursos.getImagenPlay());
+        botonPlay.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getBLANCO()));
+        panelBotonesReproductor.add(botonPlay, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.botonPause = construirBotonReproductor(sRecursos.getImagenPause());
+        botonPause.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, sRecursos.getBLANCO()));
+        panelBotonesReproductor.add(botonPause, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.botonStop = construirBotonReproductor(sRecursos.getImagenStop());
+        botonStop.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, sRecursos.getBLANCO()));
+        panelBotonesReproductor.add(botonStop, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.botonCambiarTiempo = construirBotonParametros("Cambiar los parámetros");
+        panelBotonesCambiarTiempos.add(botonCambiarTiempo, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.botonConfirmarCambios = construirBotonParametros("Confirmar cambios");
+        botonConfirmarCambios.setVisible(false);
+        panelBotonesCambiarTiempos.add(botonConfirmarCambios, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.fieldCambiarConcentracion = construirFieldParametros(" Concentración ");
+        borderFuera = BorderFactory.createEmptyBorder(0, 0, 0, 5);
+        borderDentro = sRecursos.getBordeGranate();
+        fieldCambiarConcentracion.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
+        panelBotonesReproductor.add(fieldCambiarConcentracion, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.fieldCambiarDescanso = construirFieldParametros("Descanso corto");
+        borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 5);
+        borderDentro = sRecursos.getBordeGranate();
+        fieldCambiarDescanso.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
+        panelBotonesReproductor.add(fieldCambiarDescanso, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.fieldCambiarDescansoLargo = construirFieldParametros("Descanso largo");
+        borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+        borderDentro = sRecursos.getBordeGranate();
+        fieldCambiarDescansoLargo.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
+        panelBotonesReproductor.add(fieldCambiarDescansoLargo, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
     }
 
     private JLabel construirLabelTiempo(String texto, int sizeLetra, int posicionVertical){
@@ -406,5 +392,44 @@ public class VistaPomodoro extends JPanel {
         field.setHorizontalAlignment(SwingConstants.CENTER);
         field.setVisible(false);
         return field;
+    }
+
+    /**
+     * Cambia la visibilidad de los botones y campos de texto del panel de botones
+     */
+    private void cambiarVisibles() {
+        botonPlay.setVisible(!botonPlay.isVisible());
+        botonPause.setVisible(!botonPause.isVisible());
+        botonStop.setVisible(!botonStop.isVisible());
+
+        botonCambiarTiempo.setVisible(!botonCambiarTiempo.isVisible());
+        botonConfirmarCambios.setVisible(!botonConfirmarCambios.isVisible());
+
+        fieldCambiarConcentracion.setVisible(!fieldCambiarConcentracion.isVisible());
+        fieldCambiarDescanso.setVisible(!fieldCambiarDescanso.isVisible());
+        fieldCambiarDescansoLargo.setVisible(!fieldCambiarDescansoLargo.isVisible());
+    }
+
+    /**
+     * Devuelve un objeto GridBagConstraints con los valores pasados como parámetros
+     * @param gridx Posición en el eje x
+     * @param gridy Posición en el eje y
+     * @param weightx Peso en el eje x
+     * @param weighty Peso en el eje y
+     * @param fill Relleno
+     * @return Objeto GridBagConstraints
+     */
+    private GridBagConstraints setGbc(int gridx, int gridy, double weightx, double weighty, int fill) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        gbc.weightx = weightx;
+        gbc.weighty = weighty;
+        gbc.fill = fill;
+        return gbc;
+    }
+
+    public java.util.Timer getTimerNotificacion() {
+        return timerNotificacion;
     }
 }
