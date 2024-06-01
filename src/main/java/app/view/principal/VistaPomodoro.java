@@ -11,6 +11,10 @@ import java.awt.event.FocusEvent;
 public class VistaPomodoro extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
 
+    private Timer timer;
+
+    private int tiempoConcentracion, tiempoDescanso, tiempoDescansoLargo, tiempoRestante;
+
     private JPanel panelBotones, panelBotonesReproductor, panelBotonesCambiarTiempos;
     private JLabel labelTiempoConcentracion, labelTiempoDescanso;
     private JButton botonPlay, botonPause, botonStop, botonCambiarTiempo, botonConfirmarCambios;
@@ -18,6 +22,10 @@ public class VistaPomodoro extends JPanel {
 
     public VistaPomodoro() {
         this.setLayout(new GridBagLayout());
+
+        this.tiempoConcentracion = 25;
+        this.tiempoDescanso = 5;
+        this.tiempoDescansoLargo = 15;
 
         construirPaneles();
         construirBotones();
@@ -43,7 +51,7 @@ public class VistaPomodoro extends JPanel {
 //        panelTiempoDescanso.setPreferredSize(new Dimension(0, 0));
 //        panelTiempos.add(panelTiempoDescanso, setGbc(0, 1, 1, 0.7, GridBagConstraints.BOTH));
 
-        this.labelTiempoConcentracion = new JLabel("25:00");
+        this.labelTiempoConcentracion = new JLabel(tiempoConcentracion+":00");
         labelTiempoConcentracion.setFont(sRecursos.getMontserratMedium(325));
         labelTiempoConcentracion.setForeground(new Color(0, 0, 0));
         labelTiempoConcentracion.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -52,7 +60,7 @@ public class VistaPomodoro extends JPanel {
         panelTiempos.add(Box.createVerticalGlue());
         panelTiempos.add(labelTiempoConcentracion);
 
-        this.labelTiempoDescanso = new JLabel("5:00");
+        this.labelTiempoDescanso = new JLabel(tiempoDescanso+":00");
         labelTiempoDescanso.setFont(sRecursos.getMontserratMedium(200));
         labelTiempoDescanso.setForeground(new Color(0, 0, 0));
         labelTiempoDescanso.setVerticalAlignment(SwingConstants.TOP);
@@ -167,22 +175,27 @@ public class VistaPomodoro extends JPanel {
         fieldCambiarConcentracion.addFocusListener(listenerComprobarText(fieldCambiarConcentracion));
         fieldCambiarDescanso.addFocusListener(listenerComprobarText(fieldCambiarDescanso));
         fieldCambiarDescansoLargo.addFocusListener(listenerComprobarText(fieldCambiarDescansoLargo));
+        botonPlay.addActionListener(e -> {
+
+        });
         botonCambiarTiempo.addActionListener(e -> cambiarVisibles());
         botonConfirmarCambios.addActionListener(e -> {
-            String tiempoConcentracion = fieldCambiarConcentracion.getText();
-            String tiempoDescanso = fieldCambiarDescanso.getText();
-            String tiempoDescansoLargo = fieldCambiarDescansoLargo.getText();
+            String textoConcentracion = fieldCambiarConcentracion.getText();
+            String textoDescanso = fieldCambiarDescanso.getText();
+            String textoDescansoLargo = fieldCambiarDescansoLargo.getText();
 
-            if (comprobarTextoMinutos(tiempoConcentracion)){
-                tiempoConcentracion = "";
+            if (comprobarTextoMinutos(textoConcentracion)){
+                textoConcentracion = "";
             }
-            if (comprobarTextoMinutos(tiempoDescanso)){
-                tiempoDescanso = "";
+            if (comprobarTextoMinutos(textoDescanso)){
+                textoDescanso = "";
             }
-            if (!tiempoConcentracion.isBlank()){
+            if (!textoConcentracion.isBlank()){
+                tiempoConcentracion = Integer.parseInt(textoConcentracion);
                 labelTiempoConcentracion.setText(tiempoConcentracion+":00");
             }
-            if (!tiempoDescanso.isBlank()){
+            if (!textoDescanso.isBlank()){
+                tiempoDescanso = Integer.parseInt(textoDescanso);
                 labelTiempoDescanso.setText(tiempoDescanso+":00");
             }
 
@@ -191,6 +204,51 @@ public class VistaPomodoro extends JPanel {
             fieldCambiarDescansoLargo.setText("Descanso largo");
             cambiarVisibles();
         });
+
+        botonPlay.addActionListener(e -> {
+            crearTimerConcentracion(tiempoConcentracion);
+
+        });
+    }
+
+    private void crearTimerConcentracion(int tiempo){
+        if (timer != null){
+            return;
+        }
+        tiempoRestante = tiempo*60*1000;
+        timer = new Timer(1000, e -> {
+            tiempoRestante -= 1000;
+            if (tiempoRestante>=0){
+                int minutos = tiempoRestante/60000;
+                int segundos = (tiempoRestante%60000)/1000;
+                labelTiempoConcentracion.setText(minutos+":"+segundos);
+            } else {
+                labelTiempoConcentracion.setText(tiempoConcentracion+":00");
+                timer.stop();
+                timer = null;
+                crearTimerDescanso(tiempoDescanso);
+            }
+        });
+        timer.start();
+    }
+
+    private void crearTimerDescanso(int tiempo){
+        if (timer != null){
+            return;
+        }
+        tiempoRestante = tiempo*60*1000;
+        timer = new Timer(1000, e -> {
+            tiempoRestante -= 1000;
+            if (tiempoRestante>=0){
+                int minutos = tiempoRestante/60000;
+                int segundos = (tiempoRestante%60000)/1000;
+                labelTiempoDescanso.setText(minutos+":"+segundos);
+            } else {
+                labelTiempoDescanso.setText("0:00");
+                ((Timer)e.getSource()).stop();
+            }
+        });
+        timer.start();
     }
 
     private FocusAdapter listenerComprobarText(JTextField textField) {
@@ -246,6 +304,4 @@ public class VistaPomodoro extends JPanel {
         gbc.fill = fill;
         return gbc;
     }
-
-
 }
