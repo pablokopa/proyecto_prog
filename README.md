@@ -70,6 +70,7 @@ Esta ventana es la primera que se muestra al usuario, en ella se muestran los cr
 
 ## Diagramas
 ### Diagrama de clases
+<img src="/img/diagramaClases.png" />
 ### Diagrama de secuencia
 ### Diagrama E/R
 
@@ -113,97 +114,98 @@ resultados obtenidos semanalmente.
 
 ## Seguimiento resumido
 ### 00_23
+Durante la semana 0 hemos pensado la `idea general del proyecto`, y divido y `organizado el trabajo`.
 
 ### 01_23
 Durante la primera semana del proyecto hemos estado trabajando
 en la parte gráfica de la `interfaz de inicio de sesión` y en las
-`principales clases` del programa (Usuario y Tarea).
+`principales clases` del programa.
+
 ### 02_23
 Durante la segunda semana del proyecto hemos hecho todo lo relacionado con
 la `base de datos` y hemos avanzado en la `interfaz principal`.
+
 ### 03_23
 Esta semana hemos trabajado en las `pestañas de la interfaz principal`, `rehecho partes` del programa,
-y creadas `nuevas funciones`. Aparte, se han arreglado diversos errores.
+y creadas `nuevas funciones`. 
+
 ### 04_23
+Durante la semana 4 se han `refinado` muchas cosas y `arreglado diversos bugs`. Se ha `refactorizado` algunas partes y `terminado algunas vistas`.
+
 ### 05_23
 
 ## Seguimiento detallado
 ### 00_23
-Durante la semana 0 hemos pensado la idea general del proyecto,
-y también realizado los siguientes puntos:
-1. Diseño del diagrama de clases.
-2. Realización del documento inicial del proyecto.
-3. División y organización del trabajo.
+* Diseño del diagrama de clases inicial. 
+* Realización del documento inicial del proyecto. 
+* División y organización del trabajo.
 
 ### 01_23
-Durante la primera semana del proyecto hemos estado trabajando
-en la parte gráfica de la **interfaz de inicio de sesión** y en las
-**principales funcionalidades** del programa.
-Más concretamente, en los siguientes aspectos:
-1. Creación de clases principales.
-2. Búsqueda de las imágenes y png utilizados en el programa
-3. Creadas clases Servicios y ObjRecursos para facilitar la creación de Swing sin Layouts.
-4. Hecha la interfaz de inicio de sesión.
-5. Métodos de usuario (Registrar y Conectar).
-6. Métodos de las tareas (Crear, Modificar y Eliminar).
-7. Métodos para añadir **restricciones en el nombre y la contraseña** del usuario.
-8. Métodos para **comprobar que el nombre de usuario y la contraseña** sean correctos al registrarse o conectarse.
-9. El usuario puede **registrarse y conectarse** desde la interfaz.
-10. El usuario puede **trabajar con tareas** (crearlas, modificarlas y eliminarlas) desde un Menú temporal de pruebas.
-11. La interfaz lanza **avisos cuando hubo errores** a la hora de registrarse o conectarse.
-12. Cambiada la **fuente principal** del programa.
+* Creación de clases principales (Usuario y Tarea). 
+* Búsqueda de las imágenes y png utilizados en el programa
+* Creada clase `Servicios` para obtener diversos recursos utilizados en diferentes partes del programa, como fuentes, colores, etc.
+* Creada clase `ObjRecursos` para facilitar la creación de componentes Swing. 
+* Hecha la `interfaz de inicio de sesión`. 
+* Métodos de usuario (`Registrar y Conectar`). 
+* Métodos de las tareas (`Crear, Modificar y Eliminar`). 
+* Métodos para añadir **restricciones en el nombre y la contraseña** del usuario. 
+* Métodos para **comprobar que el nombre de usuario y la contraseña** sean correctos al registrarse o conectarse. 
+* El usuario puede **registrarse y conectarse** desde la interfaz. 
+* El usuario puede **trabajar con tareas** (crearlas, modificarlas y eliminarlas) desde un Menú temporal de pruebas. 
+* La interfaz lanza `avisos cuando hubo errores` a la hora de registrarse o conectarse. 
+* Cambiada la **fuente principal** del programa.
 
 ### 02_23
-Durante la segunda semana del proyecto hemos hecho todo lo relacionado con
-la **base de datos** y hemos avanzado en la **interfaz principal**.
-Los cambios realizados han sido:
-1. Cambiado el proyecto de IntelIJ a **Maven**
-2. Creación de la **base de datos** (Base, esquema, tablas, roles, permisos, etc).
-3. Creación de una **VPS** en la que poder subir la base de datos para que el usuario tenga su progreso en cualquier ordenador.
-4. Implementación de la base de datos en el programa Java.
-5. Modificados los métodos para que funcionen a través de la base de datos.
-6. **Encriptadas las contraseñas** del Usuario para que nadie pueda verla, ni si quiera en la base de datos.
-7. Empezada la pestaña Tareas y terminada la parte visual de la pestaña Pomodoro con algunas de sus funciones.
-8. Implementado contador de usuarios automático en la interfaz login.
-9. Empezada la Interfaz Principal con layouts.
-10. Cambiado icono de la aplicación.
+* Cambiado el proyecto de IntelIJ a `Maven`.
+* Creación de la `base de datos` (Base, esquema, tablas, roles, permisos, etc). 
+* Creación de una `VPS` en la que poder subir la base de datos para que el usuario tenga su progreso en cualquier ordenador. 
+* Implementación de la base de datos en el programa Java. 
+* Modificados los métodos para que funcionen a través de la base de datos.
+* `Encriptadas las contraseñas` del Usuario para que nadie pueda verla, ni si quiera en la base de datos. 
+* Empezada la pestaña Tareas y terminada la parte visual de la pestaña temporal Pomodoro con algunas de sus funciones. 
+* Implementado contador de usuarios automático en la interfaz login. 
+* Empezada la Interfaz Principal con layouts. 
+* Cambiado icono de la aplicación.
 
 ### 03_23
-Esta semana hemos trabajado en las **pestañas de la interfaz principal**, **rehecho partes** del programa,
-y creadas **nuevas funciones**. Aparte, se han arreglado diversos errores.
-Cambios detallados de esta semana:
-1. Rehechas todas las pestañas para que funcionen con layouts.
-2. Rehechos los métodos de usuario y de tareas para que funcionen con la base de datos.
-3. **Implementadas las pestañas** en la Interfaz Principal.
-4. Se puede **cambiar de pestaña desde el menú** principal.
-5. Cambios estéticos en los botones (Cambian de color cuando pasa el ratón encima y/o se seleccionan, y se expanden )
-6. Avance en la parte visual de VistaTareas y VistaMatrix.
-7. Implementadas funcionalidades en VistaTareas (Crear y completar tareas, se cambian de columna)
-8. Arreglado y **perfeccionado el funcionamiento del panel superior** de la ventana.
-9. Dibujados los botones de Cerrar, Maximizar y Minimizar con G2Graphics
-10. La interfaz login lanza **avisos cuando no se pudo conectar** a la base de datos.
-11. Ahora la **aplicación se abre rápidamente cuando se inicia sin conexión**.
-12. Creado e implementado en el menú método para **desconectar al usuario**.
+* Rehechas todas las pestañas para que funcionen con layouts. 
+* Rehechos los métodos de usuario y de tareas para que funcionen con la base de datos.
+* `Implementadas las pestañas` en la Interfaz Principal. 
+* Se puede **cambiar de pestaña desde el menú** principal. 
+* Cambios estéticos en los botones (Cambian de color cuando pasa el ratón encima y/o se seleccionan, y se expanden )
+* Avance en la parte visual de `VistaTareas y VistaMatrix`. 
+* Implementadas funcionalidades en VistaTareas (Crear y completar tareas, se cambian de columna)
+* Arreglado y **perfeccionado el funcionamiento del panel superior** de la ventana. 
+* Dibujados los botones de Cerrar, Maximizar y Minimizar con G2Graphics 
+* La interfaz login lanza `avisos cuando no se pudo conectar` a la base de datos. 
+* Ahora la **aplicación se abre rápidamente cuando se inicia sin conexión**. 
+* Creado e implementado en el menú método para **desconectar al usuario**.
 
 ### 04_23
-Esta semana se han refinado muchas cosas, terminado otras.
-Cambios detallados:
-1. Arreglado diversos bugs:
-   1. Bugs relacionados con las tareas recién creadas en VistaTareas; ahora se actualizan automáticamente en la vista.
-   2. Bug del título de VistaMatrix; ahora todos se ven completos.
-   3. Arreglados conflictos
-2. Se han límites en los nombres de las tareas.
-3. Se han añadido mensajes de error.
-4. Se han añadido timer a todos los mensajes de error de la aplicación.
-5. Creado botón y funcionalidad para eliminar todas las tareas completadas.
-6. Creado botón y funcionalidad para modificar la tarea seleccionada.
-7. Se ha cambiado el diseño y la funcionalidad de diversos card de la columna de información.
-   1. Acabada cardCrearTarea y cambios en su diseño.
-   2. Cambiada cardTareaSeleccionada, y añadida funcionalidad para eliminar o modificar la tarea, y cambios en su diseño.
-8. Se ha añadido un calendario e implementado en los cards de la columna de información.
-9. Refactorizado muchas partes del código.
-10. Terminada la vista inicio
-11. Eliminadas clases y paquetes no utilizados.
-12. Otros cambios de diseño y funcionalidad.
+* `Arreglado diversos bugs`:
+  * Bugs relacionados con las tareas recién creadas en VistaTareas; ahora se actualizan automáticamente en la vista.
+  * Bug del título de VistaMatrix; ahora todos se ven completos.
+  * Arreglados conflictos
+* Se han límites en los nombres de las tareas.
+* Se han añadido mensajes de error.
+* Se han añadido timer a todos los mensajes de error de la aplicación. 
+* Creado botón y funcionalidad para eliminar todas las tareas completadas. 
+* Creado botón y funcionalidad para modificar la tarea seleccionada. 
+* Se ha cambiado el diseño y la funcionalidad de diversos card de la columna de información.
+  * Acabada cardCrearTarea y cambios en su diseño.
+  * Cambiada cardTareaSeleccionada, y añadida funcionalidad para eliminar o modificar la tarea, y cambios en su diseño. 
+* Se ha añadido un calendario e implementado en los cards de la columna de información. 
+* `Refactorizado` muchas partes del código. 
+* Terminada la `vista inicio` 
+* Eliminadas clases y paquetes no utilizados. 
+* Otros cambios de diseño y funcionalidad.
+* Se han rehecho los test para que funcionen con la base de datos.
 
 ### Seguimiento_05_23
+* Implementado y arreglado el patrón MVC.
+* Rehechos los tests para que funcionen con el patrón MVC.
+* Terminadas las vistas Matrix y Tareas.
+* Hecha la vista Pomodoro.
+* Implementados los temporizadores del Pomodoro y el funcionamiento de los diferentes tiempos.
+* Notificaciones al sistema al acabar los tiempos.
+* Arreglados diversos bugs y refinado muchas partes del programa.
