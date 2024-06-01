@@ -34,35 +34,30 @@ public class VistaPomodoro extends JPanel {
         this.tiempoDescanso = 5;
         this.tiempoDescansoLargo = 15;
 
-        construirPaneles();
-        construirBotones();
+        crearPanelTiempos();
+        crearPanelBotones();
     }
 
-    private void construirPaneles(){
+    private void crearPanelTiempos(){
         this.panelTiempos = new JPanel();
         panelTiempos.setLayout(new BoxLayout(panelTiempos, BoxLayout.Y_AXIS));
-        panelTiempos.setBackground(sRecursos.getBLANCO());
+        panelTiempos.setBackground(sRecursos.getGRIS_DEFAULT());
         panelTiempos.setPreferredSize(new Dimension(0, 0));
         this.add(panelTiempos, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
-        this.labelTiempoConcentracion = new JLabel(tiempoConcentracion+":00");
-        labelTiempoConcentracion.setFont(sRecursos.getMontserratMedium(325));
-        labelTiempoConcentracion.setForeground(new Color(0, 0, 0));
-        labelTiempoConcentracion.setVerticalAlignment(SwingConstants.BOTTOM);
+        this.labelTiempoConcentracion = construirLabelTiempo(tiempoConcentracion+":00", 325, SwingConstants.BOTTOM);
         labelTiempoConcentracion.setBorder(BorderFactory.createEmptyBorder(0, 0, -25, 0));
-        labelTiempoConcentracion.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        this.labelTiempoDescanso = construirLabelTiempo(tiempoDescanso+":00", 200, SwingConstants.TOP);
+        labelTiempoDescanso.setBorder(BorderFactory.createEmptyBorder(-50, 0, 0, 0));
+
         panelTiempos.add(Box.createVerticalGlue());
         panelTiempos.add(labelTiempoConcentracion);
-
-        this.labelTiempoDescanso = new JLabel(tiempoDescanso+":00");
-        labelTiempoDescanso.setFont(sRecursos.getMontserratMedium(200));
-        labelTiempoDescanso.setForeground(new Color(0, 0, 0));
-        labelTiempoDescanso.setVerticalAlignment(SwingConstants.TOP);
-        labelTiempoDescanso.setBorder(BorderFactory.createEmptyBorder(-50, 0, 0, 0));
-        labelTiempoDescanso.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelTiempos.add(labelTiempoDescanso);
         panelTiempos.add(Box.createVerticalGlue());
+    }
 
+    private void crearPanelBotones(){
         this.panelBotones = new JPanel();
         panelBotones.setLayout(new GridBagLayout());
         panelBotones.setBackground(sRecursos.getBLANCO());
@@ -71,8 +66,8 @@ public class VistaPomodoro extends JPanel {
         this.add(panelBotones, setGbc(0, 1, 1, 0, GridBagConstraints.HORIZONTAL));
 
         this.panelBotonesReproductor = new JPanel();
-        panelBotonesReproductor.setBackground(sRecursos.getBLANCO());
         panelBotonesReproductor.setLayout(new GridBagLayout());
+        panelBotonesReproductor.setBackground(sRecursos.getBLANCO());
         panelBotonesReproductor.setPreferredSize(new Dimension(0, 0));
         panelBotonesReproductor.setBorder(BorderFactory.createEmptyBorder(6, 30, 3, 30));
         panelBotones.add(panelBotonesReproductor, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
@@ -83,87 +78,46 @@ public class VistaPomodoro extends JPanel {
         panelBotonesCambiarTiempos.setPreferredSize(new Dimension(0, 0));
         panelBotonesCambiarTiempos.setBorder(BorderFactory.createEmptyBorder(3, 30, 5, 30));
         panelBotones.add(panelBotonesCambiarTiempos, setGbc(0, 1, 1, 1, GridBagConstraints.BOTH));
-    }
 
-    private void construirBotones(){
         Border borderFuera;
         Border borderDentro;
 
-        this.botonPlay = new JButton();
-        botonPlay.setIcon(sRecursos.getImagenPlay());
-        botonPlay.setBackground(new Color(0, 0, 0));
-        botonPlay.setPreferredSize(new Dimension(0, 0));
-        botonPlay.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getGRIS_DEFAULT()));
-        botonPlay.setFocusable(false);
-        botonPlay.setCursor(sRecursos.getCursorMano());
+        this.botonPlay = construirBotonReproductor(sRecursos.getImagenPlay());
+        botonPlay.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getBLANCO()));
         panelBotonesReproductor.add(botonPlay, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
-        this.fieldCambiarConcentracion = new JTextField(" Concentración ");
-        fieldCambiarConcentracion.setFont(sRecursos.getMontserratBold(18));
-        fieldCambiarConcentracion.setBackground(sRecursos.getGRIS_DEFAULT());
+        this.botonPause = construirBotonReproductor(sRecursos.getImagenPause());
+        botonPause.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, sRecursos.getBLANCO()));
+        panelBotonesReproductor.add(botonPause, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.botonStop = construirBotonReproductor(sRecursos.getImagenStop());
+        botonStop.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, sRecursos.getBLANCO()));
+        panelBotonesReproductor.add(botonStop, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.botonCambiarTiempo = construirBotonParametros("Cambiar los parámetros");
+        panelBotonesCambiarTiempos.add(botonCambiarTiempo, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.botonConfirmarCambios = construirBotonParametros("Confirmar cambios");
+        botonConfirmarCambios.setVisible(false);
+        panelBotonesCambiarTiempos.add(botonConfirmarCambios, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
+
+        this.fieldCambiarConcentracion = construirFieldParametros(" Concentración ");
         borderFuera = BorderFactory.createEmptyBorder(0, 0, 0, 5);
         borderDentro = sRecursos.getBordeGranate();
         fieldCambiarConcentracion.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
-        fieldCambiarConcentracion.setHorizontalAlignment(SwingConstants.CENTER);
-        fieldCambiarConcentracion.setVisible(false);
         panelBotonesReproductor.add(fieldCambiarConcentracion, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
-        this.botonPause = new JButton();
-        botonPause.setIcon(sRecursos.getImagenPause());
-        botonPause.setBackground(sRecursos.getGRANATE_MID_LIGHT());
-        botonPause.setPreferredSize(new Dimension(0, 0));
-        botonPause.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, sRecursos.getGRIS_DEFAULT()));
-        botonPause.setFocusable(false);
-        botonPause.setCursor(sRecursos.getCursorMano());
-        panelBotonesReproductor.add(botonPause, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.fieldCambiarDescanso = new JTextField("Descanso corto");
-        fieldCambiarDescanso.setFont(sRecursos.getMontserratBold(18));
-        fieldCambiarDescanso.setBackground(sRecursos.getGRIS_DEFAULT());
+        this.fieldCambiarDescanso = construirFieldParametros("Descanso corto");
         borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 5);
         borderDentro = sRecursos.getBordeGranate();
         fieldCambiarDescanso.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
-        fieldCambiarDescanso.setHorizontalAlignment(SwingConstants.CENTER);
-        fieldCambiarDescanso.setVisible(false);
         panelBotonesReproductor.add(fieldCambiarDescanso, setGbc(1, 0, 1, 1, GridBagConstraints.BOTH));
 
-        this.botonStop = new JButton();
-        botonStop.setIcon(sRecursos.getImagenStop());
-        botonStop.setBackground(sRecursos.getGRANATE_MID_LIGHT());
-        botonStop.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, sRecursos.getGRIS_DEFAULT()));
-        botonStop.setPreferredSize(new Dimension(0, 0));
-        botonStop.setFocusable(false);
-        botonStop.setCursor(sRecursos.getCursorMano());
-        panelBotonesReproductor.add(botonStop, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.fieldCambiarDescansoLargo = new JTextField("Descanso largo");
-        fieldCambiarDescansoLargo.setFont(sRecursos.getMontserratBold(18));
-        fieldCambiarDescansoLargo.setBackground(sRecursos.getGRIS_DEFAULT());
+        this.fieldCambiarDescansoLargo = construirFieldParametros("Descanso largo");
         borderFuera = BorderFactory.createEmptyBorder(0, 5, 0, 0);
         borderDentro = sRecursos.getBordeGranate();
         fieldCambiarDescansoLargo.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
-        fieldCambiarDescansoLargo.setHorizontalAlignment(SwingConstants.CENTER);
-        fieldCambiarDescansoLargo.setVisible(false);
         panelBotonesReproductor.add(fieldCambiarDescansoLargo, setGbc(2, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.botonCambiarTiempo = new JButton();
-        botonCambiarTiempo.setText("Cambiar los parámetros");
-        botonCambiarTiempo.setFont(sRecursos.getMontserratBold(18));
-        botonCambiarTiempo.setBackground(sRecursos.getGRANATE_MID_LIGHT());
-        botonCambiarTiempo.setForeground(sRecursos.getBLANCO());
-        botonCambiarTiempo.setFocusable(false);
-        botonCambiarTiempo.setCursor(sRecursos.getCursorMano());
-        panelBotonesCambiarTiempos.add(botonCambiarTiempo, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-        this.botonConfirmarCambios = new JButton();
-        botonConfirmarCambios.setText("Confirmar cambios");
-        botonConfirmarCambios.setFont(sRecursos.getMontserratBold(18));
-        botonConfirmarCambios.setBackground(sRecursos.getGRANATE_MID_LIGHT());
-        botonConfirmarCambios.setForeground(sRecursos.getBLANCO());
-        botonConfirmarCambios.setFocusable(false);
-        botonConfirmarCambios.setVisible(false);
-        botonConfirmarCambios.setCursor(sRecursos.getCursorMano());
-        panelBotonesCambiarTiempos.add(botonConfirmarCambios, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
 
         fieldCambiarConcentracion.addFocusListener(listenerComprobarText(fieldCambiarConcentracion));
         fieldCambiarDescanso.addFocusListener(listenerComprobarText(fieldCambiarDescanso));
@@ -179,6 +133,7 @@ public class VistaPomodoro extends JPanel {
             fieldCambiarDescanso.setText("Descanso corto");
             fieldCambiarDescansoLargo.setText("Descanso largo");
         });
+
         botonConfirmarCambios.addActionListener(e -> {
             String textoConcentracion = fieldCambiarConcentracion.getText();
             String textoDescanso = fieldCambiarDescanso.getText();
@@ -230,24 +185,24 @@ public class VistaPomodoro extends JPanel {
                 timer = null;
                 labelTiempoConcentracion.setText(String.format("%d:%02d", tiempoConcentracion, 0));
                 labelTiempoDescanso.setText(String.format("%d:%02d", tiempoDescanso, 0));
-                panelTiempos.setBackground(sRecursos.getBLANCO());
+                panelTiempos.setBackground(sRecursos.getGRIS_DEFAULT());
             }
         });
     }
 
     private void crearTimerIntermedio(String nuevoTimer){
-        lanzarAlerta();
+        lanzarAlerta(nuevoTimer);
         timer = new Timer(1000, e -> {
-            tiempoIntermedio--;
             System.out.println(tiempoIntermedio);
+            tiempoIntermedio--;
             if (tiempoIntermedio==0){
                 tiempoIntermedio = 5;
                 timer.stop();
                 timer = null;
                 switch (nuevoTimer){
-                    case "concentracion" -> crearTimerConcentracion(tiempoConcentracion);
+                    case "concentración" -> crearTimerConcentracion(tiempoConcentracion);
                     case "descanso" -> crearTimerDescanso(tiempoDescanso);
-                    case "descansoLargo" -> crearTimerDescansoLargo(tiempoDescansoLargo);
+                    case "descanso largo" -> crearTimerDescansoLargo(tiempoDescansoLargo);
                 }
             }
         });
@@ -267,18 +222,15 @@ public class VistaPomodoro extends JPanel {
                 int segundos = tiempoRestante%60;
                 labelTiempoConcentracion.setText(String.format("%d:%02d", minutos, segundos));
             } else {
-//                Toolkit.getDefaultToolkit().beep();
                 labelTiempoConcentracion.setText(String.format("%d:%02d", tiempoConcentracion, 0));
                 timer.stop();
                 timer = null;
                 if (cantidadDescansosCortos<limiteDescansosCortos){
                     cantidadDescansosCortos++;
                     crearTimerIntermedio("descanso");
-//                    crearTimerDescanso(tiempoDescanso);
                 } else {
                     cantidadDescansosCortos = 0;
-                    crearTimerIntermedio("descansoLargo");
-//                    crearTimerDescansoLargo(tiempoDescansoLargo);
+                    crearTimerIntermedio("descanso largo");
                 }
 
             }
@@ -299,7 +251,6 @@ public class VistaPomodoro extends JPanel {
                 int segundos = tiempoRestante%60;
                 labelTiempoDescanso.setText(String.format("%d:%02d", minutos, segundos));
             } else {
-//                Toolkit.getDefaultToolkit().beep();
                 if (cantidadDescansosCortos == limiteDescansosCortos){
                     labelTiempoDescanso.setText(String.format("%d:%02d", tiempoDescansoLargo, 0));
                 } else {
@@ -307,8 +258,7 @@ public class VistaPomodoro extends JPanel {
                 }
                 timer.stop();
                 timer = null;
-                crearTimerIntermedio("concentracion");
-//                crearTimerConcentracion(tiempoConcentracion);;
+                crearTimerIntermedio("concentración");
             }
         });
         timer.start();
@@ -327,19 +277,16 @@ public class VistaPomodoro extends JPanel {
                 int segundos = tiempoRestante%60;
                 labelTiempoDescanso.setText(String.format("%d:%02d", minutos, segundos));
             } else {
-//                Toolkit.getDefaultToolkit().beep();
-//                Toolkit.getDefaultToolkit().
                 labelTiempoDescanso.setText(String.format("%d:%02d", tiempoDescanso, 0));
                 timer.stop();
                 timer = null;
-                crearTimerIntermedio("concecentracion");
-//                crearTimerConcentracion(tiempoConcentracion);;
+                crearTimerIntermedio("concentración");
             }
         });
         timer.start();
     }
 
-    private void lanzarAlerta() {
+    private void lanzarAlerta(String nuevoTimer){
         Toolkit.getDefaultToolkit().beep();
         if (!SystemTray.isSupported()){
             System.out.println("No se pueden lanzar notificaciones");
@@ -349,7 +296,7 @@ public class VistaPomodoro extends JPanel {
             TrayIcon trayIcon = new TrayIcon(sRecursos.getImagenLogo2().getImage(), "Alerta de pomodoro");
             SystemTray tray = SystemTray.getSystemTray();
             tray.add(trayIcon);
-            trayIcon.displayMessage("Alerta de pomodoro", "Se ha terminado el tiempo de concentración", TrayIcon.MessageType.WARNING);
+            trayIcon.displayMessage("Alerta de pomodoro", "Ha empezado el tiempo de "+ nuevoTimer, TrayIcon.MessageType.INFO);
 
             new java.util.Timer().schedule(
                 new java.util.TimerTask() {
@@ -418,5 +365,46 @@ public class VistaPomodoro extends JPanel {
         gbc.weighty = weighty;
         gbc.fill = fill;
         return gbc;
+    }
+
+    private JLabel construirLabelTiempo(String texto, int sizeLetra, int posicionVertical){
+        JLabel label = new JLabel(texto);
+        label.setFont(sRecursos.getMontserratBold(sizeLetra));
+        label.setForeground(new Color(30, 30, 30));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setVerticalAlignment(posicionVertical);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return label;
+    }
+
+    private JButton construirBotonReproductor(ImageIcon icono){
+        JButton boton = new JButton();
+        boton.setIcon(icono);
+        boton.setBackground(new Color(30, 30, 30));
+        boton.setPreferredSize(new Dimension(0, 0));
+        boton.setFocusable(false);
+        boton.setCursor(sRecursos.getCursorMano());
+        return boton;
+    }
+
+    private JButton construirBotonParametros(String texto){
+        JButton boton = new JButton();
+        boton.setText(texto);
+        boton.setFont(sRecursos.getMontserratBold(18));
+        boton.setBackground(sRecursos.getGRANATE_MID_LIGHT());
+        boton.setForeground(sRecursos.getBLANCO());
+        boton.setFocusable(false);
+        boton.setCursor(sRecursos.getCursorMano());
+        return boton;
+    }
+
+    private JTextField construirFieldParametros(String texto){
+        JTextField field = new JTextField(texto);
+        field.setFont(sRecursos.getMontserratBold(18));
+        field.setBackground(sRecursos.getGRIS_DEFAULT());
+        field.setBorder(BorderFactory.createEmptyBorder());
+        field.setHorizontalAlignment(SwingConstants.CENTER);
+        field.setVisible(false);
+        return field;
     }
 }
