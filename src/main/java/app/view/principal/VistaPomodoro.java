@@ -14,6 +14,8 @@ public class VistaPomodoro extends JPanel {
     private Timer timer;
 
     private int cantidadDescansosCortos = 0;
+    private int limiteDescansosCortos;
+    private int tiempoIntermedio;
 
     private int tiempoConcentracion, tiempoDescanso, tiempoDescansoLargo, tiempoRestante;
 
@@ -24,6 +26,9 @@ public class VistaPomodoro extends JPanel {
 
     public VistaPomodoro() {
         this.setLayout(new GridBagLayout());
+
+        this.limiteDescansosCortos = 3;
+        this.tiempoIntermedio = 5;
 
         this.tiempoConcentracion = 25;
         this.tiempoDescanso = 5;
@@ -37,22 +42,8 @@ public class VistaPomodoro extends JPanel {
         this.panelTiempos = new JPanel();
         panelTiempos.setLayout(new BoxLayout(panelTiempos, BoxLayout.Y_AXIS));
         panelTiempos.setBackground(sRecursos.getBLANCO());
-//        panelTiempos.setBackground(sRecursos.getColorRojo());
-//        panelTiempos.setBackground(sRecursos.getColorVerde());
-//        panelTiempos.setBackground(sRecursos.getColorAzul());
-//        panelTiempos.setBackground(sRecursos.getColorAmarillo());
         panelTiempos.setPreferredSize(new Dimension(0, 0));
         this.add(panelTiempos, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-
-//        JPanel panelTiempoConcentracion = new JPanel();
-//        panelTiempoConcentracion.setBackground(Color.cyan);
-//        panelTiempoConcentracion.setPreferredSize(new Dimension(0, 0));
-//        panelTiempos.add(panelTiempoConcentracion, setGbc(0, 0, 1, 1, GridBagConstraints.BOTH));
-//
-//        JPanel panelTiempoDescanso = new JPanel();
-//        panelTiempoDescanso.setBackground(Color.yellow);
-//        panelTiempoDescanso.setPreferredSize(new Dimension(0, 0));
-//        panelTiempos.add(panelTiempoDescanso, setGbc(0, 1, 1, 0.7, GridBagConstraints.BOTH));
 
         this.labelTiempoConcentracion = new JLabel(tiempoConcentracion+":00");
         labelTiempoConcentracion.setFont(sRecursos.getMontserratMedium(325));
@@ -100,7 +91,6 @@ public class VistaPomodoro extends JPanel {
 
         this.botonPlay = new JButton();
         botonPlay.setIcon(sRecursos.getImagenPlay());
-//        botonPlay.setBackground(sRecursos.getGRANATE_MID_LIGHT());
         botonPlay.setBackground(new Color(0, 0, 0));
         botonPlay.setPreferredSize(new Dimension(0, 0));
         botonPlay.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, sRecursos.getGRIS_DEFAULT()));
@@ -245,6 +235,25 @@ public class VistaPomodoro extends JPanel {
         });
     }
 
+    private void crearTimerIntermedio(String nuevoTimer){
+        lanzarAlerta();
+        timer = new Timer(1000, e -> {
+            tiempoIntermedio--;
+            System.out.println(tiempoIntermedio);
+            if (tiempoIntermedio==0){
+                tiempoIntermedio = 5;
+                timer.stop();
+                timer = null;
+                switch (nuevoTimer){
+                    case "concentracion" -> crearTimerConcentracion(tiempoConcentracion);
+                    case "descanso" -> crearTimerDescanso(tiempoDescanso);
+                    case "descansoLargo" -> crearTimerDescansoLargo(tiempoDescansoLargo);
+                }
+            }
+        });
+        timer.start();
+    }
+
     private void crearTimerConcentracion(int tiempo){
         if (timer != null){
             return;
@@ -258,15 +267,18 @@ public class VistaPomodoro extends JPanel {
                 int segundos = tiempoRestante%60;
                 labelTiempoConcentracion.setText(String.format("%d:%02d", minutos, segundos));
             } else {
+//                Toolkit.getDefaultToolkit().beep();
                 labelTiempoConcentracion.setText(String.format("%d:%02d", tiempoConcentracion, 0));
                 timer.stop();
                 timer = null;
-                if (cantidadDescansosCortos<3){
+                if (cantidadDescansosCortos<limiteDescansosCortos){
                     cantidadDescansosCortos++;
-                    crearTimerDescanso(tiempoDescanso);
+                    crearTimerIntermedio("descanso");
+//                    crearTimerDescanso(tiempoDescanso);
                 } else {
                     cantidadDescansosCortos = 0;
-                    crearTimerDescansoLargo(tiempoDescansoLargo);
+                    crearTimerIntermedio("descansoLargo");
+//                    crearTimerDescansoLargo(tiempoDescansoLargo);
                 }
 
             }
@@ -287,10 +299,16 @@ public class VistaPomodoro extends JPanel {
                 int segundos = tiempoRestante%60;
                 labelTiempoDescanso.setText(String.format("%d:%02d", minutos, segundos));
             } else {
-                labelTiempoDescanso.setText(String.format("%d:%02d", tiempoDescanso, 0));
+//                Toolkit.getDefaultToolkit().beep();
+                if (cantidadDescansosCortos == limiteDescansosCortos){
+                    labelTiempoDescanso.setText(String.format("%d:%02d", tiempoDescansoLargo, 0));
+                } else {
+                    labelTiempoDescanso.setText(String.format("%d:%02d", tiempoDescanso, 0));
+                }
                 timer.stop();
                 timer = null;
-                crearTimerConcentracion(tiempoConcentracion);;
+                crearTimerIntermedio("concentracion");
+//                crearTimerConcentracion(tiempoConcentracion);;
             }
         });
         timer.start();
@@ -309,13 +327,43 @@ public class VistaPomodoro extends JPanel {
                 int segundos = tiempoRestante%60;
                 labelTiempoDescanso.setText(String.format("%d:%02d", minutos, segundos));
             } else {
+//                Toolkit.getDefaultToolkit().beep();
+//                Toolkit.getDefaultToolkit().
                 labelTiempoDescanso.setText(String.format("%d:%02d", tiempoDescanso, 0));
                 timer.stop();
                 timer = null;
-                crearTimerConcentracion(tiempoConcentracion);;
+                crearTimerIntermedio("concecentracion");
+//                crearTimerConcentracion(tiempoConcentracion);;
             }
         });
         timer.start();
+    }
+
+    private void lanzarAlerta() {
+        Toolkit.getDefaultToolkit().beep();
+        if (!SystemTray.isSupported()){
+            System.out.println("No se pueden lanzar notificaciones");
+            return;
+        }
+        try {
+            TrayIcon trayIcon = new TrayIcon(sRecursos.getImagenLogo2().getImage(), "Alerta de pomodoro");
+            SystemTray tray = SystemTray.getSystemTray();
+            tray.add(trayIcon);
+            trayIcon.displayMessage("Alerta de pomodoro", "Se ha terminado el tiempo de concentración", TrayIcon.MessageType.WARNING);
+
+            new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        tray.remove(trayIcon);
+                    }
+                }, 5000
+            );
+
+
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
     }
 
     private FocusAdapter listenerComprobarText(JTextField textField) {
