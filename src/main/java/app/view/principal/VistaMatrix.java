@@ -2,28 +2,23 @@ package app.view.principal;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import javax.swing.border.MatteBorder;
+import javax.swing.border.Border;
 
-import app.model.tareas.GestorTareas;
-import app.view.templates.TemplatePanelTareaEspecifica;
 import services.Recursos;
 
-
+/**
+ * Vista de la matriz de Eisenhower.
+ */
 public class VistaMatrix extends JPanel {
     private final Recursos sRecursos;
-    GestorTareas gestorTareas = new GestorTareas();
-    VistaTareas tareas = new VistaTareas(gestorTareas);
 
-    private final Color colorGrisPrincipal = new Color(59, 59, 59);
-    private final Color colorVerde = new Color(175, 255, 168);
-    private final Color colorAmarillo = new Color(255, 255, 168);
-    private final Color colorRojo = new Color(255, 168, 168);
-    private final Color colorAzul = new Color(168, 235, 255);
+    private JPanel panelTareasNINU, panelTareasNIU, panelTareasINU, panelTareasIU;
 
+    /**
+     * Constructor de la clase
+     */
     public VistaMatrix() {
         sRecursos = Recursos.getService();
-        gestorTareas.getTareasDeBase();
 
         this.setLayout(new GridLayout(2, 2));
 
@@ -31,34 +26,66 @@ public class VistaMatrix extends JPanel {
     }
 
     /**
-     * Método para crear la matriz de Eisenhower.
+     * Método para obtener el panel de las tareas de "No importante / No urgente".
+     * @return Paneles de las tareas.
      */
-    private void crearMatrix() {
-        JPanel panelArribaI = crearPanelesMatrix(colorVerde, "No importante / No urgente");
-        add(panelArribaI);
-
-        JPanel panelArribaD = crearPanelesMatrix(colorAzul, "No importante / Urgente");
-        add(panelArribaD);
-
-        JPanel panelAbajoI = crearPanelesMatrix(colorAmarillo, "Importante / No urgente");
-        add(panelAbajoI);
-
-        JPanel panelAbajoD = crearPanelesMatrix(colorRojo, "Importante / Urgente");
-        add(panelAbajoD);
+    public JPanel getPanelTareasNINU() {
+        return panelTareasNINU;
     }
 
     /**
-     * Método para crear los paneles de la matriz.
+     * Método para obtener el panel de las tareas de "No importante / Urgente".
+     * @return Paneles de las tareas.
+     */
+    public JPanel getPanelTareasNIU() {
+        return panelTareasNIU;
+    }
+
+    /**
+     * Método para obtener el panel de las tareas de "Importante / No urgente".
+     * @return Paneles de las tareas.
+     */
+    public JPanel getPanelTareasINU() {
+        return panelTareasINU;
+    }
+
+    /**
+     * Método para obtener el panel de las tareas de "Importante / Urgente".
+     * @return Paneles de las tareas.
+     */
+    public JPanel getPanelTareasIU() {
+        return panelTareasIU;
+    }
+
+    /**
+     * Método para crear la matriz de Eisenhower.
+     */
+    private void crearMatrix() {
+        JPanel panelNINU = crearPanelesMatrix(sRecursos.getColorVerde());
+        this.panelTareasNINU = crearPanelesTareas(panelNINU, sRecursos.getColorVerde(), "No importante / No urgente");
+        add(panelNINU);
+
+        JPanel panelNIU = crearPanelesMatrix(sRecursos.getColorAzul());
+        this.panelTareasNIU = crearPanelesTareas(panelNIU, sRecursos.getColorAzul(), "No importante / Urgente");
+        add(panelNIU);
+
+        JPanel panelINU = crearPanelesMatrix(sRecursos.getColorAmarillo());
+        this.panelTareasINU = crearPanelesTareas(panelINU, sRecursos.getColorAmarillo(), "Importante / No urgente");
+        add(panelINU);
+
+        JPanel panelIU = crearPanelesMatrix(sRecursos.getColorRojo());
+        this.panelTareasIU = crearPanelesTareas(panelIU, sRecursos.getColorRojo(), "Importante / Urgente");
+        add(panelIU);
+    }
+
+    /**
+     * Método para crear los paneles de las tareas.
+     * @param panel Panel donde se añadirán las tareas.
      * @param color Color del panel.
      * @param titulo Título del panel.
      * @return Panel creado.
      */
-    private JPanel crearPanelesMatrix(Color color, String titulo) {
-        /* Crea el panel principal */
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setBackground(color);
-
+    private JPanel crearPanelesTareas(JPanel panel, Color color , String titulo){
         /* Crea el panel de tareas */
         JPanel panelTareas = new JPanel();
         panelTareas.setLayout(new BoxLayout(panelTareas, BoxLayout.Y_AXIS));
@@ -71,73 +98,68 @@ public class VistaMatrix extends JPanel {
 
         /* Crea el panel del título y del botón añadir tareas */
         JPanel panelTitulo = new JPanel();
-        panelTitulo.setLayout(new BoxLayout(panelTitulo, BoxLayout.X_AXIS));
         panelTitulo.setBackground(color);
         panelTitulo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         /* Crea el label del título */
         JLabel labelTitulo = new JLabel(titulo);
         labelTitulo.setFont(sRecursos.getMontserratBold(20));
-
-        /* Crea el botón de añadir tareas */
-        JButton botonAddTareas = new JButton("Añadir tarea");
-        botonAddTareas.setFont(sRecursos.getMontserratBold(14));
-        botonAddTareas.setBorder(new MatteBorder(5, 5, 5, 5, colorGrisPrincipal));
-        botonAddTareas.setBackground(colorGrisPrincipal);
-        botonAddTareas.setForeground(color);
-        botonAddTareas.setCursor(sRecursos.getCursorMano());
-
-        botonAddTareas.addActionListener(e -> {
-            // Obtener los paneles de tareas por hacer
-            ArrayList<TemplatePanelTareaEspecifica> panelesTareasToDo = tareas.getListaPanelesTareasToDo();
-
-            // Añadir cada panel de tarea al panel
-            for (TemplatePanelTareaEspecifica panelTarea : panelesTareasToDo) {
-                panelTareas.add(panelTarea);
-            }
-
-            // Actualizar el panel
-            panelTareas.revalidate();
-            panelTareas.repaint();
-        });
+        panelTitulo.add(labelTitulo);
 
         /* Añade el panel del título en una disposición especifica según el panel de matrix */
         switch (titulo) {
             case "No importante / No urgente" -> {
                 panel.add(panelTitulo, BorderLayout.NORTH);
-                panelTitulo.add(labelTitulo);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(botonAddTareas);
 
-                panel.setBorder(new MatteBorder(0, 10, 5, 5, sRecursos.getBLANCO()));
+                Border borderFuera = BorderFactory.createMatteBorder(0, 10, 5, 5, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "No importante / Urgente" -> {
                 panel.add(panelTitulo, BorderLayout.NORTH);
-                panelTitulo.add(botonAddTareas);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(labelTitulo);
 
-                panel.setBorder(new MatteBorder(0, 5, 5, 10, sRecursos.getBLANCO()));
+                Border borderFuera = BorderFactory.createMatteBorder(0, 5, 5, 10, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(0, 3, 1, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / No urgente" -> {
                 panel.add(panelTitulo, BorderLayout.SOUTH);
-                panelTitulo.add(labelTitulo);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(botonAddTareas);
 
-                panel.setBorder(new MatteBorder(5, 10, 10, 5, sRecursos.getBLANCO()));
+                Border borderFuera = BorderFactory.createMatteBorder(5, 10, 10, 5, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
             case "Importante / Urgente" -> {
                 panel.add(panelTitulo, BorderLayout.SOUTH);
-                panelTitulo.add(botonAddTareas);
-                panelTitulo.add(Box.createHorizontalGlue());
-                panelTitulo.add(labelTitulo);
 
-                panel.setBorder(new MatteBorder(5, 5, 10, 10, sRecursos.getBLANCO()));
+                Border borderFuera = BorderFactory.createMatteBorder(5, 5, 10, 10, sRecursos.getBLANCO());
+                Border borderDentro = BorderFactory.createMatteBorder(1, 3, 0, 3, color);
+                panel.setBorder(BorderFactory.createCompoundBorder(borderFuera, borderDentro));
             }
         }
         panel.add(scrollTareas, BorderLayout.CENTER);
 
+        return panelTareas;
+    }
+
+    /**
+     * Método para crear los paneles de la matriz.
+     * @param color Color del panel.
+     * @return Panel creado.
+     */
+    private JPanel crearPanelesMatrix(Color color) {
+        /* Crea el panel principal */
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(color);
         return panel;
+    }
+
+    /**
+     * Método para actualizar la vista de la matriz.
+     */
+    public void actualizarVistaMatrix(){
+        this.repaint();
+        this.revalidate();
     }
 }

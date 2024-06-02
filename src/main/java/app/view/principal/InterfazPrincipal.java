@@ -1,9 +1,13 @@
 package app.view.principal;
 
-import app.model.tareas.GestorTareas;
+import app.controller.ControladorTareas;
+import app.controller.ControladorUsuarios;
+import app.model.tareas.Tarea;
 import app.model.usuarios.GestorUsuarios;
 import app.model.usuarios.Usuario;
 import app.view.login.InterfazLogin;
+import app.view.templates.TemplatePanelMatrix;
+import app.view.templates.TemplatePanelTareas;
 import services.Recursos;
 
 import javax.swing.*;
@@ -18,17 +22,15 @@ import java.util.ArrayList;
 public class InterfazPrincipal extends JFrame {
     private final Recursos sRecursos;
 
-    private final GestorTareas gestorTareas;
-
     private int xRelativoFrame, yRelativoFrame, xRelativoPantalla, yRelativoPantalla;
 
-    private JPanel panelMenu, panelCentral, panelSuperior, panelPrincipal;
+    private JPanel panelMenu;
+    private JPanel panelSuperior;
+    private JPanel panelPrincipal;
     private JButton botonInicio, botonAjustes, botonCerrarSesion, botonTareas, botonPomodoro, botonMatrix;
-    private JButton botonCerrar, botonMinimizar, botonMaximizar;
-    private VistaInicio panelInicio;
-    private VistaTareas panelTareas;
-    private VistaMatrix panelMatrix;
-    private VistaPomodoro panelPomodoro;
+    private VistaTareas vistaTareas;
+    private VistaMatrix vistaMatrix;
+    private VistaPomodoro vistaPomodoro;
 
     private CardLayout cardLayout;
     private ArrayList<JButton> listaBotonesMenu;
@@ -36,14 +38,31 @@ public class InterfazPrincipal extends JFrame {
 
     private String textoBotonActual = "";
 
+    private final ArrayList<TemplatePanelTareas> listaTareasToDo, listaTareasCompletadas;
+    private final ArrayList<TemplatePanelMatrix> listaTareasNINU, listaTareasNIU, listaTareasINU, listaTareasIU;
 
-    public InterfazPrincipal(GestorTareas gestorTareas) {
+    private final ControladorTareas controladorTareas;
+
+    /**
+     * Constructor de la clase InterfazPrincipal.
+     * @param controladorTareas Controlador de tareas
+     */
+    public InterfazPrincipal(ControladorTareas controladorTareas) {
         this.sRecursos = Recursos.getService();
-        this.gestorTareas = gestorTareas;
+
+        this.controladorTareas = controladorTareas;
 
         Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         dimensionPantallaCompleta = new Dimension(screenSize.width, screenSize.height-1);
         dimensionPantallaNormal = new Dimension(1400, 750);
+
+
+        this.listaTareasToDo = new ArrayList<>();
+        this.listaTareasCompletadas = new ArrayList<>();
+        this.listaTareasNINU = new ArrayList<>();
+        this.listaTareasNIU = new ArrayList<>();
+        this.listaTareasINU = new ArrayList<>();
+        this.listaTareasIU = new ArrayList<>();
 
         this.setLayout(new BorderLayout());
         this.setSize(dimensionPantallaNormal);              // Debe empezar en dimension pequeña para evitar errores y posteriormente redimensionar a completa
@@ -51,8 +70,8 @@ public class InterfazPrincipal extends JFrame {
         this.setUndecorated(true);
         this.setIconImage(sRecursos.getImagenLogo2().getImage());
 
-        crearPaneles();
 
+        crearPaneles();
         crearBotonesVentana();
         crearBotonesMenu();
         botonesActionListener();
@@ -61,9 +80,277 @@ public class InterfazPrincipal extends JFrame {
         redimensionarPaneles();
         moverVentana();
 
+        addTareasAListas();
+        addTareasAPaneles();
+
+
         this.setVisible(true);
 
         setSize(dimensionPantallaCompleta);     // Línea necesaria para redimensionar sin errores
+    }
+
+    /**
+     * Añade la tarea a la columna de tareas por hacer.
+     * @param tarea
+     */
+    public void addAColumnaToDo(Tarea tarea){
+        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, controladorTareas, this);
+        vistaTareas.getPanelListaTareasToDo().add(panelTarea);
+        listaTareasToDo.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea a la columna de tareas completadas.
+     * @param tarea
+     */
+    public void addAColumnaCompletada(Tarea tarea){
+        TemplatePanelTareas panelTarea = new TemplatePanelTareas(tarea, controladorTareas, this);
+        vistaTareas.getPanelListaTareasCompletadas().add(panelTarea);
+        listaTareasCompletadas.add(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea de la columna de tareas por hacer.
+     * @param tarea
+     */
+    public void removeDeColumnaToDo(Tarea tarea){
+        TemplatePanelTareas panelTarea = listaTareasToDo.get(listaTareasToDo.indexOf(new TemplatePanelTareas(tarea, controladorTareas, this)));
+        vistaTareas.getPanelListaTareasToDo().remove(panelTarea);
+        listaTareasToDo.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea de la columna de tareas completadas.
+     * @param tarea
+     */
+    public void removeDeColumnaCompletada(Tarea tarea){
+        TemplatePanelTareas panelTarea = listaTareasCompletadas.get(listaTareasCompletadas.indexOf(new TemplatePanelTareas(tarea, controladorTareas, this)));
+        vistaTareas.getPanelListaTareasCompletadas().remove(panelTarea);
+        listaTareasCompletadas.remove(panelTarea);
+    }
+
+    /**
+     * Cambia la tarea de columna completada a la de tareas por hacer.
+     * @param tarea
+     */
+    public void cambiarAColumnaToDo(Tarea tarea){
+        removeDeColumnaCompletada(tarea);
+        addAColumnaToDo(tarea);
+    }
+
+    /**
+     * Cambia la tarea de columna de tareas por hacer a la de tareas completadas.
+     * @param tarea
+     */
+    public void cambiarAColumnaCompletada(Tarea tarea){
+        removeDeColumnaToDo(tarea);
+        addAColumnaCompletada(tarea);
+    }
+
+    /**
+     * Añade la tarea a la matriz de Eisenhower.
+     */
+    public void addEnMatrix(Tarea tarea){
+        switch (tarea.getNombreE()){
+            case "No importante / No urgente" -> addAPanelNINU(tarea);
+            case "No importante / Urgente" -> addAPanelNIU(tarea);
+            case "Importante / No urgente" -> addAPanelINU(tarea);
+            case "Importante / Urgente" -> addAPanelIU(tarea);
+        }
+    }
+
+    /**
+     * Elimina la tarea de la matriz de Eisenhower.
+     */
+    public void eliminarEnMatrix(Tarea tarea){
+        switch (tarea.getNombreE()){
+            case "No importante / No urgente" -> removeDePanelNINU(tarea);
+            case "No importante / Urgente" -> removeDePanelNIU(tarea);
+            case "Importante / No urgente" -> removeDePanelINU(tarea);
+            case "Importante / Urgente" -> removeDePanelIU(tarea);
+        }
+    }
+
+    /**
+     * Completa o descompleta la tarea en la matriz de Eisenhower.
+     */
+    public void completarEnMatrix(Tarea tarea){
+        if (tarea.getCompletadaT()){
+            eliminarEnMatrix(tarea);
+        } else {
+            addEnMatrix(tarea);
+        }
+    }
+
+    /**
+     * Añade la tarea al panel "No importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelNINU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasNINU().add(panelTarea);
+        listaTareasNINU.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea al panel "No importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelNIU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasNIU().add(panelTarea);
+        listaTareasNIU.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea al panel "Importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelINU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasINU().add(panelTarea);
+        listaTareasINU.add(panelTarea);
+    }
+
+    /**
+     * Añade la tarea al panel "Importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void addAPanelIU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = new TemplatePanelMatrix(tarea, controladorTareas, this);
+        vistaMatrix.getPanelTareasIU().add(panelTarea);
+        listaTareasIU.add(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "No importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelNINU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasNINU.get(listaTareasNINU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasNINU().remove(panelTarea);
+        listaTareasNINU.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "No importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelNIU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasNIU.get(listaTareasNIU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasNIU().remove(panelTarea);
+        listaTareasNIU.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "Importante / No urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelINU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasINU.get(listaTareasINU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasINU().remove(panelTarea);
+        listaTareasINU.remove(panelTarea);
+    }
+
+    /**
+     * Elimina la tarea del panel "Importante / Urgente" de la matriz de Eisenhower.
+     */
+    public void removeDePanelIU(Tarea tarea){
+        TemplatePanelMatrix panelTarea = listaTareasIU.get(listaTareasIU.indexOf(new TemplatePanelMatrix(tarea, controladorTareas, this)));
+        vistaMatrix.getPanelTareasIU().remove(panelTarea);
+        listaTareasIU.remove(panelTarea);
+    }
+
+    /**
+     * Actualiza la vista de Matrix.
+     */
+    public void actualizarVistaMatrix(){
+        vistaMatrix.actualizarVistaMatrix();
+    }
+
+    /**
+     * Actualiza la vista de Tareas.
+     */
+    public void actualizarVistaTareas(){
+        vistaTareas.actualizarVistaTareas();
+    }
+
+    /**
+     * Selecciona el card de la tarea seleccionada en la vista Tareas.
+     * @param panelTarea
+     */
+    public void setCardTareaSeleccionada(TemplatePanelTareas panelTarea){
+        vistaTareas.setCardTareaSeleccionada(panelTarea.getTarea());
+    }
+
+    /**
+     * Añade las tareas a las listas correspondientes.
+     */
+    public void addTareasAListas() {
+
+        for (Tarea tarea : controladorTareas.getListaTareas()) {
+            TemplatePanelTareas panelTareas = new TemplatePanelTareas(tarea, controladorTareas, this);
+            TemplatePanelMatrix panelMatrix = new TemplatePanelMatrix(tarea, controladorTareas, this);
+
+            if (tarea.getCompletadaT()) {
+                listaTareasCompletadas.add(panelTareas);
+            } else {
+                listaTareasToDo.add(panelTareas);
+
+                switch (panelTareas.getTarea().getNombreE()) {
+                    case "No importante / No urgente" -> listaTareasNINU.add(panelMatrix);
+                    case "No importante / Urgente" -> listaTareasNIU.add(panelMatrix);
+                    case "Importante / No urgente" -> listaTareasINU.add(panelMatrix);
+                    case "Importante / Urgente" -> listaTareasIU.add(panelMatrix);
+                }
+            }
+        }
+    }
+
+    /**
+     * Añade las tareas a los paneles correspondientes de las vistas Tareas y Matrix.
+     */
+    public void addTareasAPaneles(){
+        for (TemplatePanelTareas panelTarea : listaTareasToDo) {
+            vistaTareas.getPanelListaTareasToDo().add(panelTarea);
+        }
+
+        for (TemplatePanelTareas panelTarea : listaTareasCompletadas) {
+            vistaTareas.getPanelListaTareasCompletadas().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : listaTareasNINU) {
+            vistaMatrix.getPanelTareasNINU().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : listaTareasNIU) {
+            vistaMatrix.getPanelTareasNIU().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : listaTareasINU) {
+            vistaMatrix.getPanelTareasINU().add(panelTarea);
+        }
+
+        for (TemplatePanelMatrix panelTarea : listaTareasIU) {
+            vistaMatrix.getPanelTareasIU().add(panelTarea);
+        }
+    }
+
+    /**
+     * Obtiene y devuelve el label de mensajes de error del cardGeneral de vistaTareas.
+     * @return JLabel
+     */
+    public JLabel getLabelMensajesDeErrorGeneral(){
+        return vistaTareas.getLabelMensajesDeErrorGeneral();
+    }
+
+    /**
+     * Devuelve la lista de tareas por hacer.
+     * @return listaTareasToDo
+     */
+    public ArrayList<TemplatePanelTareas> getListaTareasToDo() {
+        return listaTareasToDo;
+    }
+
+    /**
+     * Devuelve la lista de tareas completadas.
+     * @return listaTareasCompletadas
+     */
+    public ArrayList<TemplatePanelTareas> getListaTareasCompletadas() {
+        return listaTareasCompletadas;
     }
 
     /**
@@ -71,13 +358,13 @@ public class InterfazPrincipal extends JFrame {
      */
     private void crearPaneles(){
         panelMenu = templatePanelesPrincipales("menu");
-        panelCentral = templatePanelesPrincipales("central");
+        JPanel panelCentral = templatePanelesPrincipales("central");
         panelSuperior = templatePanelesPrincipales("superior");
         panelPrincipal = templatePanelesPrincipales("principal");
-        this.panelInicio = new VistaInicio();
-        this.panelTareas = new VistaTareas(gestorTareas);
-        this.panelMatrix = new VistaMatrix();
-        this.panelPomodoro = new VistaPomodoro();
+        VistaInicio vistaInicio = new VistaInicio();
+        this.vistaTareas = new VistaTareas(controladorTareas, this);
+        this.vistaMatrix = new VistaMatrix();
+        this.vistaPomodoro = new VistaPomodoro();
 
         cardLayout = new CardLayout();
         panelPrincipal.setLayout(cardLayout);
@@ -86,19 +373,19 @@ public class InterfazPrincipal extends JFrame {
         this.add(panelCentral, BorderLayout.CENTER);
         panelCentral.add(panelSuperior, BorderLayout.NORTH);
         panelCentral.add(panelPrincipal, BorderLayout.CENTER);
-        panelPrincipal.add(panelInicio, "Inicio");    // Se añade la vista de inicio al panel principal (por defecto
-        panelPrincipal.add(panelTareas, "Tareas");
-        panelPrincipal.add(panelPomodoro, "Pomodoro");
-        panelPrincipal.add(panelMatrix, "Matrix");
+        panelPrincipal.add(vistaInicio, "Inicio");    // Se añade la vista de inicio al panel principal (por defecto
+        panelPrincipal.add(vistaTareas, "Tareas");
+        panelPrincipal.add(vistaPomodoro, "Pomodoro");
+        panelPrincipal.add(vistaMatrix, "Matrix");
     }
 
     /**
      * Crea los botones de control de la ventana principal con el método estático construirBotonesVentana y los añade
      */
     private void crearBotonesVentana() {
-        botonMinimizar = construirBotonesVentana("minimizar");
-        botonMaximizar = construirBotonesVentana("maximizar");
-        botonCerrar = construirBotonesVentana("cerrar");
+        JButton botonMinimizar = construirBotonesVentana("minimizar");
+        JButton botonMaximizar = construirBotonesVentana("maximizar");
+        JButton botonCerrar = construirBotonesVentana("cerrar");
 
         panelSuperior.add(botonMinimizar);
         panelSuperior.add(botonMaximizar);
@@ -113,7 +400,7 @@ public class InterfazPrincipal extends JFrame {
         botonTareas = templateBotonesMenu("Tareas");
         botonMatrix = templateBotonesMenu("Matrix");
         botonPomodoro = templateBotonesMenu("Pomodoro");
-        botonAjustes = templateBotonesMenu("Ajustes");
+//        botonAjustes = templateBotonesMenu("Ajustes");
         botonCerrarSesion = templateBotonesMenu("Cerrar Sesión");
 
         panelMenu.add(botonInicio);
@@ -121,7 +408,7 @@ public class InterfazPrincipal extends JFrame {
         panelMenu.add(botonMatrix);
         panelMenu.add(botonPomodoro);
         panelMenu.add(Box.createVerticalGlue());   //espacio entre botones
-        panelMenu.add(botonAjustes);
+//        panelMenu.add(botonAjustes);
         panelMenu.add(botonCerrarSesion);
 
         addBotonesALista();
@@ -140,13 +427,13 @@ public class InterfazPrincipal extends JFrame {
                     case "Cerrar Sesión":   // Si el botón es Cerrar Sesión, se desconecta al usuario y vuelve a la ventana de login
                         dispose();
                         Usuario.desconectarUsuario();
-                        new InterfazLogin(new GestorUsuarios());
+                        new InterfazLogin(new ControladorUsuarios(new GestorUsuarios()));
                         return;
                     case "Inicio":      // Si el botón es Inicio, contrae el resto de botones
                         contraerBotones(listaBotonesMenu);
                         break;
                     case "Tareas":      // Si el botón es Tareas, se cambia el card de la columna Información Extra de la VistaTareas y continua a default
-                        panelTareas.setCardGeneral();
+                        vistaTareas.setCardGeneral();
                     default:            // Si es cualquier otro botón, expande el botón seleccionado y contrae el resto de botones
                         contraerBotones(listaBotonesMenu);
                         boton.setPreferredSize(new Dimension(getWidth(), 75));
@@ -383,6 +670,9 @@ public class InterfazPrincipal extends JFrame {
                     }
                     break;
                 case "cerrar":
+                    if (vistaPomodoro.getTimerNotificacion() != null){
+                        vistaPomodoro.getTimerNotificacion().cancel();
+                    }
                     dispose();
                     break;
             }
@@ -398,7 +688,7 @@ public class InterfazPrincipal extends JFrame {
         listaBotonesMenu.add(botonTareas);
         listaBotonesMenu.add(botonMatrix);
         listaBotonesMenu.add(botonPomodoro);
-        listaBotonesMenu.add(botonAjustes);
+//        listaBotonesMenu.add(botonAjustes);
         listaBotonesMenu.add(botonCerrarSesion);
     }
 }

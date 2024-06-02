@@ -1,21 +1,29 @@
 package app.model.tareas;
 
+import app.model.CodigoError;
 import app.model.basedatos.ConectarBD;
 import app.model.usuarios.Usuario;
-import services.Recursos;
 
-import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Gestor de tareas. Se utiliza desde el ControladorTareas
+ */
 public class GestorTareas {
-    private final ArrayList<Tarea> listaTareas;
+    private final ConectarBD conectarBD = new ConectarBD();
     private final Usuario usuario;
-    private final Recursos sRecursos = Recursos.getService();
 
+    private final ArrayList<Tarea> listaTareas;
+
+    /**
+     * Constructor de la clase
+     */
     public GestorTareas() {
         this.usuario = Usuario.getUsuarioConectado();
         this.listaTareas = new ArrayList<>();
+
+        getTareasDeBase();
     }
 
     /**
@@ -29,10 +37,10 @@ public class GestorTareas {
     /**
      * Obtiene las tareas del usuario registrado de la base de datos y las añade a una lista para reducir el número de consultas.
      */
-    public void getTareasDeBase(){
+    private void getTareasDeBase(){
         String sql = "select * from tarea where nombreu = ?";
 
-        try (Connection conexion = ConectarBD.conectar()){
+        try (Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, usuario.getNombreU());
 
@@ -50,7 +58,7 @@ public class GestorTareas {
                 String nombreE = resultado.getString("nombree");
 
                 Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
-                this.listaTareas.add(tarea);
+                listaTareas.add(tarea);
             }
         } catch (SQLException e) {
             System.out.println("CATCH EN GestorTareas.getTareasDeBase()");
@@ -60,12 +68,12 @@ public class GestorTareas {
 
     /**
      * Obtiene la última tarea añadida a la base de datos.
-     * @return la última tarea añadida
+     * @return la última tarea añadida o null si no hay tareas
      */
     public Tarea getUltimaTarea(){
         String sql = "SELECT * FROM tarea ORDER BY idT DESC LIMIT 1;";
 
-        try (Connection conexion = ConectarBD.conectar()){
+        try (Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
 
             prepare.executeQuery();
@@ -82,7 +90,8 @@ public class GestorTareas {
                 String nombreE = resultado.getString("nombree");
 
                 Tarea tarea = new Tarea(idT, nombreT, descripcionT, fechaCreacionT, fechaFinalizacionT, completadaT, usuario.getNombreU(), nombreE);
-                this.listaTareas.add(tarea);
+                listaTareas.add(tarea);
+
                 return tarea;
             }
         } catch (SQLException e) {
@@ -93,13 +102,14 @@ public class GestorTareas {
     }
 
     /**
-     * Añade una tarea a la base de datos y a la lista de tareas.
-     * @param tarea tarea a añadir
+     * Crea una tarea en la base de datos y en la lista de tareas.
+     * @param tarea tarea a crear
+     * @return CodigoError constante
      */
-    public void crearTarea(Tarea tarea) {
+    public int crearTarea(Tarea tarea) {
         String sql = "INSERT INTO tarea (nombreT, descripcionT, fechaCreacionT, nombreU, nombreE) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conexion = ConectarBD.conectar()) {
+        try (Connection conexion = conectarBD.conectar()) {
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, tarea.getNombreT());
             prepare.setString(2, tarea.getDescripcionT());
@@ -108,22 +118,23 @@ public class GestorTareas {
             prepare.setString(5, tarea.getNombreE());
 
             prepare.executeUpdate();
-            this.listaTareas.add(tarea);
         } catch (SQLException e) {
             System.out.println("CATCH EN crearTarea()");
             e.printStackTrace();
+            return CodigoError.ERROR_SIN_CONEXION;
         }
+        return CodigoError.SIN_ERROR;
     }
 
     /**
-     * Completa o descompleta una tarea.
+     * Completa o descompleta una tarea o devuelve un código de error
      * @param tarea tarea a completar
-     * @return true si se ha completado correctamente
+     * @return CodigoError constante
      */
-    public boolean completarTarea(Tarea tarea){
+    public int completarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET completadaT = ?, fechaFinalizacionT = ? WHERE idT = ?";
 
-        try (Connection conexion = ConectarBD.conectar()){
+        try (Connection conexion = conectarBD.conectar()){
 
             if (tarea.getCompletadaT()){
                 tarea.setCompletadaT(false);
@@ -140,42 +151,40 @@ public class GestorTareas {
 
             prepare.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("CATCH EN completarTarea()");
-            e.printStackTrace();
-            return false;
+            return CodigoError.ERROR_SIN_CONEXION;
         }
-        return true;
+        return CodigoError.SIN_ERROR;
     }
 
     /**
      * Elimina una tarea de la base de datos y de la lista de tareas.
      * @param tarea tarea a eliminar
-     * @return true si se ha eliminado correctamente
+     * @return CodigoError constante
      */
-    public boolean eliminarTarea(Tarea tarea){
+    public int eliminarTarea(Tarea tarea){
         String sql = "delete from tarea where idt = ? and nombreu = ?";
 
-        try(Connection conexion = ConectarBD.conectar()){
+        try(Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setInt(1, tarea.getIdT());
             prepare.setString(2, tarea.getNombreU());
             prepare.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return CodigoError.ERROR_SIN_CONEXION;
         }
-        return true;
+        return CodigoError.SIN_ERROR;
     }
 
     /**
      * Modifica una tarea en la base de datos y en la lista de tareas.
      * @param tarea tarea a modificar
-     * @return true si se ha modificado correctamente
+     * @return CodigoError constante
      */
-    public boolean modificarTarea(Tarea tarea){
+    public int modificarTarea(Tarea tarea){
         String sql = "UPDATE tarea SET nombret = ?, descripciont = ?, nombree = ? WHERE idt = ?";
 
-        try(Connection conexion = ConectarBD.conectar()){
+        try(Connection conexion = conectarBD.conectar()){
             PreparedStatement prepare = conexion.prepareStatement(sql);
             prepare.setString(1, tarea.getNombreT());
             prepare.setString(2, tarea.getDescripcionT());
@@ -184,69 +193,55 @@ public class GestorTareas {
             prepare.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return CodigoError.ERROR_SIN_CONEXION;
         }
-        return true;
+        return CodigoError.SIN_ERROR;
     }
 
     /**
-     * Comprueba si el nombre de la tarea está vacío o tiene más de 45 caracteres o si no ha habido cambios.
+     * Comprueba si el nombre de la tarea está vacío o tiene más de 35 caracteres; o si no ha habido cambios.
      * @param tareaOriginal tarea original
      * @param tareaEditada tarea editada
-     * @param label label para mostrar mensajes de error
-     * @return true si es correcto
+     * @return CodigoError constante
      */
-    public boolean comprobarNombreEditarTarea(Tarea tareaOriginal, Tarea tareaEditada, JLabel label){
+    public int comprobarDatosEditarTarea(Tarea tareaOriginal, Tarea tareaEditada){
         if (tareaEditada.getNombreT().isBlank()){
-            label.setText("El nombre no puede estar vacío");
-            sRecursos.crearTimer(label);
-            return false;
+            return CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO;
         }
         if (tareaEditada.getNombreT().length() > 35){
-            label.setText("El nombre no puede tener más de 35 caracteres");
-            sRecursos.crearTimer(label);
-            return false;
+            return CodigoError.ERROR_TAREA_NOMBRE_LARGO;
         }
         if (tareaEditada.getNombreT().equals(tareaOriginal.getNombreT())
                 && tareaEditada.getDescripcionT().equals(tareaOriginal.getDescripcionT())
                 && tareaEditada.getNombreE().equals(tareaOriginal.getNombreE())){
-            label.setText("No se ha modificado ningún campo");
-            sRecursos.crearTimer(label);
-            return false;
+            return CodigoError.ERROR_TAREA_SIN_CAMBIOS;
         }
-        return true;
+        return CodigoError.SIN_ERROR;
     }
 
     /**
      * Comprueba si el nombre de la tarea está vacío o tiene más de 45 caracteres.
      * @param nombreTarea nombre de la tarea
-     * @param label label para mostrar mensajes de error
-     * @return true si es correcto
+     * @return CodigoError constante
      */
-    public boolean comprobarNombreCrearTarea(String nombreTarea, JLabel label){
+    public int comprobarNombreCrearTarea(String nombreTarea){
         if (nombreTarea.equals("Nombre de la tarea")){
-            label.setText("Introduce un nombre");
-            sRecursos.crearTimer(label);
-            return false;
+            return CodigoError.ERROR_TAREA_SIN_NOMBRE;
         }
         if (nombreTarea.isBlank()){
-            label.setText("El nombre no puede estar vacío");
-            sRecursos.crearTimer(label);
-            return false;
+            return CodigoError.ERROR_TAREA_NOMBRE_EN_BLANCO;
         }
         if (nombreTarea.length() > 35){
-            label.setText("El nombre no puede tener más de 35 caracteres");
-            sRecursos.crearTimer(label);
-            return false;
+            return CodigoError.ERROR_TAREA_NOMBRE_LARGO;
         }
-        return true;
+        return CodigoError.SIN_ERROR;
     }
 
     /**
-     * Devuelve la lista de tareas.
+     * Obtiene la lista de tareas
      * @return lista de tareas
      */
-    public ArrayList<Tarea> getListaTareas(){
-        return this.listaTareas;
+    public ArrayList<Tarea> getListaTareas() {
+        return listaTareas;
     }
 }

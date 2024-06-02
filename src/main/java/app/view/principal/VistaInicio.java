@@ -5,36 +5,42 @@ import services.Recursos;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Vista de inicio, utilizada para mostrar los créditos del proyecto
+ */
 public class VistaInicio extends JPanel {
     private final Recursos sRecursos = Recursos.getService();
 
+    /**
+     * Constructor de la clase
+     */
     public VistaInicio() {
         this.setLayout(new GridBagLayout()); // Cambiar a GridBagLayout
-        this.setBackground(sRecursos.getBLANCO());
-        this.setBorder(BorderFactory.createMatteBorder(1, 0,0,0, sRecursos.getGRANATE_MID_LIGHT().brighter()));
 
         crearLabelCreditos();
     }
 
+    /**
+     * Método para crear los labels de los créditos
+     */
     private void crearLabelCreditos(){
         JPanel panelCreditos = new JPanel();
-        panelCreditos.setBackground(sRecursos.getBLANCO());
         panelCreditos.setLayout(new BoxLayout(panelCreditos, BoxLayout.Y_AXIS));
 
-        JLabel label3 = construirLabel("proyecto de programación", 64, "italic");
-        panelCreditos.add(label3);
+        JLabel labelTitulo = construirLabel("proyecto de programación", 64, "italic");
+        panelCreditos.add(labelTitulo);
 
-        JLabel label4 = construirLabel("To-Do", 64, "bold");
-        panelCreditos.add(label4);
+        JLabel labelProyecto = construirLabel("To-Do", 64, "bold");
+        panelCreditos.add(labelProyecto);
 
         JLabel labelEspacio = construirLabel("", 64, "");
         panelCreditos.add(labelEspacio);
 
-        JLabel label1 = construirLabel("Made by", 64, "italic");
-        panelCreditos.add(label1);
+        JLabel labelTitulo2 = construirLabel("Made by", 64, "italic");
+        panelCreditos.add(labelTitulo2);
 
-        JLabel label2 = construirLabel("Enrique & Pablo", 64, "bold");
-        panelCreditos.add(label2);
+        JLabel labelMakers = construirLabel("Enrique & Pablo", 64, "bold");
+        panelCreditos.add(labelMakers);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -45,6 +51,13 @@ public class VistaInicio extends JPanel {
         this.add(panelCreditos, gbc);
     }
 
+    /**
+     * Método para construir un label
+     * @param texto Texto del label
+     * @param sizeLetra Tamaño de la letra
+     * @param tipoLetra Tipo de letra
+     * @return JLabel
+     */
     private JLabel construirLabel(String texto, int sizeLetra, String tipoLetra) {
         JLabel label = new JLabel(texto);
         switch (tipoLetra) {
