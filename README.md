@@ -65,7 +65,7 @@ Esta ventana es la primera que se muestra al usuario, en ella se muestran los cr
 <img src="/img/vistaInicio.png" alt="Vista Inicio" width="996"/>
 
 ## Bibliotecas utilizadas
-| Dependencias    | Versión | Casos de uso                                           |
+| Dependencia     | Versión | Casos de uso                                           |
 |-----------------|---------|--------------------------------------------------------|
 | postgresql      | 42.3.1  | Uso y conexión a la base de datos                      |
 | JUnit           | 5.8.1   | Realización de los test unitarios                      |
@@ -78,7 +78,13 @@ Esta ventana es la primera que se muestra al usuario, en ella se muestran los cr
 <img src="/img/diagramaClases.png"  alt=""/>
 
 ### Diagrama de secuencia
+#### Registro de usuario
+<img src="/img/secuenciaRegistro.png"  alt=""/>
 
+#### Creación de tarea
+<img src="/img/secuenciaCrearTarea.png"  alt=""/>
+
+#### Registro de usuario
 
 ### Diagrama E/R
 <img src="/img/diagramaER.png"  alt=""/>
