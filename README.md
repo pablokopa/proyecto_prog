@@ -141,13 +141,15 @@ Durante la segunda semana del proyecto hemos hecho todo lo relacionado con
 la `base de datos` y hemos avanzado en la `interfaz principal`.
 
 ### 03_23
-Esta semana hemos trabajado en las `pestañas de la interfaz principal`, `rehecho partes` del programa,
+Esta semana hemos trabajado en las `pestañas de la interfaz principal`, `rehecho partes` del programa para que funcionen con la base de datos
 y creadas `nuevas funciones`. 
 
 ### 04_23
 Durante la semana 4 se han `refinado` muchas cosas y `arreglado diversos bugs`. Se ha `refactorizado` algunas partes y `terminado algunas vistas`.
 
 ### 05_23
+Durante la última semana se ha implementado `MVC` y cambiado las partes del programa en consecuencia. Se han `terminado las vistas` y añadido las últimas funcionalidades.
+Se han arreglado diversos bugs y refinado muchas partes del programa. Finalmente, se ha realizado la documentación general y `lanzado el programa`.
 
 ## Seguimiento detallado
 ### 00_23
@@ -171,9 +173,6 @@ Durante la semana 4 se han `refinado` muchas cosas y `arreglado diversos bugs`. 
 * Cambiada la **fuente principal** del programa.
 
 ### 02_23
-* Cambiado el proyecto de IntelIJ a `Maven`.
-* Creación de la `base de datos` (Base, esquema, tablas, roles, permisos, etc). 
-* Creación de una `VPS` en la que poder subir la base de datos para que el usuario tenga su progreso en cualquier ordenador. 
 * Implementación de la base de datos en el programa Java. 
 * Modificados los métodos para que funcionen a través de la base de datos.
 * `Encriptadas las contraseñas` del Usuario para que nadie pueda verla, ni si quiera en la base de datos. 
@@ -181,6 +180,9 @@ Durante la semana 4 se han `refinado` muchas cosas y `arreglado diversos bugs`. 
 * Implementado contador de usuarios automático en la interfaz login. 
 * Empezada la Interfaz Principal con layouts. 
 * Cambiado icono de la aplicación.
+* Cambiado el proyecto de IntelIJ a `Maven`.
+* Creación de la `base de datos` (Base, esquema, tablas, roles, permisos, etc).
+* Creación de una `VPS` en la que poder subir la base de datos para que el usuario tenga su progreso en cualquier ordenador.
 
 ### 03_23
 * Rehechas todas las pestañas para que funcionen con layouts. 
@@ -215,12 +217,19 @@ Durante la semana 4 se han `refinado` muchas cosas y `arreglado diversos bugs`. 
 * Eliminadas clases y paquetes no utilizados. 
 * Otros cambios de diseño y funcionalidad.
 * Se han rehecho los test para que funcionen con la base de datos.
+* Empezada la sincronización de las pestañas de la aplicación
+* Rehechos los test unitarios para que funcionen con la base de datos
 
 ### Seguimiento_05_23
-* Implementado y arreglado el patrón MVC.
+* Arreglo e implementación final del `patrón MVC`.
 * Rehechos los tests para que funcionen con el patrón MVC.
-* Terminadas las vistas Matrix y Tareas.
-* Hecha la vista Pomodoro.
+* Sincronizadas las pestañas de la aplicación.
+  * Cuando una tarea tiene cambios en la vistaTareas se actualiza en la vistaMatrix.
+  * Cuando una tarea se completa desde vistaMatrix, se actualiza en vistaTareas.
+* Terminadas las vistas `Matrix y Tareas`.
+* Hecha la vista `Pomodoro`.
 * Implementados los temporizadores del Pomodoro y el funcionamiento de los diferentes tiempos.
 * Notificaciones al sistema al acabar los tiempos.
 * Arreglados diversos bugs y refinado muchas partes del programa.
+* Finalización del programa y lanzamiento final.
+* Hechos todos los diagramas y documentación
