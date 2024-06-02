@@ -15,8 +15,8 @@ import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 
 import com.github.lgooddatepicker.components.DatePicker;
@@ -581,7 +581,8 @@ public class VistaTareas extends JPanel {
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         StyleConstants.setSpaceAbove(center, 10);
         try{
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Montserrat-Medium.ttf"));
+            InputStream is = getClass().getResourceAsStream("/fonts/Montserrat-Medium.ttf");
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, is);
             StyleConstants.setFontFamily(center, customFont.getFamily());
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package services;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -192,20 +193,41 @@ public class Recursos {
      * Este método se llama en el constructor de la clase Recursos.
      */
     private void crearImagenes() {
-        imagenLogo = new ImageIcon("src/main/resources/images/logo1.png");
-        imagenLogo2 = new ImageIcon("src/main/resources/images/logo2.png");
-        imagenUsuario = new ImageIcon("src/main/resources/images/user.png");
-        imagenPassword = new ImageIcon("src/main/resources/images/password.png");
-        imagenPlay = new ImageIcon("src/main/resources/images/playbuttton.png");
-        imagenPause = new ImageIcon("src/main/resources/images/pausebutton.png");
-        imagenStop = new ImageIcon("src/main/resources/images/stopbutton.png");
-        imagenCalendario = new ImageIcon("src/main/resources/images/calendar.png");
+        try {
+            InputStream isLogo1 = getClass().getResourceAsStream("/images/logo1.png");
+            imagenLogo = new ImageIcon(ImageIO.read(isLogo1));
 
-        Image imageC = new ImageIcon("src/main/resources/images/checkResized.png").getImage().getScaledInstance(40,40, Image.SCALE_SMOOTH);
-        imagenCheck = new ImageIcon(imageC);
+            InputStream isLogo2 = getClass().getResourceAsStream("/images/logo2.png");
+            imagenLogo2 = new ImageIcon(ImageIO.read(isLogo2));
 
-        Image imageCsC = new ImageIcon("src/main/resources/images/checkSinCheckResized.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-        imagenCheckSinCheck = new ImageIcon(imageCsC);
+            InputStream isUser = getClass().getResourceAsStream("/images/user.png");
+            imagenUsuario = new ImageIcon(ImageIO.read(isUser));
+
+            InputStream isPassword = getClass().getResourceAsStream("/images/password.png");
+            imagenPassword = new ImageIcon(ImageIO.read(isPassword));
+
+            InputStream isPlayButton = getClass().getResourceAsStream("/images/playbuttton.png");
+            imagenPlay = new ImageIcon(ImageIO.read(isPlayButton));
+
+            InputStream isPauseButton = getClass().getResourceAsStream("/images/pausebutton.png");
+            imagenPause = new ImageIcon(ImageIO.read(isPauseButton));
+
+            InputStream isStopButton = getClass().getResourceAsStream("/images/stopbutton.png");
+            imagenStop = new ImageIcon(ImageIO.read(isStopButton));
+
+            InputStream isCalendar = getClass().getResourceAsStream("/images/calendar.png");
+            imagenCalendario = new ImageIcon(ImageIO.read(isCalendar));
+
+            InputStream isCheckResized = getClass().getResourceAsStream("/images/checkResized.png");
+            Image imageC = ImageIO.read(isCheckResized).getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            imagenCheck = new ImageIcon(imageC);
+
+            InputStream isCheckSinCheckResized = getClass().getResourceAsStream("/images/checkSinCheckResized.png");
+            Image imageCsC = ImageIO.read(isCheckSinCheckResized).getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            imagenCheckSinCheck = new ImageIcon(imageCsC);
+        } catch (IOException e) {
+            System.out.println("Error al cargar una imagen");
+        }
     }
 
     /**
